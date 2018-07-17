@@ -11,15 +11,19 @@ sinon.stub(DotaBot.DotaBot.prototype, 'leavePracticeLobby').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'abandonCurrentGame').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'inviteToLobby').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'launchPracticeLobby').resolves({ match_id: '3996284362' });
-sinon.stub(DotaBot, 'isDotaLobbyReady').returns(true);
+
+const {
+    getPlayers, getLobbyPlayerBySteamId, setPlayerReady, killLobby, getLobby, runLobby, getUserCaptainPriority, autoBalanceTeams, calcBalanceTeams, mapPlayers, setTeams,
+} = proxyquire('../lib/lobby', {
+    './dotaBot': {
+        isDotaLobbyReady: () => true,
+    },
+});
 
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
 const Promise = require('bluebird');
 const db = require('../models');
-const {
-    getPlayers, getLobbyPlayerBySteamId, setPlayerReady, killLobby, getLobby, runLobby, getUserCaptainPriority, autoBalanceTeams, calcBalanceTeams, mapPlayers, setTeams,
-} = require('../lib/lobby');
 const {
     resolveUser,
 } = require('../lib/guild');
@@ -79,10 +83,7 @@ describe('Database', () => {
     let sandbox = null;
     let client;
 
-    beforeEach(function (done) {
-
-        sandbox = sinon.sandbox.create();
-
+    before(function (done) {
         Promise.try(async () => {
             client = new Commando.CommandoClient({
                 commandPrefix: process.env.COMMAND_PREFIX,
@@ -102,8 +103,15 @@ describe('Database', () => {
         });
     });
 
+    beforeEach(() => {
+        sandbox = sinon.sandbox.create();
+    });
+
     afterEach(() => {
         sandbox && sandbox.restore();
+    });
+    
+    after(() => {
         client.destroy();
     });
 
@@ -483,6 +491,7 @@ describe('Database', () => {
                     Promise.try(async () => {
                         for (let i = 0; i < 10; i++) {
                             await setPlayerReady(true)(lobbyState)(userData[i][0]);
+                            console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
                         chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
