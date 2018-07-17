@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-  - "node"
+- node
 services:
-  - postgresql
+- postgresql
 before_script:
-  - npm run db
-  - psql -U postgres -c "create extension fuzzystrmatch"
+- npm run db
+- psql -U postgres -c "create extension fuzzystrmatch"
 env:
+  global:
   - DB_NAME=ihl_test
   - DB_USERNAME=postgres
   - DB_PASSWORD=""
@@ -24,3 +25,6 @@ env:
   - LOGGER_ZIPPEDARCHIVE=true
   - LOGGER_MAXSIZE=20m
   - LOGGER_MAXFILES=14d
+  - secure: iilaSDDIfjg/PUO04OuBdZdmM/9+9k7iKyAp1gIpynBKInz+4sOglgjibH02xlzdd8EnoPQNbux7oY9+4fY/l8om1/sIxGqApXYZwvaCazWxF8bcuV6m/XIgNt0RVN68s16NuNqBtPdmbmQehTWcTDMphsdb5t7sC/yUJ/qgNIvDSQV0v5IBntqH8tY60CK/kNSo+hT4e3iSr3fgjhiCRUCdmSfr+YMAuCl1R9J6/xdBLzuL8fpoYZyVPp+K6VBwd7tGBAZD9IR0OHSK6/tLb+6poU7McqdynpBjp0SDmGARUG8somlUpYICXWso/2EUT4n3o1OXl1/n/yqKdhmRNdH+avUZ7Cx44godFXxe1d7W1gzvXm9oDiZSX4mqS64I02/htYfWnh4PIs3+MxsRr3IWk2hM6quKqV7byP/s0IWiWvI6FaFw0aQTzCX1yatOQiVhPPCxiqh4T/BqaLdlhy4M8vDRKyUqzelpJxxu5+weoBJC5QUECGPPx6kchG3H++6es9YS6Tuf2qLhg3baWhn8JPSbQs/vvxQVDG+w1LYQ6aOoB7zHgf6HLwFOD/X278AcoxfEA04NejPrV87yVVsoJ7vIDUKeeeFL+5FlaJ70bJ8AoBJiuJqMKIl83nzjPVyisv7daLpsU4xNL62gCkn3P6w+lSPpFUPuUpTyl2Q=
+  - secure: rw+qotvFBbPPMlNY3E/HZJXUTXYpgZ9jl5xKxQUDDcyprl7fdW34Fa1HClpNX08OewrzhuTry5MheXYD1HoCh8iWhq4bWA6fikMgg1QqLQo7ZQ9ZLi+TzOYZuNhdn6ZAZKEYSEbRHWqUd/jrJxfvgBgaVJmQicjrMfuQe+nGuPhGetgukzAUz5KRWAPu8iowAYdo9SJiq6URRUwvknsNxhdyEBukDCKhHxA9Eg+CJLHZjnWYj4raKVV9sPhXT2ql034wRzFZDzFIeu6Mcbt5hipKym1gP1gYKHY+V14GyWFIa+g+RCUXaI8E1r6GfdTaOLXrIwcffQsyfniPFg/NiGauTZLCIMQvWc4/5XX+YMxiN2upAYBROy/zN8P2XrLBo4aDB16E710wJ/yTycksq7jA+m7uoJwEAqqp0DSvUOjv7YgH2VU9zGKc+vMgGde1QeDyaP5rl+Dq4zU/D1G9mIsLSQnhkNvpVg9xTVbNf04qCQYQ2TXz/VWNg9Yn92e09zL8XTs06sngkXc4+5zi4rH/m90up6esUsfubU0WpFwL9qn10XlbqZlOin2efy4enJDwQugE5C6hauA3kTwMac4Bc7GPztOFmkOR3pOc3kLm2Z6Vj6i9yIP8vOpXICJEvfxtDiuULw1odiUAk5YuUSkBg2vJvig9HcIBNCIWipw=
+  - secure: liId6+adkWjIG0Oj1sPdlBWpfyfEuspBKvFqHsw2sVwkbmNUIpBIfkk4phBwN0/tudeP1CPzj9/ZJIvTnSUqIQxKIQSTbOmEhxK7V3O8aLDTonPhy52A3icrlu6OBSt6ctQOGITwpNvFTFvIRMG1djdkirDSFYVgzSYyA0+mv+Q+ZdzpnPGPJGWBa9imhwIKTNzVPZAK/D9aNBhMIP4Z6IfQpK2T9br6xZKXT+oaNP2KZfaMUGlj/Z9oASURUZ72W4fqAfXUiD6BW8FzxYuZxvonaWT3fqWDfKIH4IGzs/i2HhMCwVIvhvnaYTjXbEuQmH7oOM14ETfAPWj8wyT9eLFReTjlso75IV9mN/nL0M6ma3wJ3kork9EPPOedbdPmPERKdQKV6fRLoGChrIWcjNP3ApSvJbvV8VSCft18GZz5iEgBlrRXUcDMOx1jj/CH0Z3D8hBRBzCUFMJgYiXJiEj4Vg52WIeyiwOXJIOrthHN7w+QtvAj/CWk82YqTMRbRZdGIP5V26mdYQhJpM+ao6EjPksJ9pYEew/bL9LjCHk/crYOXrcqH8N6wAN6VGWV+clPvR4ApZ7v4v/ftm4vJ3sGGUwFBXOILuYxK2yhn4lxo0p8uFAho0mWNGzokI4J2DIgBGOcRzwM59B/c8iv/AhKLnrQpuK01/vEk5lgxfk=
