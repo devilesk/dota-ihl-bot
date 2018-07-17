@@ -1,0 +1,9 @@
+.env
+config.json
+config/
+servers
+node_modules/
+sentry/
+logs/
+.nyc_output/
+*.log
