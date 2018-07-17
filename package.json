@@ -11,7 +11,7 @@
     "db:create": "sequelize --config config.js db:create;",
     "db:migrate": "sequelize --config config.js db:migrate;",
     "db:seed:all": "sequelize --config config.js db:seed:all;",
-    "db": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed:all",
+    "db": "npm run db:create && npm run db:migrate && npm run db:seed:all",
     "test": "mocha"
   },
   "author": "devilesk",

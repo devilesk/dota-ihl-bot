@@ -5,7 +5,9 @@ node_js:
 services:
 - postgresql
 before_script:
-- npm run db
+- npm run db:create
+- npm run db:migrate
+- npm run db:seed:all
 - psql -U postgres -c "create extension fuzzystrmatch"
 env:
   global:
