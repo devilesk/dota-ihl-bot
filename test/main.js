@@ -80,7 +80,6 @@ describe('Database', () => {
     let client;
 
     beforeEach(function (done) {
-        this.timeout(10000);
 
         sandbox = sinon.sandbox.create();
 
@@ -481,7 +480,6 @@ describe('Database', () => {
                 });
 
                 it('all players ready', function (done) {
-                    this.timeout(10000);
                     Promise.try(async () => {
                         for (let i = 0; i < 10; i++) {
                             await setPlayerReady(true)(lobbyState)(userData[i][0]);
