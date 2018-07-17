@@ -4,6 +4,8 @@ node_js:
 - "9.6.1"
 services:
 - postgresql
+addons:
+- postgresql: "9.4"
 before_script:
 - npm run db:create
 - npm run db:migrate
