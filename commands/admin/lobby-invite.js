@@ -32,13 +32,13 @@ module.exports = class LobbyInviteCommand extends Command {
     async run(msg, { member }) {
         const discord_id = msg.author.id;
         const guild = msg.channel.guild;
-        const lobby = getLobbyFromMessage(ihlManager.inhouseStates, msg);
+        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
 
-        if (lobby) {
+        if (lobbyState) {
             const [user, discord_user, result_type] = await findUser(guild)(member);
             if (user) {
-                await lobby.dotaBot.inviteToLobby(user.steamid_64);
-                await user.addRole(lobby.role);
+                await lobbyState.dotaBot.inviteToLobby(user.steamid_64);
+                await user.addRole(lobbyState.role);
                 await msg.say('User invited to lobby.');
             }
             else {

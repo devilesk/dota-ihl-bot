@@ -31,15 +31,15 @@ module.exports = class LobbyKickCommand extends Command {
     async run(msg, { member }) {
         const discord_id = msg.author.id;
         const guild = msg.channel.guild;
-        const lobby = getLobbyFromMessage(ihlManager.inhouseStates, msg);
+        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
 
-        if (lobby) {
-            await member.removeRole(lobby.role);
+        if (lobbyState) {
+            await member.removeRole(lobbyState.role);
 
             const user = await findUserByDiscordId(guild.id)(discord_id);
             if (user) {
                 const account_id = convertor.to32(user.steamid_64);
-                await lobby.dotaBot.practiceLobbyKick(account_id);
+                await lobbyState.dotaBot.practiceLobbyKick(account_id);
                 msg.say('User kicked from lobby.');
             }
             else {

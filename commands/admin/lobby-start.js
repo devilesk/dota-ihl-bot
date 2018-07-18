@@ -21,11 +21,11 @@ module.exports = class LobbyStartCommand extends Command {
     async run(msg) {
         const discord_id = msg.author.id;
         const guild = msg.channel.guild;
-        const lobby = getLobbyFromMessage(ihlManager.inhouseStates, msg);
+        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
 
-        if (lobby) {
+        if (lobbyState) {
             // TODO: FIX
-            lobby.start().then(() => msg.say('Lobby started.')).catch(console.error);
+            lobbyState.start().then(() => msg.say('Lobby started.')).catch(console.error);
         }
         else {
             await msg.say('Not in a lobby channel.');
