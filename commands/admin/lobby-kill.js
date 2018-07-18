@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAdmin,
+    ihlManager, getLobbyFromMessage, isMessageFromAdmin,
 } = require('../../lib/ihlManager');
 
 module.exports = class LobbyKillCommand extends Command {
@@ -20,16 +20,13 @@ module.exports = class LobbyKillCommand extends Command {
     }
 
     async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const lobby = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-
-        if (lobby) {
-            // TODO: FIX
-            lobby.kill().then(ihlManager.removeLobby).catch(console.error);
+        const [lobbyState, inhouseState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
+        
+        if (lobbyState) {
+            ihlManager.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
         }
         else {
-            await msg.say('Not in a lobby channel.');
+            msg.say('Not in a lobby channel.').catch(console.error);
         }
     }
 };
