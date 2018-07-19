@@ -1,0 +1,664 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: lib/dotaBot.js | dota-ihl-bot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">dota-ihl-bot</a></h1>
+        
+            <span class="version">v0.0.0</span>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-client.html">client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:client_sub"></div></li><li><a href="module-constants.html">constants</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:constants_sub"></div></li><li><a href="module-db.html">db</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:db_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-db.html#.League">League</a></li><li><a href="module-db.html#.User">User</a></li></ul></div></li><li><a href="module-dotaBot.html">dotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot.html#~isDotaLobbyReady">isDotaLobbyReady</a></li><li><a href="module-dotaBot.html#~slotToFaction">slotToFaction</a></li><li><a href="module-dotaBot.html#~updatePlayerState">updatePlayerState</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-dotaBot.html#.LogOnDetails">LogOnDetails</a></li></ul></div></li><li><a href="module-guild.html">guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:guild_sub"></div></li><li><a href="module-ihl.html">ihl</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihl_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihl.html#~addLobbyToInhouse">addLobbyToInhouse</a></li><li><a href="module-ihl.html#~banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihl.html#~checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihl.html#~createInhouseState">createInhouseState</a></li><li><a href="module-ihl.html#~createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihl.html#~getUserRankTier">getUserRankTier</a></li><li><a href="module-ihl.html#~joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihl.html#~leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihl.html#~loadLobbiesIntoInhouse">loadLobbiesIntoInhouse</a></li><li><a href="module-ihl.html#~registerUser">registerUser</a></li><li><a href="module-ihl.html#~removeLobbyFromInhouse">removeLobbyFromInhouse</a></li><li><a href="module-ihl.html#~runLobbiesForInhouse">runLobbiesForInhouse</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihl.html#.InhouseState">InhouseState</a></li></ul></div></li><li><a href="module-ihlManager.html">ihlManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-ihlManager.html#~ihlManager">ihlManager</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager.html#~addInhouseState">addInhouseState</a></li><li><a href="module-ihlManager.html#~findUser">findUser</a></li><li><a href="module-ihlManager.html#~getIndexOfInhouseState">getIndexOfInhouseState</a></li><li><a href="module-ihlManager.html#~getInhouseState">getInhouseState</a></li><li><a href="module-ihlManager.html#~getLobbyByChannelId">getLobbyByChannelId</a></li><li><a href="module-ihlManager.html#~getLobbyByLobbyName">getLobbyByLobbyName</a></li><li><a href="module-ihlManager.html#~getLobbyFromMessage">getLobbyFromMessage</a></li><li><a href="module-ihlManager.html#~isMessageFromAdmin">isMessageFromAdmin</a></li><li><a href="module-ihlManager.html#~loadInhouseState">loadInhouseState</a></li><li><a href="module-ihlManager.html#~loadInhouseStates">loadInhouseStates</a></li><li><a href="module-ihlManager.html#~loadInhouseStatesFromLeagues">loadInhouseStatesFromLeagues</a></li><li><a href="module-ihlManager.html#~transformLeagueGuild">transformLeagueGuild</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihlManager.html#.LeagueGuildObject">LeagueGuildObject</a></li><li><a href="module-ihlManager.html#~eventCallback">eventCallback</a></li></ul></div></li><li><a href="module-lobby.html">lobby</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:lobby_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-lobby.html#.LobbyState">LobbyState</a></li></ul></div></li><li><a href="module-matchTracker.html">matchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-CategoryChannel.html">CategoryChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:CategoryChannel_sub"></div></li><li><a href="external-Client.html">Client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Client_sub"></div></li><li><a href="external-Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Command_sub"></div></li><li><a href="external-EventEmitter.html">EventEmitter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:EventEmitter_sub"></div></li><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li><li><a href="external-GuildChannel.html">GuildChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildChannel_sub"></div></li><li><a href="external-GuildMember.html">GuildMember</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildMember_sub"></div></li><li><a href="external-Message.html">Message</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Message_sub"></div></li><li><a href="external-Model.html">Model</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Model_sub"></div></li><li><a href="external-Role.html">Role</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Role_sub"></div></li><li><a href="external-User.html">User</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:User_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="CommendCommand.html">CommendCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommendCommand_sub"></div></li><li><a href="GameModeCommand.html">GameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="GameModeCommand_sub"></div></li><li><a href="LeaderboardCommand.html">LeaderboardCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeaderboardCommand_sub"></div></li><li><a href="LeagueCreateCommand.html">LeagueCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueCreateCommand_sub"></div></li><li><a href="LeagueInfoCommand.html">LeagueInfoCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueInfoCommand_sub"></div></li><li><a href="LeagueSeasonCommand.html">LeagueSeasonCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueSeasonCommand_sub"></div></li><li><a href="LeagueUpdateCommand.html">LeagueUpdateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueUpdateCommand_sub"></div></li><li><a href="LobbyCreateCommand.html">LobbyCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyCreateCommand_sub"></div></li><li><a href="LobbyFirstPickCommand.html">LobbyFirstPickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyFirstPickCommand_sub"></div></li><li><a href="LobbyGameModeCommand.html">LobbyGameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyGameModeCommand_sub"></div></li><li><a href="LobbyInviteCommand.html">LobbyInviteCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyInviteCommand_sub"></div></li><li><a href="LobbyKickCommand.html">LobbyKickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKickCommand_sub"></div></li><li><a href="LobbyKillCommand.html">LobbyKillCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKillCommand_sub"></div></li><li><a href="LobbyStartCommand.html">LobbyStartCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyStartCommand_sub"></div></li><li><a href="LobbySwapCommand.html">LobbySwapCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbySwapCommand_sub"></div></li><li><a href="module-dotaBot-DotaBot.html">DotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot~DotaBot_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#accountId">accountId</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#lobby">lobby</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#state">state</a></li><li><a href="module-dotaBot-DotaBot.html#steamId">steamId</a></li><li><a href="module-dotaBot-DotaBot.html#steamid_64">steamid_64</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#connect">connect</a></li><li><a href="module-dotaBot-DotaBot.html#disconnect">disconnect</a></li><li><a href="module-dotaBot-DotaBot.html#schedule">schedule</a></li></ul></div></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager~IHLManager_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager-IHLManager.html#attachEventHandlers">attachEventHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#attachMessageHandlers">attachMessageHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLeague">createNewLeague</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihlManager-IHLManager.html#init">init</a></li><li><a href="module-ihlManager-IHLManager.html#joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#onDraftMember">onDraftMember</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyKill">onLobbyKill</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyReady">onLobbyReady</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyTimedOut">onLobbyTimedOut</a></li><li><a href="module-ihlManager-IHLManager.html#onMatchEnd">onMatchEnd</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayerReady">onPlayerReady</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayersReady">onPlayersReady</a></li><li><a href="module-ihlManager-IHLManager.html#processEventQueue">processEventQueue</a></li><li><a href="module-ihlManager-IHLManager.html#queueEvent">queueEvent</a></li><li><a href="module-ihlManager-IHLManager.html#registerLobbyTimeout">registerLobbyTimeout</a></li><li><a href="module-ihlManager-IHLManager.html#runLobby">runLobby</a></li><li><a href="module-ihlManager-IHLManager.html#unregisterLobbyTimeout">unregisterLobbyTimeout</a></li></ul></div></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker~MatchTracker_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-matchTracker-MatchTracker.html#run">run</a></li><li><a href="module-matchTracker-MatchTracker.html#start">start</a></li><li><a href="module-matchTracker-MatchTracker.html#stop">stop</a></li></ul></div></li><li><a href="NicknameCommand.html">NicknameCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="NicknameCommand_sub"></div></li><li><a href="PickCommand.html">PickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="PickCommand_sub"></div></li><li><a href="Queue.html">Queue</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Queue_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#state">state</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Queue.html#block">block</a></li><li><a href="Queue.html#clear">clear</a></li><li><a href="Queue.html#release">release</a></li><li><a href="Queue.html#schedule">schedule</a></li></ul></div></li><li><a href="QueueBanCommand.html">QueueBanCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueBanCommand_sub"></div></li><li><a href="QueueClearCommand.html">QueueClearCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueClearCommand_sub"></div></li><li><a href="QueueJoinCommand.html">QueueJoinCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueJoinCommand_sub"></div></li><li><a href="QueueLeaveCommand.html">QueueLeaveCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueLeaveCommand_sub"></div></li><li><a href="QueueReadyCommand.html">QueueReadyCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueReadyCommand_sub"></div></li><li><a href="QueueStatusCommand.html">QueueStatusCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueStatusCommand_sub"></div></li><li><a href="RegisterCommand.html">RegisterCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RegisterCommand_sub"></div></li><li><a href="RepCommand.html">RepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RepCommand_sub"></div></li><li><a href="RolesCommand.html">RolesCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RolesCommand_sub"></div></li><li><a href="UnrepCommand.html">UnrepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="UnrepCommand_sub"></div></li><li><a href="WhoisCommand.html">WhoisCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="WhoisCommand_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module dotaBot
+ */
+ 
+const steam = require('steam');
+const util = require('util');
+const fs = require('fs');
+const crypto = require('crypto');
+const dota2 = require('dota2');
+const Promise = require('bluebird');
+const events = require('events');
+const queue = require('./queue');
+const CONSTANTS = require('./constants');
+const logger = require('./logger');
+
+/**
+* Converts a Dota team slot value to a faction value.
+* @function 
+* @param {number} slot - The Dota team slot.
+* @returns {number} An inhouse lobby faction.
+*/
+const slotToFaction = slot => {
+    switch (slot) {
+    case dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GC_TEAM_GOOD_GUYS:
+        return 1;
+    case dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GC_TEAM_BAD_GUYS:
+        return 2;
+    default:
+        return null;
+    }
+}
+
+/**
+* Updates a player to team mapping object.
+* Used to track which players have joined team slots in lobby.
+* A null slot value will remove the player from the mapping meaning they are not in a team slot.
+* @function 
+* @param {string} steamid_64 - The player's steamid64.
+* @param {?number} slot - The lobby team slot the player joined.
+* @param {Object} playerState - A player to team mapping.
+* @returns {Object} A player to team mapping.
+*/
+const updatePlayerState = (steamid_64, slot, playerState) => {
+    const _playerState = { ...playerState };
+    if (slot == null) {
+        delete _playerState[steamid_64];
+    }
+    else {
+        _playerState[steamid_64] = slotToFaction(slot);
+    }
+    logger.debug(`updatePlayerState ${steamid_64} ${slot} ${util.inspect(playerState)} -> ${util.inspect(_playerState)}`);
+    return _playerState;
+};
+
+/**
+* Checks if all entries in a player to faction mapping match the player to team state mapping.
+* @function 
+* @param {Object} factionCache - The intended player to team state.
+* @param {Object} playerState - The current state of players to teams.
+* @returns {boolean} Whether the player state matches the faction cache.
+*/
+const isDotaLobbyReady = (factionCache, playerState) => {
+    for (const [steamid_64, faction] of Object.entries(factionCache)) {
+        if (playerState[steamid_64] != faction) return false;
+    }
+    return true;
+};
+
+ /**
+ * @typedef module:dotaBot.LogOnDetails
+ * @type {Object}
+ * @property {string} account_name - The steam account name.
+ * @property {string} password - The steam account password.
+ * @property {string} persona_name - The steam account alias to use.
+ */
+
+/**
+ * Class representing a Dota bot.
+ * Handles all in game functions required to host an inhouse lobby.
+ * @class DotaBot
+ * @extends external:EventEmitter
+ */
+class DotaBot extends events.EventEmitter {
+    /**
+     * Constructor of the DotaBot. This prepares an object for connecting to
+     * Steam and the Dota2 Game Coordinator.
+     * @param {module:dotaBot.LogOnDetails} logOnDetails - Steam login credentials.
+     * @param {boolean} debug - Whether or not debug info should be logged.
+     * @param {boolean} debugMore - Whether or not more debug info should be logged.
+     * */
+    constructor(config, debug, debugMore) {
+        super();
+
+        this.playerState = {};
+        this.factionCache = {};
+        this._queue = new queue(null, null, true);
+        this._debug = debug;
+        this._debugMore = debugMore;
+        this.config = config;
+        this.steamClient = new steam.SteamClient();
+        this.steamUser = new steam.SteamUser(this.steamClient);
+        this.steamFriends = new steam.SteamFriends(this.steamClient);
+        this.Dota2 = new dota2.Dota2Client(this.steamClient, debug, debugMore);
+        // Properties are not properly exported on the instance, so need to re-add them
+        this.Dota2.schema = dota2.schema;
+        this.Dota2.ServerRegion = dota2.ServerRegion;
+        this.Dota2.EResult = dota2.EResult;
+        this.Dota2.Seriestype = dota2.SeriesType;
+
+        this.defaultLobbyOptions = {
+            game_name: Date.now().toString(),
+            server_region: dota2.ServerRegion.USEAST,
+            game_mode: dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM,
+            series_type: 2,
+            game_version: 1,
+            allow_cheats: false,
+            fill_with_bots: false,
+            allow_spectating: true,
+            pass_key: 'password',
+            radiant_series_wins: 0,
+            dire_series_wins: 0,
+            allchat: true,
+        };
+
+        this.logOnDetails = {
+            account_name: config.steam_name,
+            password: config.steam_pass,
+        };
+        if (config.steam_guard_code) this.logOnDetails.auth_code = config.steam_guard_code;
+        if (config.two_factor_code) this.logOnDetails.two_factor_code = config.two_factor_code;
+
+        try {
+            const sentry = fs.readFileSync(`sentry/${config.steamid_64}`);
+            if (sentry.length) this.logOnDetails.sha_sentryfile = sentry;
+        }
+        catch (beef) {
+            logger.debug(`DotaBot Cannot load the sentry. ${beef}`);
+        }
+
+        // Block queue until GC is ready
+        this._queue.block();
+
+        this.Dota2.on('ready', () => {
+            // Activate queue when GC is ready
+            logger.debug('DotaBot Node-dota2 ready.');
+            this._queue.release();
+        });
+        this.Dota2.on('unready', () => {
+            logger.debug('DotaBot Node-dota2 unready.');
+            // Block queue when GC is not ready
+            this._queue.block();
+        });
+        this.Dota2.on('unhandled', (kMsg) => {
+            logger.debug(`DotaBot UNHANDLED MESSAGE ${kMsg}`);
+        });
+        this.Dota2.on('practiceLobbyUpdate', (lobby) => {
+            logger.debug(`DotaBot practiceLobbyUpdate ${util.inspect(lobby)}`);
+            if (this.lobby) this.processLobbyUpdate(this.lobby, lobby);
+        });
+        this.Dota2.on('practiceLobbyResponse', (result, body) => {
+            logger.debug(`DotaBot practiceLobbyResponse ${util.inspect(body)}`);
+        });
+        this.Dota2.on('chatMessage', (channel, sender_name, message, chatData) => {
+            logger.debug(`DotaBot chatMessage ${channel} ${sender_name} {$message} ${util.inspect(chatData)}`);
+            if (channel == `Lobby_${this.lobby.lobby_id}`) {
+                this.emit(CONSTANTS.EVENT_CHAT_MESSAGE, channel, sender_name, message, chatData);
+            }
+        });
+
+        this.steamClient.on('connected', () => {
+            this.steamUser.logOn(this.logOnDetails);
+        });
+        this.steamClient.on('logOnResponse', (logonResp) => {
+            if (logonResp.eresult == steam.EResult.OK) {
+                // Set status to online
+                this.steamFriends.setPersonaState(steam.EPersonaState.Online);
+                // Set nickname
+                this.steamFriends.setPersonaName(this.config.persona_name);
+                logger.debug('DotaBot Set steam persona state and name.');
+            }
+        });
+        this.steamClient.on('loggedOff', (eresult) => {
+            logger.debug('DotaBot Logged off from Steam. Trying reconnect');
+            // Block queue while there's no access to Steam
+            this._queue.block();
+            this.steamUser.logOn(this.logOnDetails);
+        });
+        this.steamClient.on('error', (error) => {
+            logger.debug('DotaBot Connection closed by server. Trying reconnect');
+            // Block queue while there's no access to Steam
+            this._queue.block();
+            this.steamClient.connect();
+        });
+        this.steamClient.on('servers', (servers) => {
+            logger.debug('DotaBot Received servers.');
+            fs.writeFileSync('servers', JSON.stringify(servers));
+        });
+
+        this.steamUser.on('updateMachineAuth', (sentry, callback) => {
+            fs.writeFileSync(`sentry/${this.steamid_64}`, sentry.bytes);
+            logger.debug('DotaBot sentryfile saved');
+            callback({ sha_file: crypto.createHash('sha1').update(sentry.bytes).digest() });
+        });
+    }
+
+    /**
+     * Get bot steamid_64
+     * */
+    get steamid_64() {
+        return this.config.steamid_64;
+    }
+
+    /**
+     * Get the current state of the queue
+     * */
+    get state() {
+        return this._queue.state;
+    }
+
+    /**
+     * Get the current rate limit factor
+     * */
+    get rate_limit() {
+        return this._queue.rate_limit;
+    }
+
+    /**
+     * Set the rate limiting factor
+     * @param {number} rate_limit - Milliseconds to wait between requests.
+     * */
+    set rate_limit(rate_limit) {
+        this._queue.rate_limit = rate_limit;
+    }
+
+    /**
+     * Get the current backoff time of the queue
+     * */
+    get backoff() {
+        return this._queue.backoff;
+    }
+
+    /**
+    * Set the backoff time of the queue
+    * @param {number} backoff - Exponential backoff time in milliseconds.
+    * */
+    set backoff(backoff) {
+        this._queue.backoff = backoff;
+    }
+
+    /**
+     * Initiates the connection to Steam and the Dota2 Game Coordinator.
+     * */
+    async connect() {
+        return new Promise((resolve, reject) => {
+            this.Dota2.once('ready', resolve);
+            this.steamClient.once('logOnResponse', (logonResp) => {
+                if (logonResp.eresult == steam.EResult.OK) {
+                    logger.debug(`DotaBot Logged on with id = ${this.accountId}`);
+                    this.Dota2.launch();
+                }
+                else {
+                    reject();
+                }
+            });
+            this.steamClient.connect();
+        });
+    }
+
+    /**
+     * Disconnect from the Game Coordinator. This will also cancel all queued
+     * operations!
+     * */
+    async disconnect() {
+        return Promise.try(() => {
+            this._queue.clear();
+            this.Dota2.exit();
+            this.steamClient.disconnect();
+            logger.debug('DotaBot Logged off.');
+        });
+    }
+
+    /**
+     * Schedule a function for execution. This function will be executed as soon
+     * as the GC is available.
+     * */
+    schedule(fn) {
+        this._queue.schedule(fn);
+    }
+
+    /**
+     * Get the dota lobby object
+     * */
+    get lobby() {
+        return this.Dota2.Lobby;
+    }
+
+    /**
+     * Get the bot steam id
+     * */
+    get steamId() {
+        return this.Dota2._client.steamID;
+    }
+
+    /**
+     * Get the bot account id
+     * */
+    get accountId() {
+        return this.Dota2.ToAccountID(this.Dota2._client.steamID);
+    }
+
+    processLobbyUpdate(oldLobby, newLobby) {
+        const membersLeft = oldLobby.members.filter(oldMember => !newLobby.members.find(newMember => oldMember.id.compare(newMember.id) == 0));
+        const membersJoined = newLobby.members.filter(oldMember => !oldLobby.members.find(newMember => oldMember.id.compare(newMember.id) == 0));
+
+        membersLeft.forEach((member) => {
+            logger.debug(`processLobbyUpdate member left ${member.id}`);
+            this.playerState = updatePlayerState(member.id.toString(), null, this.playerState, this.factionCache);
+            this.emit(CONSTANTS.EVENT_LOBBY_PLAYER_LEFT, member);
+        });
+
+        membersJoined.forEach((member) => {
+            logger.debug(`processLobbyUpdate member joined ${member.id}`);
+            this.playerState = updatePlayerState(member.id.toString(), member.team, this.playerState, this.factionCache);
+            this.emit(CONSTANTS.EVENT_LOBBY_PLAYER_JOINED, member);
+        });
+
+        oldLobby.members.forEach((oldMember) => {
+            const newMember = newLobby.members.find(newMember => oldMember.id.compare(newMember.id) == 0);
+            if (newMember) {
+                const steamid_64 = newMember.id.toString();
+                const team = newMember.team;
+
+                this.playerState = updatePlayerState(steamid_64, team, this.playerState, this.factionCache);
+
+                if (oldMember.team != newMember.team || oldMember.slot != newMember.slot) {
+                    logger.debug(`processLobbyUpdate member slot changed ${util.inspect(oldMember)} => ${util.inspect(newMember)}`);
+
+                    this.emit(CONSTANTS.EVENT_LOBBY_PLAYER_CHANGED_SLOT, {
+                        previous: oldMember,
+                        current: newMember,
+                    });
+
+                    if (this.factionCache.hasOwnProperty(steamid_64)) {
+                        if (this.factionCache[steamid_64] != slotToFaction(team)) {
+                            const account_id = convertor.to32(steamid_64);
+                            this.practiceLobbyKickFromTeam(account_id).catch(console.error);
+                        }
+                    }
+                }
+            }
+        });
+
+        if (isDotaLobbyReady(this.factionCache, this.playerState)) {
+            this.emit(CONSTANTS.EVENT_LOBBY_READY);
+        }
+    }
+
+    sendMessage(message) {
+        if (this.lobby) {
+            this.Dota2.sendMessage(message, `Lobby_${this.lobby.lobby_id}`, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
+        }
+    }
+
+    async inviteToLobby(steamid_64) {
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.once('inviteCreated', (steam_id, group_id, is_online) => {
+                    resolve(steam_id, group_id, is_online);
+                });
+                logger.debug(`inviteToLobby ${steamid_64}`);
+                this.Dota2.inviteToLobby(steamid_64);
+            });
+        });
+    }
+
+    async configPracticeLobby(options, lobby_id) {
+        options = { ...this.lobbyOptions, ...options };
+        logger.debug(`DotaBot configPracticeLobby ${util.inspect(options)}`);
+        return new Promise((resolve, reject) => {
+            if (lobby_id || this.lobby) {
+                this.schedule(() => {
+                    this.Dota2.once('practiceLobbyUpdate', resolve);
+                    lobby_id = lobby_id || this.lobby.lobby_id;
+                    this.Dota2.configPracticeLobby(lobby_id, options, (err, body) => {
+                        if (err) {
+                            reject(err);
+                        }
+                    });
+                });
+            }
+            else {
+                logger.debug('DotaBot configPracticeLobby missing lobby_id');
+                reject(new Error('no lobby_id'));
+            }
+        });
+    }
+
+    async flipLobbyTeams() {
+        logger.debug('DotaBot flipLobbyTeams');
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.flipLobbyTeams((err, body) => {
+                    if (!err) {
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async launchPracticeLobby() {
+        logger.debug('DotaBot launchPracticeLobby');
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.once('practiceLobbyUpdate', resolve);
+                this.Dota2.launchPracticeLobby((err, body) => {
+                    if (err) {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async practiceLobbyKickFromTeam(account_id) {
+        logger.debug(`DotaBot practiceLobbyKickFromTeam ${account_id}`);
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.practiceLobbyKickFromTeam(account_id, (err, body) => {
+                    if (!err) {
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async practiceLobbyKick(account_id) {
+        logger.debug(`DotaBot practiceLobbyKick ${account_id}`);
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.practiceLobbyKick(account_id, (err, body) => {
+                    if (!err) {
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async leavePracticeLobby() {
+        logger.debug('DotaBot leavePracticeLobby');
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.leavePracticeLobby((err, body) => {
+                    if (!err) {
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async abandonCurrentGame() {
+        logger.debug('DotaBot abandonCurrentGame');
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.abandonCurrentGame((err, body) => {
+                    if (!err) {
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async destroyLobby() {
+        logger.debug('DotaBot destroyLobby');
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.destroyLobby((err, body) => {
+                    if (!err) {
+                        this.lobbyOptions = null;
+                        resolve(body);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async joinPracticeLobby(lobby_id, options) {
+        options = { ...this.defaultLobbyOptions, ...options };
+        this.lobbyOptions = options;
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.joinPracticeLobby(lobby_id, options.pass_key, (err, body) => {
+                    if (!err) {
+                        if (body.result == dota2.schema.lookupEnum('DOTAJoinLobbyResult').values.DOTA_JOIN_RESULT_SUCCESS) {
+                            this.practiceLobbyKickFromTeam(this.accountId).then((body) => {});
+                            this.configPracticeLobby(options, lobby_id).then(() => {
+                                this.Dota2.joinChat(`Lobby_${this.lobby.lobby_id}`, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
+                                resolve();
+                            }).catch(reject);
+                        }
+                        else {
+                            reject(body.result);
+                        }
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+
+    async createPracticeLobby(options) {
+        options = { ...this.defaultLobbyOptions, ...options };
+        this.lobbyOptions = options;
+        logger.debug(`DotaBot createPracticeLobby ${util.inspect(options)}`);
+        return new Promise((resolve, reject) => {
+            this.schedule(() => {
+                this.Dota2.once('practiceLobbyUpdate', (lobby) => {
+                    this.Dota2.joinChat(`Lobby_${lobby.lobby_id}`, dota2.schema.lookupEnum('DOTAChatChannelType_t').values.DOTAChannelType_Lobby);
+                    resolve();
+                });
+                this.Dota2.createPracticeLobby(options, (err, body) => {
+                    if (!err) {
+                        if (body.eresult == dota2.EResult.k_EResultOK) {
+                            this.practiceLobbyKickFromTeam(this.accountId).then((body) => {});
+                        }
+                        else if (body.eresult == dota2.EResult.k_EResultFail) {
+                            this.leavePracticeLobby().then((body) => {
+                                this.Dota2.createPracticeLobby(options, (err, body) => {
+                                    if (!err) {
+                                        if (body.eresult == dota2.EResult.k_EResultOK) {
+                                            this.practiceLobbyKickFromTeam(this.accountId).then((body) => {});
+                                        }
+                                        else {
+                                            reject(body.eresult);
+                                        }
+                                    }
+                                    else {
+                                        reject(err);
+                                    }
+                                });
+                            }).catch(reject);
+                        }
+                        else {
+                            reject(body.eresult);
+                        }
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            });
+        });
+    }
+}
+
+module.exports = {
+    updatePlayerState,
+    isDotaLobbyReady,
+    DotaBot,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">https://github.com/devilesk/dota-ihl-bot</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>

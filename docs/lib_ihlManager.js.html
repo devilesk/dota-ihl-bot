@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: lib/ihlManager.js | dota-ihl-bot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">dota-ihl-bot</a></h1>
+        
+            <span class="version">v0.0.0</span>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-client.html">client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:client_sub"></div></li><li><a href="module-constants.html">constants</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:constants_sub"></div></li><li><a href="module-db.html">db</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:db_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-db.html#.League">League</a></li><li><a href="module-db.html#.User">User</a></li></ul></div></li><li><a href="module-dotaBot.html">dotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot.html#~isDotaLobbyReady">isDotaLobbyReady</a></li><li><a href="module-dotaBot.html#~slotToFaction">slotToFaction</a></li><li><a href="module-dotaBot.html#~updatePlayerState">updatePlayerState</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-dotaBot.html#.LogOnDetails">LogOnDetails</a></li></ul></div></li><li><a href="module-guild.html">guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:guild_sub"></div></li><li><a href="module-ihl.html">ihl</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihl_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihl.html#~addLobbyToInhouse">addLobbyToInhouse</a></li><li><a href="module-ihl.html#~banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihl.html#~checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihl.html#~createInhouseState">createInhouseState</a></li><li><a href="module-ihl.html#~createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihl.html#~getUserRankTier">getUserRankTier</a></li><li><a href="module-ihl.html#~joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihl.html#~leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihl.html#~loadLobbiesIntoInhouse">loadLobbiesIntoInhouse</a></li><li><a href="module-ihl.html#~registerUser">registerUser</a></li><li><a href="module-ihl.html#~removeLobbyFromInhouse">removeLobbyFromInhouse</a></li><li><a href="module-ihl.html#~runLobbiesForInhouse">runLobbiesForInhouse</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihl.html#.InhouseState">InhouseState</a></li></ul></div></li><li><a href="module-ihlManager.html">ihlManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-ihlManager.html#~ihlManager">ihlManager</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager.html#~addInhouseState">addInhouseState</a></li><li><a href="module-ihlManager.html#~findUser">findUser</a></li><li><a href="module-ihlManager.html#~getIndexOfInhouseState">getIndexOfInhouseState</a></li><li><a href="module-ihlManager.html#~getInhouseState">getInhouseState</a></li><li><a href="module-ihlManager.html#~getLobbyByChannelId">getLobbyByChannelId</a></li><li><a href="module-ihlManager.html#~getLobbyByLobbyName">getLobbyByLobbyName</a></li><li><a href="module-ihlManager.html#~getLobbyFromMessage">getLobbyFromMessage</a></li><li><a href="module-ihlManager.html#~isMessageFromAdmin">isMessageFromAdmin</a></li><li><a href="module-ihlManager.html#~loadInhouseState">loadInhouseState</a></li><li><a href="module-ihlManager.html#~loadInhouseStates">loadInhouseStates</a></li><li><a href="module-ihlManager.html#~loadInhouseStatesFromLeagues">loadInhouseStatesFromLeagues</a></li><li><a href="module-ihlManager.html#~transformLeagueGuild">transformLeagueGuild</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihlManager.html#.LeagueGuildObject">LeagueGuildObject</a></li><li><a href="module-ihlManager.html#~eventCallback">eventCallback</a></li></ul></div></li><li><a href="module-lobby.html">lobby</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:lobby_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-lobby.html#.LobbyState">LobbyState</a></li></ul></div></li><li><a href="module-matchTracker.html">matchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-CategoryChannel.html">CategoryChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:CategoryChannel_sub"></div></li><li><a href="external-Client.html">Client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Client_sub"></div></li><li><a href="external-Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Command_sub"></div></li><li><a href="external-EventEmitter.html">EventEmitter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:EventEmitter_sub"></div></li><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li><li><a href="external-GuildChannel.html">GuildChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildChannel_sub"></div></li><li><a href="external-GuildMember.html">GuildMember</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildMember_sub"></div></li><li><a href="external-Message.html">Message</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Message_sub"></div></li><li><a href="external-Model.html">Model</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Model_sub"></div></li><li><a href="external-Role.html">Role</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Role_sub"></div></li><li><a href="external-User.html">User</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:User_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="CommendCommand.html">CommendCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommendCommand_sub"></div></li><li><a href="GameModeCommand.html">GameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="GameModeCommand_sub"></div></li><li><a href="LeaderboardCommand.html">LeaderboardCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeaderboardCommand_sub"></div></li><li><a href="LeagueCreateCommand.html">LeagueCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueCreateCommand_sub"></div></li><li><a href="LeagueInfoCommand.html">LeagueInfoCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueInfoCommand_sub"></div></li><li><a href="LeagueSeasonCommand.html">LeagueSeasonCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueSeasonCommand_sub"></div></li><li><a href="LeagueUpdateCommand.html">LeagueUpdateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueUpdateCommand_sub"></div></li><li><a href="LobbyCreateCommand.html">LobbyCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyCreateCommand_sub"></div></li><li><a href="LobbyFirstPickCommand.html">LobbyFirstPickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyFirstPickCommand_sub"></div></li><li><a href="LobbyGameModeCommand.html">LobbyGameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyGameModeCommand_sub"></div></li><li><a href="LobbyInviteCommand.html">LobbyInviteCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyInviteCommand_sub"></div></li><li><a href="LobbyKickCommand.html">LobbyKickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKickCommand_sub"></div></li><li><a href="LobbyKillCommand.html">LobbyKillCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKillCommand_sub"></div></li><li><a href="LobbyStartCommand.html">LobbyStartCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyStartCommand_sub"></div></li><li><a href="LobbySwapCommand.html">LobbySwapCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbySwapCommand_sub"></div></li><li><a href="module-dotaBot-DotaBot.html">DotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot~DotaBot_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#accountId">accountId</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#lobby">lobby</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#state">state</a></li><li><a href="module-dotaBot-DotaBot.html#steamId">steamId</a></li><li><a href="module-dotaBot-DotaBot.html#steamid_64">steamid_64</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#connect">connect</a></li><li><a href="module-dotaBot-DotaBot.html#disconnect">disconnect</a></li><li><a href="module-dotaBot-DotaBot.html#schedule">schedule</a></li></ul></div></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager~IHLManager_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager-IHLManager.html#attachEventHandlers">attachEventHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#attachMessageHandlers">attachMessageHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLeague">createNewLeague</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihlManager-IHLManager.html#init">init</a></li><li><a href="module-ihlManager-IHLManager.html#joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#onDraftMember">onDraftMember</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyKill">onLobbyKill</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyReady">onLobbyReady</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyTimedOut">onLobbyTimedOut</a></li><li><a href="module-ihlManager-IHLManager.html#onMatchEnd">onMatchEnd</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayerReady">onPlayerReady</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayersReady">onPlayersReady</a></li><li><a href="module-ihlManager-IHLManager.html#processEventQueue">processEventQueue</a></li><li><a href="module-ihlManager-IHLManager.html#queueEvent">queueEvent</a></li><li><a href="module-ihlManager-IHLManager.html#registerLobbyTimeout">registerLobbyTimeout</a></li><li><a href="module-ihlManager-IHLManager.html#runLobby">runLobby</a></li><li><a href="module-ihlManager-IHLManager.html#unregisterLobbyTimeout">unregisterLobbyTimeout</a></li></ul></div></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker~MatchTracker_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-matchTracker-MatchTracker.html#run">run</a></li><li><a href="module-matchTracker-MatchTracker.html#start">start</a></li><li><a href="module-matchTracker-MatchTracker.html#stop">stop</a></li></ul></div></li><li><a href="NicknameCommand.html">NicknameCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="NicknameCommand_sub"></div></li><li><a href="PickCommand.html">PickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="PickCommand_sub"></div></li><li><a href="Queue.html">Queue</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Queue_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#state">state</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Queue.html#block">block</a></li><li><a href="Queue.html#clear">clear</a></li><li><a href="Queue.html#release">release</a></li><li><a href="Queue.html#schedule">schedule</a></li></ul></div></li><li><a href="QueueBanCommand.html">QueueBanCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueBanCommand_sub"></div></li><li><a href="QueueClearCommand.html">QueueClearCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueClearCommand_sub"></div></li><li><a href="QueueJoinCommand.html">QueueJoinCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueJoinCommand_sub"></div></li><li><a href="QueueLeaveCommand.html">QueueLeaveCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueLeaveCommand_sub"></div></li><li><a href="QueueReadyCommand.html">QueueReadyCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueReadyCommand_sub"></div></li><li><a href="QueueStatusCommand.html">QueueStatusCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueStatusCommand_sub"></div></li><li><a href="RegisterCommand.html">RegisterCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RegisterCommand_sub"></div></li><li><a href="RepCommand.html">RepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RepCommand_sub"></div></li><li><a href="RolesCommand.html">RolesCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RolesCommand_sub"></div></li><li><a href="UnrepCommand.html">UnrepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="UnrepCommand_sub"></div></li><li><a href="WhoisCommand.html">WhoisCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="WhoisCommand_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module ihlManager
+ */
+ 
+ /**
+ * Node.js EventEmitter object
+ * @external EventEmitter
+ * @see {@link https://nodejs.org/api/events.html#events_class_eventemitter}
+ */
+ 
+const events = require('events');
+const util = require('util');
+const logger = require('./logger');
+const { MatchTracker, createMatchEndMessageEmbed } = require('./matchTracker');
+const CONSTANTS = require('./constants');
+const {
+    findAllLeagues, findUserByDiscordId, findUserByNicknameLevenshtein,
+} = require('./db');
+const {
+    getLobby, runLobby, isPlayerDraftable, isCaptain, setPlayerReady, getPlayerByDiscordId, getFactionCaptain, setPlayerTeam,
+} = require('./lobby');
+const {
+    createInhouseState, loadLobbiesIntoInhouse, runLobbiesForInhouse, addLobbyToInhouse, removeLobbyFromInhouse, checkInhouseQueue, createNewLobbyForInhouse, joinInhouseQueue, leaveInhouseQueue, banInhouseQueue,
+} = require('./ihl');
+const {
+    pipeP, mapPromise,
+} = require('./util/fp');
+const {
+    resolveUser,
+} = require('./guild');
+const {
+    findOrCreateLeague,
+} = require('./db');
+const toHHMMSS = require('./util/toHHMMSS');
+
+/**
+* Searches the discord guild for a member.
+* @function 
+* @param {external:Guild} guild - A list of guilds to initialize leagues with.
+* @param {string|external:GuildMember} member - A name or search string for an inhouse player or their guild member instance.
+* @returns {Array} The search result in an array containing the user record, discord guild member, and type of match.
+*/
+const findUser = guild => async (member) => {
+    let discord_id;
+    let discord_user;
+    let user;
+    let result_type;
+    logger.debug(`Member ${util.inspect(member)}`);
+    const discord_id_matches = member.match(/&lt;@(\d+)>/);
+    logger.debug(discord_id_matches);
+    if (discord_id_matches) {
+        discord_id = discord_id_matches[1];
+        discord_user = guild.members.get(discord_id);
+        result_type = CONSTANTS.MATCH_EXACT_DISCORD_MENTION;
+    }
+    else {
+        // check exact discord name match
+        discord_user = guild.members.find(guildMember => guildMember.displayName.toLowerCase() === member.toLowerCase());
+        if (discord_user) {
+            discord_id = discord_user.id;
+            logger.debug('Matched on displayName exact.');
+            result_type = CONSTANTS.MATCH_EXACT_DISCORD_NAME;
+        }
+    }
+
+    if (discord_id) {
+        user = await findUserByDiscordId(guild.id)(discord_id);
+    }
+
+    if (!user) {
+        [user] = await findUserByNicknameLevenshtein(member);
+        if (user) {
+            discord_id = user.discord_id;
+            discord_user = guild.members.get(discord_id);
+            result_type = CONSTANTS.MATCH_CLOSEST_NICKNAME;
+        }
+    }
+
+    return [user, discord_user, result_type];
+};
+
+/**
+* Gets the inhouse state with the given guild id in a list of inhouse states.
+* @function 
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {string} guildId - A guild id.
+* @returns {number} The inhouse state in inhouseStates. Returns undefined if no inhouse state with the guild id exists.
+*/
+const getInhouseState = (inhouseStates, guildId) => inhouseStates.find(inhouseState => inhouseState.guild.id === guildId);
+
+/**
+* Gets the index of an inhouse state with the given guild id in a list of inhouse states.
+* @function 
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {string} guildId - A guild id.
+* @returns {number} The index of the inhouse state in inhouseStates. Returns -1 if no inhouse state with the guild id exists.
+*/
+const getIndexOfInhouseState = (inhouseStates, guildId) => inhouseStates.indexOf(inhouseState => inhouseState.guild.id === guildId);
+
+/**
+ * @typedef {Object} module:ihlManager.LeagueGuildObject
+ * @property {module:db.League} league - A database league record
+ * @property {external:Guild} guild - The guild the league belongs to
+ */
+ 
+/**
+* Takes a list of guilds and a league record and turns it into an object containing both.
+* Transforms the input into an object that can be passed to createInhouseState.
+* @function 
+* @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
+* @param {module:db.League} league - A database league record.
+* @returns {module:ihlManager.LeagueGuildObject} An object containing the league and its guild.
+*/
+const transformLeagueGuild = guilds => league => ({ league, guild: guilds.get(league.guild_id) });
+
+/**
+* Adds an inhouse state to a list of inhouse states.
+* @function 
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {module:ihl.InhouseState} inhouseState - The inhouse state to add.
+* @returns {module:ihl.InhouseState[]} A new list of inhouse states with the inhouse state added to it.
+*/
+const addInhouseState = (inhouseStates, inhouseState) => {
+    const index = getIndexOfInhouseState(inhouseStates, inhouseState.guild.id);
+    if (index !== -1) {
+        const _inhouseState = [...inhouseStates].splice(index, 1);
+        return [..._inhouseState, inhouseState];
+    }
+
+    return [...inhouseStates, inhouseState];
+};
+
+/**
+* Maps a league record to an inhouse state.
+* All inhouse lobbies are loaded and run.
+* @function 
+* @async
+* @param {external:EventEmitter} eventEmitter - The event listener object.
+* @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
+* @param {module:db.League} league - A database league record.
+* @returns {module:ihl.InhouseState} The inhouse state loaded from a league record.
+*/
+const loadInhouseState = eventEmitter => guilds => async league => pipeP(
+    transformLeagueGuild(guilds),
+    createInhouseState,
+    checkInhouseQueue(eventEmitter),
+    loadLobbiesIntoInhouse,
+    runLobbiesForInhouse(eventEmitter),
+)(league);
+
+/**
+* Maps league records to inhouse states.
+* @function 
+* @async
+* @param {external:EventEmitter} eventEmitter - The event listener object.
+* @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
+* @param {module:db.League[]} leagues - A list of database league records.
+* @returns {module:ihl.InhouseState[]} The inhouse states loaded from league records.
+*/
+const loadInhouseStates = eventEmitter => guilds => async leagues => mapPromise(loadInhouseState(eventEmitter)(guilds))(leagues);
+
+/**
+* Gets all league records from the database turns them into inhouse states.
+* @function
+* @async
+* @param {external:EventEmitter} eventEmitter - The event listener object.
+* @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
+* @returns {module:ihl.InhouseState[]} The inhouse states loaded from all league records.
+*/
+const loadInhouseStatesFromLeagues = eventEmitter => async guilds => pipeP(
+    findAllLeagues,
+    loadInhouseStates(eventEmitter)(guilds),
+)();
+
+/**
+* Gets a lobby state by its channel id.
+* @function
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {string} guildId - The id of the guild for the lobby.
+* @param {string} channelId - The id of the channel for the lobby.
+* @returns {module:lobby.LobbyState} The lobby state corresponding to the guild and channel.
+*/
+const getLobbyByChannelId = (inhouseStates, guildId, channelId) => {
+    const _inhouseState = getInhouseState(inhouseStates, guildId);
+    return _inhouseState ? [_inhouseState.lobbies.find(lobbyState => lobbyState.channel.id === channelId), _inhouseState] : [];
+};
+
+/**
+* Gets a lobby state by its lobby name from a list of inhouse states.
+* @function
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {string} lobby_name - The name of the lobby being looked for.
+* @returns {module:lobby.LobbyState} The lobby state with the given lobby name.
+*/
+const getLobbyByLobbyName = (inhouseStates, lobby_name) => {
+    logger.debug(`getLobbyByLobbyName lobby_name ${lobby_name}`);
+    for (const inhouseState of inhouseStates) {
+        for (const lobbyState of inhouseState.lobbies) {
+            if (lobbyState.lobby_name === lobby_name) {
+                logger.debug(`getLobbyByLobbyName found ${lobby_name}`);
+                return [lobbyState, inhouseState];
+            }
+        }
+    }
+    logger.debug(`getLobbyByLobbyName not found ${lobby_name}`);
+    return null;
+};
+
+/**
+* Checks if a message was sent by an inhouse admin.
+* @function
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {external:Message} msg - A discord message sent from a lobby channel.
+* @returns {boolean} Whether the message author is an inhouse admin.
+*/
+const isMessageFromAdmin = (inhouseStates, msg) => {
+    const inhouseState = getInhouseState(inhouseStates, msg.channel.guild.id);
+    return msg.author.roles.has(inhouseState.adminRole.id);
+};
+
+/**
+* Gets a lobby state from a discord message.
+* @function 
+* @param {module:ihl.InhouseState[]} inhouseStates - A list of inhouse states.
+* @param {external:Message} msg - A discord message sent from a lobby channel.
+* @returns {module:lobby.LobbyState} The lobby state corresponding to the channel the message was posted in.
+*/
+const getLobbyFromMessage = (inhouseStates, msg) => getLobbyByChannelId(inhouseStates, msg.channel.guild.id, msg.channel.id);
+
+/**
+ * Class representing the inhouse league manager.
+ * @class IHLManager
+ * @extends external:EventEmitter
+ */
+class IHLManager extends events.EventEmitter {
+    /** Creates an inhouse league manager. */
+    constructor() {
+        super();
+
+        this.client = null;
+        this.inhouseStates = [];
+        this.lobbyTimeoutTimers = {};
+        this.matchTracker = new MatchTracker(this);
+        this.attachEventHandlers();
+        this.attachMessageHandlers();
+        this.eventQueue = [];
+        this.blocking = false;
+    }
+
+    /**
+     * Initializes the inhouse league manager with a discord client and loads inhouse states for each league.
+     * @async
+     * @param {external:Client} client - A discord.js client.
+     */
+    async init(client) {
+        logger.debug('ihlManager init');
+        this.client = client;
+        this.matchTracker.start();
+        logger.debug('ihlManager matchTracker started');
+        this.inhouseStates = await loadInhouseStatesFromLeagues(this)(this.client.guilds);
+        logger.debug('ihlManager init done');
+    }
+
+    /**
+     * Creates a new inhouse league and adds the inhouse state to list of inhouse states.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     */
+    async createNewLeague(guild) {
+        const league = await findOrCreateLeague(guild.id);
+        const inhouseState = await createInhouseState({ league, guild });
+        this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+    }
+
+    /**
+     * Creates a new inhouse lobby.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     * @param {string[]} steamid_64s - A list of inhouse player steamids.
+     */
+    async createNewLobbyForInhouse(guild, steamid_64s) {
+        let inhouseState = getInhouseState(this.inhouseStates, guild.id);
+        if (inhouseState) {
+            logger.debug(`ihlManager createLobby guild found ${guild.id}`);
+            inhouseState = await createNewLobbyForInhouse(inhouseState, this, steamid_64s);
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager createLobby guild not found ${guild.id}`);
+        }
+    }
+
+    /**
+     * Checks the inhouse queue.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     */
+    async checkInhouseQueue(guild) {
+        logger.debug('ihlManager checkInhouseQueue');
+        let inhouseState = getInhouseState(this.inhouseStates, guild.id);
+        if (inhouseState) {
+            logger.debug(`ihlManager checkInhouseQueue guild found ${guild.id}`);
+            inhouseState = await checkInhouseQueue(this)(inhouseState);
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager checkInhouseQueue guild not found ${guild.id}`);
+        }
+    }
+
+    /**
+     * Adds a user to the inhouse queue.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     * @param {external:User} user - A discord.js user.
+     */
+    async joinInhouseQueue(guild, user) {
+        logger.debug('ihlManager joinInhouseQueue');
+        let inhouseState = getInhouseState(this.inhouseStates, guild.id);
+        if (inhouseState) {
+            logger.debug(`ihlManager joinInhouseQueue guild found ${guild.id}`);
+            inhouseState = await joinInhouseQueue(inhouseState, user, this);
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager joinInhouseQueue guild not found ${guild.id}`);
+        }
+    }
+
+    /**
+     * Removes a user from the inhouse queue.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     * @param {external:User} user - A discord.js user.
+     */
+    async leaveInhouseQueue(guild, user) {
+        logger.debug('ihlManager leaveInhouseQueue');
+        let inhouseState = getInhouseState(this.inhouseStates, guild.id);
+        if (inhouseState) {
+            logger.debug(`ihlManager leaveInhouseQueue guild found ${guild.id}`);
+            inhouseState = await leaveInhouseQueue(inhouseState, user, this);
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager leaveInhouseQueue guild not found ${guild.id}`);
+        }
+    }
+
+    /**
+     * Bans a user from the inhouse queue.
+     * @async
+     * @param {external:Guild} guild - A discord.js guild.
+     * @param {external:User} user - A discord.js user.
+     * @param {number} timeout - Duration of ban in minutes.
+     */
+    async banInhouseQueue(guild, user, timeout) {
+        logger.debug('ihlManager banInhouseQueue');
+        let inhouseState = getInhouseState(this.inhouseStates, guild.id);
+        if (inhouseState) {
+            logger.debug(`ihlManager banInhouseQueue guild found ${guild.id}`);
+            inhouseState = await banInhouseQueue(inhouseState, user, timeout);
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager banInhouseQueue guild not found ${guild.id}`);
+        }
+    }
+
+    /**
+     * Processes and executes a lobby state if it matches any of the given states.
+     * If no states to match against are given, the lobby state is run by default.
+     * @async
+     * @param {module:lobby.LobbyState} _lobbyState - An inhouse lobby state.
+     * @param {string[]} states - A list of valid lobby states.
+     */
+    async runLobby(_lobbyState, states = []) {
+        logger.debug(`ihlManager runLobby ${_lobbyState.lobby_name} ${states}`);
+        let [lobbyState, inhouseState] = getLobbyByLobbyName(this.inhouseStates, _lobbyState.lobby_name);
+        if (!states.length || states.indexOf(lobbyState.state) !== -1) {
+            logger.debug(`ihlManager runLobby valid state ${lobbyState.state} ${states}`);
+            lobbyState = await runLobby(lobbyState, this);
+            if (lobbyState.state === CONSTANTS.STATE_KILLED) {
+                inhouseState = removeLobbyFromInhouse(inhouseState, lobbyState);
+                this.emit(CONSTANTS.EVENT_LOBBY_KILLED, inhouseState);
+            }
+            else {
+                inhouseState = addLobbyToInhouse(inhouseState, lobbyState);
+            }
+            this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+        }
+        else {
+            logger.debug(`ihlManager runLobby invalid state ${lobbyState.state} ${states}`);
+        }
+    }
+    
+    /**
+     * Creates and registers a ready up timer for a lobby state.
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     */
+    registerLobbyTimeout(lobbyState) {
+        this.unregisterLobbyTimeout(lobbyState);
+        const delay = Math.max(0, lobbyState.ready_check_time + lobbyState.ready_check_timeout - Date.now());
+        logger.debug(`ihlManager registerLobbyTimeout ${lobbyState.ready_check_time} ${lobbyState.ready_check_timeout}. timeout ${delay}ms`);
+        this.lobbyTimeoutTimers[lobbyState.lobby_name] = setTimeout(() => {
+            logger.debug(`ihlManager lobby ${lobbyState.lobby_name} timed out`);
+            this.queueEvent(this.onLobbyTimedOut, [lobbyState]);
+        }, delay);
+    }
+
+    /**
+     * Clears and unregisters the ready up timer for a lobby state.
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     */
+    unregisterLobbyTimeout(lobbyState) {
+        logger.debug('ihlManager unregisterLobbyTimeout');
+        if (this.lobbyTimeoutTimers[lobbyState.lobby_name]) {
+            clearTimeout(this.lobbyTimeoutTimers[lobbyState.lobby_name]);
+        }
+        this.lobbyTimeoutTimers[lobbyState.lobby_name] = null;
+    }
+
+    /**
+     * Runs a lobby state when its ready up timer has expired.
+     * Checks for STATE_CHECKING_READY lobby state
+     * @async
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     */
+    async onLobbyTimedOut(lobbyState) {
+        logger.debug('ihlManager onLobbyTimedOut');
+        this.lobbyTimeoutTimers[lobbyState.lobby_name] = null;
+        await this.runLobby(lobbyState, [CONSTANTS.STATE_CHECKING_READY]);
+    }
+
+    /**
+     * Event reporting that all players are ready.
+     *
+     * @event module:ihlManager~EVENT_PLAYERS_READY
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     */
+
+    /**
+     * Runs a lobby state when all players have readied up.
+     * Checks for STATE_CHECKING_READY lobby state
+     * @async
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @listens module:ihlManager~event:EVENT_PLAYERS_READY
+     */
+    async onPlayersReady(lobbyState) {
+        logger.debug('ihlManager onPlayersReady');
+        this.unregisterLobbyTimeout(lobbyState);
+        await this.runLobby(lobbyState, [CONSTANTS.STATE_CHECKING_READY]);
+    }
+
+    /**
+     * Event reporting that a player has readied up.
+     *
+     * @event module:ihlManager~EVENT_PLAYER_READY
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @param {module:db.User} user - The picked user
+     */
+
+    /**
+     * Runs a lobby state when a player has readied up and update their player ready state.
+     * Checks for STATE_CHECKING_READY lobby state
+     * @async
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @param {module:db.User} user - An inhouse user.
+     * @listens module:ihlManager~event:EVENT_PLAYER_READY
+     */
+    async onPlayerReady(lobbyState, user) {
+        logger.debug('ihlManager onPlayerReady');
+        await setPlayerReady(true)(lobbyState)(user.steamid_64);
+        await this.runLobby(lobbyState, [CONSTANTS.STATE_CHECKING_READY]);
+    }
+
+    /**
+     * Event reporting that a player has been picked.
+     *
+     * @event module:ihlManager~EVENT_PICK_PLAYER
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @param {module:db.User} user - The picked user
+     * @param {number} faction - The picking faction
+     */
+
+    /**
+     * Checks if a player is draftable and fires an event representing the result.
+     * If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and runs the lobby state.
+     * @async
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @param {module:db.User} user - The picked user
+     * @param {number} faction - The picking faction
+     * @listens module:ihlManager~event:EVENT_PICK_PLAYER
+     */
+    async onDraftMember(lobbyState, user, faction) {
+        logger.debug('ihlManager onDraftMember');
+        await setPlayerTeam(faction)(lobbyState)(user.steamid_64);
+        await this.runLobby(lobbyState, [CONSTANTS.STATE_DRAFTING_PLAYERS]);
+    }
+
+    /**
+     * Runs a lobby state when the lobby is ready (all players have joined and are in the right team slot).
+     * Checks for STATE_WAITING_FOR_PLAYERS lobby state
+     * @async
+     * @param {module:lobby.LobbyState} _lobbyState - An inhouse lobby state.
+     */
+    async onLobbyReady(_lobbyState) {
+        logger.debug('ihlManager onLobbyReady');
+        await this.runLobby(_lobbyState, [CONSTANTS.STATE_WAITING_FOR_PLAYERS]);
+    }
+
+    /**
+     * Kills a lobby state.
+     * @async
+     * @param {module:lobby.LobbyState} _lobbyState - An inhouse lobby state.
+     * @param {module:ihl.InhouseState} _inhouseState - The inhouse state for the lobby.
+     */
+    async onLobbyKill(_lobbyState, _inhouseState) {
+        logger.debug('ihlManager onLobbyKill');
+        const inhouseState = removeLobbyFromInhouse(_inhouseState, _lobbyState);
+        this.emit(CONSTANTS.EVENT_LOBBY_KILLED, inhouseState);
+        this.inhouseStates = addInhouseState(this.inhouseStates, inhouseState);
+    }
+
+    /**
+     * Event reporting that a match has ended.
+     *
+     * @event module:ihlManager~EVENT_MATCH_ENDED
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     */
+
+    /**
+     * Runs a lobby state when the match has ended.
+     * Checks for STATE_MATCH_IN_PROGRESS lobby state
+     * @async
+     * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
+     * @listens module:ihlManager~event:EVENT_MATCH_ENDED
+     */
+    async onMatchEnd(lobbyState) {
+        logger.debug('ihlManager onMatchEnd');
+        await this.runLobby(lobbyState, [CONSTANTS.STATE_MATCH_IN_PROGRESS]);
+    }
+
+    /**
+     * Processes the inhouse manager event queue until it is empty.
+     * Events are actions to perform on lobby states.
+     * @async
+     */
+    async processEventQueue() {
+        logger.debug(`ihlManager processEventQueue ${this.blocking} ${this.eventQueue.length}`);
+        if (this.blocking) return;
+        if (this.eventQueue.length) {
+            this.blocking = true;
+            const [fn, args] = this.eventQueue.shift();
+            logger.debug(`ihlManager processEventQueue processing ${fn.name} ${this.eventQueue.length}`);
+            await fn.apply(this, args);
+            logger.debug(`ihlManager processEventQueue processed ${fn.name} ${this.eventQueue.length}`);
+            this.blocking = false;
+            if (this.eventQueue.length) {
+                logger.debug(`ihlManager processEventQueue looping ${this.eventQueue.length}`);
+                await this.processEventQueue();
+            }
+        }
+    }
+    
+    /**
+     * Callback for a lobby processing event.
+     *
+     * @callback eventCallback
+     */
+
+    /**
+     * Adds a lobby processing function and its arguments to the queue.
+     * When the queue is processed the function will be executed with its arguments.
+     * @param {eventCallback} fn - A lobby processing event function.
+     * @param {...*} args - A list of arguments the lobby processing event function will be called with.
+     */
+    queueEvent(fn, args) {
+        logger.debug(`ihlManager queuing event ${fn.name}`);
+        this.eventQueue.push([fn, args]);
+        this.processEventQueue();
+    }
+
+    /**
+     * Bind all lobby events to their corresponding event handler functions
+     */
+    attachEventHandlers() {
+        logger.debug('ihlManager attachEventHandlers');
+        this.on(CONSTANTS.EVENT_READY_CHECK_START, lobbyState => this.registerLobbyTimeout(lobbyState));
+        this.on(CONSTANTS.EVENT_PLAYER_READY, (lobbyState, user) => this.queueEvent(this.onPlayerReady, [lobbyState, user]));
+        this.on(CONSTANTS.EVENT_PLAYERS_READY, lobbyState => this.queueEvent(this.onPlayersReady, [lobbyState]));
+        this.on(CONSTANTS.EVENT_PICK_PLAYER, (lobbyState, user, faction) => this.queueEvent(this.onDraftMember, [lobbyState, user, faction]));
+
+        this.on(CONSTANTS.EVENT_MATCH_ENDED, lobbyState => this.queueEvent(this.onMatchEnd, [lobbyState]));
+
+        this.on(CONSTANTS.EVENT_LOBBY_SET_FP, async (lobbyState, cm_pick) => lobbyState.dotaBot.configPracticeLobby({ cm_pick }));
+        this.on(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, async (lobbyState, game_mode) => lobbyState.dotaBot.configPracticeLobby({ game_mode }));
+        this.on(CONSTANTS.EVENT_LOBBY_SWAP_TEAMS, async (lobbyState) => lobbyState.dotaBot.flipLobbyTeams());
+
+        this.on(CONSTANTS.EVENT_LOBBY_READY, lobbyState => this.queueEvent(this.onLobbyReady, [lobbyState]));
+        this.on(CONSTANTS.EVENT_LOBBY_KILL, (lobbyState, inhouseState) => this.queueEvent(this.onLobbyKill, [lobbyState, inhouseState]));
+    }
+
+    /**
+     * Bind all message events to their corresponding event handler functions
+     */
+    attachMessageHandlers() {
+        logger.debug('ihlManager attachMessageHandlers');
+        this.on(CONSTANTS.EVENT_READY_CHECK_START, async lobbyState => lobbyState.channel.send(`Queue popped. ${lobbyState.role} reply with \`!ready\``).catch(console.error));
+        this.on(CONSTANTS.EVENT_READY_CHECK_FAILED, async (lobbyState) => {
+            const [, inhouseState] = getLobbyByLobbyName(this.inhouseStates, lobbyState.lobby_name);
+            return inhouseState.channel.send('Failed to ready up.').catch(console.error);
+        });
+        this.on(CONSTANTS.EVENT_PLAYERS_READY, async lobbyState => lobbyState.channel.send('All players ready.').catch(console.error));
+        this.on(CONSTANTS.EVENT_AUTOBALANCING, async lobbyState => lobbyState.channel.send('No suitable captain pairing. Autobalancing teams instead.').catch(console.error));
+        this.on(CONSTANTS.EVENT_ASSIGNED_CAPTAINS, async (lobbyState) => {
+            const captain_user_1 = resolveUser(lobbyState.guild, lobbyState.captain_1);
+            const captain_user_2 = resolveUser(lobbyState.guild, lobbyState.captain_2);
+            return lobbyState.channel.send(`Assigned ${captain_user_1} and ${captain_user_2} as captains`).catch(console.error);
+        });
+        this.on(CONSTANTS.EVENT_DRAFT_TURN, async (lobbyState) => {
+            const lobbyPlayer = await getFactionCaptain(lobbyState);
+            const player = await lobbyPlayer.getUser();
+            const user = lobbyState.guild.members.get(player.discord_id);
+            return lobbyState.channel.send(`${user}'s turn to draft a player. Use \`!pick @mention\``).catch(console.error);
+        });
+        this.on(CONSTANTS.EVENT_TEAMS_SELECTED, async (lobbyState) => {
+            const lobby = await getLobby(lobbyState);
+            let players;
+            let nicknames;
+            players = await lobby.getTeam1Players();
+            nicknames = players.map(player => player.nickname);
+            await lobbyState.channel.send(`Team 1: ${nicknames.join(',')}`).catch(console.error);
+            players = await lobby.getTeam2Players();
+            nicknames = players.map(player => player.nickname);
+            return lobbyState.channel.send(`Team 2: ${nicknames.join(',')}`).catch(console.error);
+        });
+
+        this.on(CONSTANTS.EVENT_INVALID_DRAFT_CAPTAIN, async lobbyState => lobbyState.channel.send('Cannot draft a captain.').catch(console.error));
+        this.on(CONSTANTS.EVENT_INVALID_DRAFT_PLAYER, async lobbyState => lobbyState.channel.send('Player already drafted.').catch(console.error));
+        this.on(CONSTANTS.EVENT_INVALID_PLAYER_NOT_FOUND, async lobbyState => lobbyState.channel.send('Player not found.').catch(console.error));
+        this.on(CONSTANTS.EVENT_PLAYER_DRAFTED, async (lobbyState, drafter, member) => lobbyState.channel.send(`${member} drafted by ${drafter}`).catch(console.error));
+
+        this.on(CONSTANTS.EVENT_LOBBY_STARTED, lobbyState => lobbyState.channel.send(`Lobby started. Match id: ${lobbyState.match_id}.`).catch(console.error));
+        this.on(CONSTANTS.EVENT_LOBBY_KILLED, async (inhouseState) => inhouseState.channel.send('Lobby killed.').catch(console.error));
+
+        this.on(CONSTANTS.EVENT_CHAT_MESSAGE, async (lobbyState, channel, sender_name, message) => lobbyState.channel.send(`**${sender_name}:** ${message}`).catch(console.error));
+        this.on(CONSTANTS.EVENT_DISCORD_MESSAGE, (msg) => {
+            const [lobbyState] = getLobbyFromMessage(this.inhouseStates, msg);
+            if (lobbyState &amp;&amp; lobbyState.dotaBot) {
+                lobbyState.dotaBot.sendMessage(`${msg.member.displayName}: ${msg.content}`);
+            }
+        });
+
+        this.on(CONSTANTS.EVENT_LOBBY_PLAYER_JOINED, async (lobbyState, member) => lobbyState.channel.send(`${member.name} joined lobby`).catch(console.error));
+        this.on(CONSTANTS.EVENT_LOBBY_PLAYER_LEFT, async (lobbyState, member) => lobbyState.channel.send(`${member.name} left lobby`).catch(console.error));
+        this.on(CONSTANTS.EVENT_LOBBY_PLAYER_CHANGED_SLOT, async (lobbyState, state) => lobbyState.channel.send(`${state.current.name} ${state.current.id} changed slot`).catch(console.error));
+
+        this.on(CONSTANTS.EVENT_QUEUE_LEFT, async (inhouseState, queueCount) => inhouseState.channel.send(`Left queue. ${queueCount} in queue.`).catch(console.error));
+        this.on(CONSTANTS.EVENT_QUEUE_JOINED, async (inhouseState, queueCount) => inhouseState.channel.send(`Joined queue. ${queueCount} in queue.`).catch(console.error));
+        this.on(CONSTANTS.EVENT_QUEUE_BANNED, async (inhouseState, user) => inhouseState.channel.send(`You are banned from queuing. Remaining time: ${toHHMMSS((user.queue_timeout - Date.now()) / 1000)}.`).catch(console.error));
+        this.on(CONSTANTS.EVENT_QUEUE_ALREADY_JOINED, async (inhouseState, user) => {
+            const author = inhouseState.guild.members.get(user.discord_id);
+            return inhouseState.channel.send(`${author} already in queue or game.`).catch(console.error);
+        });
+
+        this.on(CONSTANTS.EVENT_MATCH_ENDED, async (lobbyState) => {
+            const [, inhouseState] = getLobbyByLobbyName(this.inhouseStates, lobbyState.lobby_name);
+            const embed = await createMatchEndMessageEmbed(lobbyState.match_id);
+            return inhouseState.channel.send(embed).catch(console.error);
+        });
+    }
+}
+
+/**
+ * A singleton instance of IHLManager that is exported by this module.
+ * @constant
+ * @type {IHLManager}
+*/
+const ihlManager = new IHLManager();
+
+module.exports = {
+    addInhouseState,
+    loadInhouseStates,
+    getInhouseState,
+    getLobbyByChannelId,
+    getLobbyByLobbyName,
+    isMessageFromAdmin,
+    getLobbyFromMessage,
+    ihlManager,
+    findUser,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">https://github.com/devilesk/dota-ihl-bot</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>

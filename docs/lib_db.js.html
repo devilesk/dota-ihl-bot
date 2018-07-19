@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Source: lib/db.js | dota-ihl-bot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
+</head>
+<body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="">
+        
+            <img src="img/toast-ui.png" width="100%" height="100%">
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">dota-ihl-bot</a></h1>
+        
+            <span class="version">v0.0.0</span>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-client.html">client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:client_sub"></div></li><li><a href="module-constants.html">constants</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:constants_sub"></div></li><li><a href="module-db.html">db</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:db_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-db.html#.League">League</a></li><li><a href="module-db.html#.User">User</a></li></ul></div></li><li><a href="module-dotaBot.html">dotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot.html#~isDotaLobbyReady">isDotaLobbyReady</a></li><li><a href="module-dotaBot.html#~slotToFaction">slotToFaction</a></li><li><a href="module-dotaBot.html#~updatePlayerState">updatePlayerState</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-dotaBot.html#.LogOnDetails">LogOnDetails</a></li></ul></div></li><li><a href="module-guild.html">guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:guild_sub"></div></li><li><a href="module-ihl.html">ihl</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihl_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihl.html#~addLobbyToInhouse">addLobbyToInhouse</a></li><li><a href="module-ihl.html#~banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihl.html#~checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihl.html#~createInhouseState">createInhouseState</a></li><li><a href="module-ihl.html#~createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihl.html#~getUserRankTier">getUserRankTier</a></li><li><a href="module-ihl.html#~joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihl.html#~leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihl.html#~loadLobbiesIntoInhouse">loadLobbiesIntoInhouse</a></li><li><a href="module-ihl.html#~registerUser">registerUser</a></li><li><a href="module-ihl.html#~removeLobbyFromInhouse">removeLobbyFromInhouse</a></li><li><a href="module-ihl.html#~runLobbiesForInhouse">runLobbiesForInhouse</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihl.html#.InhouseState">InhouseState</a></li></ul></div></li><li><a href="module-ihlManager.html">ihlManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-ihlManager.html#~ihlManager">ihlManager</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager.html#~addInhouseState">addInhouseState</a></li><li><a href="module-ihlManager.html#~findUser">findUser</a></li><li><a href="module-ihlManager.html#~getIndexOfInhouseState">getIndexOfInhouseState</a></li><li><a href="module-ihlManager.html#~getInhouseState">getInhouseState</a></li><li><a href="module-ihlManager.html#~getLobbyByChannelId">getLobbyByChannelId</a></li><li><a href="module-ihlManager.html#~getLobbyByLobbyName">getLobbyByLobbyName</a></li><li><a href="module-ihlManager.html#~getLobbyFromMessage">getLobbyFromMessage</a></li><li><a href="module-ihlManager.html#~isMessageFromAdmin">isMessageFromAdmin</a></li><li><a href="module-ihlManager.html#~loadInhouseState">loadInhouseState</a></li><li><a href="module-ihlManager.html#~loadInhouseStates">loadInhouseStates</a></li><li><a href="module-ihlManager.html#~loadInhouseStatesFromLeagues">loadInhouseStatesFromLeagues</a></li><li><a href="module-ihlManager.html#~transformLeagueGuild">transformLeagueGuild</a></li></ul><div class="member-type">Events</div><ul class="inner"><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-ihlManager.html#.LeagueGuildObject">LeagueGuildObject</a></li><li><a href="module-ihlManager.html#~eventCallback">eventCallback</a></li></ul></div></li><li><a href="module-lobby.html">lobby</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:lobby_sub"><div class="member-type">Typedef</div><ul class="inner"><li><a href="module-lobby.html#.LobbyState">LobbyState</a></li></ul></div></li><li><a href="module-matchTracker.html">matchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Externals</h3><ul><li><a href="external-CategoryChannel.html">CategoryChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:CategoryChannel_sub"></div></li><li><a href="external-Client.html">Client</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Client_sub"></div></li><li><a href="external-Command.html">Command</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Command_sub"></div></li><li><a href="external-EventEmitter.html">EventEmitter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:EventEmitter_sub"></div></li><li><a href="external-Guild.html">Guild</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Guild_sub"></div></li><li><a href="external-GuildChannel.html">GuildChannel</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildChannel_sub"></div></li><li><a href="external-GuildMember.html">GuildMember</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:GuildMember_sub"></div></li><li><a href="external-Message.html">Message</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Message_sub"></div></li><li><a href="external-Model.html">Model</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Model_sub"></div></li><li><a href="external-Role.html">Role</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:Role_sub"></div></li><li><a href="external-User.html">User</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="external:User_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="CommendCommand.html">CommendCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="CommendCommand_sub"></div></li><li><a href="GameModeCommand.html">GameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="GameModeCommand_sub"></div></li><li><a href="LeaderboardCommand.html">LeaderboardCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeaderboardCommand_sub"></div></li><li><a href="LeagueCreateCommand.html">LeagueCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueCreateCommand_sub"></div></li><li><a href="LeagueInfoCommand.html">LeagueInfoCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueInfoCommand_sub"></div></li><li><a href="LeagueSeasonCommand.html">LeagueSeasonCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueSeasonCommand_sub"></div></li><li><a href="LeagueUpdateCommand.html">LeagueUpdateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LeagueUpdateCommand_sub"></div></li><li><a href="LobbyCreateCommand.html">LobbyCreateCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyCreateCommand_sub"></div></li><li><a href="LobbyFirstPickCommand.html">LobbyFirstPickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyFirstPickCommand_sub"></div></li><li><a href="LobbyGameModeCommand.html">LobbyGameModeCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyGameModeCommand_sub"></div></li><li><a href="LobbyInviteCommand.html">LobbyInviteCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyInviteCommand_sub"></div></li><li><a href="LobbyKickCommand.html">LobbyKickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKickCommand_sub"></div></li><li><a href="LobbyKillCommand.html">LobbyKillCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyKillCommand_sub"></div></li><li><a href="LobbyStartCommand.html">LobbyStartCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbyStartCommand_sub"></div></li><li><a href="LobbySwapCommand.html">LobbySwapCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="LobbySwapCommand_sub"></div></li><li><a href="module-dotaBot-DotaBot.html">DotaBot</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:dotaBot~DotaBot_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#accountId">accountId</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#backoff">backoff</a></li><li><a href="module-dotaBot-DotaBot.html#lobby">lobby</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#rate_limit">rate_limit</a></li><li><a href="module-dotaBot-DotaBot.html#state">state</a></li><li><a href="module-dotaBot-DotaBot.html#steamId">steamId</a></li><li><a href="module-dotaBot-DotaBot.html#steamid_64">steamid_64</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="module-dotaBot-DotaBot.html#connect">connect</a></li><li><a href="module-dotaBot-DotaBot.html#disconnect">disconnect</a></li><li><a href="module-dotaBot-DotaBot.html#schedule">schedule</a></li></ul></div></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:ihlManager~IHLManager_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-ihlManager-IHLManager.html#attachEventHandlers">attachEventHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#attachMessageHandlers">attachMessageHandlers</a></li><li><a href="module-ihlManager-IHLManager.html#banInhouseQueue">banInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#checkInhouseQueue">checkInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLeague">createNewLeague</a></li><li><a href="module-ihlManager-IHLManager.html#createNewLobbyForInhouse">createNewLobbyForInhouse</a></li><li><a href="module-ihlManager-IHLManager.html#init">init</a></li><li><a href="module-ihlManager-IHLManager.html#joinInhouseQueue">joinInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#leaveInhouseQueue">leaveInhouseQueue</a></li><li><a href="module-ihlManager-IHLManager.html#onDraftMember">onDraftMember</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyKill">onLobbyKill</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyReady">onLobbyReady</a></li><li><a href="module-ihlManager-IHLManager.html#onLobbyTimedOut">onLobbyTimedOut</a></li><li><a href="module-ihlManager-IHLManager.html#onMatchEnd">onMatchEnd</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayerReady">onPlayerReady</a></li><li><a href="module-ihlManager-IHLManager.html#onPlayersReady">onPlayersReady</a></li><li><a href="module-ihlManager-IHLManager.html#processEventQueue">processEventQueue</a></li><li><a href="module-ihlManager-IHLManager.html#queueEvent">queueEvent</a></li><li><a href="module-ihlManager-IHLManager.html#registerLobbyTimeout">registerLobbyTimeout</a></li><li><a href="module-ihlManager-IHLManager.html#runLobby">runLobby</a></li><li><a href="module-ihlManager-IHLManager.html#unregisterLobbyTimeout">unregisterLobbyTimeout</a></li></ul></div></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:matchTracker~MatchTracker_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-matchTracker-MatchTracker.html#run">run</a></li><li><a href="module-matchTracker-MatchTracker.html#start">start</a></li><li><a href="module-matchTracker-MatchTracker.html#stop">stop</a></li></ul></div></li><li><a href="NicknameCommand.html">NicknameCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="NicknameCommand_sub"></div></li><li><a href="PickCommand.html">PickCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="PickCommand_sub"></div></li><li><a href="Queue.html">Queue</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Queue_sub"><div class="member-type">Members</div><ul class="inner"><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#backoff">backoff</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#rate_limit">rate_limit</a></li><li><a href="Queue.html#state">state</a></li></ul><div class="member-type">Methods</div><ul class="inner"><li><a href="Queue.html#block">block</a></li><li><a href="Queue.html#clear">clear</a></li><li><a href="Queue.html#release">release</a></li><li><a href="Queue.html#schedule">schedule</a></li></ul></div></li><li><a href="QueueBanCommand.html">QueueBanCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueBanCommand_sub"></div></li><li><a href="QueueClearCommand.html">QueueClearCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueClearCommand_sub"></div></li><li><a href="QueueJoinCommand.html">QueueJoinCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueJoinCommand_sub"></div></li><li><a href="QueueLeaveCommand.html">QueueLeaveCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueLeaveCommand_sub"></div></li><li><a href="QueueReadyCommand.html">QueueReadyCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueReadyCommand_sub"></div></li><li><a href="QueueStatusCommand.html">QueueStatusCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="QueueStatusCommand_sub"></div></li><li><a href="RegisterCommand.html">RegisterCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RegisterCommand_sub"></div></li><li><a href="RepCommand.html">RepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RepCommand_sub"></div></li><li><a href="RolesCommand.html">RolesCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="RolesCommand_sub"></div></li><li><a href="UnrepCommand.html">UnrepCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="UnrepCommand_sub"></div></li><li><a href="WhoisCommand.html">WhoisCommand</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="WhoisCommand_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
+
+<div class="main" id="main">
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module db
+ */
+ 
+ /**
+ * Sequelize Model object
+ * @external Model
+ * @see {@link http://docs.sequelizejs.com/class/lib/model.js~Model.html}
+ */
+ 
+/**
+ * @typedef module:db.League
+ * @type {external:Model}
+ */
+ 
+/**
+ * @typedef module:db.User
+ * @type {external:Model}
+ */
+ 
+const Sequelize = require('sequelize');
+const db = require('../models');
+const CONSTANTS = require('./constants');
+
+const Op = Sequelize.Op;
+
+const findAllLeagues = async () => db.League.findAll();
+
+const findAllActiveLobbies = async guild_id => db.Lobby.scope('active', { method: ['guild', guild_id] }).findAll();
+
+const findAllInProgressLobbies = async () => db.Lobby.findAll({ where: { state: CONSTANTS.STATE_MATCH_IN_PROGRESS } });
+
+const findLeague = async guild_id => db.League.find({ where: { guild_id } });
+
+const findOrCreateLeague = async guild_id => db.sequelize.transaction(async t => db.League.findOrCreate({
+    where: { guild_id },
+    transaction: t,
+})
+    .spread(league => db.Season.findOrCreate({
+        where: { league_id: league.id, active: true },
+        include: [db.League],
+        transaction: t,
+    }))
+    .spread(season => season.getLeague()
+        .then(league => league.update({ current_season_id: season.id }, { transaction: t }))));
+
+const createSeason = async guild_id => sequelize.transaction(async (t) => {
+    const league = await findLeague(guild_id);
+    await db.Season.update({ active: false }, { where: { league_id: league.id }, transaction: t });
+    const season = await db.Season.create({ league_id: league.id, active: true }, { transaction: t });
+    await league.update({ current_season_id: season.id }, { transaction: t });
+    return season;
+});
+
+const findOrCreateBot = async (league, steamid_64, steam_name, steam_user, steam_pass) => db.Bot.findOrCreate({
+    where: {
+        league_id: league.id,
+        steamid_64,
+        steam_name,
+        steam_user,
+        steam_pass,
+    },
+})
+    .spread(bot => bot);
+
+const findOrCreateLobby = async (league, lobby_name) => db.Lobby.findOrCreate({
+    where: { league_id: league.id, season_id: league.current_season_id, lobby_name },
+    include: [{
+        model: db.League,
+        where: {
+            id: league.id,
+        },
+    }],
+})
+    .spread(lobby => lobby);
+
+const findOrCreateLobbyForGuild = async (guild_id, lobby_name) => findOrCreateLobby(await findOrCreateLeague(guild_id), lobby_name);
+
+const findLobby = async lobby_name => db.Lobby.scope({ method: ['lobby_name', lobby_name] }).find();
+
+const findBot = async id => db.Bot.findOne({ where: { id } });
+
+const findAllUnassignedBot = async () => db.Bot.findAll({ where: { status: CONSTANTS.BOT_OFFLINE }, include: [{ model: db.Lobby, where: { active: true, state: { [Op.ne]: CONSTANTS.STATE_MATCH_ENDED } }, required: false }] });
+
+const findUserByDiscordId = guild_id => async discord_id => db.User.scope({ method: ['guild', guild_id] }, { method: ['discord_id', discord_id] }).find();
+
+const findUserBySteamId64 = guild_id => async steamid_64 => db.User.scope({ method: ['guild', guild_id] }, { method: ['steamid_64', steamid_64] }).find();
+
+const findUserByNicknameLevenshtein = member => db.sequelize.query('SELECT * FROM "Users" WHERE levenshtein(LOWER(nickname), LOWER(:nickname)) &lt; 2', { replacements: { nickname: member }, model: db.User });
+
+const findOrCreateUser = async (league, steamid_64, discord_id, rank_tier) => db.User.findOrCreate({
+    where: {
+        league_id: league.id, steamid_64, discord_id, rank_tier,
+    },
+    include: [{
+        model: db.League,
+        where: {
+            id: league.id,
+        },
+    }],
+})
+    .spread(user => user);
+
+const findOrCreateQueue = async user => db.Queue.findOrCreate({
+    where: { league_id: user.league_id, user_id: user.id },
+    include: [{
+        model: db.User,
+        where: {
+            id: user.id,
+        },
+    }],
+});
+
+const findOrCreateMatch = async match_id => db.Match.findOrCreate({
+    where: {
+        match_id,
+    },
+    defaults: {
+        match_id,
+    },
+});
+
+const findMatch = async match_id => db.Match.findOne({ where: { match_id }, include: [db.Lobby] });
+
+const queryUserLeaderboardRank = league_id => season_id => async user_id => db.sequelize.query('SELECT rank FROM (SELECT *, rank() OVER (ORDER BY rating DESC) FROM "Leaderboards" WHERE league_id = :league_id AND season_id = :season_id) AS ranking WHERE user_id = :user_id LIMIT 1',
+    { replacements: { league_id, season_id, user_id }, type: db.sequelize.QueryTypes.SELECT }).then(([rank]) => (rank ? rank.rank : null));
+
+const queryLeaderboardRank = league_id => season_id => async limit => db.sequelize.query('SELECT * FROM (SELECT *, rank() OVER (ORDER BY rating DESC) FROM "Leaderboards" WHERE league_id = :league_id AND season_id = :season_id LIMIT :limit) AS ranking INNER JOIN "Users" as users ON ranking.user_id = users.id',
+    { replacements: { league_id, season_id, limit }, type: db.sequelize.QueryTypes.SELECT });
+
+
+const updateLeague = guild_id => async values => db.League.update(values, { where: { guild_id } });
+
+const updateLobbyState = async lobbyOrState => db.Lobby.update(lobbyOrState, { where: { lobby_name: lobbyOrState.lobby_name } });
+
+const updateBotStatusBySteamId = status => async steamid_64 => db.Bot.update({ status }, { where: { steamid_64 } });
+
+const updateBotStatus = status => async id => db.Bot.update({ status }, { where: { id } });
+
+const findInQueueWithUser = async () => db.Queue.findAll({
+    where: { state: CONSTANTS.QUEUE_IN_QUEUE }, limit: 10, order: [['timestamp', 'ASC']], include: [db.User],
+});
+
+const findAllInQueueWithUser = async () => db.Queue.findAll({
+    where: { state: CONSTANTS.QUEUE_IN_QUEUE }, order: [['timestamp', 'ASC']], include: [db.User],
+});
+
+const findInQueueBySteamId = guild_id => async steamid_64 => db.Queue.scope({ method: ['state', CONSTANTS.QUEUE_IN_QUEUE] }, { method: ['guild', guild_id] }, { method: ['steamid_64', steamid_64] }).findOne();
+
+const updateQueueStates = state => async ids => db.Queue.update({ state }, { where: { id: { [Op.in]: ids } } });
+
+const updateQueueStatesByUserId = state => async user_ids => db.Queue.update({ state }, { where: { user_id: { [Op.in]: user_ids } } });
+
+const destroyQueues = async ids => db.Queue.destroy({ where: { id: { [Op.in]: ids } } });
+
+const destroyQueuesByGuildId = async (guild_id) => {
+    const queues = await db.Queue.scope({ method: ['guild', guild_id] }).findAll();
+    return await destroyQueues(queues.map(queue => queue.id));
+};
+
+const destroyQueuesByUserId = async user_ids => db.Queue.destroy({ where: { user_id: { [Op.in]: user_ids } } });
+
+const countQueueInQueue = async guild_id => db.Queue.scope({ method: ['state', CONSTANTS.QUEUE_IN_QUEUE] }, { method: ['guild', guild_id] }).count();
+
+const findOrCreateReputation = league => giver => async receiver => db.Reputation.findOrCreate({ where: { recipient_user_id: receiver.id, giver_user_id: giver.id }, defaults: { timestamp: Date.now(), season_id: league.current_season_id } });
+
+const destroyReputation = league => giver => async receiver => db.Reputation.destroy({ where: { recipient_user_id: receiver.id, giver_user_id: giver.id, season_id: league.current_season_id } });
+
+module.exports = {
+    findAllLeagues,
+    findAllActiveLobbies,
+    findAllInProgressLobbies,
+    findLeague,
+    findOrCreateLeague,
+    createSeason,
+    findOrCreateBot,
+    findOrCreateLobby,
+    findOrCreateLobbyForGuild,
+    findLobby,
+    findBot,
+    findAllUnassignedBot,
+    findOrCreateUser,
+    findOrCreateQueue,
+    findOrCreateMatch,
+    findMatch,
+    findUserByDiscordId,
+    findUserBySteamId64,
+    findUserByNicknameLevenshtein,
+    queryUserLeaderboardRank,
+    queryLeaderboardRank,
+    updateLeague,
+    updateLobbyState,
+    updateBotStatusBySteamId,
+    updateBotStatus,
+    findInQueueWithUser,
+    findAllInQueueWithUser,
+    findInQueueBySteamId,
+    updateQueueStates,
+    updateQueueStatesByUserId,
+    destroyQueues,
+    destroyQueuesByGuildId,
+    destroyQueuesByUserId,
+    countQueueInQueue,
+    findOrCreateReputation,
+    destroyReputation,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<footer>
+    <img class="logo" src="img/toast-ui.png" style="">
+    <div class="footer-text">https://github.com/devilesk/dota-ihl-bot</div>
+</footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
+</body>
+</html>
