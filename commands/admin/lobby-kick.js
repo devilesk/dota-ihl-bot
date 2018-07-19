@@ -5,6 +5,10 @@ const {
 } = require('../../lib/ihlManager');
 const { findUserByDiscordId } = require('../../lib/db');
 
+/**
+ * @class LobbyKickCommand
+ * @extends external:Command
+ */
 module.exports = class LobbyKickCommand extends Command {
     constructor(client) {
         super(client, {

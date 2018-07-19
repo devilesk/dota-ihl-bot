@@ -27,11 +27,74 @@
 <dt><a href="#Queue">Queue</a></dt>
 <dd><p>Class representing a job queue with exponential backoff</p>
 </dd>
+<dt><a href="#LeagueCreateCommand">LeagueCreateCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LeagueInfoCommand">LeagueInfoCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LeagueSeasonCommand">LeagueSeasonCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LeagueUpdateCommand">LeagueUpdateCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyCreateCommand">LobbyCreateCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyFirstPickCommand">LobbyFirstPickCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyGameModeCommand">LobbyGameModeCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyInviteCommand">LobbyInviteCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyKickCommand">LobbyKickCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyKillCommand">LobbyKillCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbyStartCommand">LobbyStartCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LobbySwapCommand">LobbySwapCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueBanCommand">QueueBanCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueClearCommand">QueueClearCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#CommendCommand">CommendCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#GameModeCommand">GameModeCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#LeaderboardCommand">LeaderboardCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#NicknameCommand">NicknameCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#PickCommand">PickCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#RegisterCommand">RegisterCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#RepCommand">RepCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#RolesCommand">RolesCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#UnrepCommand">UnrepCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#WhoisCommand">WhoisCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueJoinCommand">QueueJoinCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueLeaveCommand">QueueLeaveCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueReadyCommand">QueueReadyCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
+<dt><a href="#QueueStatusCommand">QueueStatusCommand</a> ⇐ <code><a href="#external_Command">Command</a></code></dt>
+<dd></dd>
 </dl>
 
 <a name="module_client"></a>
 
 ## client
+<a name="external_Command"></a>
+
+### client~Command
+Discord.js Commando Command object
+
+**Kind**: inner external of [<code>client</code>](#module_client)  
+**See**: [https://discord.js.org/#/docs/commando/v0.9.0/class/Command](https://discord.js.org/#/docs/commando/v0.9.0/class/Command)  
 <a name="module_constants"></a>
 
 ## constants
@@ -114,14 +177,6 @@ Sequelize Model object
 
 ### dotaBot.LogOnDetails : <code>Object</code>
 **Kind**: static typedef of [<code>dotaBot</code>](#module_dotaBot)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| account_name | <code>string</code> | The steam account name. |
-| password | <code>string</code> | The steam account password. |
-| persona_name | <code>string</code> | The steam account alias to use. |
-
 <a name="module_dotaBot..DotaBot"></a>
 
 ### dotaBot~DotaBot ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
@@ -507,19 +562,6 @@ Discord.js Message object
 
 ### ihl.InhouseState : <code>Object</code>
 **Kind**: static typedef of [<code>ihl</code>](#module_ihl)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | The discord guild the inhouse belongs to. |
-| lobbies | [<code>Array.&lt;LobbyState&gt;</code>](#module_lobby.LobbyState) | A list of lobby states for the inhouse. |
-| category | [<code>CategoryChannel</code>](#external_CategoryChannel) | The discord inhouse category. |
-| channel | [<code>GuildChannel</code>](#external_GuildChannel) | The discord inhouse general channel. |
-| adminRole | [<code>Role</code>](#external_Role) | The discord inhouse admin role. |
-| ready_check_timeout | <code>number</code> | Duration in milliseconds before lobby ready timeout. |
-| captain_rank_threshold | <code>number</code> | Maximum rank difference between captains. |
-| captain_role_regexp | <code>string</code> | Regular expression string for captain roles. |
-
 <a name="module_ihl..getUserRankTier"></a>
 
 ### ihl~getUserRankTier(steamId64) ⇒ <code>number</code>
@@ -752,13 +794,6 @@ Bans a user from an inhouse queue.
 
 ### ihlManager.LeagueGuildObject : <code>Object</code>
 **Kind**: static typedef of [<code>ihlManager</code>](#module_ihlManager)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| league | [<code>League</code>](#module_db.League) | A database league record |
-| guild | [<code>Guild</code>](#external_Guild) | The guild the league belongs to |
-
 <a name="module_ihlManager..IHLManager"></a>
 
 ### ihlManager~IHLManager ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
@@ -1546,26 +1581,6 @@ Node.js EventEmitter object
 
 ### lobby.LobbyState : <code>Object</code>
 **Kind**: static typedef of [<code>lobby</code>](#module_lobby)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | The discord guild the lobby belongs to. |
-| category | [<code>CategoryChannel</code>](#external_CategoryChannel) | The discord inhouse category. |
-| channel | [<code>GuildChannel</code>](#external_GuildChannel) | The discord lobby channel. |
-| role | [<code>Role</code>](#external_Role) | The discord lobby role. |
-| ready_check_timeout | <code>number</code> | Duration in milliseconds before lobby ready timeout. |
-| captain_rank_threshold | <code>number</code> | Maximum rank difference between captains. |
-| captain_role_regexp | <code>string</code> | Regular expression string for captain roles. |
-| state | <code>string</code> | The lobby state. |
-| bot_id | <code>number</code> | The record id of the bot hosting the lobby. |
-| lobby_name | <code>string</code> | The lobby name. |
-| lobby_id | <code>string</code> | The in-game lobby id. |
-| password | <code>string</code> | The lobby password. |
-| captain_1 | <code>string</code> | The first captain steamid64. |
-| captain_2 | <code>string</code> | The second captain steamid64. |
-| match_id | <code>string</code> | The match id for the lobby. |
-
 <a name="module_matchTracker"></a>
 
 ## matchTracker
@@ -1720,3 +1735,143 @@ Start job execution
 Deletes all the jobs from the queue
 
 **Kind**: instance method of [<code>Queue</code>](#Queue)  
+<a name="LeagueCreateCommand"></a>
+
+## LeagueCreateCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LeagueInfoCommand"></a>
+
+## LeagueInfoCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LeagueSeasonCommand"></a>
+
+## LeagueSeasonCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LeagueUpdateCommand"></a>
+
+## LeagueUpdateCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyCreateCommand"></a>
+
+## LobbyCreateCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyFirstPickCommand"></a>
+
+## LobbyFirstPickCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyGameModeCommand"></a>
+
+## LobbyGameModeCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyInviteCommand"></a>
+
+## LobbyInviteCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyKickCommand"></a>
+
+## LobbyKickCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyKillCommand"></a>
+
+## LobbyKillCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbyStartCommand"></a>
+
+## LobbyStartCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LobbySwapCommand"></a>
+
+## LobbySwapCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueBanCommand"></a>
+
+## QueueBanCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueClearCommand"></a>
+
+## QueueClearCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="CommendCommand"></a>
+
+## CommendCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="GameModeCommand"></a>
+
+## GameModeCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="LeaderboardCommand"></a>
+
+## LeaderboardCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="NicknameCommand"></a>
+
+## NicknameCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="PickCommand"></a>
+
+## PickCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="RegisterCommand"></a>
+
+## RegisterCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="RepCommand"></a>
+
+## RepCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="RolesCommand"></a>
+
+## RolesCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="UnrepCommand"></a>
+
+## UnrepCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="WhoisCommand"></a>
+
+## WhoisCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueJoinCommand"></a>
+
+## QueueJoinCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueLeaveCommand"></a>
+
+## QueueLeaveCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueReadyCommand"></a>
+
+## QueueReadyCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  
+<a name="QueueStatusCommand"></a>
+
+## QueueStatusCommand ⇐ [<code>Command</code>](#external_Command)
+**Kind**: global class  
+**Extends**: [<code>Command</code>](#external_Command)  

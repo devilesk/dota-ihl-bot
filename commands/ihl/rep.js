@@ -5,6 +5,10 @@ const {
     findUserByDiscordId, findOrCreateLeague, findOrCreateReputation,
 } = require('../../lib/db');
 
+/**
+ * @class RepCommand
+ * @extends external:Command
+ */
 module.exports = class RepCommand extends Command {
     constructor(client) {
         super(client, {

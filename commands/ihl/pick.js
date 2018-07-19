@@ -10,6 +10,10 @@ const {
 } = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
+/**
+ * @class PickCommand
+ * @extends external:Command
+ */
 module.exports = class PickCommand extends Command {
     constructor(client) {
         super(client, {

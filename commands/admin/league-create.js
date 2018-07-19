@@ -3,6 +3,10 @@ const {
     ihlManager, getInhouse,
 } = require('../../lib/ihlManager');
 
+/**
+ * @class LeagueCreateCommand
+ * @extends external:Command
+ */
 module.exports = class LeagueCreateCommand extends Command {
     constructor(client) {
         super(client, {

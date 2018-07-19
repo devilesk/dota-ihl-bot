@@ -3,6 +3,10 @@ const { Command } = require('discord.js-commando');
 const CONSTANTS = require('../../lib/constants');
 const { findUserByDiscordId } = require('../../lib/db');
 
+/**
+ * @class GameModeCommand
+ * @extends external:Command
+ */
 module.exports = class GameModeCommand extends Command {
     constructor(client) {
         super(client, {

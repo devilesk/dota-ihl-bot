@@ -2,6 +2,10 @@ const logger = require('../../lib/logger');
 const { Command } = require('discord.js-commando');
 const { findOrCreateLeague, queryLeaderboardRank } = require('../../lib/db');
 
+/**
+ * @class LeaderboardCommand
+ * @extends external:Command
+ */
 module.exports = class LeaderboardCommand extends Command {
     constructor(client) {
         super(client, {

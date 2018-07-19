@@ -3,6 +3,10 @@ const { Command } = require('discord.js-commando');
 const db = require('../../models');
 const Promise = require('bluebird');
 
+/**
+ * @class CommendCommand
+ * @extends external:Command
+ */
 module.exports = class CommendCommand extends Command {
     constructor(client) {
         super(client, {

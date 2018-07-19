@@ -3,6 +3,10 @@ const {
     findUserByDiscordId, findAllInQueueWithUser,
 } = require('../../lib/db');
 
+/**
+ * @class QueueStatusCommand
+ * @extends external:Command
+ */
 module.exports = class QueueStatusCommand extends Command {
     constructor(client) {
         super(client, {

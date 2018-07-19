@@ -6,6 +6,10 @@ const {
     findLeague,
 } = require('../../lib/db');
 
+/**
+ * @class LeagueInfoCommand
+ * @extends external:Command
+ */
 module.exports = class LeagueInfoCommand extends Command {
     constructor(client) {
         super(client, {

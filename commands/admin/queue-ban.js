@@ -6,6 +6,10 @@ const {
     findUser,
 } = require('../../lib/db');
 
+/**
+ * @class QueueBanCommand
+ * @extends external:Command
+ */
 module.exports = class QueueBanCommand extends Command {
     constructor(client) {
         super(client, {

@@ -2,6 +2,10 @@ const logger = require('../../lib/logger');
 const { Command } = require('discord.js-commando');
 const { findUserByDiscordId } = require('../../lib/db');
 
+/**
+ * @class NicknameCommand
+ * @extends external:Command
+ */
 module.exports = class NicknameCommand extends Command {
     constructor(client) {
         super(client, {

@@ -1,6 +1,10 @@
 const { Command } = require('discord.js-commando');
 const { ihlManager, getInhouse, isMessageFromAdmin } = require('../../lib/ihlManager');
 
+/**
+ * @class LobbyCreateCommand
+ * @extends external:Command
+ */
 module.exports = class LobbyCreateCommand extends Command {
     constructor(client) {
         super(client, {

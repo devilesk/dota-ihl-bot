@@ -7,6 +7,10 @@ const {
 } = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 
+/**
+ * @class QueueReadyCommand
+ * @extends external:Command
+ */
 module.exports = class QueueReadyCommand extends Command {
     constructor(client) {
         super(client, {

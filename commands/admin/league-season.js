@@ -6,6 +6,10 @@ const {
     createSeason,
 } = require('../../lib/db');
 
+/**
+ * @class LeagueSeasonCommand
+ * @extends external:Command
+ */
 module.exports = class LeagueSeasonCommand extends Command {
     constructor(client) {
         super(client, {

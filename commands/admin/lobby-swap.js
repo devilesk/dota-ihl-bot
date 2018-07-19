@@ -3,6 +3,10 @@ const {
     ihlManager, getLobbyFromMessage, isMessageFromAdmin,
 } = require('../../lib/ihlManager');
 
+/**
+ * @class LobbySwapCommand
+ * @extends external:Command
+ */
 module.exports = class LobbySwapCommand extends Command {
     constructor(client) {
         super(client, {

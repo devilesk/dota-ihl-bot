@@ -6,6 +6,10 @@ const steam = require('steamidconvert')(process.env.STEAM_API_KEY);
 const logger = require('../../lib/logger');
 const { registerUser } = require('../../lib/ihl');
 
+/**
+ * @class RegisterCommand
+ * @extends external:Command
+ */
 module.exports = class RegisterCommand extends Command {
     constructor(client) {
         super(client, {

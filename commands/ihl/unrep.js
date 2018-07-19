@@ -5,6 +5,10 @@ const {
     findUserByDiscordId, findOrCreateLeague, destroyReputation,
 } = require('../../lib/db');
 
+/**
+ * @class UnrepCommand
+ * @extends external:Command
+ */
 module.exports = class UnrepCommand extends Command {
     constructor(client) {
         super(client, {

@@ -5,6 +5,10 @@ const {
 const dota2 = require('dota2');
 const CONSTANTS = require('../../lib/constants');
 
+/**
+ * @class LobbyGameModeCommand
+ * @extends external:Command
+ */
 module.exports = class LobbyGameModeCommand extends Command {
     constructor(client) {
         super(client, {

@@ -21,6 +21,10 @@ const rankTierToMedalName = (rank_tier) => {
     return `${RANK_TO_MEDAL[rank]} ${tier}`;
 };
 
+/**
+ * @class WhoisCommand
+ * @extends external:Command
+ */
 module.exports = class WhoisCommand extends Command {
     constructor(client) {
         super(client, {

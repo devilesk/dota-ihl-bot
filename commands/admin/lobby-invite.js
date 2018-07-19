@@ -6,6 +6,10 @@ const {
     findUser,
 } = require('../../lib/db');
 
+/**
+ * @class LobbyInviteCommand
+ * @extends external:Command
+ */
 module.exports = class LobbyInviteCommand extends Command {
     constructor(client) {
         super(client, {

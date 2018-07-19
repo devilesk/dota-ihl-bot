@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docs:html": "jsdoc lib/*.js -d docs",
-    "docs:md": "jsdoc2md lib/*.js > api.md",
+    "docs:html": "jsdoc --configure .jsdoc.json",
+    "docs:md": "jsdoc2md lib/*.js commands/**/*.js -r > api.md",
     "docs": "npm run docs:html && npm run docs:md",
     "db:drop": "sequelize --config config.js db:drop;",
     "db:create": "sequelize --config config.js db:create;",
@@ -49,6 +49,7 @@
     "eslint-plugin-import": "^2.13.0",
     "jsdoc": "^3.5.5",
     "jsdoc-to-markdown": "^4.0.1",
+    "minami": "^1.2.3",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "proxyquire": "^2.0.1",

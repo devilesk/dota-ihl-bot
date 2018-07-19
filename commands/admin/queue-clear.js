@@ -6,6 +6,10 @@ const {
     destroyQueuesByGuildId,
 } = require('../../lib/db');
 
+/**
+ * @class QueueClearCommand
+ * @extends external:Command
+ */
 module.exports = class QueueClearCommand extends Command {
     constructor(client) {
         super(client, {

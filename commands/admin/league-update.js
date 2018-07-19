@@ -15,6 +15,10 @@ const settingMap = {
     readychecktimeout: 'ready_check_timeout',
 };
 
+/**
+ * @class LeagueUpdateCommand
+ * @extends external:Command
+ */
 class LeagueUpdateCommand extends Command {
     constructor(client) {
         super(client, {

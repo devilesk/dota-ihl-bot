@@ -3,6 +3,10 @@ const {
     ihlManager, getLobbyFromMessage, isMessageFromAdmin,
 } = require('../../lib/ihlManager');
 
+/**
+ * @class LobbyKillCommand
+ * @extends external:Command
+ */
 module.exports = class LobbyKillCommand extends Command {
     constructor(client) {
         super(client, {
