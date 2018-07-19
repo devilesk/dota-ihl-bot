@@ -30,7 +30,7 @@ module.exports = class PickCommand extends Command {
         });
     }
 
-    run(msg, { member }) {
+    async run(msg, { member }) {
         const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
         if (lobbyState) {
             const captain = await isCaptain(lobbyState)(msg.author.id);
