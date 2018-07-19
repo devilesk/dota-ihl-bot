@@ -35,9 +35,9 @@
  * @type {Object}
  * @property {external:Guild} guild - The discord guild the inhouse belongs to.
  * @property {module:lobby.LobbyState[]} lobbies - A list of lobby states for the inhouse.
- * @property {Category} category - The discord inhouse category.
- * @property {Channel} channel - The discord inhouse general channel.
- * @property {Role} adminRole - The discord inhouse admin role.
+ * @property {external:CategoryChannel} category - The discord inhouse category.
+ * @property {external:GuildChannel} channel - The discord inhouse general channel.
+ * @property {external:Role} adminRole - The discord inhouse admin role.
  * @property {number} ready_check_timeout - Duration in milliseconds before lobby ready timeout. 
  * @property {number} captain_rank_threshold - Maximum rank difference between captains. 
  * @property {string} captain_role_regexp - Regular expression string for captain roles.
@@ -143,7 +143,7 @@ const addLobbyToInhouse = (_inhouseState, lobbyState) => {
 * @function 
 * @param {module:ihl.InhouseState} _inhouseState - An inhouse state.
 * @param {external:EventEmitter} eventEmitter - The event listener object.
-* @param {User[]} users - The players that will be added to the lobby.
+* @param {module:db.User[]} users - The players that will be added to the lobby.
 * @returns {module:ihl.InhouseState} A new inhouse state with lobby state added to it.
 */
 const createNewLobbyForInhouse = async (_inhouseState, eventEmitter, users) => {
@@ -215,7 +215,7 @@ const checkInhouseQueue = eventEmitter => async (_inhouseState) => {
 * Adds a user to an inhouse queue.
 * @function 
 * @param {module:ihl.InhouseState} _inhouseState - An inhouse state.
-* @param {User} user - The player to queue.
+* @param {module:db.User} user - The player to queue.
 * @param {external:EventEmitter} eventEmitter - The event listener object.
 * @returns {module:ihl.InhouseState} A new inhouse state with updated lobby states from being run if queue popped.
 */
@@ -243,7 +243,7 @@ const joinInhouseQueue = async (_inhouseState, user, eventEmitter) => {
 * Removes a user from an inhouse queue.
 * @function 
 * @param {module:ihl.InhouseState} _inhouseState - An inhouse state.
-* @param {User} user - The player to dequeue.
+* @param {module:db.User} user - The player to dequeue.
 * @param {external:EventEmitter} eventEmitter - The event listener object.
 * @returns {module:ihl.InhouseState} A new inhouse state.
 */
@@ -265,7 +265,7 @@ const leaveInhouseQueue = async (_inhouseState, user, eventEmitter) => {
 * Bans a user from an inhouse queue.
 * @function 
 * @param {module:ihl.InhouseState} _inhouseState - An inhouse state.
-* @param {User} user - The player to ban.
+* @param {module:db.User} user - The player to ban.
 * @param {external:EventEmitter} eventEmitter - The event listener object.
 * @returns {module:ihl.InhouseState} A new inhouse state.
 */
@@ -303,13 +303,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client.html">client</a></li><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-GuildMember.html">GuildMember</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-User.html">User</a></li></ul><h3>Classes</h3><ul><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client.html">client</a></li><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li></ul><h3>Externals</h3><ul><li><a href="external-CategoryChannel.html">CategoryChannel</a></li><li><a href="external-Client.html">Client</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-GuildChannel.html">GuildChannel</a></li><li><a href="external-GuildMember.html">GuildMember</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-Model.html">Model</a></li><li><a href="external-Role.html">Role</a></li><li><a href="external-User.html">User</a></li></ul><h3>Classes</h3><ul><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 12:16:41 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 13:39:08 GMT+0000 (UTC)
 </footer>
 
 <script> prettyPrint(); </script>

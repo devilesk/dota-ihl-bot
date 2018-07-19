@@ -45,6 +45,29 @@ Enum for all constant values.
 <a name="module_db"></a>
 
 ## db
+
+* [db](#module_db)
+    * _static_
+        * [.League](#module_db.League) : [<code>Model</code>](#external_Model)
+        * [.User](#module_db.User) : [<code>Model</code>](#external_Model)
+    * _inner_
+        * [~Model](#external_Model)
+
+<a name="module_db.League"></a>
+
+### db.League : [<code>Model</code>](#external_Model)
+**Kind**: static typedef of [<code>db</code>](#module_db)  
+<a name="module_db.User"></a>
+
+### db.User : [<code>Model</code>](#external_Model)
+**Kind**: static typedef of [<code>db</code>](#module_db)  
+<a name="external_Model"></a>
+
+### db~Model
+Sequelize Model object
+
+**Kind**: inner external of [<code>db</code>](#module_db)  
+**See**: [http://docs.sequelizejs.com/class/lib/model.js~Model.html](http://docs.sequelizejs.com/class/lib/model.js~Model.html)  
 <a name="module_dotaBot"></a>
 
 ## dotaBot
@@ -396,6 +419,9 @@ Checks if all entries in a player to faction mapping match the player to team st
 * [guild](#module_guild)
     * [~Client](#external_Client)
     * [~Guild](#external_Guild)
+    * [~CategoryChannel](#external_CategoryChannel)
+    * [~GuildChannel](#external_GuildChannel)
+    * [~Role](#external_Role)
     * [~GuildMember](#external_GuildMember)
     * [~User](#external_User)
     * [~Message](#external_Message)
@@ -414,6 +440,27 @@ Discord.js Guild object
 
 **Kind**: inner external of [<code>guild</code>](#module_guild)  
 **See**: [https://discord.js.org/#/docs/main/11.3.2/class/Guild](https://discord.js.org/#/docs/main/11.3.2/class/Guild)  
+<a name="external_CategoryChannel"></a>
+
+### guild~CategoryChannel
+Discord.js Category object
+
+**Kind**: inner external of [<code>guild</code>](#module_guild)  
+**See**: [https://discord.js.org/#/docs/main/11.3.2/class/CategoryChannel](https://discord.js.org/#/docs/main/11.3.2/class/CategoryChannel)  
+<a name="external_GuildChannel"></a>
+
+### guild~GuildChannel
+Discord.js Channel object
+
+**Kind**: inner external of [<code>guild</code>](#module_guild)  
+**See**: [https://discord.js.org/#/docs/main/11.3.2/class/GuildChannel](https://discord.js.org/#/docs/main/11.3.2/class/GuildChannel)  
+<a name="external_Role"></a>
+
+### guild~Role
+Discord.js Role object
+
+**Kind**: inner external of [<code>guild</code>](#module_guild)  
+**See**: [https://discord.js.org/#/docs/main/11.3.2/class/Role](https://discord.js.org/#/docs/main/11.3.2/class/Role)  
 <a name="external_GuildMember"></a>
 
 ### guild~GuildMember
@@ -466,9 +513,9 @@ Discord.js Message object
 | --- | --- | --- |
 | guild | [<code>Guild</code>](#external_Guild) | The discord guild the inhouse belongs to. |
 | lobbies | [<code>Array.&lt;LobbyState&gt;</code>](#module_lobby.LobbyState) | A list of lobby states for the inhouse. |
-| category | <code>Category</code> | The discord inhouse category. |
-| channel | <code>Channel</code> | The discord inhouse general channel. |
-| adminRole | <code>Role</code> | The discord inhouse admin role. |
+| category | [<code>CategoryChannel</code>](#external_CategoryChannel) | The discord inhouse category. |
+| channel | [<code>GuildChannel</code>](#external_GuildChannel) | The discord inhouse general channel. |
+| adminRole | [<code>Role</code>](#external_Role) | The discord inhouse admin role. |
 | ready_check_timeout | <code>number</code> | Duration in milliseconds before lobby ready timeout. |
 | captain_rank_threshold | <code>number</code> | Maximum rank difference between captains. |
 | captain_role_regexp | <code>string</code> | Regular expression string for captain roles. |
@@ -532,7 +579,7 @@ Creates a lobby and adds it to an inhouse state.
 | --- | --- | --- |
 | _inhouseState | [<code>InhouseState</code>](#module_ihl.InhouseState) | An inhouse state. |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
-| users | <code>Array.&lt;User&gt;</code> | The players that will be added to the lobby. |
+| users | [<code>Array.&lt;User&gt;</code>](#module_db.User) | The players that will be added to the lobby. |
 
 <a name="module_ihl..removeLobbyFromInhouse"></a>
 
@@ -594,7 +641,7 @@ Adds a user to an inhouse queue.
 | Param | Type | Description |
 | --- | --- | --- |
 | _inhouseState | [<code>InhouseState</code>](#module_ihl.InhouseState) | An inhouse state. |
-| user | <code>User</code> | The player to queue. |
+| user | [<code>User</code>](#module_db.User) | The player to queue. |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
 
 <a name="module_ihl..leaveInhouseQueue"></a>
@@ -608,7 +655,7 @@ Removes a user from an inhouse queue.
 | Param | Type | Description |
 | --- | --- | --- |
 | _inhouseState | [<code>InhouseState</code>](#module_ihl.InhouseState) | An inhouse state. |
-| user | <code>User</code> | The player to dequeue. |
+| user | [<code>User</code>](#module_db.User) | The player to dequeue. |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
 
 <a name="module_ihl..banInhouseQueue"></a>
@@ -622,7 +669,7 @@ Bans a user from an inhouse queue.
 | Param | Type | Description |
 | --- | --- | --- |
 | _inhouseState | [<code>InhouseState</code>](#module_ihl.InhouseState) | An inhouse state. |
-| user | <code>User</code> | The player to ban. |
+| user | [<code>User</code>](#module_db.User) | The player to ban. |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
 
 <a name="module_ihlManager"></a>
@@ -630,73 +677,87 @@ Bans a user from an inhouse queue.
 ## ihlManager
 
 * [ihlManager](#module_ihlManager)
-    * [~IHLManager](#module_ihlManager..IHLManager) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
-        * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-        * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-        * [.init(client)](#module_ihlManager..IHLManager+init)
-        * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
-        * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
-        * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
-        * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
-        * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
-        * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
-        * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
-        * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-        * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
-        * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
-        * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
-        * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
-        * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-        * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
-        * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
-        * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
-        * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
-        * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
-        * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
-        * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
-    * [~IHLManager](#module_ihlManager..IHLManager)
-        * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-        * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-        * [.init(client)](#module_ihlManager..IHLManager+init)
-        * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
-        * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
-        * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
-        * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
-        * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
-        * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
-        * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
-        * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-        * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
-        * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
-        * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
-        * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
-        * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-        * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
-        * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
-        * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
-        * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
-        * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
-        * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
-        * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
-    * [~ihlManager](#module_ihlManager..ihlManager) : <code>IHLManager</code>
-    * [~findUser(guild, member)](#module_ihlManager..findUser) ⇒ <code>Array</code>
-    * [~getInhouseState(inhouseStates, guildId)](#module_ihlManager..getInhouseState) ⇒ <code>number</code>
-    * [~getIndexOfInhouseState(inhouseStates, guildId)](#module_ihlManager..getIndexOfInhouseState) ⇒ <code>number</code>
-    * [~transformLeagueGuild(guilds, league)](#module_ihlManager..transformLeagueGuild) ⇒ <code>Object</code>
-    * [~addInhouseState(inhouseStates, inhouseState)](#module_ihlManager..addInhouseState) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
-    * [~loadInhouseState(eventEmitter, guilds, league)](#module_ihlManager..loadInhouseState) ⇒ [<code>InhouseState</code>](#module_ihl.InhouseState)
-    * [~loadInhouseStates(eventEmitter, guilds, leagues)](#module_ihlManager..loadInhouseStates) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
-    * [~loadInhouseStatesFromLeagues(eventEmitter, guilds)](#module_ihlManager..loadInhouseStatesFromLeagues) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
-    * [~getLobbyByChannelId(inhouseStates, guildId, channelId)](#module_ihlManager..getLobbyByChannelId) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
-    * [~getLobbyByLobbyName(inhouseStates, lobby_name)](#module_ihlManager..getLobbyByLobbyName) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
-    * [~isMessageFromAdmin(inhouseStates, msg)](#module_ihlManager..isMessageFromAdmin) ⇒ <code>boolean</code>
-    * [~getLobbyFromMessage(inhouseStates, msg)](#module_ihlManager..getLobbyFromMessage) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
-    * ["EVENT_PLAYERS_READY" (lobbyState)](#module_ihlManager..event_EVENT_PLAYERS_READY)
-    * ["EVENT_PLAYER_READY" (lobbyState, user)](#module_ihlManager..event_EVENT_PLAYER_READY)
-    * ["EVENT_PICK_PLAYER" (lobbyState, user, faction)](#module_ihlManager..event_EVENT_PICK_PLAYER)
-    * ["EVENT_MATCH_ENDED" (lobbyState)](#module_ihlManager..event_EVENT_MATCH_ENDED)
-    * [~eventCallback](#module_ihlManager..eventCallback) : <code>function</code>
-    * [~EventEmitter](#external_EventEmitter)
+    * _static_
+        * [.LeagueGuildObject](#module_ihlManager.LeagueGuildObject) : <code>Object</code>
+    * _inner_
+        * [~IHLManager](#module_ihlManager..IHLManager) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
+            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
+            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
+            * [.init(client)](#module_ihlManager..IHLManager+init)
+            * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
+            * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
+            * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
+            * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
+            * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
+            * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
+            * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
+            * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
+            * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
+            * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
+            * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
+            * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
+            * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
+            * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
+            * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
+            * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
+            * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
+            * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
+            * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
+            * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
+        * [~IHLManager](#module_ihlManager..IHLManager)
+            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
+            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
+            * [.init(client)](#module_ihlManager..IHLManager+init)
+            * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
+            * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
+            * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
+            * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
+            * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
+            * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
+            * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
+            * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
+            * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
+            * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
+            * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
+            * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
+            * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
+            * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
+            * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
+            * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
+            * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
+            * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
+            * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
+            * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
+        * [~ihlManager](#module_ihlManager..ihlManager) : <code>IHLManager</code>
+        * [~findUser(guild, member)](#module_ihlManager..findUser) ⇒ <code>Array</code>
+        * [~getInhouseState(inhouseStates, guildId)](#module_ihlManager..getInhouseState) ⇒ <code>number</code>
+        * [~getIndexOfInhouseState(inhouseStates, guildId)](#module_ihlManager..getIndexOfInhouseState) ⇒ <code>number</code>
+        * [~transformLeagueGuild(guilds, league)](#module_ihlManager..transformLeagueGuild) ⇒ [<code>LeagueGuildObject</code>](#module_ihlManager.LeagueGuildObject)
+        * [~addInhouseState(inhouseStates, inhouseState)](#module_ihlManager..addInhouseState) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
+        * [~loadInhouseState(eventEmitter, guilds, league)](#module_ihlManager..loadInhouseState) ⇒ [<code>InhouseState</code>](#module_ihl.InhouseState)
+        * [~loadInhouseStates(eventEmitter, guilds, leagues)](#module_ihlManager..loadInhouseStates) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
+        * [~loadInhouseStatesFromLeagues(eventEmitter, guilds)](#module_ihlManager..loadInhouseStatesFromLeagues) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
+        * [~getLobbyByChannelId(inhouseStates, guildId, channelId)](#module_ihlManager..getLobbyByChannelId) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
+        * [~getLobbyByLobbyName(inhouseStates, lobby_name)](#module_ihlManager..getLobbyByLobbyName) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
+        * [~isMessageFromAdmin(inhouseStates, msg)](#module_ihlManager..isMessageFromAdmin) ⇒ <code>boolean</code>
+        * [~getLobbyFromMessage(inhouseStates, msg)](#module_ihlManager..getLobbyFromMessage) ⇒ [<code>LobbyState</code>](#module_lobby.LobbyState)
+        * ["EVENT_PLAYERS_READY" (lobbyState)](#module_ihlManager..event_EVENT_PLAYERS_READY)
+        * ["EVENT_PLAYER_READY" (lobbyState, user)](#module_ihlManager..event_EVENT_PLAYER_READY)
+        * ["EVENT_PICK_PLAYER" (lobbyState, user, faction)](#module_ihlManager..event_EVENT_PICK_PLAYER)
+        * ["EVENT_MATCH_ENDED" (lobbyState)](#module_ihlManager..event_EVENT_MATCH_ENDED)
+        * [~eventCallback](#module_ihlManager..eventCallback) : <code>function</code>
+        * [~EventEmitter](#external_EventEmitter)
+
+<a name="module_ihlManager.LeagueGuildObject"></a>
+
+### ihlManager.LeagueGuildObject : <code>Object</code>
+**Kind**: static typedef of [<code>ihlManager</code>](#module_ihlManager)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| league | [<code>League</code>](#module_db.League) | A database league record |
+| guild | [<code>Guild</code>](#external_Guild) | The guild the league belongs to |
 
 <a name="module_ihlManager..IHLManager"></a>
 
@@ -891,7 +952,7 @@ Checks for STATE_CHECKING_READY lobby state
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | An inhouse user. |
+| user | [<code>User</code>](#module_db.User) | An inhouse user. |
 
 <a name="module_ihlManager..IHLManager+onDraftMember"></a>
 
@@ -904,7 +965,7 @@ If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and ru
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | The picked user |
+| user | [<code>User</code>](#module_db.User) | The picked user |
 | faction | <code>number</code> | The picking faction |
 
 <a name="module_ihlManager..IHLManager+onLobbyReady"></a>
@@ -1167,7 +1228,7 @@ Checks for STATE_CHECKING_READY lobby state
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | An inhouse user. |
+| user | [<code>User</code>](#module_db.User) | An inhouse user. |
 
 <a name="module_ihlManager..IHLManager+onDraftMember"></a>
 
@@ -1180,7 +1241,7 @@ If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and ru
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | The picked user |
+| user | [<code>User</code>](#module_db.User) | The picked user |
 | faction | <code>number</code> | The picking faction |
 
 <a name="module_ihlManager..IHLManager+onLobbyReady"></a>
@@ -1298,17 +1359,17 @@ Gets the index of an inhouse state with the given guild id in a list of inhouse 
 
 <a name="module_ihlManager..transformLeagueGuild"></a>
 
-### ihlManager~transformLeagueGuild(guilds, league) ⇒ <code>Object</code>
+### ihlManager~transformLeagueGuild(guilds, league) ⇒ [<code>LeagueGuildObject</code>](#module_ihlManager.LeagueGuildObject)
 Takes a list of guilds and a league record and turns it into an object containing both.
 Transforms the input into an object that can be passed to createInhouseState.
 
 **Kind**: inner method of [<code>ihlManager</code>](#module_ihlManager)  
-**Returns**: <code>Object</code> - An object containing the league and its guild.  
+**Returns**: [<code>LeagueGuildObject</code>](#module_ihlManager.LeagueGuildObject) - An object containing the league and its guild.  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | guilds | [<code>Array.&lt;Guild&gt;</code>](#external_Guild) | A list of guilds to initialize leagues with. |
-| league | <code>League</code> | A database league record. |
+| league | [<code>League</code>](#module_db.League) | A database league record. |
 
 <a name="module_ihlManager..addInhouseState"></a>
 
@@ -1336,7 +1397,7 @@ All inhouse lobbies are loaded and run.
 | --- | --- | --- |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
 | guilds | [<code>Array.&lt;Guild&gt;</code>](#external_Guild) | A list of guilds to initialize leagues with. |
-| league | <code>League</code> | A database league record. |
+| league | [<code>League</code>](#module_db.League) | A database league record. |
 
 <a name="module_ihlManager..loadInhouseStates"></a>
 
@@ -1350,7 +1411,7 @@ Maps league records to inhouse states.
 | --- | --- | --- |
 | eventEmitter | [<code>EventEmitter</code>](#external_EventEmitter) | The event listener object. |
 | guilds | [<code>Array.&lt;Guild&gt;</code>](#external_Guild) | A list of guilds to initialize leagues with. |
-| leagues | <code>Array.&lt;League&gt;</code> | A list of database league records. |
+| leagues | [<code>Array.&lt;League&gt;</code>](#module_db.League) | A list of database league records. |
 
 <a name="module_ihlManager..loadInhouseStatesFromLeagues"></a>
 
@@ -1439,7 +1500,7 @@ Event reporting that a player has readied up.
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | The picked user |
+| user | [<code>User</code>](#module_db.User) | The picked user |
 
 <a name="module_ihlManager..event_EVENT_PICK_PLAYER"></a>
 
@@ -1451,7 +1512,7 @@ Event reporting that a player has been picked.
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>User</code> | The picked user |
+| user | [<code>User</code>](#module_db.User) | The picked user |
 | faction | <code>number</code> | The picking faction |
 
 <a name="module_ihlManager..event_EVENT_MATCH_ENDED"></a>
@@ -1490,9 +1551,9 @@ Node.js EventEmitter object
 | Name | Type | Description |
 | --- | --- | --- |
 | guild | [<code>Guild</code>](#external_Guild) | The discord guild the lobby belongs to. |
-| category | <code>Category</code> | The discord inhouse category. |
-| channel | <code>Channel</code> | The discord lobby channel. |
-| role | <code>Role</code> | The discord lobby role. |
+| category | [<code>CategoryChannel</code>](#external_CategoryChannel) | The discord inhouse category. |
+| channel | [<code>GuildChannel</code>](#external_GuildChannel) | The discord lobby channel. |
+| role | [<code>Role</code>](#external_Role) | The discord lobby role. |
 | ready_check_timeout | <code>number</code> | Duration in milliseconds before lobby ready timeout. |
 | captain_rank_threshold | <code>number</code> | Maximum rank difference between captains. |
 | captain_role_regexp | <code>string</code> | Regular expression string for captain roles. |

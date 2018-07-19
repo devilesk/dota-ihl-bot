@@ -126,12 +126,18 @@ const getInhouseState = (inhouseStates, guildId) => inhouseStates.find(inhouseSt
 const getIndexOfInhouseState = (inhouseStates, guildId) => inhouseStates.indexOf(inhouseState => inhouseState.guild.id === guildId);
 
 /**
+ * @typedef {Object} module:ihlManager.LeagueGuildObject
+ * @property {module:db.League} league - A database league record
+ * @property {external:Guild} guild - The guild the league belongs to
+ */
+ 
+/**
 * Takes a list of guilds and a league record and turns it into an object containing both.
 * Transforms the input into an object that can be passed to createInhouseState.
 * @function 
 * @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
-* @param {League} league - A database league record.
-* @returns {Object} An object containing the league and its guild.
+* @param {module:db.League} league - A database league record.
+* @returns {module:ihlManager.LeagueGuildObject} An object containing the league and its guild.
 */
 const transformLeagueGuild = guilds => league => ({ league, guild: guilds.get(league.guild_id) });
 
@@ -159,7 +165,7 @@ const addInhouseState = (inhouseStates, inhouseState) => {
 * @async
 * @param {external:EventEmitter} eventEmitter - The event listener object.
 * @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
-* @param {League} league - A database league record.
+* @param {module:db.League} league - A database league record.
 * @returns {module:ihl.InhouseState} The inhouse state loaded from a league record.
 */
 const loadInhouseState = eventEmitter => guilds => async league => pipeP(
@@ -176,7 +182,7 @@ const loadInhouseState = eventEmitter => guilds => async league => pipeP(
 * @async
 * @param {external:EventEmitter} eventEmitter - The event listener object.
 * @param {external:Guild[]} guilds - A list of guilds to initialize leagues with.
-* @param {League[]} leagues - A list of database league records.
+* @param {module:db.League[]} leagues - A list of database league records.
 * @returns {module:ihl.InhouseState[]} The inhouse states loaded from league records.
 */
 const loadInhouseStates = eventEmitter => guilds => async leagues => mapPromise(loadInhouseState(eventEmitter)(guilds))(leagues);
@@ -478,7 +484,7 @@ class IHLManager extends events.EventEmitter {
      *
      * @event module:ihlManager~EVENT_PLAYER_READY
      * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
-     * @param {User} user - The picked user
+     * @param {module:db.User} user - The picked user
      */
 
     /**
@@ -486,7 +492,7 @@ class IHLManager extends events.EventEmitter {
      * Checks for STATE_CHECKING_READY lobby state
      * @async
      * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
-     * @param {User} user - An inhouse user.
+     * @param {module:db.User} user - An inhouse user.
      * @listens module:ihlManager~event:EVENT_PLAYER_READY
      */
     async onPlayerReady(lobbyState, user) {
@@ -500,7 +506,7 @@ class IHLManager extends events.EventEmitter {
      *
      * @event module:ihlManager~EVENT_PICK_PLAYER
      * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
-     * @param {User} user - The picked user
+     * @param {module:db.User} user - The picked user
      * @param {number} faction - The picking faction
      */
 
@@ -509,7 +515,7 @@ class IHLManager extends events.EventEmitter {
      * If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and runs the lobby state.
      * @async
      * @param {module:lobby.LobbyState} lobbyState - An inhouse lobby state.
-     * @param {User} user - The picked user
+     * @param {module:db.User} user - The picked user
      * @param {number} faction - The picking faction
      * @listens module:ihlManager~event:EVENT_PICK_PLAYER
      */
@@ -721,13 +727,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client.html">client</a></li><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li></ul><h3>Externals</h3><ul><li><a href="external-Client.html">Client</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-GuildMember.html">GuildMember</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-User.html">User</a></li></ul><h3>Classes</h3><ul><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-client.html">client</a></li><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li></ul><h3>Externals</h3><ul><li><a href="external-CategoryChannel.html">CategoryChannel</a></li><li><a href="external-Client.html">Client</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Guild.html">Guild</a></li><li><a href="external-GuildChannel.html">GuildChannel</a></li><li><a href="external-GuildMember.html">GuildMember</a></li><li><a href="external-Message.html">Message</a></li><li><a href="external-Model.html">Model</a></li><li><a href="external-Role.html">Role</a></li><li><a href="external-User.html">User</a></li></ul><h3>Classes</h3><ul><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:EVENT_MATCH_ENDED">EVENT_MATCH_ENDED</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYERS_READY">EVENT_PLAYERS_READY</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 12:16:41 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Jul 19 2018 13:39:08 GMT+0000 (UTC)
 </footer>
 
 <script> prettyPrint(); </script>
