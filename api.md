@@ -140,22 +140,6 @@ Sequelize Model object
         * [.LogOnDetails](#module_dotaBot.LogOnDetails) : <code>Object</code>
     * _inner_
         * [~DotaBot](#module_dotaBot..DotaBot) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
-            * [new DotaBot()](#new_module_dotaBot..DotaBot_new)
-            * [new DotaBot(logOnDetails, debug, debugMore)](#new_module_dotaBot..DotaBot_new)
-            * [.steamid_64](#module_dotaBot..DotaBot+steamid_64)
-            * [.state](#module_dotaBot..DotaBot+state)
-            * [.rate_limit](#module_dotaBot..DotaBot+rate_limit)
-            * [.rate_limit](#module_dotaBot..DotaBot+rate_limit)
-            * [.backoff](#module_dotaBot..DotaBot+backoff)
-            * [.backoff](#module_dotaBot..DotaBot+backoff)
-            * [.lobby](#module_dotaBot..DotaBot+lobby)
-            * [.steamId](#module_dotaBot..DotaBot+steamId)
-            * [.accountId](#module_dotaBot..DotaBot+accountId)
-            * [.connect()](#module_dotaBot..DotaBot+connect)
-            * [.disconnect()](#module_dotaBot..DotaBot+disconnect)
-            * [.schedule()](#module_dotaBot..DotaBot+schedule)
-        * [~DotaBot](#module_dotaBot..DotaBot)
-            * [new DotaBot()](#new_module_dotaBot..DotaBot_new)
             * [new DotaBot(logOnDetails, debug, debugMore)](#new_module_dotaBot..DotaBot_new)
             * [.steamid_64](#module_dotaBot..DotaBot+steamid_64)
             * [.state](#module_dotaBot..DotaBot+state)
@@ -180,11 +164,13 @@ Sequelize Model object
 <a name="module_dotaBot..DotaBot"></a>
 
 ### dotaBot~DotaBot ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
+Class representing a Dota bot.
+Handles all in game functions required to host an inhouse lobby.
+
 **Kind**: inner class of [<code>dotaBot</code>](#module_dotaBot)  
 **Extends**: [<code>EventEmitter</code>](#external_EventEmitter)  
 
 * [~DotaBot](#module_dotaBot..DotaBot) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
-    * [new DotaBot()](#new_module_dotaBot..DotaBot_new)
     * [new DotaBot(logOnDetails, debug, debugMore)](#new_module_dotaBot..DotaBot_new)
     * [.steamid_64](#module_dotaBot..DotaBot+steamid_64)
     * [.state](#module_dotaBot..DotaBot+state)
@@ -198,136 +184,6 @@ Sequelize Model object
     * [.connect()](#module_dotaBot..DotaBot+connect)
     * [.disconnect()](#module_dotaBot..DotaBot+disconnect)
     * [.schedule()](#module_dotaBot..DotaBot+schedule)
-
-<a name="new_module_dotaBot..DotaBot_new"></a>
-
-#### new DotaBot()
-Class representing a Dota bot.
-Handles all in game functions required to host an inhouse lobby.
-
-<a name="new_module_dotaBot..DotaBot_new"></a>
-
-#### new DotaBot(logOnDetails, debug, debugMore)
-Constructor of the DotaBot. This prepares an object for connecting to
-Steam and the Dota2 Game Coordinator.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| logOnDetails | [<code>LogOnDetails</code>](#module_dotaBot.LogOnDetails) | Steam login credentials. |
-| debug | <code>boolean</code> | Whether or not debug info should be logged. |
-| debugMore | <code>boolean</code> | Whether or not more debug info should be logged. |
-
-<a name="module_dotaBot..DotaBot+steamid_64"></a>
-
-#### dotaBot.steamid_64
-Get bot steamid_64
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+state"></a>
-
-#### dotaBot.state
-Get the current state of the queue
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+rate_limit"></a>
-
-#### dotaBot.rate_limit
-Get the current rate limit factor
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+rate_limit"></a>
-
-#### dotaBot.rate_limit
-Set the rate limiting factor
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| rate_limit | <code>number</code> | Milliseconds to wait between requests. |
-
-<a name="module_dotaBot..DotaBot+backoff"></a>
-
-#### dotaBot.backoff
-Get the current backoff time of the queue
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+backoff"></a>
-
-#### dotaBot.backoff
-Set the backoff time of the queue
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| backoff | <code>number</code> | Exponential backoff time in milliseconds. |
-
-<a name="module_dotaBot..DotaBot+lobby"></a>
-
-#### dotaBot.lobby
-Get the dota lobby object
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+steamId"></a>
-
-#### dotaBot.steamId
-Get the bot steam id
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+accountId"></a>
-
-#### dotaBot.accountId
-Get the bot account id
-
-**Kind**: instance property of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+connect"></a>
-
-#### dotaBot.connect()
-Initiates the connection to Steam and the Dota2 Game Coordinator.
-
-**Kind**: instance method of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+disconnect"></a>
-
-#### dotaBot.disconnect()
-Disconnect from the Game Coordinator. This will also cancel all queued
-operations!
-
-**Kind**: instance method of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot+schedule"></a>
-
-#### dotaBot.schedule()
-Schedule a function for execution. This function will be executed as soon
-as the GC is available.
-
-**Kind**: instance method of [<code>DotaBot</code>](#module_dotaBot..DotaBot)  
-<a name="module_dotaBot..DotaBot"></a>
-
-### dotaBot~DotaBot
-**Kind**: inner class of [<code>dotaBot</code>](#module_dotaBot)  
-
-* [~DotaBot](#module_dotaBot..DotaBot)
-    * [new DotaBot()](#new_module_dotaBot..DotaBot_new)
-    * [new DotaBot(logOnDetails, debug, debugMore)](#new_module_dotaBot..DotaBot_new)
-    * [.steamid_64](#module_dotaBot..DotaBot+steamid_64)
-    * [.state](#module_dotaBot..DotaBot+state)
-    * [.rate_limit](#module_dotaBot..DotaBot+rate_limit)
-    * [.rate_limit](#module_dotaBot..DotaBot+rate_limit)
-    * [.backoff](#module_dotaBot..DotaBot+backoff)
-    * [.backoff](#module_dotaBot..DotaBot+backoff)
-    * [.lobby](#module_dotaBot..DotaBot+lobby)
-    * [.steamId](#module_dotaBot..DotaBot+steamId)
-    * [.accountId](#module_dotaBot..DotaBot+accountId)
-    * [.connect()](#module_dotaBot..DotaBot+connect)
-    * [.disconnect()](#module_dotaBot..DotaBot+disconnect)
-    * [.schedule()](#module_dotaBot..DotaBot+schedule)
-
-<a name="new_module_dotaBot..DotaBot_new"></a>
-
-#### new DotaBot()
-Class representing a Dota bot.
-Handles all in game functions required to host an inhouse lobby.
 
 <a name="new_module_dotaBot..DotaBot_new"></a>
 
@@ -724,31 +580,6 @@ Bans a user from an inhouse queue.
     * _inner_
         * [~IHLManager](#module_ihlManager..IHLManager) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
             * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-            * [.init(client)](#module_ihlManager..IHLManager+init)
-            * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
-            * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
-            * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
-            * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
-            * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
-            * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
-            * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
-            * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-            * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
-            * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
-            * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
-            * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
-            * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-            * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
-            * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
-            * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
-            * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
-            * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
-            * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
-            * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
-        * [~IHLManager](#module_ihlManager..IHLManager)
-            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-            * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
             * [.init(client)](#module_ihlManager..IHLManager+init)
             * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
             * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
@@ -797,12 +628,13 @@ Bans a user from an inhouse queue.
 <a name="module_ihlManager..IHLManager"></a>
 
 ### ihlManager~IHLManager ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
+Class representing the inhouse league manager.
+
 **Kind**: inner class of [<code>ihlManager</code>](#module_ihlManager)  
 **Extends**: [<code>EventEmitter</code>](#external_EventEmitter)  
 
 * [~IHLManager](#module_ihlManager..IHLManager) ⇐ [<code>EventEmitter</code>](#external_EventEmitter)
     * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-    * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
     * [.init(client)](#module_ihlManager..IHLManager+init)
     * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
     * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
@@ -824,287 +656,6 @@ Bans a user from an inhouse queue.
     * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
     * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
     * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
-
-<a name="new_module_ihlManager..IHLManager_new"></a>
-
-#### new IHLManager()
-Class representing the inhouse league manager.
-
-<a name="new_module_ihlManager..IHLManager_new"></a>
-
-#### new IHLManager()
-Creates an inhouse league manager.
-
-<a name="module_ihlManager..IHLManager+init"></a>
-
-#### ihlManager.init(client)
-Initializes the inhouse league manager with a discord client and loads inhouse states for each league.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| client | [<code>Client</code>](#external_Client) | A discord.js client. |
-
-<a name="module_ihlManager..IHLManager+createNewLeague"></a>
-
-#### ihlManager.createNewLeague(guild)
-Creates a new inhouse league and adds the inhouse state to list of inhouse states.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-
-<a name="module_ihlManager..IHLManager+createNewLobbyForInhouse"></a>
-
-#### ihlManager.createNewLobbyForInhouse(guild, steamid_64s)
-Creates a new inhouse lobby.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-| steamid_64s | <code>Array.&lt;string&gt;</code> | A list of inhouse player steamids. |
-
-<a name="module_ihlManager..IHLManager+checkInhouseQueue"></a>
-
-#### ihlManager.checkInhouseQueue(guild)
-Checks the inhouse queue.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-
-<a name="module_ihlManager..IHLManager+joinInhouseQueue"></a>
-
-#### ihlManager.joinInhouseQueue(guild, user)
-Adds a user to the inhouse queue.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-| user | [<code>User</code>](#external_User) | A discord.js user. |
-
-<a name="module_ihlManager..IHLManager+leaveInhouseQueue"></a>
-
-#### ihlManager.leaveInhouseQueue(guild, user)
-Removes a user from the inhouse queue.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-| user | [<code>User</code>](#external_User) | A discord.js user. |
-
-<a name="module_ihlManager..IHLManager+banInhouseQueue"></a>
-
-#### ihlManager.banInhouseQueue(guild, user, timeout)
-Bans a user from the inhouse queue.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| guild | [<code>Guild</code>](#external_Guild) | A discord.js guild. |
-| user | [<code>User</code>](#external_User) | A discord.js user. |
-| timeout | <code>number</code> | Duration of ban in minutes. |
-
-<a name="module_ihlManager..IHLManager+runLobby"></a>
-
-#### ihlManager.runLobby(_lobbyState, states)
-Processes and executes a lobby state if it matches any of the given states.
-If no states to match against are given, the lobby state is run by default.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| _lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| states | <code>Array.&lt;string&gt;</code> | A list of valid lobby states. |
-
-<a name="module_ihlManager..IHLManager+registerLobbyTimeout"></a>
-
-#### ihlManager.registerLobbyTimeout(lobbyState)
-Creates and registers a ready up timer for a lobby state.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+unregisterLobbyTimeout"></a>
-
-#### ihlManager.unregisterLobbyTimeout(lobbyState)
-Clears and unregisters the ready up timer for a lobby state.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+onLobbyTimedOut"></a>
-
-#### ihlManager.onLobbyTimedOut(lobbyState)
-Runs a lobby state when its ready up timer has expired.
-Checks for STATE_CHECKING_READY lobby state
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+onPlayersReady"></a>
-
-#### ihlManager.onPlayersReady(lobbyState)
-Runs a lobby state when all players have readied up.
-Checks for STATE_CHECKING_READY lobby state
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+onPlayerReady"></a>
-
-#### ihlManager.onPlayerReady(lobbyState, user)
-Runs a lobby state when a player has readied up and update their player ready state.
-Checks for STATE_CHECKING_READY lobby state
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | [<code>User</code>](#module_db.User) | An inhouse user. |
-
-<a name="module_ihlManager..IHLManager+onDraftMember"></a>
-
-#### ihlManager.onDraftMember(lobbyState, user, faction)
-Checks if a player is draftable and fires an event representing the result.
-If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and runs the lobby state.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | [<code>User</code>](#module_db.User) | The picked user |
-| faction | <code>number</code> | The picking faction |
-
-<a name="module_ihlManager..IHLManager+onLobbyReady"></a>
-
-#### ihlManager.onLobbyReady(_lobbyState)
-Runs a lobby state when the lobby is ready (all players have joined and are in the right team slot).
-Checks for STATE_WAITING_FOR_PLAYERS lobby state
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| _lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+onLobbyKill"></a>
-
-#### ihlManager.onLobbyKill(_lobbyState, _inhouseState)
-Kills a lobby state.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| _lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| _inhouseState | [<code>InhouseState</code>](#module_ihl.InhouseState) | The inhouse state for the lobby. |
-
-<a name="module_ihlManager..IHLManager+onMatchEnd"></a>
-
-#### ihlManager.onMatchEnd(lobbyState)
-Runs a lobby state when the match has ended.
-Checks for STATE_MATCH_IN_PROGRESS lobby state
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+processEventQueue"></a>
-
-#### ihlManager.processEventQueue()
-Processes the inhouse manager event queue until it is empty.
-Events are actions to perform on lobby states.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-<a name="module_ihlManager..IHLManager+queueEvent"></a>
-
-#### ihlManager.queueEvent(fn, ...args)
-Adds a lobby processing function and its arguments to the queue.
-When the queue is processed the function will be executed with its arguments.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fn | <code>eventCallback</code> | A lobby processing event function. |
-| ...args | <code>\*</code> | A list of arguments the lobby processing event function will be called with. |
-
-<a name="module_ihlManager..IHLManager+attachEventHandlers"></a>
-
-#### ihlManager.attachEventHandlers()
-Bind all lobby events to their corresponding event handler functions
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-<a name="module_ihlManager..IHLManager+attachMessageHandlers"></a>
-
-#### ihlManager.attachMessageHandlers()
-Bind all message events to their corresponding event handler functions
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-<a name="module_ihlManager..IHLManager"></a>
-
-### ihlManager~IHLManager
-**Kind**: inner class of [<code>ihlManager</code>](#module_ihlManager)  
-
-* [~IHLManager](#module_ihlManager..IHLManager)
-    * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-    * [new IHLManager()](#new_module_ihlManager..IHLManager_new)
-    * [.init(client)](#module_ihlManager..IHLManager+init)
-    * [.createNewLeague(guild)](#module_ihlManager..IHLManager+createNewLeague)
-    * [.createNewLobbyForInhouse(guild, steamid_64s)](#module_ihlManager..IHLManager+createNewLobbyForInhouse)
-    * [.checkInhouseQueue(guild)](#module_ihlManager..IHLManager+checkInhouseQueue)
-    * [.joinInhouseQueue(guild, user)](#module_ihlManager..IHLManager+joinInhouseQueue)
-    * [.leaveInhouseQueue(guild, user)](#module_ihlManager..IHLManager+leaveInhouseQueue)
-    * [.banInhouseQueue(guild, user, timeout)](#module_ihlManager..IHLManager+banInhouseQueue)
-    * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
-    * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-    * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
-    * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
-    * [.onPlayersReady(lobbyState)](#module_ihlManager..IHLManager+onPlayersReady)
-    * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
-    * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-    * [.onLobbyReady(_lobbyState)](#module_ihlManager..IHLManager+onLobbyReady)
-    * [.onLobbyKill(_lobbyState, _inhouseState)](#module_ihlManager..IHLManager+onLobbyKill)
-    * [.onMatchEnd(lobbyState)](#module_ihlManager..IHLManager+onMatchEnd)
-    * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
-    * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
-    * [.attachEventHandlers()](#module_ihlManager..IHLManager+attachEventHandlers)
-    * [.attachMessageHandlers()](#module_ihlManager..IHLManager+attachMessageHandlers)
-
-<a name="new_module_ihlManager..IHLManager_new"></a>
-
-#### new IHLManager()
-Class representing the inhouse league manager.
 
 <a name="new_module_ihlManager..IHLManager_new"></a>
 

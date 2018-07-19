@@ -124,16 +124,13 @@ const isDotaLobbyReady = (factionCache, playerState) => {
  * @property {string} persona_name - The steam account alias to use.
  */
 
-/**
- * Class representing a Dota bot.
- * Handles all in game functions required to host an inhouse lobby.
- * @class DotaBot
- * @extends external:EventEmitter
- */
 class DotaBot extends events.EventEmitter {
     /**
      * Constructor of the DotaBot. This prepares an object for connecting to
      * Steam and the Dota2 Game Coordinator.
+     * @classdesc Class representing a Dota bot.
+     * Handles all in game functions required to host an inhouse lobby.
+     * @extends external:EventEmitter
      * @param {module:dotaBot.LogOnDetails} logOnDetails - Steam login credentials.
      * @param {boolean} debug - Whether or not debug info should be logged.
      * @param {boolean} debugMore - Whether or not more debug info should be logged.
