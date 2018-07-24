@@ -45,11 +45,6 @@ module.exports = {
         password: {
             type: Sequelize.STRING,
         },
-        active: {
-            allowNull: false,
-            type: Sequelize.BOOLEAN,
-            defaultValue: false,
-        },
         ready_check_time: Sequelize.DATE,
         state: {
             allowNull: false,

@@ -357,9 +357,8 @@ describe('Database', () => {
 
         it('loadInhouseStates', async () => {
             const inhouseStates = await loadInhouseStates(eventEmitter)(client.guilds)(findAllLeagues());
-            console.log(util.inspect(Object.keys(inhouseStates)));
             chai.assert.exists(inhouseStates);
-            chai.assert.lengthOf(Object.keys(inhouseStates), 1);
+            chai.assert.lengthOf(inhouseStates, 1);
         });
 
         describe('Inhouse', () => {

@@ -9,11 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         lobby_id: DataTypes.STRING,
         password: DataTypes.STRING,
-        active: {
-            allowNull: false,
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
         ready_check_time: DataTypes.DATE,
         state: {
             allowNull: false,
@@ -105,18 +100,6 @@ module.exports = (sequelize, DataTypes) => {
                 match_id: value,
             },
         }));
-
-        Lobby.addScope('active', {
-            where: {
-                active: true,
-            },
-        });
-
-        Lobby.addScope('inactive', {
-            where: {
-                active: false,
-            },
-        });
 
         Lobby.addScope('guild', value => ({
             include: [{
