@@ -10,7 +10,7 @@ sinon.stub(DotaBot.DotaBot.prototype, 'createPracticeLobby').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'leavePracticeLobby').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'abandonCurrentGame').resolves(true);
 sinon.stub(DotaBot.DotaBot.prototype, 'inviteToLobby').resolves(true);
-sinon.stub(DotaBot.DotaBot.prototype, 'launchPracticeLobby').resolves({ match_id: '3996284362' });
+sinon.stub(DotaBot.DotaBot.prototype, 'launchPracticeLobby').resolves({ match_id: '4021669313' });
 
 const {
     getPlayers, getLobbyPlayerBySteamId, setPlayerReady, killLobby, getLobby, runLobby, getUserCaptainPriority, autoBalanceTeams, calcBalanceTeams, mapPlayers, setTeams,
@@ -28,8 +28,11 @@ const {
     resolveUser,
 } = require('../lib/guild');
 const {
-    loadInhouseStates,
+    loadInhouseStates, sendMatchEndMessage,
 } = require('../lib/ihlManager');
+const {
+    setMatchDetails,
+} = require('../lib/matchTracker');
 const CONSTANTS = require('../lib/constants');
 const {
     findOrCreateLeague, findOrCreateLobby, findOrCreateLobbyForGuild, findOrCreateUser, findOrCreateQueue, findUserByDiscordId, findOrCreateBot, findAllLeagues, findInQueueWithUser, updateLeague, findLeague
@@ -493,7 +496,25 @@ describe('Database', () => {
                             console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
+                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
+                        lobbyState = await runLobby(lobbyState, eventEmitter);
                         chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
+                        done();
+                    });
+                });
+
+                it('sendMatchEndMessage', function (done) {
+                    Promise.try(async () => {
+                        for (let i = 0; i < 10; i++) {
+                            await setPlayerReady(true)(lobbyState)(userData[i][0]);
+                            console.log('set player ready', userData[i][0]);
+                            lobbyState = await runLobby(lobbyState, eventEmitter);
+                        }
+                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
+                        lobbyState = await runLobby(lobbyState, eventEmitter);
+                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
+                        await setMatchDetails(lobbyState);
+                        await sendMatchEndMessage([inhouseState], lobbyState);
                         done();
                     });
                 });
