@@ -1,4 +1,4 @@
-const logger = require('./../../logger');
+const logger = require('../../lib/logger');
 const { Command } = require('discord.js-commando');
 const db = require('../../models');
 const Promise = require('bluebird');
