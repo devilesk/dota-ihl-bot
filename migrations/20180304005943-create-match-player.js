@@ -1,11 +1,5 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('MatchPlayers', {
-        id: {
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            type: Sequelize.INTEGER,
-        },
         match_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
@@ -55,8 +49,8 @@ module.exports = {
         },
     })
         .then(() => queryInterface.addConstraint('MatchPlayers', ['match_id', 'user_id'], {
-            type: 'unique',
-            name: 'uk_matchplayers_match_id_user_id',
+            type: 'primary key',
+            name: 'pk_matchplayers_match_id_user_id',
         })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('MatchPlayers'),
 };

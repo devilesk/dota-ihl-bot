@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     }, { underscored: true });
     Match.associate = (models) => {
         Match.belongsTo(models.Lobby);
-        Match.hasMany(models.MatchPlayer);
         Match.hasMany(models.Commend);
+        Match.belongsToMany(models.User, { as: 'Players', through: models.MatchPlayer });
     };
     return Match;
 };
