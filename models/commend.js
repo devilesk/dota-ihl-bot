@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         timestamp: DataTypes.DATE,
     }, { underscored: true });
     Commend.associate = (models) => {
-        Commend.belongsTo(models.Match);
+        Commend.belongsTo(models.Lobby);
         Commend.belongsTo(models.User, {
             as: 'Recipient',
             foreignKey: 'recipient_user_id',

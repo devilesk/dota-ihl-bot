@@ -28,6 +28,36 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
+        hero_id: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: -1,
+        },
+        kills: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        deaths: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        assists: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        gpm: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        xpm: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

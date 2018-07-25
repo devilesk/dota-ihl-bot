@@ -65,6 +65,18 @@ module.exports = {
         captain_2: {
             type: Sequelize.STRING,
         },
+        started_at: {
+            type: Sequelize.DATE,
+        },
+        finished_at: {
+            type: Sequelize.DATE,
+        },
+        valve_data: {
+            type: Sequelize.JSONB,
+        },
+        odota_data: {
+            type: Sequelize.JSONB,
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

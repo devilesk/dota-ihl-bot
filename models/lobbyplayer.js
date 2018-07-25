@@ -14,6 +14,36 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        hero_id: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: -1,
+        },
+        kills: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        deaths: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        assists: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        gpm: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        xpm: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
     }, { underscored: true });
     LobbyPlayer.associate = (models) => {
         LobbyPlayer.belongsTo(models.Lobby);

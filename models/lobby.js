@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         match_id: DataTypes.STRING,
         captain_1: DataTypes.STRING,
         captain_2: DataTypes.STRING,
+        started_at: DataTypes.DATE,
+        finished_at: DataTypes.DATE,
+        valve_data: DataTypes.JSONB,
+        odota_data: DataTypes.JSONB,
     },
     {
         underscored: true,
