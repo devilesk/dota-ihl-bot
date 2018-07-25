@@ -45,9 +45,7 @@ module.exports = class RepCommand extends Command {
                 else {
                     await msg.say(`${discord_user.displayName} already repped.`);
                 }
-                return [rep, created];
             }
         }
-        return [];
     }
 };

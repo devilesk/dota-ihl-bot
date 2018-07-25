@@ -147,7 +147,7 @@ describe('Database', () => {
             chai.assert.equal(user.discord_id, '75056758787158016');
         });
 
-        it('RegisterCommand', async () => {
+        /*it('RegisterCommand', async () => {
             const command = sinon.createStubInstance(RegisterCommand);
             command.run.restore();
             const msg = {
@@ -311,7 +311,7 @@ describe('Database', () => {
             });
             league2 = await findLeague(guild.id);
             chai.assert.equal(league2.category_name, 'test');
-        });
+        });*/
 
         it('getLobby', async () => {
             const lobby1 = await findOrCreateLobby(league, 'test');

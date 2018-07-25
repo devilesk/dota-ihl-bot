@@ -65,6 +65,5 @@ module.exports = class RegisterCommand extends Command {
         if (user) {
             await msg.say(`Registered ${user.steamid_64}`);
         }
-        return user;
     }
 };

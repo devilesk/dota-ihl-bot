@@ -63,7 +63,5 @@ module.exports = class PickCommand extends Command {
                 }
             }
         }
-        
-        
     }
 };

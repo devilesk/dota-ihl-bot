@@ -49,6 +49,5 @@ module.exports = class RolesCommand extends Command {
             logger.debug(`User ${discord_id} not found.`);
             await msg.say('User not found. (Have you registered your steam id with `!register`?)');
         }
-        return user;
     }
 };

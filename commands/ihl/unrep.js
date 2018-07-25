@@ -44,7 +44,6 @@ module.exports = class UnrepCommand extends Command {
                 else {
                     await msg.say(`${discord_user.displayName} not repped.`);
                 }
-                return count;
             }
         }
     }
