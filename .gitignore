@@ -1,7 +1,6 @@
 .env
 config.json
 config/
-servers
 node_modules/
 sentry/
 logs/
