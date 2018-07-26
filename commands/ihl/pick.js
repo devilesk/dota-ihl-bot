@@ -37,9 +37,9 @@ module.exports = class PickCommand extends Command {
     async run(msg, { member }) {
         const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
         if (lobbyState) {
-            const captain = await isCaptain(lobbyState)(msg.author.id);
+            const captain = await getPlayerByDiscordId(lobbyState)(msg.author.id);
             const faction = await getDraftingFaction(lobbyState);
-            if (captain && captain.faction === faction) {
+            if (isCaptain(lobbyState)(captain) && captain.faction === faction) {
                 const player = await getPlayerByDiscordId(lobbyState)(member.id);
                 if (player) {
                     const result = await isPlayerDraftable(lobbyState)(player);

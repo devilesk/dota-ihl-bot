@@ -59,11 +59,21 @@ module.exports = {
         match_id: {
             type: Sequelize.STRING,
         },
-        captain_1: {
-            type: Sequelize.STRING,
+        captain_1_user_id: {
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
         },
-        captain_2: {
-            type: Sequelize.STRING,
+        captain_2_user_id: {
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
         },
         started_at: {
             type: Sequelize.DATE,

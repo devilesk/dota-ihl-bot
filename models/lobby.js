@@ -21,8 +21,6 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
         match_id: DataTypes.STRING,
-        captain_1: DataTypes.STRING,
-        captain_2: DataTypes.STRING,
         started_at: DataTypes.DATE,
         finished_at: DataTypes.DATE,
         valve_data: DataTypes.JSONB,
@@ -37,6 +35,16 @@ module.exports = (sequelize, DataTypes) => {
         Lobby.belongsTo(models.Bot);
         Lobby.belongsToMany(models.User, { as: 'Players', through: models.LobbyPlayer });
 
+        Lobby.belongsTo(models.User, {
+            as: 'Captain1',
+            foreignKey: 'captain_1_user_id',
+        });
+
+        Lobby.belongsTo(models.User, {
+            as: 'Captain2',
+            foreignKey: 'captain_2_user_id',
+        });
+        
         Lobby.belongsToMany(models.User, {
             through: {
                 model: models.LobbyPlayer,
