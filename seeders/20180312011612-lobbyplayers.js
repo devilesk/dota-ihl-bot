@@ -2,7 +2,7 @@ module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.bulkInsert('LobbyPlayers', [{
         lobby_id: 1,
         user_id: 1,
-        ready: false,
+        ready: true,
         faction: 1,
         created_at: new Date(),
         updated_at: new Date(),
@@ -51,7 +51,7 @@ module.exports = {
         lobby_id: 1,
         user_id: 7,
         ready: true,
-        faction: 2,
+        faction: 1,
         created_at: new Date(),
         updated_at: new Date(),
     },
@@ -80,107 +80,6 @@ module.exports = {
         updated_at: new Date(),
     },
 
-        /* ,
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198077337441',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 1,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198135828361',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 1,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198013337613',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 1,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561197984954207',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 1,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198010115720',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 1,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198017839572',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 2,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198015512690',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 2,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198032905940',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 2,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198150158005',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 2,
-              created_at: new Date(),
-              updated_at: new Date()
-            },
-            {
-              lobby_name: 'funny-yak-75',
-              steamid_64: '76561198117347893',
-              ready: true,
-              invited: false,
-              joined: false,
-              faction: 2,
-              created_at: new Date(),
-              updated_at: new Date()
-            } */
     ], {}),
 
     down: (queryInterface, Sequelize) => queryInterface.bulkDelete('LobbyPlayers', null, {}),

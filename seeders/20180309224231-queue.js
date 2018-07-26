@@ -2,15 +2,6 @@ const CONSTANTS = require('../lib/constants');
 
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Queues', [
-        /* {
-                league_id: 1,
-                user_id: 1,
-                ready: false,
-                timestamp: new Date(),
-                state: CONSTANTS.QUEUE_IN_QUEUE,
-                created_at: new Date(),
-                updated_at: new Date()
-            }, */
         {
             league_id: 1,
             user_id: 2,
