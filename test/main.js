@@ -406,7 +406,7 @@ describe('Database', () => {
             it('joinInhouseQueue - not joined', async () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
                 chai.assert.isTrue(spy.calledOnce);
                 chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
                 eventEmitter.emit.restore();
@@ -415,8 +415,8 @@ describe('Database', () => {
             it('joinInhouseQueue - already joined', async () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
                 chai.assert.isTrue(spy.calledTwice);
                 chai.assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
                 chai.assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_ALREADY_JOINED));
@@ -427,8 +427,8 @@ describe('Database', () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const user2 = await findOrCreateUser(league, userData[1][0], userData[1][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
-                inhouseState = await joinInhouseQueue(inhouseState, user2, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user2, eventEmitter);
                 chai.assert.isTrue(spy.calledTwice);
                 chai.assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
                 chai.assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 2));
@@ -438,7 +438,7 @@ describe('Database', () => {
             it('leaveInhouseQueue - not joined', async () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await leaveInhouseQueue(inhouseState, user, eventEmitter);
+                await leaveInhouseQueue(inhouseState, user, eventEmitter);
                 chai.assert.isTrue(spy.calledOnce);
                 chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_NOT_JOINED, sinon.match.any));
                 eventEmitter.emit.restore();
@@ -447,8 +447,8 @@ describe('Database', () => {
             it('leaveInhouseQueue - already joined', async () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
-                inhouseState = await leaveInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await leaveInhouseQueue(inhouseState, user, eventEmitter);
                 chai.assert.isTrue(spy.calledTwice);
                 chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 0));
                 eventEmitter.emit.restore();
@@ -458,9 +458,9 @@ describe('Database', () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const user2 = await findOrCreateUser(league, userData[1][0], userData[1][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
-                inhouseState = await joinInhouseQueue(inhouseState, user, eventEmitter);
-                inhouseState = await joinInhouseQueue(inhouseState, user2, eventEmitter);
-                inhouseState = await leaveInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user, eventEmitter);
+                await joinInhouseQueue(inhouseState, user2, eventEmitter);
+                await leaveInhouseQueue(inhouseState, user, eventEmitter);
                 chai.assert.isTrue(spy.calledThrice);
                 chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 1));
                 eventEmitter.emit.restore();
@@ -485,7 +485,7 @@ describe('Database', () => {
                     const steamid_64 = userData[0][0];
                     let lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', steamid_64] }).findOne();
                     chai.assert.isFalse(lobbyPlayer.ready);
-                    await setPlayerReady(true)(lobbyState)(steamid_64);
+                    await setPlayerReady(true)(lobbyState)(lobbyPlayer.User.id);
                     lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', steamid_64] }).findOne();
                     chai.assert.isTrue(lobbyPlayer.ready);
                 });
@@ -493,7 +493,8 @@ describe('Database', () => {
                 it('all players ready', function (done) {
                     Promise.try(async () => {
                         for (let i = 0; i < 10; i++) {
-                            await setPlayerReady(true)(lobbyState)(userData[i][0]);
+                            let lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', userData[i][0]] }).findOne();
+                            await setPlayerReady(true)(lobbyState)(lobbyPlayer.User.id);
                             console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
@@ -507,7 +508,8 @@ describe('Database', () => {
                 it('sendMatchEndMessage', function (done) {
                     Promise.try(async () => {
                         for (let i = 0; i < 10; i++) {
-                            await setPlayerReady(true)(lobbyState)(userData[i][0]);
+                            let lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', userData[i][0]] }).findOne();
+                            await setPlayerReady(true)(lobbyState)(lobbyPlayer.User.id);
                             console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
