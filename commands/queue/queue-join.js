@@ -29,7 +29,12 @@ module.exports = class QueueJoinCommand extends Command {
         const user = await findUserByDiscordId(guild.id)(discord_id);
 
         if (user) {
-            await ihlManager.joinInhouseQueue(guild, user);
+            if (user.rank_tier) {
+                await ihlManager.joinInhouseQueue(guild, user);
+            }
+            else {
+                await msg.say('Badge rank not set. Ping an admin to have them set it for you.');
+            }
         }
         else {
             await msg.say('User not found. (Have you registered your steam id with `!register`?)');
