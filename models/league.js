@@ -1,5 +1,5 @@
+const CONSTANTS = require('../lib/constants');
 const Sequelize = require('sequelize');
-
 const Op = Sequelize.Op;
 
 module.exports = (sequelize, DataTypes) => {
@@ -46,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 1000,
+        },
+        default_game_mode: {
+            allowNull: false,
+            type: DataTypes.STRING,
+            defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
     },
     {

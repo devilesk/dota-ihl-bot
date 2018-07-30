@@ -1,3 +1,5 @@
+const CONSTANTS = require('../lib/constants');
+
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Leagues', {
         id: {
@@ -48,6 +50,11 @@ module.exports = {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 1000,
+        },
+        default_game_mode: {
+            allowNull: false,
+            type: Sequelize.STRING,
+            defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
         created_at: {
             allowNull: false,

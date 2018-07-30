@@ -13,6 +13,8 @@ const settingMap = {
     captainrankthreshold: 'captain_rank_threshold',
     captainroleregexp: 'captain_role_regexp',
     readychecktimeout: 'ready_check_timeout',
+    initialrating: 'initial_rating',
+    defaultgamemode: 'default_game_mode',
 };
 
 /**
