@@ -34,9 +34,6 @@ module.exports = {
                 key: 'id',
             },
         },
-        timestamp: {
-            type: Sequelize.DATE,
-        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

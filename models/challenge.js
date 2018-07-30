@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-        timestamp: DataTypes.DATE,
     }, { underscored: true });
     Challenge.associate = (models) => {
         Challenge.belongsTo(models.User, {
