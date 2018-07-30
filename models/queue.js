@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        role_name: {
+            allowNull: false,
+            type: DataTypes.STRING,
+        },
     }, { underscored: true });
     Queue.associate = (models) => {
         Queue.belongsTo(models.League);
