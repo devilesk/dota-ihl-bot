@@ -1,39 +1,37 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.createTable('Queues', {
-        id: {
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            type: Sequelize.INTEGER,
-        },
-        league_id: {
+    up: (queryInterface, Sequelize) => queryInterface.createTable('QueueUsers', {
+        queue_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
             references: {
-                model: 'Leagues',
+                model: 'Queues',
                 key: 'id',
             },
         },
-        enabled: {
+        user_id: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
+        },
+        ready: {
             allowNull: false,
             type: Sequelize.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         timestamp: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
         },
-        queue_type: {
+        state: {
             allowNull: false,
             type: Sequelize.STRING,
-        },
-        channel_name: {
-            allowNull: false,
-            type: Sequelize.STRING,
+            defaultValue: CONSTANTS.QUEUE_IN_QUEUE,
         },
         created_at: {
             allowNull: false,
@@ -43,6 +41,10 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Queues'),
+    })
+        .then(() => queryInterface.addConstraint('QueueUsers', ['queue_id', 'user_id'], {
+            type: 'primary key',
+            name: 'pk_queueusers_queue_id_user_id',
+        })),
+    down: (queryInterface, Sequelize) => queryInterface.dropTable('QueueUsers'),
 };
