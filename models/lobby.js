@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
                     ready: true,
                 },
             },
-            as: 'readyPlayers',
+            as: 'ReadyPlayers',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -94,6 +94,26 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'Team2Players',
+        });
+        
+        Lobby.belongsToMany(models.User, {
+            through: {
+                model: models.LobbyQueuer,
+                scope: {
+                    ready: true,
+                },
+            },
+            as: 'ReadyQueuers',
+        });
+
+        Lobby.belongsToMany(models.User, {
+            through: {
+                model: models.LobbyQueuer,
+                scope: {
+                    ready: false,
+                },
+            },
+            as: 'NotReadyQueuers',
         });
 
         Lobby.addScope('lobby_name', value => ({
