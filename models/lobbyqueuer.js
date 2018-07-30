@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = (sequelize, DataTypes) => {
-    const QueueUser = sequelize.define('QueueUser', {
+    const LobbyQueuer = sequelize.define('LobbyQueuer', {
         ready: {
             allowNull: false,
             type: DataTypes.BOOLEAN,
@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: CONSTANTS.QUEUE_IN_QUEUE,
         },
     }, { underscored: true });
-    QueueUser.associate = (models) => {
-        QueueUser.belongsTo(models.Queue);
-        QueueUser.belongsTo(models.User);
+    LobbyQueuer.associate = (models) => {
+        LobbyQueuer.belongsTo(models.Lobby);
+        LobbyQueuer.belongsTo(models.User);
     };
-    return QueueUser;
+    return LobbyQueuer;
 };

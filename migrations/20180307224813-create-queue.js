@@ -17,6 +17,14 @@ module.exports = {
                 key: 'id',
             },
         },
+        lobby_id: {
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Lobbies',
+                key: 'id',
+            },
+        },
         enabled: {
             allowNull: false,
             type: Sequelize.BOOLEAN,

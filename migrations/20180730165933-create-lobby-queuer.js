@@ -1,11 +1,11 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.createTable('QueueUsers', {
-        queue_id: {
+    up: (queryInterface, Sequelize) => queryInterface.createTable('LobbyQueuers', {
+        lobby_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
             references: {
-                model: 'Queues',
+                model: 'Lobbies',
                 key: 'id',
             },
         },
@@ -42,9 +42,9 @@ module.exports = {
             type: Sequelize.DATE,
         },
     })
-        .then(() => queryInterface.addConstraint('QueueUsers', ['queue_id', 'user_id'], {
+        .then(() => queryInterface.addConstraint('LobbyQueuers', ['lobby_id', 'user_id'], {
             type: 'primary key',
-            name: 'pk_queueusers_queue_id_user_id',
+            name: 'pk_lobbyqueuers_lobby_id_user_id',
         })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('QueueUsers'),
+    down: (queryInterface, Sequelize) => queryInterface.dropTable('LobbyQueuers'),
 };

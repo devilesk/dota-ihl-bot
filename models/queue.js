@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     }, { underscored: true });
     Queue.associate = (models) => {
         Queue.belongsTo(models.League);
-        Queue.belongsToMany(models.User, { through: models.QueueUser });
+        Queue.belongsTo(models.Lobby);
 
         Queue.addScope('guild', value => ({
             include: [{

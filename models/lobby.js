@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         Lobby.belongsTo(models.Season);
         Lobby.belongsTo(models.Bot);
         Lobby.belongsToMany(models.User, { as: 'Players', through: models.LobbyPlayer });
+        Lobby.belongsToMany(models.User, { as: 'Queuers', through: models.LobbyQueuer });
 
         Lobby.belongsTo(models.User, {
             as: 'Captain1',
