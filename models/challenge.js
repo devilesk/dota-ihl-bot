@@ -1,5 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
     const Challenge = sequelize.define('Challenge', {
+        accepted: {
+            allowNull: false,
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        finished: {
+            allowNull: false,
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
         timestamp: DataTypes.DATE,
     }, { underscored: true });
     Challenge.associate = (models) => {

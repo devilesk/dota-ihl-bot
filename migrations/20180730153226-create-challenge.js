@@ -1,27 +1,50 @@
-'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Challenges', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      challenge_user_id: {
-        type: Sequelize.INTEGER
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-  },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Challenges');
-  }
+    up: (queryInterface, Sequelize) => queryInterface.createTable('Challenge', {
+        id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER,
+        },
+        accepted: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
+        finished: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
+        recipient_user_id: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
+        },
+        giver_user_id: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            onDelete: 'CASCADE',
+            references: {
+                model: 'Users',
+                key: 'id',
+            },
+        },
+        timestamp: {
+            type: Sequelize.DATE,
+        },
+        created_at: {
+            allowNull: false,
+            type: Sequelize.DATE,
+        },
+        updated_at: {
+            allowNull: false,
+            type: Sequelize.DATE,
+        },
+    }),
+    down: (queryInterface, Sequelize) => queryInterface.dropTable('Challenge'),
 };
