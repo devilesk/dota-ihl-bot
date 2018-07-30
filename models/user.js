@@ -65,6 +65,16 @@ module.exports = (sequelize, DataTypes) => {
         User.belongsTo(models.League);
         User.hasMany(models.Leaderboard);
 
+        User.hasMany(models.Challenge, {
+            as: 'ChallengesReceived',
+            foreignKey: 'recipient_user_id',
+        });
+
+        User.hasMany(models.Challenge, {
+            as: 'ChallengesGiven',
+            foreignKey: 'giver_user_id',
+        });
+
         User.hasMany(models.Commend, {
             as: 'CommendsReceived',
             foreignKey: 'recipient_user_id',
