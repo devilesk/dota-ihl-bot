@@ -5,11 +5,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-        finished: {
-            allowNull: false,
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
     }, { underscored: true });
     Challenge.associate = (models) => {
         Challenge.belongsTo(models.User, {

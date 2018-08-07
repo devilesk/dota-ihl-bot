@@ -56,6 +56,11 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
+        lobby_name_template: {
+            allowNull: false,
+            type: Sequelize.STRING,
+            defaultValue: 'Inhouse Lobby ${lobby_id}',
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

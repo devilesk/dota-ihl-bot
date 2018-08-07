@@ -95,7 +95,29 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'giver_user_id',
         });
 
-        User.belongsToMany(models.Lobby, { through: models.LobbyPlayer });
+        User.belongsToMany(models.Lobby, { as: 'Lobbies', through: models.LobbyPlayer });
+        
+        User.belongsToMany(models.Lobby, { as: 'Queues', through: models.LobbyQueuer });
+        
+        User.belongsToMany(models.Lobby, {
+            through: {
+                model: models.LobbyQueuer,
+                scope: {
+                    active: true,
+                },
+            },
+            as: 'ActiveQueues',
+        });
+
+        User.belongsToMany(models.Lobby, {
+            through: {
+                model: models.LobbyQueuer,
+                scope: {
+                    active: false,
+                },
+            },
+            as: 'InactiveQueues',
+        });
 
         User.addScope('steamid_64', value => ({
             where: {
@@ -106,6 +128,12 @@ module.exports = (sequelize, DataTypes) => {
         User.addScope('discord_id', value => ({
             where: {
                 discord_id: value,
+            },
+        }));
+
+        User.addScope('id', value => ({
+            where: {
+                id: value,
             },
         }));
 

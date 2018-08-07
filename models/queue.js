@@ -16,18 +16,13 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        channel_name: {
-            allowNull: false,
-            type: DataTypes.STRING,
-        },
-        role_name: {
+        queue_name: {
             allowNull: false,
             type: DataTypes.STRING,
         },
     }, { underscored: true });
     Queue.associate = (models) => {
         Queue.belongsTo(models.League);
-        Queue.belongsTo(models.Lobby);
 
         Queue.addScope('guild', value => ({
             include: [{

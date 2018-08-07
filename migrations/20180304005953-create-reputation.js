@@ -6,12 +6,12 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        season_id: {
+        league_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
             references: {
-                model: 'Seasons',
+                model: 'Leagues',
                 key: 'id',
             },
         },

@@ -18,20 +18,15 @@ module.exports = {
                 key: 'id',
             },
         },
-        ready: {
+        active: {
             allowNull: false,
             type: Sequelize.BOOLEAN,
-            defaultValue: false,
+            defaultValue: true,
         },
         timestamp: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
-        },
-        state: {
-            allowNull: false,
-            type: Sequelize.STRING,
-            defaultValue: CONSTANTS.QUEUE_IN_QUEUE,
         },
         created_at: {
             allowNull: false,

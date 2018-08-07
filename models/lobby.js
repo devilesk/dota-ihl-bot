@@ -2,6 +2,10 @@ const CONSTANTS = require('../lib/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const Lobby = sequelize.define('Lobby', {
+        queue_type: {
+            allowNull: false,
+            type: DataTypes.STRING,
+        },
         lobby_name: {
             allowNull: false,
             type: DataTypes.STRING,
@@ -100,20 +104,20 @@ module.exports = (sequelize, DataTypes) => {
             through: {
                 model: models.LobbyQueuer,
                 scope: {
-                    ready: true,
+                    active: true,
                 },
             },
-            as: 'ReadyQueuers',
+            as: 'ActiveQueuers',
         });
 
         Lobby.belongsToMany(models.User, {
             through: {
                 model: models.LobbyQueuer,
                 scope: {
-                    ready: false,
+                    active: false,
                 },
             },
-            as: 'NotReadyQueuers',
+            as: 'InactiveQueuers',
         });
 
         Lobby.addScope('lobby_name', value => ({

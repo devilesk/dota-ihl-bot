@@ -52,6 +52,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
+        lobby_name_template: {
+            allowNull: false,
+            type: DataTypes.STRING,
+            defaultValue: 'Inhouse Lobby ${lobby_id}',
+        },
     },
     {
         underscored: true,
@@ -65,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     League.associate = (models) => {
         League.hasMany(models.Season);
+        League.hasMany(models.Queue);
         League.hasMany(models.User);
         League.hasMany(models.Lobby);
         League.hasMany(models.Bot);

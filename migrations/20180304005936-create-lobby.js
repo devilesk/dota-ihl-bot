@@ -34,6 +34,10 @@ module.exports = {
                 key: 'id',
             },
         },
+        queue_type: {
+            allowNull: false,
+            type: Sequelize.STRING,
+        },
         lobby_name: {
             allowNull: false,
             type: Sequelize.STRING,

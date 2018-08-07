@@ -11,11 +11,6 @@ module.exports = {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
         },
-        finished: {
-            allowNull: false,
-            type: Sequelize.BOOLEAN,
-            defaultValue: false,
-        },
         recipient_user_id: {
             allowNull: false,
             type: Sequelize.INTEGER,

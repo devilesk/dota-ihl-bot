@@ -17,14 +17,6 @@ module.exports = {
                 key: 'id',
             },
         },
-        lobby_id: {
-            type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
-            references: {
-                model: 'Lobbies',
-                key: 'id',
-            },
-        },
         enabled: {
             allowNull: false,
             type: Sequelize.BOOLEAN,
@@ -39,11 +31,7 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        channel_name: {
-            allowNull: false,
-            type: Sequelize.STRING,
-        },
-        role_name: {
+        queue_name: {
             allowNull: false,
             type: Sequelize.STRING,
         },
