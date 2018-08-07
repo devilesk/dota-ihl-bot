@@ -1,4 +1,5 @@
 const chai = require('chai');
+const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
@@ -73,14 +74,14 @@ describe('Database', () => {
     describe('findAllLeagues', () => {
         it('return leagues', async () => {
             const leagues = await findAllLeagues();
-            chai.assert.lengthOf(leagues, 2);
+            assert.lengthOf(leagues, 2);
         });
     });
 
     describe('findAllActiveLobbies', () => {
         it('return lobbies', async () => {
             const lobbies = await findAllActiveLobbies('422549177151782925');
-            chai.assert.lengthOf(lobbies, 1);
+            assert.lengthOf(lobbies, 1);
         });
     });
 
@@ -88,28 +89,28 @@ describe('Database', () => {
         it('return lobbies for user', async () => {
             const user = await findUserById(1);
             const lobbies = await findActiveLobbiesForUser(user);
-            chai.assert.lengthOf(lobbies, 1);
+            assert.lengthOf(lobbies, 1);
         });
     });
 
     describe('findAllInProgressLobbies', () => {
         it('return lobbies', async () => {
             const lobbies = await findAllInProgressLobbies();
-            chai.assert.lengthOf(lobbies, 1);
+            assert.lengthOf(lobbies, 1);
         });
     });
 
     describe('findAllEnabledQueues', () => {
         it('return queues', async () => {
             const queues = await findAllEnabledQueues('422549177151782925');
-            chai.assert.lengthOf(queues, 2);
+            assert.lengthOf(queues, 2);
         });
     });
 
     describe('findLeague', () => {
         it('return league', async () => {
             const league = await findLeague('422549177151782925');
-            chai.assert.exists(league);
+            assert.exists(league);
         });
     });
 
@@ -119,27 +120,27 @@ describe('Database', () => {
                 { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
                 { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue2' },
             ]);
-            chai.assert.exists(league);
+            assert.exists(league);
             const queues = await league.getQueues();
-            chai.assert.lengthOf(queues, 4);
+            assert.lengthOf(queues, 4);
         });
         it('return new league', async () => {
             const league = await findOrCreateLeague('123')([
                 { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
                 { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue2' },
             ]);
-            chai.assert.exists(league);
+            assert.exists(league);
             const queues = await league.getQueues();
-            chai.assert.lengthOf(queues, 2);
+            assert.lengthOf(queues, 2);
         });
     });
 
     describe('createSeason', () => {
         it('create new season', async () => {
             const season = await createSeason('422549177151782925');
-            chai.assert.exists(season);
+            assert.exists(season);
             const league = await season.getLeague();
-            chai.assert.equal(league.current_season_id, season.id);
+            assert.equal(league.current_season_id, season.id);
         });
     });
 
@@ -147,8 +148,8 @@ describe('Database', () => {
         it('create new bot', async () => {
             const league = await findLeague('422549177151782925');
             const bot = await findOrCreateBot(league, '123', 'bot3', 'bot3', 'pass');
-            chai.assert.exists(bot);
-            chai.assert.equal(bot.league_id, league.id);
+            assert.exists(bot);
+            assert.equal(bot.league_id, league.id);
         });
     });
 
@@ -156,10 +157,10 @@ describe('Database', () => {
         it('create new lobby', async () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findOrCreateLobby(league, CONSTANTS.QUEUE_TYPE_DRAFT, 'draft-lobby');
-            chai.assert.exists(lobby);
-            chai.assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            chai.assert.equal(lobby.league_id, league.id);
-            chai.assert.equal(lobby.season_id, league.current_season_id);
+            assert.exists(lobby);
+            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.league_id, league.id);
+            assert.equal(lobby.season_id, league.current_season_id);
         });
     });
 
@@ -167,10 +168,10 @@ describe('Database', () => {
         it('create new lobby', async () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findOrCreateLobbyForGuild('422549177151782925', CONSTANTS.QUEUE_TYPE_DRAFT, 'draft-lobby');
-            chai.assert.exists(lobby);
-            chai.assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            chai.assert.equal(lobby.league_id, league.id);
-            chai.assert.equal(lobby.season_id, league.current_season_id);
+            assert.exists(lobby);
+            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.league_id, league.id);
+            assert.equal(lobby.season_id, league.current_season_id);
         });
     });
 
@@ -178,10 +179,10 @@ describe('Database', () => {
         it('return existing lobby', async () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findLobby('funny-yak-74');
-            chai.assert.exists(lobby);
-            chai.assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            chai.assert.equal(lobby.league_id, league.id);
-            chai.assert.equal(lobby.season_id, league.current_season_id);
+            assert.exists(lobby);
+            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.league_id, league.id);
+            assert.equal(lobby.season_id, league.current_season_id);
         });
     });
 
@@ -189,9 +190,9 @@ describe('Database', () => {
         it('return existing bot', async () => {
             const league = await findLeague('422549177151782925');
             const bot = await findBot(1);
-            chai.assert.exists(bot);
-            chai.assert.equal(bot.id, 1);
-            chai.assert.equal(bot.league_id, league.id);
+            assert.exists(bot);
+            assert.equal(bot.id, 1);
+            assert.equal(bot.league_id, league.id);
         });
     });
 
@@ -199,7 +200,7 @@ describe('Database', () => {
         it('return bots not assigned to a lobby', async () => {
             const league = await findLeague('422549177151782925');
             const bots = await findAllUnassignedBot();
-            chai.assert.lengthOf(bots, 1);
+            assert.lengthOf(bots, 1);
         });
     });
 
@@ -207,8 +208,8 @@ describe('Database', () => {
         it('return user by id', async () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserById(1);
-            chai.assert.exists(user);
-            chai.assert.equal(user.league_id, league.id);
+            assert.exists(user);
+            assert.equal(user.league_id, league.id);
         });
     });
 
@@ -216,9 +217,9 @@ describe('Database', () => {
         it('return user by discord id', async () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserByDiscordId('422549177151782925')('76864899866697728');
-            chai.assert.exists(user);
-            chai.assert.equal(user.discord_id, '76864899866697728');
-            chai.assert.equal(user.league_id, league.id);
+            assert.exists(user);
+            assert.equal(user.discord_id, '76864899866697728');
+            assert.equal(user.league_id, league.id);
         });
     });
 
@@ -226,9 +227,9 @@ describe('Database', () => {
         it('return user by steam id', async () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserBySteamId64('422549177151782925')('76561198015512690');
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, '76561198015512690');
-            chai.assert.equal(user.league_id, league.id);
+            assert.exists(user);
+            assert.equal(user.steamid_64, '76561198015512690');
+            assert.equal(user.league_id, league.id);
         });
     });
 
@@ -239,11 +240,11 @@ describe('Database', () => {
         it('create new user', async () => {
             const league = await findLeague('422549177151782925');
             const user = await findOrCreateUser(league, '123', '456', 70);
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, '123');
-            chai.assert.equal(user.discord_id, '456');
-            chai.assert.equal(user.rank_tier, 70);
-            chai.assert.equal(user.league_id, league.id);
+            assert.exists(user);
+            assert.equal(user.steamid_64, '123');
+            assert.equal(user.discord_id, '456');
+            assert.equal(user.rank_tier, 70);
+            assert.equal(user.league_id, league.id);
         });
     });
 
@@ -251,19 +252,19 @@ describe('Database', () => {
         it('create new queue', async () => {
             const league = await findLeague('422549177151782925');
             const queue = await findOrCreateQueue(league, true, CONSTANTS.QUEUE_TYPE_AUTO, 'auto-queue');
-            chai.assert.exists(queue);
-            chai.assert.isTrue(queue.enabled);
-            chai.assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_AUTO);
-            chai.assert.equal(queue.queue_name, 'auto-queue');
-            chai.assert.equal(queue.league_id, league.id);
+            assert.exists(queue);
+            assert.isTrue(queue.enabled);
+            assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_AUTO);
+            assert.equal(queue.queue_name, 'auto-queue');
+            assert.equal(queue.league_id, league.id);
         });
     });
 
     describe('findLobbyByMatchId', () => {
         it('return existing lobby', async () => {
             const lobby = await findLobbyByMatchId('123');
-            chai.assert.exists(lobby);
-            chai.assert.equal(lobby.id, 2);
+            assert.exists(lobby);
+            assert.equal(lobby.id, 2);
         });
     });
 
@@ -276,48 +277,48 @@ describe('Database', () => {
     describe('updateLeague', () => {
         it('update league values', async () => {
             const result = await updateLeague('422549177151782925')({ channel_name: 'test' });
-            chai.assert.lengthOf(result, 1);
+            assert.lengthOf(result, 1);
             const league = await findLeague('422549177151782925');
-            chai.assert.equal(league.channel_name, 'test');
+            assert.equal(league.channel_name, 'test');
         });
     });
 
     describe('updateLobbyState', () => {
         it('update lobby state', async () => {
             const result = await updateLobbyState({ lobby_name: 'funny-yak-74', password: 'pass' });
-            chai.assert.lengthOf(result, 1);
+            assert.lengthOf(result, 1);
             const lobby = await findLobby('funny-yak-74');
-            chai.assert.equal(lobby.password, 'pass');
+            assert.equal(lobby.password, 'pass');
         });
     });
 
     describe('updateLobbyName', () => {
         it('update lobby name', async () => {
             const result = await updateLobbyName('funny-yak-74')('renamed-lobby');
-            chai.assert.lengthOf(result, 1);
+            assert.lengthOf(result, 1);
             const lobby = await findLobby('renamed-lobby');
-            chai.assert.exists(lobby);
-            chai.assert.equal(lobby.id, 1);
+            assert.exists(lobby);
+            assert.equal(lobby.id, 1);
         });
     });
 
     describe('updateBotStatusBySteamId', () => {
         it('update bot status', async () => {
             const result = await updateBotStatusBySteamId(CONSTANTS.BOT_ONLINE)('999991');
-            chai.assert.lengthOf(result, 1);
+            assert.lengthOf(result, 1);
             const bot = await findBot(1);
-            chai.assert.exists(bot);
-            chai.assert.equal(bot.status, CONSTANTS.BOT_ONLINE);
+            assert.exists(bot);
+            assert.equal(bot.status, CONSTANTS.BOT_ONLINE);
         });
     });
 
     describe('updateBotStatus', () => {
         it('update bot status', async () => {
             const result = await updateBotStatus(CONSTANTS.BOT_ONLINE)(1);
-            chai.assert.lengthOf(result, 1);
+            assert.lengthOf(result, 1);
             const bot = await findBot(1);
-            chai.assert.exists(bot);
-            chai.assert.equal(bot.status, CONSTANTS.BOT_ONLINE);
+            assert.exists(bot);
+            assert.equal(bot.status, CONSTANTS.BOT_ONLINE);
         });
     });
 
@@ -325,11 +326,11 @@ describe('Database', () => {
         it('update lobby queuer', async () => {
             let user = await findUserById(1);
             user = await updateQueuesForUser(false)(user);
-            chai.assert.equal(user.id, 1);
+            assert.equal(user.id, 1);
             const queues = await user.getQueues();
-            chai.assert.lengthOf(queues, 2);
-            chai.assert.isFalse(queues[0].LobbyQueuer.active);
-            chai.assert.isFalse(queues[1].LobbyQueuer.active);
+            assert.lengthOf(queues, 2);
+            assert.isFalse(queues[0].LobbyQueuer.active);
+            assert.isFalse(queues[1].LobbyQueuer.active);
         });
     });
 
@@ -337,10 +338,10 @@ describe('Database', () => {
         it('destroy queue', async () => {
             const league = await findLeague('422549177151782925');
             let queue = await db.Queue.findOne({ where: { id: 3 } });
-            chai.assert.exists(queue);
+            assert.exists(queue);
             await destroyQueueByName(league)(queue.queue_name);
             queue = await db.Queue.findOne({ where: { id: 3 } });
-            chai.assert.notExists(queue);
+            assert.notExists(queue);
         });
     });
 
@@ -350,10 +351,10 @@ describe('Database', () => {
             const giver = await findUserById(1);
             const receiver = await findUserById(2);
             const rep = await findOrCreateReputation(league)(giver)(receiver);
-            chai.assert.exists(rep);
-            chai.assert.equal(rep.league_id, 1);
-            chai.assert.equal(rep.giver_user_id, giver.id);
-            chai.assert.equal(rep.recipient_user_id, receiver.id);
+            assert.exists(rep);
+            assert.equal(rep.league_id, 1);
+            assert.equal(rep.giver_user_id, giver.id);
+            assert.equal(rep.recipient_user_id, receiver.id);
         });
     });
 
@@ -363,7 +364,7 @@ describe('Database', () => {
             const giver = await findUserById(3);
             const receiver = await findUserById(1);
             const result = await destroyReputation(league)(giver)(receiver);
-            chai.assert.equal(result, 1);
+            assert.equal(result, 1);
         });
     });
 
@@ -372,23 +373,23 @@ describe('Database', () => {
             const user1 = await findUserById(1);
             const user2 = await findUserById(2);
             const challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.notExists(challenge);
+            assert.notExists(challenge);
         });
         
         it('return accepted challenge', async () => {
             const user1 = await findUserById(4);
             const user2 = await findUserById(3);
             const challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isTrue(challenge.accepted);
+            assert.exists(challenge);
+            assert.isTrue(challenge.accepted);
         });
         
         it('return challenge', async () => {
             const user1 = await findUserById(1);
             const user2 = await findUserById(2);
             const challenge = await getChallengeBetweenUsers(user2)(user1);
-            chai.assert.exists(challenge);
-            chai.assert.isFalse(challenge.accepted);
+            assert.exists(challenge);
+            assert.isFalse(challenge.accepted);
         });
     });
 
@@ -397,10 +398,10 @@ describe('Database', () => {
             const user1 = await findUserById(1);
             const user2 = await findUserById(2);
             const challenge = await createChallenge(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isFalse(challenge.accepted);
-            chai.assert.equal(challenge.giver_user_id, user1.id);
-            chai.assert.equal(challenge.recipient_user_id, user2.id);
+            assert.exists(challenge);
+            assert.isFalse(challenge.accepted);
+            assert.equal(challenge.giver_user_id, user1.id);
+            assert.equal(challenge.recipient_user_id, user2.id);
         });
     });
 
@@ -409,10 +410,10 @@ describe('Database', () => {
             const user1 = await findUserById(1);
             const user2 = await findUserById(2);
             let challenge = await getChallengeBetweenUsers(user2)(user1);
-            chai.assert.exists(challenge);
+            assert.exists(challenge);
             await destroyChallengeBetweenUsers(user2)(user1);
             challenge = await getChallengeBetweenUsers(user2)(user1);
-            chai.assert.notExists(challenge);
+            assert.notExists(challenge);
         });
     });
 
@@ -421,41 +422,41 @@ describe('Database', () => {
             const user1 = await findUserById(4);
             const user2 = await findUserById(3);
             let challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isTrue(challenge.accepted);
+            assert.exists(challenge);
+            assert.isTrue(challenge.accepted);
             await destroyAllAcceptedChallengeForUser(user1);
             challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.notExists(challenge);
+            assert.notExists(challenge);
         });
         
         it('destroy challenges for user 2', async () => {
             const user1 = await findUserById(4);
             const user2 = await findUserById(3);
             let challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isTrue(challenge.accepted);
+            assert.exists(challenge);
+            assert.isTrue(challenge.accepted);
             await destroyAllAcceptedChallengeForUser(user2);
             challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.notExists(challenge);
+            assert.notExists(challenge);
         });
         
         it('not destroy unaccepted challenge', async () => {
             const user1 = await findUserById(3);
             const user2 = await findUserById(2);
             let challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isFalse(challenge.accepted);
+            assert.exists(challenge);
+            assert.isFalse(challenge.accepted);
             await destroyAllAcceptedChallengeForUser(user2);
             challenge = await getChallengeBetweenUsers(user1)(user2);
-            chai.assert.exists(challenge);
-            chai.assert.isFalse(challenge.accepted);
+            assert.exists(challenge);
+            assert.isFalse(challenge.accepted);
         });
     });
 
     describe('setChallengeAccepted', () => {
         it('set accepted to true', async () => {
             let challenge = await db.Challenge.findOne({ where: { id: 1 } });
-            chai.assert.isFalse(challenge.accepted);
+            assert.isFalse(challenge.accepted);
             await setChallengeAccepted(challenge);
             challenge = await db.Challenge.findOne({ where: { id: 1 } });
         });

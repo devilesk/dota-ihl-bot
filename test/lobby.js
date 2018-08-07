@@ -1,4 +1,5 @@
 const chai = require('chai');
+const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
@@ -124,12 +125,12 @@ describe('Database - with lobby players', () => {
     describe('getLobby', () => {
         it('return a Lobby given a { lobby_name }', async () => {
             const lobby = await getLobby({ lobby_name });
-            chai.assert.equal(lobby.lobby_name, lobby_name);
+            assert.equal(lobby.lobby_name, lobby_name);
         });
     
         it('return a Lobby given a Lobby db model', async () => {
             const lobby = await getLobby(await getLobby({ lobby_name: lobby_name }));
-            chai.assert.equal(lobby.lobby_name, lobby_name);
+            assert.equal(lobby.lobby_name, lobby_name);
         });
     });
     
@@ -142,14 +143,14 @@ describe('Database - with lobby players', () => {
         describe('getPlayers', () => {
             it('return 10 players in the lobby', async () => {
                 const players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
 
         describe('getPlayerByUserId', () => {
             it('return a player', async () => {
                 const player = await getPlayerByUserId(lobby)(1);
-                chai.assert.equal(player.id, 1);
+                assert.equal(player.id, 1);
             });
         });
 
@@ -157,7 +158,7 @@ describe('Database - with lobby players', () => {
             it('return a player', async () => {
                 const steamid_64 = '76561198015512690';
                 const player = await getPlayerBySteamId(lobby)(steamid_64);
-                chai.assert.equal(player.steamid_64, steamid_64);
+                assert.equal(player.steamid_64, steamid_64);
             });
         });
 
@@ -165,53 +166,53 @@ describe('Database - with lobby players', () => {
             it('return a player', async () => {
                 const discord_id = '76864899866697728';
                 const player = await getPlayerByDiscordId(lobby)(discord_id);
-                chai.assert.equal(player.discord_id, discord_id);
+                assert.equal(player.discord_id, discord_id);
             });
         });
 
         describe('getNoTeamPlayers', () => {
             it('return players not on a team', async () => {
                 const players = await getNoTeamPlayers()(lobby);
-                chai.assert.lengthOf(players, 0);
+                assert.lengthOf(players, 0);
             });
         });
 
         describe('getNotReadyPlayers', () => {
             it('return players not ready', async () => {
                 const players = await getNotReadyPlayers()(lobby);
-                chai.assert.lengthOf(players, 0);
+                assert.lengthOf(players, 0);
             });
         });
 
         describe('getReadyPlayers', () => {
             it('return players ready', async () => {
                 const players = await getReadyPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
 
         describe('mapPlayers', () => {
             it('apply a function to players', async () => {
                 const players = await mapPlayers(player => player.id)(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
 
         describe('removePlayer', () => {
             it('remove a lobby player', async () => {
                 let players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
                 const result = await removePlayer(lobby)(players[0]);
-                chai.assert.equal(result, 1);
+                assert.equal(result, 1);
                 players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 9);
+                assert.lengthOf(players, 9);
             });
         });
         
         describe('addRoleToPlayers', () => {
             it('add role to players', async () => {
                 const players = await addRoleToPlayers(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
         
@@ -227,12 +228,12 @@ describe('Database - with lobby players', () => {
                 }
                 await updateLobbyPlayer(data)(lobby)(1);
                 const player = await getPlayerByUserId(lobby)(1);
-                chai.assert.equal(player.LobbyPlayer.hero_id, 1);
-                chai.assert.equal(player.LobbyPlayer.kills, 1);
-                chai.assert.equal(player.LobbyPlayer.deaths, 1);
-                chai.assert.equal(player.LobbyPlayer.assists, 1);
-                chai.assert.equal(player.LobbyPlayer.gpm, 1);
-                chai.assert.equal(player.LobbyPlayer.xpm, 1);
+                assert.equal(player.LobbyPlayer.hero_id, 1);
+                assert.equal(player.LobbyPlayer.kills, 1);
+                assert.equal(player.LobbyPlayer.deaths, 1);
+                assert.equal(player.LobbyPlayer.assists, 1);
+                assert.equal(player.LobbyPlayer.gpm, 1);
+                assert.equal(player.LobbyPlayer.xpm, 1);
             });
         });
         
@@ -249,12 +250,12 @@ describe('Database - with lobby players', () => {
                 }
                 await updateLobbyPlayerBySteamId(data)(lobby)(steamid_64);
                 const player = await getPlayerBySteamId(lobby)(steamid_64);
-                chai.assert.equal(player.LobbyPlayer.hero_id, 1);
-                chai.assert.equal(player.LobbyPlayer.kills, 1);
-                chai.assert.equal(player.LobbyPlayer.deaths, 1);
-                chai.assert.equal(player.LobbyPlayer.assists, 1);
-                chai.assert.equal(player.LobbyPlayer.gpm, 1);
-                chai.assert.equal(player.LobbyPlayer.xpm, 1);
+                assert.equal(player.LobbyPlayer.hero_id, 1);
+                assert.equal(player.LobbyPlayer.kills, 1);
+                assert.equal(player.LobbyPlayer.deaths, 1);
+                assert.equal(player.LobbyPlayer.assists, 1);
+                assert.equal(player.LobbyPlayer.gpm, 1);
+                assert.equal(player.LobbyPlayer.xpm, 1);
             });
         });
         
@@ -262,7 +263,7 @@ describe('Database - with lobby players', () => {
             it('set lobby player ready false', async () => {
                 await setPlayerReady(false)(lobby)(1);
                 const player = await getPlayerByUserId(lobby)(1);
-                chai.assert.isFalse(player.LobbyPlayer.ready);
+                assert.isFalse(player.LobbyPlayer.ready);
             });
         });
         
@@ -270,7 +271,7 @@ describe('Database - with lobby players', () => {
             it('set lobby player faction', async () => {
                 await setPlayerTeam(2)(lobby)(1);
                 const player = await getPlayerByUserId(lobby)(1);
-                chai.assert.equal(player.LobbyPlayer.faction, 2);
+                assert.equal(player.LobbyPlayer.faction, 2);
             });
         });
         
@@ -283,59 +284,59 @@ describe('Database - with lobby players', () => {
                     { id: 4, LobbyQueuer: { created_at: 75 } },
                 ]
                 const sortedQueuers = await sortQueuersAsc(queuers);
-                chai.assert.equal(sortedQueuers[0].id, 2);
-                chai.assert.equal(sortedQueuers[1].id, 4)
-                chai.assert.equal(sortedQueuers[2].id, 1)
-                chai.assert.equal(sortedQueuers[3].id, 3)
+                assert.equal(sortedQueuers[0].id, 2);
+                assert.equal(sortedQueuers[1].id, 4)
+                assert.equal(sortedQueuers[2].id, 1)
+                assert.equal(sortedQueuers[3].id, 3)
             });
         });
 
         describe('getQueuers', () => {
             it('return 10 users in the lobby queue', async () => {
                 const queuers = await getQueuers()(lobby);
-                chai.assert.lengthOf(queuers, 10);
+                assert.lengthOf(queuers, 10);
             });
         });
 
         describe('getActiveQueuers', () => {
             it('return 9 active users in the lobby queue', async () => {
                 const queuers = await getActiveQueuers()(lobby);
-                chai.assert.lengthOf(queuers, 9);
+                assert.lengthOf(queuers, 9);
             });
         });
 
         describe('getQueuerByUserId', () => {
             it('return user in the lobby queue', async () => {
                 const user = await getQueuerByUserId(lobby)(1);
-                chai.assert.exists(user);
+                assert.exists(user);
             });
         });
 
         describe('getQueuerBySteamId', () => {
             it('return user in the lobby queue', async () => {
                 const user = await getQueuerBySteamId(lobby)('76561198015512690');
-                chai.assert.exists(user);
+                assert.exists(user);
             });
         });
 
         describe('getQueuerByDiscordId', () => {
             it('return user in the lobby queue', async () => {
                 const user = await getQueuerByDiscordId(lobby)('76864899866697728');
-                chai.assert.exists(user);
+                assert.exists(user);
             });
         });
 
         describe('mapQueuers', () => {
             it('apply a function to queuers', async () => {
                 const players = await mapQueuers(player => player.id)(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
 
         describe('mapActiveQueuers', () => {
             it('apply a function to active queuers', async () => {
                 const players = await mapActiveQueuers(player => player.id)(lobby);
-                chai.assert.lengthOf(players, 9);
+                assert.lengthOf(players, 9);
             });
         });
 
@@ -343,25 +344,25 @@ describe('Database - with lobby players', () => {
             it('return user in queue true', async () => {
                 const user = await getQueuerByUserId(lobby)(1);
                 const result = await hasQueuer(lobby)(user);
-                chai.assert.isTrue(result);
+                assert.isTrue(result);
             });
         });
 
         describe('removeQueuer', () => {
             it('remove a lobby queuer', async () => {
                 let queuers = await getPlayers()(lobby);
-                chai.assert.lengthOf(queuers, 10);
+                assert.lengthOf(queuers, 10);
                 const result = await removeQueuer(lobby)(queuers[0]);
-                chai.assert.equal(result, 1);
+                assert.equal(result, 1);
                 queuers = await getQueuers()(lobby);
-                chai.assert.lengthOf(queuers, 9);
+                assert.lengthOf(queuers, 9);
             });
         });
         
         describe('addRoleToQueuers', () => {
             it('add role to queuers', async () => {
                 const queuers = await addRoleToQueuers(lobby);
-                chai.assert.lengthOf(queuers, 10);
+                assert.lengthOf(queuers, 10);
             });
         });
         
@@ -372,7 +373,7 @@ describe('Database - with lobby players', () => {
                 }
                 await updateLobbyQueuer(data)(lobby)(1);
                 const queuer = await getQueuerByUserId(lobby)(1);
-                chai.assert.isFalse(queuer.LobbyQueuer.active);
+                assert.isFalse(queuer.LobbyQueuer.active);
             });
         });
         
@@ -384,7 +385,7 @@ describe('Database - with lobby players', () => {
                 }
                 await updateLobbyQueuerBySteamId(data)(lobby)(steamid_64);
                 const queuer = await getQueuerBySteamId(lobby)(steamid_64);
-                chai.assert.isFalse(queuer.LobbyQueuer.active);
+                assert.isFalse(queuer.LobbyQueuer.active);
             });
         });
         
@@ -392,7 +393,7 @@ describe('Database - with lobby players', () => {
             it('set lobby queuer active false', async () => {
                 await setQueuerActive(false)(lobby)(1);
                 const queuer = await getQueuerByUserId(lobby)(1);
-                chai.assert.isFalse(queuer.LobbyQueuer.active);
+                assert.isFalse(queuer.LobbyQueuer.active);
             });
         });
         
@@ -400,10 +401,10 @@ describe('Database - with lobby players', () => {
             it('remove user from all queues', async () => {
                 const queuer = await getQueuerByUserId(lobby)(1);
                 let queues = await queuer.getQueues();
-                chai.assert.lengthOf(queues, 2);
+                assert.lengthOf(queues, 2);
                 await removeUserFromQueues(queuer);
                 queues = await queuer.getQueues();
-                chai.assert.lengthOf(queues, 0);
+                assert.lengthOf(queues, 0);
             });
         });
         
@@ -411,9 +412,9 @@ describe('Database - with lobby players', () => {
             it('balance teams', async () => {
                 const players = await getPlayers()(lobby);
                 const teams = await calcBalanceTeams(players);
-                chai.assert.lengthOf(teams, 2);
-                chai.assert.lengthOf(teams[0], 5);
-                chai.assert.lengthOf(teams[1], 5);
+                assert.lengthOf(teams, 2);
+                assert.lengthOf(teams[0], 5);
+                assert.lengthOf(teams[1], 5);
             });
             
             it('balance teams', async () => {
@@ -430,39 +431,39 @@ describe('Database - with lobby players', () => {
                     { rank_tier: 10 },
                 ];
                 const teams = await calcBalanceTeams(players);
-                chai.assert.lengthOf(teams, 2);
-                chai.assert.lengthOf(teams[0], 5);
-                chai.assert.lengthOf(teams[1], 5);
-                chai.assert.equal(Math.abs(teams[0].reduce((total, player) => total + player.rank_tier, 0) - teams[1].reduce((total, player) => total + player.rank_tier, 0)), 1);
+                assert.lengthOf(teams, 2);
+                assert.lengthOf(teams[0], 5);
+                assert.lengthOf(teams[1], 5);
+                assert.equal(Math.abs(teams[0].reduce((total, player) => total + player.rank_tier, 0) - teams[1].reduce((total, player) => total + player.rank_tier, 0)), 1);
             });
         });
         
         describe('setTeams', () => {
             it('set player factions', async () => {
                 let players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
                 team_1 = players.slice(5);
                 team_2 = players.slice(0, 5);
                 const result = await setTeams(lobby)([team_1, team_2]);
                 players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
-                chai.assert.equal(players[0].LobbyPlayer.faction, 2);
-                chai.assert.equal(players[1].LobbyPlayer.faction, 2);
-                chai.assert.equal(players[2].LobbyPlayer.faction, 2);
-                chai.assert.equal(players[3].LobbyPlayer.faction, 2);
-                chai.assert.equal(players[4].LobbyPlayer.faction, 2);
-                chai.assert.equal(players[5].LobbyPlayer.faction, 1);
-                chai.assert.equal(players[6].LobbyPlayer.faction, 1);
-                chai.assert.equal(players[7].LobbyPlayer.faction, 1);
-                chai.assert.equal(players[8].LobbyPlayer.faction, 1);
-                chai.assert.equal(players[9].LobbyPlayer.faction, 1);
+                assert.lengthOf(players, 10);
+                assert.equal(players[0].LobbyPlayer.faction, 2);
+                assert.equal(players[1].LobbyPlayer.faction, 2);
+                assert.equal(players[2].LobbyPlayer.faction, 2);
+                assert.equal(players[3].LobbyPlayer.faction, 2);
+                assert.equal(players[4].LobbyPlayer.faction, 2);
+                assert.equal(players[5].LobbyPlayer.faction, 1);
+                assert.equal(players[6].LobbyPlayer.faction, 1);
+                assert.equal(players[7].LobbyPlayer.faction, 1);
+                assert.equal(players[8].LobbyPlayer.faction, 1);
+                assert.equal(players[9].LobbyPlayer.faction, 1);
             });
         });
         
         describe('selectCaptainPairFromTiers', () => {
             it('return an empty array when tiers empty', async () => {
                 const captains = selectCaptainPairFromTiers(0)({});
-                chai.assert.isEmpty(captains);
+                assert.isEmpty(captains);
             });
 
             it('return an empty array when captains not within threshold', async () => {
@@ -470,7 +471,7 @@ describe('Database - with lobby players', () => {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }]
                 }
                 const captains = selectCaptainPairFromTiers(0)(tiers);
-                chai.assert.isEmpty(captains);
+                assert.isEmpty(captains);
             });
 
             it('return a captain pair', async () => {
@@ -478,7 +479,7 @@ describe('Database - with lobby players', () => {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }]
                 }
                 const captains = selectCaptainPairFromTiers(1)(tiers);
-                chai.assert.lengthOf(captains, 2);
+                assert.lengthOf(captains, 2);
             });
 
             it('return a tier 1 captain pair when tier 0 exceeds threshold', async () => {
@@ -487,8 +488,8 @@ describe('Database - with lobby players', () => {
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
                 const captains = selectCaptainPairFromTiers(0)(tiers);
-                chai.assert.lengthOf(captains, 2);
-                chai.assert.equal(captains[0].rank_tier, 10);
+                assert.lengthOf(captains, 2);
+                assert.equal(captains[0].rank_tier, 10);
             });
 
             it('return a tier 1 captain pair when tier 0 empty', async () => {
@@ -497,8 +498,8 @@ describe('Database - with lobby players', () => {
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
                 const captains = selectCaptainPairFromTiers(0)(tiers);
-                chai.assert.lengthOf(captains, 2);
-                chai.assert.equal(captains[0].rank_tier, 10);
+                assert.lengthOf(captains, 2);
+                assert.equal(captains[0].rank_tier, 10);
             });
 
             it('return a tier 0 captain pair when 2 in tier 0', async () => {
@@ -507,8 +508,8 @@ describe('Database - with lobby players', () => {
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
                 const captains = selectCaptainPairFromTiers(0)(tiers);
-                chai.assert.lengthOf(captains, 2);
-                chai.assert.equal(captains[0].rank_tier, 0);
+                assert.lengthOf(captains, 2);
+                assert.equal(captains[0].rank_tier, 0);
             });
 
             it('return a tier 0 captain pair when 3 in tier 0', async () => {
@@ -517,8 +518,8 @@ describe('Database - with lobby players', () => {
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
                 const captains = selectCaptainPairFromTiers(0)(tiers);
-                chai.assert.lengthOf(captains, 2);
-                chai.assert.equal(captains[0].rank_tier, 1);
+                assert.lengthOf(captains, 2);
+                assert.equal(captains[0].rank_tier, 1);
             });
         });
         
@@ -534,10 +535,10 @@ describe('Database - with lobby players', () => {
                     [{ id: 7 }, Infinity],
                 ];
                 const tiers = sortPlayersByCaptainPriority(playersWithCaptainPriority);
-                chai.assert.hasAllKeys(tiers, ['0', '1', '2']);
-                chai.assert.lengthOf(tiers['0'], 2);
-                chai.assert.lengthOf(tiers['1'], 3);
-                chai.assert.lengthOf(tiers['2'], 1);
+                assert.hasAllKeys(tiers, ['0', '1', '2']);
+                assert.lengthOf(tiers['0'], 2);
+                assert.lengthOf(tiers['1'], 3);
+                assert.lengthOf(tiers['2'], 1);
             });
         });
         
@@ -545,19 +546,19 @@ describe('Database - with lobby players', () => {
             it('return 0', async () => {
                 const regexp = new RegExp('Tier ([0-9]+) Captain');
                 const priority = roleToCaptainPriority(regexp)({ name: 'Tier 0 Captain' });
-                chai.assert.equal(priority, 0);
+                assert.equal(priority, 0);
             });
 
             it('return 10', async () => {
                 const regexp = new RegExp('Tier ([0-9]+) Captain');
                 const priority = roleToCaptainPriority(regexp)({ name: 'Tier 10 Captain' });
-                chai.assert.equal(priority, 10);
+                assert.equal(priority, 10);
             });
 
             it('return undefined', async () => {
                 const regexp = new RegExp('Tier ([0-9]+) Captain');
                 const priority = roleToCaptainPriority(regexp)({ name: 'Tier A Captain' });
-                chai.assert.isUndefined(priority);
+                assert.isUndefined(priority);
             });
         });
         
@@ -566,21 +567,21 @@ describe('Database - with lobby players', () => {
                 const captain_role_regexp = 'Tier ([0-9]+) Captain';
                 const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
                 const priority = getCaptainPriorityFromRoles(captain_role_regexp, roles);
-                chai.assert.equal(priority, 0);
+                assert.equal(priority, 0);
             });
 
             it('return Infinity when no tier roles', async () => {
                 const captain_role_regexp = 'Tier ([0-9]+) Captain';
                 const roles = [{ name: 'Tier X Captain' }, { name: 'Inhouse Player' }];
                 const priority = getCaptainPriorityFromRoles(captain_role_regexp, roles);
-                chai.assert.equal(priority, Infinity);
+                assert.equal(priority, Infinity);
             });
 
             it('return Infinity when no roles', async () => {
                 const captain_role_regexp = 'Tier ([0-9]+) Captain';
                 const roles = [];
                 const priority = getCaptainPriorityFromRoles(captain_role_regexp, roles);
-                chai.assert.equal(priority, Infinity);
+                assert.equal(priority, Infinity);
             });
         });
         
@@ -593,9 +594,9 @@ describe('Database - with lobby players', () => {
                 const getUserRoles = sinon.stub();
                 getUserRoles.withArgs(guild, user).resolves(roles);
                 const [player, priority] = await playerToCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(user);
-                chai.assert.isTrue(getUserRoles.calledOnceWith(guild, user));
-                chai.assert.equal(player, user);
-                chai.assert.equal(priority, 0);
+                assert.isTrue(getUserRoles.calledOnceWith(guild, user));
+                assert.equal(player, user);
+                assert.equal(priority, 0);
             });
         });
         
@@ -619,7 +620,7 @@ describe('Database - with lobby players', () => {
             it('return default game mode when empty', async () => {
                 const game_mode_preferences = [];
                 const game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CD)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
             
             it('return default game mode when tied 1', async () => {
@@ -629,9 +630,9 @@ describe('Database - with lobby players', () => {
                 ];
                 let game_mode;
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CM)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CD)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
             
             it('return default game mode when tied 2', async () => {
@@ -645,17 +646,17 @@ describe('Database - with lobby players', () => {
                 ];
                 let game_mode;
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CM)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CD)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_AP)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_AP);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_AP);
             });
             
             it('return only game mode', async () => {
                 const game_mode_preferences = [CONSTANTS.DOTA_GAMEMODE_CD];
                 const game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CM)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
             
             it('return most game mode', async () => {
@@ -669,11 +670,11 @@ describe('Database - with lobby players', () => {
                 ];
                 let game_mode;
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CM)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_AP)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
                 game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CD)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
         });
         
@@ -685,15 +686,15 @@ describe('Database - with lobby players', () => {
             it('return only game mode', async () => {
                 const game_mode_preferences = [CONSTANTS.DOTA_GAMEMODE_CD];
                 const game_mode = calcDefaultGameMode(CONSTANTS.DOTA_GAMEMODE_CM)(game_mode_preferences);
-                chai.assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
         });
         
         describe('assignGameMode', () => {
             it('return game mode preferred by lobby players', async () => {
-                chai.assert.equal(lobby.game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
+                assert.equal(lobby.game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
                 const lobbyState = await assignGameMode(lobby);
-                chai.assert.equal(lobbyState.game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
+                assert.equal(lobbyState.game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
             });
         });
         
@@ -713,9 +714,9 @@ describe('Database - with lobby players', () => {
                 players[1].LobbyPlayer = { faction: 2 };
                 await lobby.setPlayers(players, { through: { faction: 0 } });
                 const noTeam = await lobby.getNoTeamPlayers();
-                chai.assert.equal(noTeam.length, 8);
+                assert.equal(noTeam.length, 8);
                 faction = await getDraftingFaction(draftOrder)(lobby);
-                chai.assert.equal(faction, 1);
+                assert.equal(faction, 1);
             });
             
             it('return 2 when on last pick', async () => {
@@ -725,26 +726,26 @@ describe('Database - with lobby players', () => {
                 players[0].LobbyPlayer.faction = 0;
                 await players[0].LobbyPlayer.save();
                 const noTeam = await lobby.getNoTeamPlayers();
-                chai.assert.equal(noTeam.length, 1);
+                assert.equal(noTeam.length, 1);
                 faction = await getDraftingFaction(draftOrder)(lobby);
-                chai.assert.equal(faction, 2);
+                assert.equal(faction, 2);
             });
         });
         
         describe('getFactionCaptain', () => {
             it('return null when faction 0', async () => {
                 const captain = await getFactionCaptain(lobby)(0);
-                chai.assert.isNull(captain);
+                assert.isNull(captain);
             });
             
             it('return captain 1 when faction 1', async () => {
                 const captain = await getFactionCaptain(lobby)(1);
-                chai.assert.equal(lobby.captain_1_user_id, captain.id);
+                assert.equal(lobby.captain_1_user_id, captain.id);
             });
             
             it('return captain 2 when faction 2', async () => {
                 const captain = await getFactionCaptain(lobby)(2);
-                chai.assert.equal(lobby.captain_2_user_id, captain.id);
+                assert.equal(lobby.captain_2_user_id, captain.id);
             });
         });
         
@@ -752,19 +753,19 @@ describe('Database - with lobby players', () => {
             it('return INVALID_DRAFT_CAPTAIN when player is captain 1', async () => {
                 const player = await getPlayerByUserId(lobby)(lobby.captain_1_user_id);
                 const result = await isPlayerDraftable(lobby)(player);
-                chai.assert.equal(result, CONSTANTS.INVALID_DRAFT_CAPTAIN);
+                assert.equal(result, CONSTANTS.INVALID_DRAFT_CAPTAIN);
             });
             
             it('return INVALID_DRAFT_CAPTAIN when player is captain 2', async () => {
                 const player = await getPlayerByUserId(lobby)(lobby.captain_2_user_id);
                 const result = await isPlayerDraftable(lobby)(player);
-                chai.assert.equal(result, CONSTANTS.INVALID_DRAFT_CAPTAIN);
+                assert.equal(result, CONSTANTS.INVALID_DRAFT_CAPTAIN);
             });
             
             it('return INVALID_DRAFT_PLAYER when player is on a team', async () => {
                 const players = await lobby.getTeam1Players();
                 const result = await isPlayerDraftable(lobby)(players[1]);
-                chai.assert.equal(result, CONSTANTS.INVALID_DRAFT_PLAYER);
+                assert.equal(result, CONSTANTS.INVALID_DRAFT_PLAYER);
             });
             
             it('return PLAYER_DRAFTED when player is not on a team', async () => {
@@ -772,7 +773,7 @@ describe('Database - with lobby players', () => {
                 players[1].LobbyPlayer.faction = 0;
                 await players[1].LobbyPlayer.save();
                 const result = await isPlayerDraftable(lobby)(players[1]);
-                chai.assert.equal(result, CONSTANTS.PLAYER_DRAFTED);
+                assert.equal(result, CONSTANTS.PLAYER_DRAFTED);
                 
             });
         });
@@ -781,43 +782,43 @@ describe('Database - with lobby players', () => {
             it('return true when user is captain 1', async () => {
                 const player = await getPlayerByUserId(lobby)(lobby.captain_1_user_id);
                 const result = isCaptain(lobby)(player);
-                chai.assert.isTrue(result);
+                assert.isTrue(result);
             });
             
             it('return true when user is captain 2', async () => {
                 const player = await getPlayerByUserId(lobby)(lobby.captain_2_user_id);
                 const result = isCaptain(lobby)(player);
-                chai.assert.isTrue(result);
+                assert.isTrue(result);
             });
             
             it('return false when user is not a captain', async () => {
                 const player = await getPlayerByUserId(lobby)(2);
                 const result = isCaptain(lobby)(player);
-                chai.assert.isFalse(result);
+                assert.isFalse(result);
             });
         });
         
         describe('formatNameForLobby', () => {
             it('return alphanumeric characters', async () => {
                 const result = formatNameForLobby('te-st_1-2-3');
-                chai.assert.equal(result, 'test123');
+                assert.equal(result, 'test123');
             });
             
             it('return max length 15 characters', async () => {
                 const result = formatNameForLobby('te-st_1-2-3abcdefghijklmnopqrstuvwxyz');
-                chai.assert.equal(result, 'test123abcdefgh');
+                assert.equal(result, 'test123abcdefgh');
             });
         });
         
         describe('getLobbyNameFromCaptains', () => {
             it('return combined lobby name', async () => {
                 const result = await getLobbyNameFromCaptains('te-st_1-2-3', 'te-st_4-5-6', 1);
-                chai.assert.equal(result, 'test123-test456-1');
+                assert.equal(result, 'test123-test456-1');
             });
 
             it('return combined lobby name with counter 2', async () => {
                 const result = await getLobbyNameFromCaptains('te-st_1-2-3', 'te-st_4-5-6', 2);
-                chai.assert.equal(result, 'test123-test456-3');
+                assert.equal(result, 'test123-test456-3');
             });
         });
         
@@ -825,33 +826,33 @@ describe('Database - with lobby players', () => {
             it('set STATE_CHECKING_READY state to STATE_BEGIN_READY', async () => {
                 lobby.state = CONSTANTS.STATE_CHECKING_READY;
                 const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobbyState.state, CONSTANTS.STATE_BEGIN_READY);
+                assert.equal(lobbyState.state, CONSTANTS.STATE_BEGIN_READY);
                 lobby = await getLobby({ lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobby.state, CONSTANTS.STATE_BEGIN_READY);
+                assert.equal(lobby.state, CONSTANTS.STATE_BEGIN_READY);
             });
             
             it('set STATE_BOT_STARTED state to STATE_WAITING_FOR_BOT', async () => {
                 lobby.state = CONSTANTS.STATE_BOT_STARTED;
                 const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
                 lobby = await getLobby({ lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
             });
             
             it('set STATE_WAITING_FOR_PLAYERS state to STATE_WAITING_FOR_BOT', async () => {
                 lobby.state = CONSTANTS.STATE_WAITING_FOR_PLAYERS;
                 const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
                 lobby = await getLobby({ lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
             });
             
             it('set null state to STATE_NEW', async () => {
                 lobby.state = null;
                 const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobbyState.state, CONSTANTS.STATE_NEW);
+                assert.equal(lobbyState.state, CONSTANTS.STATE_NEW);
                 lobby = await getLobby({ lobby_name: lobby.lobby_name });
-                chai.assert.equal(lobby.state, CONSTANTS.STATE_NEW);
+                assert.equal(lobby.state, CONSTANTS.STATE_NEW);
             });
         });
         
@@ -897,7 +898,7 @@ describe('Database - no lobby players', () => {
         describe('getPlayers', () => {
             it('return 0 players in the lobby', async () => {
                 const players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 0);
+                assert.lengthOf(players, 0);
             });
         });
         
@@ -905,9 +906,9 @@ describe('Database - no lobby players', () => {
             it('add player to lobby', async () => {
                 const user = await db.User.find({ where: { id: 1 } });
                 const result = await addPlayer(lobby)(user);
-                chai.assert.lengthOf(result, 1);
+                assert.lengthOf(result, 1);
                 const players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 1);
+                assert.lengthOf(players, 1);
             });
         });
         
@@ -915,9 +916,9 @@ describe('Database - no lobby players', () => {
             it('add players to lobby', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 const result = await addPlayers(lobby)(users);
-                chai.assert.lengthOf(result, 10);
+                assert.lengthOf(result, 10);
                 const players = await getPlayers()(lobby);
-                chai.assert.lengthOf(players, 10);
+                assert.lengthOf(players, 10);
             });
         });
 
@@ -925,9 +926,9 @@ describe('Database - no lobby players', () => {
             it('add user to queue', async () => {
                 const user = await db.User.find({ where: { id: 1 } });
                 const result = await addQueuer(lobby)(user);
-                chai.assert.lengthOf(result, 1);
+                assert.lengthOf(result, 1);
                 const queuers = await getQueuers()(lobby);
-                chai.assert.lengthOf(queuers, 1);
+                assert.lengthOf(queuers, 1);
             });
         });
         
@@ -935,9 +936,9 @@ describe('Database - no lobby players', () => {
             it('add users to queue', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 const result = await addQueuers(lobby)(users);
-                chai.assert.lengthOf(result, 10);
+                assert.lengthOf(result, 10);
                 const queuers = await getQueuers()(lobby);
-                chai.assert.lengthOf(queuers, 10);
+                assert.lengthOf(queuers, 10);
             });
         });
     });

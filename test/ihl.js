@@ -1,4 +1,5 @@
 const chai = require('chai');
+const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
@@ -69,19 +70,19 @@ describe('Database', () => {
     describe('getUserRankTier', () => {
         it('return a rank tier', async () => {
             const rank_tier = await getUserRankTier('76561198015512690');
-            chai.assert.equal(rank_tier, 65);
+            assert.equal(rank_tier, 65);
         });
     });
 
     describe('registerUser', () => {
         it('return an existing user', async () => {
             const user = await registerUser('422549177151782925', '76561198015512690', '76864899866697728');
-            chai.assert.exists(user);
+            assert.exists(user);
         });
         
         it('return a new user', async () => {
             const user = await registerUser('88641069939453952', '76561198015512690', '76864899866697728');
-            chai.assert.exists(user);
+            assert.exists(user);
         });
     });
 
@@ -100,7 +101,7 @@ describe('Database', () => {
                 guild: {},
             }
             const inhouseState = await createInhouseState(args);
-            chai.assert.exists(inhouseState);
+            assert.exists(inhouseState);
         });
         
         it('return an inhouse state from a league', async () => {
@@ -110,7 +111,7 @@ describe('Database', () => {
                 guild: {},
             }
             const inhouseState = await createInhouseState(args);
-            chai.assert.exists(inhouseState);
+            assert.exists(inhouseState);
         });
     });
 
@@ -120,8 +121,8 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test' }],
             };
             const lobbyState = getLobbyFromInhouse(inhouseState, 'test');
-            chai.assert.exists(lobbyState);
-            chai.assert.equal(lobbyState.lobby_name, 'test');
+            assert.exists(lobbyState);
+            assert.equal(lobbyState.lobby_name, 'test');
         });
         
         it('return null', async () => {
@@ -129,7 +130,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test2' }],
             };
             const lobbyState = getLobbyFromInhouse(inhouseState, 'test');
-            chai.assert.isUndefined(lobbyState);
+            assert.isUndefined(lobbyState);
         });
     });
 
@@ -140,8 +141,8 @@ describe('Database', () => {
                 lobbies: [],
             };
             inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            chai.assert.lengthOf(inhouseState.lobbies, 1);
-            chai.assert.strictEqual(lobby, inhouseState.lobbies[0]);
+            assert.lengthOf(inhouseState.lobbies, 1);
+            assert.strictEqual(lobby, inhouseState.lobbies[0]);
         });
         
         it('add second lobby', async () => {
@@ -150,7 +151,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test2' }],
             };
             inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            chai.assert.lengthOf(inhouseState.lobbies, 2);
+            assert.lengthOf(inhouseState.lobbies, 2);
         });
         
         it('add existing lobby', async () => {
@@ -159,8 +160,8 @@ describe('Database', () => {
                 lobbies: [lobby],
             };
             inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            chai.assert.lengthOf(inhouseState.lobbies, 1);
-            chai.assert.strictEqual(lobby, inhouseState.lobbies[0]);
+            assert.lengthOf(inhouseState.lobbies, 1);
+            assert.strictEqual(lobby, inhouseState.lobbies[0]);
         });
     });
 
@@ -170,7 +171,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouseByName('test')(inhouseState);
-            chai.assert.lengthOf(inhouseState.lobbies, 0);
+            assert.lengthOf(inhouseState.lobbies, 0);
         });
         
         it('remove second lobby', async () => {
@@ -178,8 +179,8 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test2' }, { lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouseByName('test')(inhouseState);
-            chai.assert.lengthOf(inhouseState.lobbies, 1);
-            chai.assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
+            assert.lengthOf(inhouseState.lobbies, 1);
+            assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
         });
     });
 
@@ -189,7 +190,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouse({ lobby_name: 'test' })(inhouseState);
-            chai.assert.lengthOf(inhouseState.lobbies, 0);
+            assert.lengthOf(inhouseState.lobbies, 0);
         });
         
         it('remove second lobby', async () => {
@@ -197,13 +198,13 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test2' }, { lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouse({ lobby_name: 'test' })(inhouseState);
-            chai.assert.lengthOf(inhouseState.lobbies, 1);
-            chai.assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
+            assert.lengthOf(inhouseState.lobbies, 1);
+            assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
         });
     });
 
     describe('createChallengeLobbyForInhouse', () => {
-        it.only('create challenge lobby', async () => {
+        it('create challenge lobby', async () => {
             let inhouseState = {
                 guild: { id: '422549177151782925' },
                 lobbies: [],
@@ -218,23 +219,23 @@ describe('Database', () => {
             const eventEmitter = new EventEmitter();
             const findOrCreateChannelInCategory = () => true;
             const getLobbyRole = guild => async () => true;
-            chai.assert.lengthOf(inhouseState.queues, 0);
-            chai.assert.lengthOf(inhouseState.lobbies, 0);
-            chai.assert.isFalse(challenge.accepted);
+            assert.lengthOf(inhouseState.queues, 0);
+            assert.lengthOf(inhouseState.lobbies, 0);
+            assert.isFalse(challenge.accepted);
             inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, getLobbyRole })(inhouseState, challenge, eventEmitter, captain_1, captain_2);
-            chai.assert.isTrue(challenge.accepted);
-            chai.assert.lengthOf(inhouseState.lobbies, 1);
-            chai.assert.lengthOf(inhouseState.queues, 1);
+            assert.isTrue(challenge.accepted);
+            assert.lengthOf(inhouseState.lobbies, 1);
+            assert.lengthOf(inhouseState.queues, 1);
             const queue = inhouseState.queues[0];
             const lobbyState = inhouseState.lobbies[0];
-            chai.assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
-            chai.assert.equal(lobbyState.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
-            chai.assert.equal(queue.queue_name, lobbyState.lobby_name);
-            chai.assert.equal(lobbyState.captain_1_user_id, captain_1.id);
-            chai.assert.equal(lobbyState.captain_2_user_id, captain_2.id);
+            assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
+            assert.equal(lobbyState.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
+            assert.equal(queue.queue_name, lobbyState.lobby_name);
+            assert.equal(lobbyState.captain_1_user_id, captain_1.id);
+            assert.equal(lobbyState.captain_2_user_id, captain_2.id);
             const queuers = await getActiveQueuers()(lobbyState);
-            chai.assert.lengthOf(queuers, 2);
-            chai.assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
+            assert.lengthOf(queuers, 2);
+            assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
         });
     });
 

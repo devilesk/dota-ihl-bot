@@ -1,4 +1,5 @@
 const chai = require('chai');
+const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
@@ -58,20 +59,20 @@ describe('Functions', () => {
         it('return 1 for radiant', async () => {
             const slot = 0;
             const faction = slotToFaction(slot);
-            chai.assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_GOOD_GUYS, slot);
-            chai.assert.equal(faction, 1);
+            assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_GOOD_GUYS, slot);
+            assert.equal(faction, 1);
         });
         
         it('return 2 for dire', async () => {
             const slot = 1;
             const faction = slotToFaction(slot);
-            chai.assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_BAD_GUYS, slot);
-            chai.assert.equal(faction, 2);
+            assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_BAD_GUYS, slot);
+            assert.equal(faction, 2);
         });
         
         it('return null when not 0 or 1', async () => {
-            chai.assert.isNull(slotToFaction(-1));
-            chai.assert.isNull(slotToFaction(2));
+            assert.isNull(slotToFaction(-1));
+            assert.isNull(slotToFaction(2));
         });
     });
     
@@ -79,40 +80,40 @@ describe('Functions', () => {
         it('return playerState with steamid_64 faction value 1', async () => {
             const steamid_64 = '123';
             const playerState = updatePlayerState(steamid_64, 0, {});
-            chai.assert.deepEqual(playerState, { [steamid_64]: 1 });
+            assert.deepEqual(playerState, { [steamid_64]: 1 });
         });
         
         it('return playerState with steamid_64 faction value 2', async () => {
             const steamid_64 = '123';
             const playerState = updatePlayerState(steamid_64, 1, {});
-            chai.assert.deepEqual(playerState, { [steamid_64]: 2 });
+            assert.deepEqual(playerState, { [steamid_64]: 2 });
         });
         
         it('return updated playerState', async () => {
             const steamid_64 = '123';
             let playerState = updatePlayerState(steamid_64, 0,  { [steamid_64]: 2 });
-            chai.assert.deepEqual(playerState, { [steamid_64]: 1 });
+            assert.deepEqual(playerState, { [steamid_64]: 1 });
             playerState = updatePlayerState(steamid_64, 1,  playerState);
-            chai.assert.deepEqual(playerState, { [steamid_64]: 2 });
+            assert.deepEqual(playerState, { [steamid_64]: 2 });
         });
         
         it('delete player', async () => {
             const playerState = updatePlayerState('1', null,  { '1': 1 });
-            chai.assert.deepEqual(playerState, {});
+            assert.deepEqual(playerState, {});
         });
         
         it('delete player when slot not 0 or 1', async () => {
             let playerState = updatePlayerState('1', -1,  { '1': 1 });
-            chai.assert.deepEqual(playerState, {});
+            assert.deepEqual(playerState, {});
             playerState = updatePlayerState('1', 2,  { '1': 1 });
-            chai.assert.deepEqual(playerState, {});
+            assert.deepEqual(playerState, {});
         });
         
         it('multiple players', async () => {
             let playerState = updatePlayerState('1', 0,  {});
             playerState = updatePlayerState('2', 1,  playerState);
             playerState = updatePlayerState('3', 0,  playerState);
-            chai.assert.deepEqual(playerState, { '1': 1, '2': 2, '3': 1 });
+            assert.deepEqual(playerState, { '1': 1, '2': 2, '3': 1 });
         });
         
         it('multiple players with a delete', async () => {
@@ -120,9 +121,9 @@ describe('Functions', () => {
             playerState = updatePlayerState('2', 1,  playerState);
             playerState = updatePlayerState('3', 0,  playerState);
             playerState = updatePlayerState('2', 2,  playerState);
-            chai.assert.deepEqual(playerState, { '1': 1, '3': 1 });
+            assert.deepEqual(playerState, { '1': 1, '3': 1 });
             playerState = updatePlayerState('1', null,  playerState);
-            chai.assert.deepEqual(playerState, { '3': 1 });
+            assert.deepEqual(playerState, { '3': 1 });
         });
     });
     
@@ -130,25 +131,25 @@ describe('Functions', () => {
         it('return true when fromCache is subset of playerState', async () => {
             const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3};
             const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
-            chai.assert.isTrue(isDotaLobbyReady(fromCache, playerState));
+            assert.isTrue(isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return true when null', async () => {
             const fromCache = {'1': null};
             const playerState = {};
-            chai.assert.isTrue(isDotaLobbyReady(fromCache, playerState));
+            assert.isTrue(isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return false when 0', async () => {
             const fromCache = {'1': 0};
             const playerState = {};
-            chai.assert.isFalse(isDotaLobbyReady(fromCache, playerState));
+            assert.isFalse(isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return false when fromCache is not subset of playerState', async () => {
             const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3, 'a': 0};
             const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
-            chai.assert.isFalse(isDotaLobbyReady(fromCache, playerState));
+            assert.isFalse(isDotaLobbyReady(fromCache, playerState));
         });
     });
     
@@ -158,8 +159,8 @@ describe('Functions', () => {
             steamClient.connect = () => steamClient.emit('connected');
             sinon.spy(steamClient, "connect");
             const result = await connectToSteam(steamClient);
-            chai.assert.isTrue(steamClient.connect.calledOnce);
-            chai.assert.equal(steamClient, result);
+            assert.isTrue(steamClient.connect.calledOnce);
+            assert.equal(steamClient, result);
         });
     });
     
@@ -169,29 +170,29 @@ describe('Functions', () => {
             steamClient.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
             sinon.spy(steamClient, "logOn");
             const result = await logOnToSteam({})(steamClient);
-            chai.assert.isTrue(steamClient.logOn.calledOnce);
-            chai.assert.equal(steamClient, result);
+            assert.isTrue(steamClient.logOn.calledOnce);
+            assert.equal(steamClient, result);
         });
     
         it('call logOn and reject on logOnResponse event with steam.EResult.Fail', async () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.Fail });
             sinon.spy(steamClient, "logOn");
-            return chai.assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(logOnToSteam({})(steamClient));
         });
 
         it('call logOn and reject on error event', async () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('error');
             sinon.spy(steamClient, "logOn");
-            return chai.assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(logOnToSteam({})(steamClient));
         });
 
         it('call logOn and reject on loggedOff event', async () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('loggedOff');
             sinon.spy(steamClient, "logOn");
-            return chai.assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(logOnToSteam({})(steamClient));
         });
         
         it('call logOn and resolve on logOnResponse event with client, ignore subsequent events', async () => {
@@ -204,8 +205,8 @@ describe('Functions', () => {
             }
             sinon.spy(steamClient, "logOn");
             const result = await logOnToSteam({})(steamClient);
-            chai.assert.isTrue(steamClient.logOn.calledOnce);
-            chai.assert.equal(steamClient, result);
+            assert.isTrue(steamClient.logOn.calledOnce);
+            assert.equal(steamClient, result);
         });
     });
     
@@ -215,8 +216,8 @@ describe('Functions', () => {
             dotaClient.launch = () => dotaClient.emit('ready');
             sinon.spy(dotaClient, "launch");
             const result = await connectToDota(dotaClient);
-            chai.assert.isTrue(dotaClient.launch.calledOnce);
-            chai.assert.equal(dotaClient, result);
+            assert.isTrue(dotaClient.launch.calledOnce);
+            assert.equal(dotaClient, result);
         });
     });
     
@@ -225,8 +226,8 @@ describe('Functions', () => {
             const steam = {};
             const servers = { '1': 1, '2': 2 };
             updateServers(steam)(servers);
-            chai.assert.property(steam, 'servers');
-            chai.assert.equal(steam.servers, servers);
+            assert.property(steam, 'servers');
+            assert.equal(steam.servers, servers);
         });
     });
     
@@ -235,7 +236,7 @@ describe('Functions', () => {
             const sha_file = crypto.createHash('sha1').update('data').digest();
             const callback = sinon.spy();
             updateMachineAuth('path')({ bytes: 'data' }, callback);
-            chai.assert.isTrue(callback.withArgs({ sha_file }).calledOnce);
+            assert.isTrue(callback.withArgs({ sha_file }).calledOnce);
         });
     });
     
@@ -245,13 +246,13 @@ describe('Functions', () => {
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
             const result = diffMembers(membersA, membersB);
-            chai.assert.lengthOf(result, 1);
-            chai.assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFF1)), 0);
+            assert.lengthOf(result, 1);
+            assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFF1)), 0);
         });
         
         it('return empty', async () => {
             const result = diffMembers([], []);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
         
         it('return empty when no differences', async () => {
@@ -259,7 +260,7 @@ describe('Functions', () => {
             const membersA = [{ id }];
             const membersB = [{ id }];
             const result = diffMembers(membersA, membersB);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
         
         it('return empty when first array is subset', async () => {
@@ -267,7 +268,7 @@ describe('Functions', () => {
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
             const result = diffMembers(membersB, membersA);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
     });
     
@@ -277,29 +278,29 @@ describe('Functions', () => {
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
             const result = intersectMembers(membersA, membersB);
-            chai.assert.lengthOf(result, 1);
-            chai.assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFFF)), 0);
+            assert.lengthOf(result, 1);
+            assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFFF)), 0);
         });
         
         it('return empty', async () => {
             const result = intersectMembers([], []);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
         
         it('return empty when none in common', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFFF) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const result = intersectMembers(membersA, membersB);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
         
         it('return empty when none in common multiple', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2) }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3) }];
             let result = intersectMembers(membersA, membersB);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
             result = intersectMembers(membersB, membersA);
-            chai.assert.lengthOf(result, 0);
+            assert.lengthOf(result, 0);
         });
     });
     
@@ -307,7 +308,7 @@ describe('Functions', () => {
         it('return an object mapping steamids to slots', async () => {
             const members = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2 }];
             const playerState = membersToPlayerState(members);
-            chai.assert.deepEqual(playerState, {
+            assert.deepEqual(playerState, {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 2,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF4)).toString()]: null,
@@ -320,13 +321,13 @@ describe('Functions', () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }];
             const members = processMembers(membersA, membersB);
-            chai.assert.hasAllKeys(members, ['joined', 'left', 'changedSlot']);
-            chai.assert.lengthOf(members.joined, 1);
-            chai.assert.lengthOf(members.left, 1);
-            chai.assert.lengthOf(members.changedSlot, 1);
-            chai.assert.deepEqual(members.joined[0], { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 });
-            chai.assert.deepEqual(members.left[0], { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 });
-            chai.assert.deepEqual(members.changedSlot[0], {
+            assert.hasAllKeys(members, ['joined', 'left', 'changedSlot']);
+            assert.lengthOf(members.joined, 1);
+            assert.lengthOf(members.left, 1);
+            assert.lengthOf(members.changedSlot, 1);
+            assert.deepEqual(members.joined[0], { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 });
+            assert.deepEqual(members.left[0], { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 });
+            assert.deepEqual(members.changedSlot[0], {
                 previous: { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 },
                 current: { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 },
             });
@@ -353,7 +354,7 @@ describe('DotaBot', () => {
     describe('constructor', () => {
         it('return DotaBot object with blocking queue', async () => {
             const dotaBot = new DotaBot(steamClient, steamUser, {}, dotaClient, {}, true, true);
-            chai.assert.equal(dotaBot.state, Queue.State.BLOCKED);
+            assert.equal(dotaBot.state, Queue.State.BLOCKED);
         });
     });
     
@@ -364,7 +365,7 @@ describe('DotaBot', () => {
             const steamFriends = { setPersonaState: () => true, setPersonaName: () => true };
             const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.logOnToSteam();
-            chai.assert.isTrue(steamClient.logOn.calledOnce);
+            assert.isTrue(steamClient.logOn.calledOnce);
         });
     });
     
@@ -374,8 +375,8 @@ describe('DotaBot', () => {
             sinon.spy(dotaClient, "launch");
             const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.connectToDota();
-            chai.assert.isTrue(dotaClient.launch.calledOnce);
-            chai.assert.equal(dotaBot.state, Queue.State.IDLE);
+            assert.isTrue(dotaClient.launch.calledOnce);
+            assert.equal(dotaBot.state, Queue.State.IDLE);
         });
     });
     
@@ -389,9 +390,9 @@ describe('DotaBot', () => {
             sinon.spy(dotaClient, "launch");
             const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.connect();
-            chai.assert.isTrue(steamClient.connect.calledOnce);
-            chai.assert.isTrue(steamClient.logOn.calledOnce);
-            chai.assert.isTrue(dotaClient.launch.calledOnce);
+            assert.isTrue(steamClient.connect.calledOnce);
+            assert.isTrue(steamClient.logOn.calledOnce);
+            assert.isTrue(dotaClient.launch.calledOnce);
         });
     });
     
@@ -403,9 +404,9 @@ describe('DotaBot', () => {
             sinon.spy(dotaClient, "exit");
             const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.disconnect();
-            chai.assert.isTrue(steamClient.disconnect.calledOnce);
-            chai.assert.isTrue(dotaClient.exit.calledOnce);
-            chai.assert.equal(dotaBot.state, Queue.State.IDLE);
+            assert.isTrue(steamClient.disconnect.calledOnce);
+            assert.isTrue(dotaClient.exit.calledOnce);
+            assert.equal(dotaBot.state, Queue.State.IDLE);
         });
     });
     
@@ -437,10 +438,10 @@ describe('DotaBot', () => {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: null,
             }
             dotaBot.processLobbyUpdate(oldLobby, newLobby);
-            chai.assert.isTrue(memberLeftSpy.calledOnce);
-            chai.assert.isTrue(memberJoinedSpy.calledOnce);
-            chai.assert.isTrue(memberChangedSlotSpy.calledOnce);
-            chai.assert.isTrue(readySpy.calledOnce);
+            assert.isTrue(memberLeftSpy.calledOnce);
+            assert.isTrue(memberJoinedSpy.calledOnce);
+            assert.isTrue(memberChangedSlotSpy.calledOnce);
+            assert.isTrue(readySpy.calledOnce);
         });
     
         it('emit left, joined, and changed slot', async () => {
@@ -456,10 +457,10 @@ describe('DotaBot', () => {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: 1,
             }
             dotaBot.processLobbyUpdate(oldLobby, newLobby);
-            chai.assert.isTrue(memberLeftSpy.calledOnce);
-            chai.assert.isTrue(memberJoinedSpy.calledOnce);
-            chai.assert.isTrue(memberChangedSlotSpy.calledOnce);
-            chai.assert.isFalse(readySpy.called);
+            assert.isTrue(memberLeftSpy.calledOnce);
+            assert.isTrue(memberJoinedSpy.calledOnce);
+            assert.isTrue(memberChangedSlotSpy.calledOnce);
+            assert.isFalse(readySpy.called);
         });
     
         it('emit joined, and lobby ready', async () => {
@@ -474,10 +475,10 @@ describe('DotaBot', () => {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 2,
             }
             dotaBot.processLobbyUpdate(oldLobby, newLobby);
-            chai.assert.isFalse(memberLeftSpy.called);
-            chai.assert.isTrue(memberJoinedSpy.calledTwice);
-            chai.assert.isFalse(memberChangedSlotSpy.called);
-            chai.assert.isTrue(readySpy.called);
+            assert.isFalse(memberLeftSpy.called);
+            assert.isTrue(memberJoinedSpy.calledTwice);
+            assert.isFalse(memberChangedSlotSpy.called);
+            assert.isTrue(readySpy.called);
         });
     });
 });

@@ -1,4 +1,5 @@
 const chai = require('chai');
+const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
@@ -143,9 +144,9 @@ describe('Database', () => {
 
         it('registerUser', async () => {
             const user = await registerUser(guild.id, '76561198017839572', '75056758787158016');
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, '76561198017839572');
-            chai.assert.equal(user.discord_id, '75056758787158016');
+            assert.exists(user);
+            assert.equal(user.steamid_64, '76561198017839572');
+            assert.equal(user.discord_id, '75056758787158016');
         });
 
         /*it('RegisterCommand', async () => {
@@ -162,9 +163,9 @@ describe('Database', () => {
             };
             const text = 'https://www.dotabuff.com/players/57573844';
             const user = await command.run(msg, { text });
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, '76561198017839572');
-            chai.assert.equal(user.discord_id, '75056758787158016');
+            assert.exists(user);
+            assert.equal(user.steamid_64, '76561198017839572');
+            assert.equal(user.discord_id, '75056758787158016');
         });
 
         it('NicknameCommand', async () => {
@@ -182,10 +183,10 @@ describe('Database', () => {
             let user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
             const text = 'Arteezy';
             user = await command.run(msg, { text });
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, userData[0][0]);
-            chai.assert.equal(user.discord_id, userData[0][1]);
-            chai.assert.equal(user.nickname, text);
+            assert.exists(user);
+            assert.equal(user.steamid_64, userData[0][0]);
+            assert.equal(user.discord_id, userData[0][1]);
+            assert.equal(user.nickname, text);
         });
 
         it('GameModeCommand', async () => {
@@ -203,10 +204,10 @@ describe('Database', () => {
             let user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
             const text = 'cd';
             user = await command.run(msg, { text });
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, userData[0][0]);
-            chai.assert.equal(user.discord_id, userData[0][1]);
-            chai.assert.equal(user.game_mode_preference, CONSTANTS.DOTA_GAMEMODE_CD);
+            assert.exists(user);
+            assert.equal(user.steamid_64, userData[0][0]);
+            assert.equal(user.discord_id, userData[0][1]);
+            assert.equal(user.game_mode_preference, CONSTANTS.DOTA_GAMEMODE_CD);
         });
 
         it('RolesCommand', async () => {
@@ -224,14 +225,14 @@ describe('Database', () => {
             let user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
             const text = '1,2,3,4,5';
             user = await command.run(msg, { text });
-            chai.assert.exists(user);
-            chai.assert.equal(user.steamid_64, userData[0][0]);
-            chai.assert.equal(user.discord_id, userData[0][1]);
-            chai.assert.equal(user.role_1, 0);
-            chai.assert.equal(user.role_2, 1);
-            chai.assert.equal(user.role_3, 2);
-            chai.assert.equal(user.role_4, 3);
-            chai.assert.equal(user.role_5, 4);
+            assert.exists(user);
+            assert.equal(user.steamid_64, userData[0][0]);
+            assert.equal(user.discord_id, userData[0][1]);
+            assert.equal(user.role_1, 0);
+            assert.equal(user.role_2, 1);
+            assert.equal(user.role_3, 2);
+            assert.equal(user.role_4, 3);
+            assert.equal(user.role_5, 4);
         });
 
         it('RepCommand', async () => {
@@ -250,9 +251,9 @@ describe('Database', () => {
             const user2 = await findOrCreateUser(league, userData[1][0], userData[1][1], 50);
             const member = 'Ari';
             const [rep, created] = await command.run(msg, { member });
-            chai.assert.exists(rep);
-            chai.assert.exists(created);
-            chai.assert.isTrue(created);
+            assert.exists(rep);
+            assert.exists(created);
+            assert.isTrue(created);
         });
 
         it('UnrepCommand', async () => {
@@ -271,19 +272,19 @@ describe('Database', () => {
             const user2 = await findOrCreateUser(league, userData[1][0], userData[1][1], 50);
             const member = 'Ari';
             let count = await command.run(msg, { member });
-            chai.assert.exists(count);
-            chai.assert.equal(count, 0);
+            assert.exists(count);
+            assert.equal(count, 0);
 
             const repCommand = sinon.createStubInstance(RepCommand);
             repCommand.run.restore();
             const [rep, created] = await repCommand.run(msg, { member });
-            chai.assert.exists(rep);
-            chai.assert.exists(created);
-            chai.assert.isTrue(created);
+            assert.exists(rep);
+            assert.exists(created);
+            assert.isTrue(created);
 
             count = await command.run(msg, { member });
-            chai.assert.exists(count);
-            chai.assert.equal(count, 1);
+            assert.exists(count);
+            assert.equal(count, 1);
         });
 
         it('LeagueUpdateCommand', async () => {
@@ -303,7 +304,7 @@ describe('Database', () => {
             const value = 'test';
             
             let league2 = await findLeague(guild.id);
-            chai.assert.equal(league2.category_name, 'inhouses');
+            assert.equal(league2.category_name, 'inhouses');
             
             await command.run(msg, { setting, value });
             
@@ -311,7 +312,7 @@ describe('Database', () => {
                 category_name: 'test'
             });
             league2 = await findLeague(guild.id);
-            chai.assert.equal(league2.category_name, 'test');
+            assert.equal(league2.category_name, 'test');
         });*/
 
         it('getLobby', async () => {
@@ -320,15 +321,15 @@ describe('Database', () => {
                 lobby_name: 'test',
             });
             const lobby3 = await getLobby(lobby1);
-            chai.assert.exists(lobby1);
-            chai.assert.exists(lobby2);
-            chai.assert.exists(lobby3);
-            chai.assert.equal(lobby1.lobby_name, 'test');
-            chai.assert.equal(lobby1.lobby_name, lobby2.lobby_name);
-            chai.assert.equal(lobby1.lobby_name, lobby3.lobby_name);
-            chai.assert.instanceOf(lobby1, Sequelize.Model);
-            chai.assert.instanceOf(lobby2, Sequelize.Model);
-            chai.assert.instanceOf(lobby3, Sequelize.Model);
+            assert.exists(lobby1);
+            assert.exists(lobby2);
+            assert.exists(lobby3);
+            assert.equal(lobby1.lobby_name, 'test');
+            assert.equal(lobby1.lobby_name, lobby2.lobby_name);
+            assert.equal(lobby1.lobby_name, lobby3.lobby_name);
+            assert.instanceOf(lobby1, Sequelize.Model);
+            assert.instanceOf(lobby2, Sequelize.Model);
+            assert.instanceOf(lobby3, Sequelize.Model);
         });
 
         it('getUserCaptainPriority', async () => {
@@ -346,23 +347,23 @@ describe('Database', () => {
 
         it('findAllLeagues', async () => {
             const leagues = await findAllLeagues();
-            chai.assert.lengthOf(leagues, 1);
+            assert.lengthOf(leagues, 1);
         });
 
         it('updateLeague', async () => {
             let league2 = await findLeague(guild.id);
-            chai.assert.equal(league2.category_name, 'inhouses');
+            assert.equal(league2.category_name, 'inhouses');
             await updateLeague(guild.id)({
                 category_name: 'test'
             });
             league2 = await findLeague(guild.id);
-            chai.assert.equal(league2.category_name, 'test');
+            assert.equal(league2.category_name, 'test');
         });
 
         it('loadInhouseStates', async () => {
             const inhouseStates = await loadInhouseStates(eventEmitter)(client.guilds)(findAllLeagues());
-            chai.assert.exists(inhouseStates);
-            chai.assert.lengthOf(inhouseStates, 1);
+            assert.exists(inhouseStates);
+            assert.lengthOf(inhouseStates, 1);
         });
 
         describe('Inhouse', () => {
@@ -390,8 +391,8 @@ describe('Database', () => {
                     await findOrCreateQueue(user);
                 }
                 const queues = await findInQueueWithUser();
-                chai.assert.lengthOf(queues, 10);
-                return queues.forEach(queue => chai.assert.exists(queue.User));
+                assert.lengthOf(queues, 10);
+                return queues.forEach(queue => assert.exists(queue.User));
             });
 
             it('checkInhouseQueue', async () => {
@@ -407,8 +408,8 @@ describe('Database', () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
-                chai.assert.isTrue(spy.calledOnce);
-                chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
                 eventEmitter.emit.restore();
             });
 
@@ -417,9 +418,9 @@ describe('Database', () => {
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
-                chai.assert.isTrue(spy.calledTwice);
-                chai.assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
-                chai.assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_ALREADY_JOINED));
+                assert.isTrue(spy.calledTwice);
+                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_ALREADY_JOINED));
                 eventEmitter.emit.restore();
             });
 
@@ -429,9 +430,9 @@ describe('Database', () => {
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await joinInhouseQueue(inhouseState, user2, eventEmitter);
-                chai.assert.isTrue(spy.calledTwice);
-                chai.assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
-                chai.assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 2));
+                assert.isTrue(spy.calledTwice);
+                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 2));
                 eventEmitter.emit.restore();
             });
 
@@ -439,8 +440,8 @@ describe('Database', () => {
                 const user = await findOrCreateUser(league, userData[0][0], userData[0][1], 50);
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await leaveInhouseQueue(inhouseState, user, eventEmitter);
-                chai.assert.isTrue(spy.calledOnce);
-                chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_NOT_JOINED, sinon.match.any));
+                assert.isTrue(spy.calledOnce);
+                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_NOT_JOINED, sinon.match.any));
                 eventEmitter.emit.restore();
             });
 
@@ -449,8 +450,8 @@ describe('Database', () => {
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await leaveInhouseQueue(inhouseState, user, eventEmitter);
-                chai.assert.isTrue(spy.calledTwice);
-                chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 0));
+                assert.isTrue(spy.calledTwice);
+                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 0));
                 eventEmitter.emit.restore();
             });
 
@@ -461,8 +462,8 @@ describe('Database', () => {
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await joinInhouseQueue(inhouseState, user2, eventEmitter);
                 await leaveInhouseQueue(inhouseState, user, eventEmitter);
-                chai.assert.isTrue(spy.calledThrice);
-                chai.assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 1));
+                assert.isTrue(spy.calledThrice);
+                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 1));
                 eventEmitter.emit.restore();
             });
 
@@ -484,10 +485,10 @@ describe('Database', () => {
                 it('setPlayerReady', async () => {
                     const steamid_64 = userData[0][0];
                     let lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', steamid_64] }).findOne();
-                    chai.assert.isFalse(lobbyPlayer.ready);
+                    assert.isFalse(lobbyPlayer.ready);
                     await setPlayerReady(true)(lobbyState)(lobbyPlayer.User.id);
                     lobbyPlayer = await db.LobbyPlayer.scope({ method: ['steamid_64', steamid_64] }).findOne();
-                    chai.assert.isTrue(lobbyPlayer.ready);
+                    assert.isTrue(lobbyPlayer.ready);
                 });
 
                 it('all players ready', function (done) {
@@ -498,9 +499,9 @@ describe('Database', () => {
                             console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
-                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
+                        assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
                         lobbyState = await runLobby(lobbyState, eventEmitter);
-                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
+                        assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
                         done();
                     });
                 });
@@ -513,9 +514,9 @@ describe('Database', () => {
                             console.log('set player ready', userData[i][0]);
                             lobbyState = await runLobby(lobbyState, eventEmitter);
                         }
-                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
+                        assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
                         lobbyState = await runLobby(lobbyState, eventEmitter);
-                        chai.assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
+                        assert.equal(lobbyState.state, CONSTANTS.STATE_MATCH_ENDED);
                         await setMatchDetails(lobbyState);
                         await sendMatchEndMessage([inhouseState], lobbyState);
                         done();
@@ -532,8 +533,8 @@ describe('Database', () => {
                 it('calcBalanceTeams', async () => {
                     const playersWithRank = await mapPlayers(player => [player, parseInt(player.rank_tier)])(lobbyState);
                     const [team_1, team_2] = await calcBalanceTeams(playersWithRank);
-                    chai.assert.lengthOf(team_1, 5);
-                    chai.assert.lengthOf(team_2, 5);
+                    assert.lengthOf(team_1, 5);
+                    assert.lengthOf(team_2, 5);
                     const lobby = await getLobby(lobbyState);
                     console.log(team_1[0], team_1[0] instanceof Sequelize.Model, team_1[0].id);
                     await setTeams(lobbyState)([team_1, team_2]);
