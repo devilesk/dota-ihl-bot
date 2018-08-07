@@ -1,6 +1,8 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getLobbyFromMessage, isMessageFromAdmin,
+    ihlManager,
+    getLobbyFromMessage,
+    isMessageFromAdmin,
 } = require('../../lib/ihlManager');
 
 /**

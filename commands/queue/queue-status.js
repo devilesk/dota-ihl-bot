@@ -1,6 +1,16 @@
 const { Command } = require('discord.js-commando');
 const {
-    findUserByDiscordId, findAllInQueueWithUser,
+    ihlManager,
+    isMessageFromInhouse,
+    parseMessage,
+    getLobbyByChannelId,
+} = require('../../lib/ihlManager');
+const {
+    getActiveQueuers,
+} = require('../../lib/lobby');
+const {
+    findAllActiveQueues,
+    getLobby,
 } = require('../../lib/db');
 
 /**
@@ -17,32 +27,68 @@ module.exports = class QueueStatusCommand extends Command {
             guildOnly: true,
             description: 'Display players in queue.',
             examples: ['queue-status', 'queuestatus', 'qstatus', 'status'],
+            args: [
+                {
+                    key: 'channel',
+                    prompt: 'Provide a channel.',
+                    type: 'channel',
+                    default: null,
+                },
+            ],
         });
     }
 
-    static async getQueueNames(guild) {
-        const queues = await findAllInQueueWithUser();
-        return queues.map((queue) => {
-            const discord_user = guild.member(queue.User.discord_id);
+    static async getQueueNames(guild, lobbyState) {
+        const queuers = await getActiveQueuers()(lobbyState);
+        return queuers.map((queuer) => {
+            const discord_user = guild.member(queuer.discord_id);
             if (discord_user) {
                 return discord_user.displayName;
             }
-            return queue.User.nickname ? queue.User.nickname : 'unknown';
+            return queuer.nickname ? queuer.nickname : 'unknown';
         });
     }
 
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const user = await findUserByDiscordId(guild.id)(discord_id);
+    static async getQueueStatusMessage(guild, lobbyState) {
+        const userNames = await QueueStatusCommand.getQueueNames(guild, lobbyState);
+        if (userNames.length) {
+            return `${userNames.length} in ${lobbyState.lobby_name} queue: ${userNames.join(', ')}`;
+        }
+        else {
+            return '0 in ${lobbyState.lobby_name} queue.';
+        }
+    }
+    
+    hasPermission(msg) {
+        return isMessageFromInhouse(ihlManager.inhouseStates, msg);
+    }
+
+    async run(msg, { channel }) {
+        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
 
         if (user) {
-            const userNames = await QueueStatusCommand.getQueueNames(guild);
-            if (userNames.length) {
-                await msg.say(`${userNames.length} in queue: ${userNames.join(', ')}`);
+            if (channel) {
+                lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                if (lobbyState) {
+                    const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
+                    await msg.say(message);
+                }
+                else {
+                    await msg.say('Invalid lobby channel.');
+                }
+            }
+            else if (lobbyState) {
+                const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
+                await msg.say(message);
             }
             else {
-                await msg.say('0 in queue.');
+                const queues = await findAllEnabledQueues(inhouseState.guild.id);
+                for (queue of queues) {
+                    await lobby = queue.getLobby();
+                    await lobbyState = getLobby(lobby);
+                    const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
+                    await msg.say(message);
+                }
             }
         }
         else {

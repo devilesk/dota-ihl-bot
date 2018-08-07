@@ -1,6 +1,9 @@
 const { Command } = require('discord.js-commando');
 const {
     ihlManager,
+    isMessageFromInhouse,
+    parseMessage,
+    getLobbyByChannelId,
 } = require('../../lib/ihlManager');
 const {
     findUserByDiscordId,
@@ -14,23 +17,46 @@ module.exports = class QueueJoinCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'queue-join',
-            aliases: ['qjoin', 'join'],
+            aliases: ['qjoin', 'join', 'join-queue'],
             group: 'queue',
             memberName: 'queue-join',
             guildOnly: true,
             description: 'Join inhouse queue.',
             examples: ['queue-join', 'queuejoin', 'qjoin', 'join'],
+            args: [
+                {
+                    key: 'channel',
+                    prompt: 'Provide a channel.',
+                    type: 'channel',
+                    default: null,
+                },
+            ],
         });
     }
+    
+    hasPermission(msg) {
+        return isMessageFromInhouse(ihlManager.inhouseStates, msg);
+    }
 
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const user = await findUserByDiscordId(guild.id)(discord_id);
-
+    async run(msg, { channel }) {
+        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
             if (user.rank_tier) {
-                await ihlManager.joinInhouseQueue(guild, user);
+                if (channel) {
+                    lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                    if (lobbyState) {
+                        await ihlManager.joinLobbyQueue(lobbyState, user);
+                    }
+                    else {
+                        await msg.say('Invalid lobby channel.');
+                    }
+                }
+                else if (lobbyState) {
+                    await ihlManager.joinLobbyQueue(lobbyState, user);
+                }
+                else {
+                    await ihlManager.joinAllQueues(inhouseState, user);
+                }
             }
             else {
                 await msg.say('Badge rank not set. Ping an admin to have them set it for you.');

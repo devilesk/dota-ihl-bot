@@ -1,6 +1,9 @@
 const { Command } = require('discord.js-commando');
 const {
     ihlManager,
+    isMessageFromInhouse,
+    parseMessage,
+    getLobbyByChannelId,
 } = require('../../lib/ihlManager');
 const {
     findUserByDiscordId,
@@ -14,7 +17,7 @@ module.exports = class QueueLeaveCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'queue-leave',
-            aliases: ['qleave', 'leave'],
+            aliases: ['qleave', 'leave', 'leave-queue'],
             group: 'queue',
             memberName: 'queue-leave',
             guildOnly: true,
@@ -22,14 +25,29 @@ module.exports = class QueueLeaveCommand extends Command {
             examples: ['queue-leave', 'queueleave', 'qleave', 'leave'],
         });
     }
+    
+    hasPermission(msg) {
+        return isMessageFromInhouse(ihlManager.inhouseStates, msg);
+    }
 
     async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const user = await findUserByDiscordId(guild.id)(discord_id);
-
+        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
-            await ihlManager.leaveInhouseQueue(guild, user);
+            if (channel) {
+                lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                if (lobbyState) {
+                    await ihlManager.leaveLobbyQueue(lobbyState, user);
+                }
+                else {
+                    await msg.say('Invalid lobby channel.');
+                }
+            }
+            else if (lobbyState) {
+                await ihlManager.leaveLobbyQueue(lobbyState, user);
+            }
+            else {
+                await ihlManager.leaveAllQueues(inhouseState, user);
+            }
         }
         else {
             await msg.say('User not found. (Have you registered your steam id with `!register`?)');

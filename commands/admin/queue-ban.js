@@ -1,6 +1,9 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, isMessageFromAdmin,
+    ihlManager,
+    isMessageFromAdmin,
+    isMessageFromInhouse,
+    getInhouseState,
 } = require('../../lib/ihlManager');
 const {
     findUser,
@@ -37,16 +40,17 @@ module.exports = class QueueBanCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAdmin(ihlManager.inhouseStates, msg) && isMessageFromInhouse(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { member, timeout }) {
         const discord_id = msg.author.id;
         const guild = msg.channel.guild;
         const [user, discord_user, result_type] = await findUser(guild)(member);
-
+        const inhouseState = getInhouseState(ihlManager.inhouseStates, guild.id);
+        
         if (user) {
-            await ihlManager.banInhouseQueue(guild, user, timeout);
+            await ihlManager.banInhouseQueue(inhouseState, user, timeout);
             await msg.say(`User kicked from queue and tempbanned for ${timeout} minutes.`);
         }
         else {
