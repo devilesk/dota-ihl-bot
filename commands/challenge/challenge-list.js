@@ -42,12 +42,12 @@ module.exports = class ChallengeListCommand extends Command {
         const guild = msg.channel.guild;
         let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
-            const receivers = await mapPromise((challenge) => {
+            const receivers = await mapPromise(async (challenge) => {
                 const receiver = await challenge.getRecipient();
                 return resolveUser(guild)(receiver);
             }, user.getChallengesGiven());
 
-            const givers = await mapPromise((challenge) => {
+            const givers = await mapPromise(async (challenge) => {
                 const giver = await challenge.getGiver();
                 return resolveUser(guild)(giver);
             }, user.getChallengesReceived());

@@ -42,7 +42,7 @@ module.exports = class UnchallengeCommand extends Command {
     async run(msg, { member }) {
         let { giver, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (giver) {
-            const receiver = await findUserByDiscordId(member.id);
+            const receiver = await findUserByDiscordId(msg.channel.guild)(member.id);
             if (receiver) {
                 const challengeFromGiver = await getChallengeBetweenUsers(giver)(receiver);
                 if (challengeFromGiver) {

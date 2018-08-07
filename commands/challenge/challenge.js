@@ -47,7 +47,7 @@ module.exports = class ChallengeCommand extends Command {
             // check if giver already in a lobby
             let inLobby = await hasActiveLobbies(giver);
             if (!inLobby) {
-                const receiver = await findUserByDiscordId(member.id);
+                const receiver = await findUserByDiscordId(msg.channel.guild)(member.id);
                 if (receiver) {
                     // check if receiver already in a lobby
                     inLobby = await hasActiveLobbies(receiver);
