@@ -28,7 +28,7 @@ module.exports = class QueueJoinCommand extends Command {
                     key: 'channel',
                     prompt: 'Provide a channel.',
                     type: 'channel',
-                    default: null,
+                    default: '',
                 },
             ],
         });

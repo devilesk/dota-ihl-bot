@@ -23,6 +23,14 @@ module.exports = class QueueLeaveCommand extends Command {
             guildOnly: true,
             description: 'Leave inhouse queue.',
             examples: ['queue-leave', 'queueleave', 'qleave', 'leave'],
+            args: [
+                {
+                    key: 'channel',
+                    prompt: 'Provide a channel.',
+                    type: 'channel',
+                    default: '',
+                },
+            ],
         });
     }
     
@@ -30,7 +38,7 @@ module.exports = class QueueLeaveCommand extends Command {
         return isMessageFromInhouse(ihlManager.inhouseStates, msg);
     }
 
-    async run(msg) {
+    async run(msg, { channel }) {
         let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
             if (channel) {
