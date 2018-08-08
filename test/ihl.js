@@ -218,11 +218,11 @@ describe('Database', () => {
             resolveUser.withArgs(sinon.match.any, captain_2.discord_id).resolves({ displayName: 'test2' });
             const eventEmitter = new EventEmitter();
             const findOrCreateChannelInCategory = () => true;
-            const getLobbyRole = guild => async () => true;
+            const makeRole = guild => permissions => mentionable => async () => true;
             assert.lengthOf(inhouseState.queues, 0);
             assert.lengthOf(inhouseState.lobbies, 0);
             assert.isFalse(challenge.accepted);
-            inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, getLobbyRole })(inhouseState, challenge, eventEmitter, captain_1, captain_2);
+            inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, makeRole })(inhouseState, challenge, eventEmitter, captain_1, captain_2);
             assert.isTrue(challenge.accepted);
             assert.lengthOf(inhouseState.lobbies, 1);
             assert.lengthOf(inhouseState.queues, 1);

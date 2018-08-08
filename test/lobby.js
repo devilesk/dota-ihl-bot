@@ -69,7 +69,6 @@ const {
     killLobby,
     isReadyCheckTimedOut,
     startLobby,
-    getLobbyRole,
     createLobbyState,
     lobbyToLobbyState,
     forceLobbyDraft,
