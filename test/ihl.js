@@ -100,7 +100,7 @@ describe('Database', () => {
                 },
                 guild: {},
             }
-            const inhouseState = await createInhouseState(args);
+            const inhouseState = await createInhouseState(new EventEmitter())(args);
             assert.exists(inhouseState);
         });
         
@@ -110,7 +110,7 @@ describe('Database', () => {
                 league,
                 guild: {},
             }
-            const inhouseState = await createInhouseState(args);
+            const inhouseState = await createInhouseState(new EventEmitter())(args);
             assert.exists(inhouseState);
         });
     });
