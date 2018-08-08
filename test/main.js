@@ -409,7 +409,7 @@ describe('Database', () => {
                 const spy = sinon.spy(eventEmitter, 'emit');
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 assert.isTrue(spy.calledOnce);
-                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.calledWith(CONSTANTS.MSG_QUEUE_JOINED, sinon.match.any, 1));
                 eventEmitter.emit.restore();
             });
 
@@ -419,8 +419,8 @@ describe('Database', () => {
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 assert.isTrue(spy.calledTwice);
-                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
-                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_ALREADY_JOINED));
+                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.MSG_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.MSG_QUEUE_ALREADY_JOINED));
                 eventEmitter.emit.restore();
             });
 
@@ -431,8 +431,8 @@ describe('Database', () => {
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await joinInhouseQueue(inhouseState, user2, eventEmitter);
                 assert.isTrue(spy.calledTwice);
-                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 1));
-                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.EVENT_QUEUE_JOINED, sinon.match.any, 2));
+                assert.isTrue(spy.firstCall.calledWith(CONSTANTS.MSG_QUEUE_JOINED, sinon.match.any, 1));
+                assert.isTrue(spy.secondCall.calledWith(CONSTANTS.MSG_QUEUE_JOINED, sinon.match.any, 2));
                 eventEmitter.emit.restore();
             });
 
@@ -451,7 +451,7 @@ describe('Database', () => {
                 await joinInhouseQueue(inhouseState, user, eventEmitter);
                 await leaveInhouseQueue(inhouseState, user, eventEmitter);
                 assert.isTrue(spy.calledTwice);
-                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 0));
+                assert.isTrue(spy.calledWith(CONSTANTS.MSG_QUEUE_LEFT, sinon.match.any, 0));
                 eventEmitter.emit.restore();
             });
 
@@ -463,7 +463,7 @@ describe('Database', () => {
                 await joinInhouseQueue(inhouseState, user2, eventEmitter);
                 await leaveInhouseQueue(inhouseState, user, eventEmitter);
                 assert.isTrue(spy.calledThrice);
-                assert.isTrue(spy.calledWith(CONSTANTS.EVENT_QUEUE_LEFT, sinon.match.any, 1));
+                assert.isTrue(spy.calledWith(CONSTANTS.MSG_QUEUE_LEFT, sinon.match.any, 1));
                 eventEmitter.emit.restore();
             });
 

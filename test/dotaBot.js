@@ -433,9 +433,9 @@ describe('DotaBot', () => {
             memberJoinedSpy = sinon.spy();
             memberChangedSlotSpy = sinon.spy();
             readySpy = sinon.spy();
-            dotaBot.on(CONSTANTS.EVENT_LOBBY_PLAYER_LEFT, memberLeftSpy);
-            dotaBot.on(CONSTANTS.EVENT_LOBBY_PLAYER_JOINED, memberJoinedSpy);
-            dotaBot.on(CONSTANTS.EVENT_LOBBY_PLAYER_CHANGED_SLOT, memberChangedSlotSpy);
+            dotaBot.on(CONSTANTS.MSG_LOBBY_PLAYER_LEFT, memberLeftSpy);
+            dotaBot.on(CONSTANTS.MSG_LOBBY_PLAYER_JOINED, memberJoinedSpy);
+            dotaBot.on(CONSTANTS.MSG_LOBBY_PLAYER_CHANGED_SLOT, memberChangedSlotSpy);
             dotaBot.on(CONSTANTS.EVENT_LOBBY_READY, readySpy);
         });
     
