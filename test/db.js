@@ -20,6 +20,7 @@ const {
     findLobby,
     findBot,
     findAllUnassignedBot,
+    findUnassignedBot,
     findUserById,
     findUserByDiscordId,
     findUserBySteamId64,
@@ -201,6 +202,14 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const bots = await findAllUnassignedBot();
             assert.lengthOf(bots, 1);
+        });
+    });
+
+    describe('findUnassignedBot', () => {
+        it('return bot not assigned to a lobby', async () => {
+            const league = await findLeague('422549177151782925');
+            const bot = await findUnassignedBot();
+            assert.exists(bot);
         });
     });
 

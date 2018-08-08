@@ -68,7 +68,6 @@ const {
     setupLobbyBot,
     killLobby,
     isReadyCheckTimedOut,
-    getUnassignedBot,
     startLobby,
     getLobbyRole,
     createLobbyState,
