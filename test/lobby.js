@@ -859,6 +859,65 @@ describe('Database - with lobby players', () => {
             it('setup bot and dota lobby', async () => {
             });
         });
+        
+        describe('killLobby', () => {
+            it('delete channel', async () => {
+                const lobbyState = {
+                    channel: {
+                        delete: sinon.spy(),
+                    }
+                }
+                const result = await killLobby(lobbyState);
+                assert.isNull(result.channel);
+                assert.isTrue(lobbyState.channel.delete.calledOnce);
+                assert.equal(result.state, CONSTANTS.STATE_KILLED);
+            });
+            
+            it('delete role', async () => {
+                const lobbyState = {
+                    role: {
+                        delete: sinon.spy(),
+                    }
+                }
+                const result = await killLobby(lobbyState);
+                assert.isNull(result.role);
+                assert.isTrue(lobbyState.role.delete.calledOnce);
+                assert.equal(result.state, CONSTANTS.STATE_KILLED);
+            });
+            
+            it('remove players and set queuers active', async () => {
+                const lobbyState = {
+                    lobby_name: lobby.lobby_name,
+                }
+                let players = await getPlayers()(lobbyState);
+                assert.lengthOf(players, 10);
+                const result = await killLobby(lobbyState);
+                players = await getPlayers()(lobbyState);
+                assert.lengthOf(players, 0);
+                let queuers = await getQueuers()(lobbyState);
+                for (queuer of queuers) {
+                    assert.isTrue(queuer.LobbyQueuer.active);
+                }
+                assert.equal(result.state, CONSTANTS.STATE_KILLED);
+            });
+        });
+        
+        describe('isReadyCheckTimedOut', () => {
+            it.only('return true', async () => {
+                const result = isReadyCheckTimedOut({
+                    ready_check_timeout: 0,
+                    ready_check_time: Date.now() - 100,
+                });
+                assert.isTrue(result);
+            });
+            it.only('return false', async () => {
+                const result = isReadyCheckTimedOut({
+                    ready_check_timeout: 1000,
+                    ready_check_time: Date.now(),
+                });
+                assert.isFalse(result);
+            });
+        });
     });
 });
 
