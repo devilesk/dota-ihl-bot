@@ -28,6 +28,7 @@ const {
     intersectMembers,
     membersToPlayerState,
     processMembers,
+    invitePlayer,
     DotaBot,
 } = proxyquire('../lib/dotaBot', {
     'fs': {
@@ -331,6 +332,19 @@ describe('Functions', () => {
                 previous: { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 },
                 current: { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 },
             });
+        });
+    });
+    
+    describe('invitePlayer', () => {
+        it.only('invite player', async () => {
+            const user = {
+                steamid_64: 'test',
+            }
+            const dotaBot = {
+                inviteToLobby: sinon.spy(),
+            }
+            const result = await invitePlayer(dotaBot)(user);
+            assert(dotaBot.inviteToLobby.calledOnce);
         });
     });
 });
