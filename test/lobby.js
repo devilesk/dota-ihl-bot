@@ -90,6 +90,9 @@ const {
     },
     './guild': require('../lib/guildStub'),
 });
+const {
+    tapP,
+} = require('../lib/util/fp');
 const CONSTANTS = require('../lib/constants');
 
 describe('Database - with lobby players', () => {
@@ -211,6 +214,11 @@ describe('Database - with lobby players', () => {
             it('add role to players', async () => {
                 const players = await addRoleToPlayers(lobby);
                 assert.lengthOf(players, 10);
+            });
+            
+            it('return lobby when tapped', async () => {
+                const result = await tapP(addRoleToPlayers)(lobby);
+                assert.strictEqual(result, lobby);
             });
         });
         
@@ -902,14 +910,14 @@ describe('Database - with lobby players', () => {
         });
         
         describe('isReadyCheckTimedOut', () => {
-            it.only('return true', async () => {
+            it('return true', async () => {
                 const result = isReadyCheckTimedOut({
                     ready_check_timeout: 0,
                     ready_check_time: Date.now() - 100,
                 });
                 assert.isTrue(result);
             });
-            it.only('return false', async () => {
+            it('return false', async () => {
                 const result = isReadyCheckTimedOut({
                     ready_check_timeout: 1000,
                     ready_check_time: Date.now(),
