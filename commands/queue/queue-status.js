@@ -83,7 +83,7 @@ module.exports = class QueueStatusCommand extends Command {
             }
             else {
                 const queues = await findAllEnabledQueues(inhouseState.guild.id);
-                for (queue of queues) {
+                for (const queue of queues) {
                     const lobbyState = await getLobby({ lobby_name: queue.queue_name });
                     const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
                     await msg.say(message);
