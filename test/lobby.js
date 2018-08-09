@@ -1323,5 +1323,61 @@ describe('Database - no lobby players', () => {
                 });
             });
         });
+        
+        describe('removeLobbyPlayersFromQueues', () => {
+            // TODO
+        });
+        
+        describe('LobbyStateTransitions', () => {
+            // TODO
+        });
+        
+        describe('transitionLobbyState', () => {
+            // TODO
+        });
+        
+        describe('assignLobbyName', () => {
+            it('nothing when QUEUE_TYPE_CHALLENGE', async () => {
+                const lobbyState = { lobby_name, queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE };
+                const result = await assignLobbyName(lobbyState);
+                assert.equal(lobbyState.lobby_name, result.lobby_name);
+            });
+            
+            it('return renamed lobby state', async () => {
+                const lobbyState = { lobby_name };
+                const result = await assignLobbyName(lobbyState);
+                assert.notEqual(lobbyState.lobby_name, result.lobby_name);
+            });
+        });
+        
+        describe('renameLobbyChannel', () => {
+            it('rename channel to lobby_name', async () => {
+                const setName = sinon.stub();
+                setName.resolves();
+                const lobbyState = {
+                    lobby_name,
+                    channel: {
+                        setName,
+                    }
+                };
+                const result = await renameLobbyChannel(lobbyState);
+                assert.isTrue(setName.calledOnceWith(lobby_name));
+            });
+        });
+        
+        describe('renameLobbyRole', () => {
+            it('rename role to lobby_name', async () => {
+                const setName = sinon.stub();
+                setName.resolves();
+                const lobbyState = {
+                    lobby_name,
+                    role: {
+                        setName,
+                    }
+                };
+                const result = await renameLobbyRole(lobbyState);
+                assert.isTrue(setName.calledOnceWith(lobby_name));
+            });
+        });
     });
 });
