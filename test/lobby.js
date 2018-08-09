@@ -174,14 +174,14 @@ describe('Database - with lobby players', () => {
         describe('getNoTeamPlayers', () => {
             it('return players not on a team', async () => {
                 const players = await getNoTeamPlayers()(lobby);
-                assert.lengthOf(players, 0);
+                assert.isEmpty(players);
             });
         });
 
         describe('getNotReadyPlayers', () => {
             it('return players not ready', async () => {
                 const players = await getNotReadyPlayers()(lobby);
-                assert.lengthOf(players, 0);
+                assert.isEmpty(players);
             });
         });
 
@@ -900,9 +900,9 @@ describe('Database - with lobby players', () => {
                 assert.lengthOf(players, 10);
                 const result = await killLobby(lobbyState);
                 players = await getPlayers()(lobbyState);
-                assert.lengthOf(players, 0);
+                assert.isEmpty(players);
                 let queuers = await getQueuers()(lobbyState);
-                for (queuer of queuers) {
+                for (const queuer of queuers) {
                     assert.isTrue(queuer.LobbyQueuer.active);
                 }
                 assert.equal(result.state, CONSTANTS.STATE_KILLED);
@@ -963,7 +963,7 @@ describe('Database - no lobby players', () => {
         describe('getPlayers', () => {
             it('return 0 players in the lobby', async () => {
                 const players = await getPlayers()(lobby);
-                assert.lengthOf(players, 0);
+                assert.isEmpty(players);
             });
         });
         

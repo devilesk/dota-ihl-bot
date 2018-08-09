@@ -171,7 +171,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouseByName('test')(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 0);
+            assert.isEmpty(inhouseState.lobbies);
         });
         
         it('remove second lobby', async () => {
@@ -190,7 +190,7 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test' }],
             };
             inhouseState = removeLobbyFromInhouse({ lobby_name: 'test' })(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 0);
+            assert.isEmpty(inhouseState.lobbies);
         });
         
         it('remove second lobby', async () => {
@@ -219,7 +219,7 @@ describe('Database', () => {
             const eventEmitter = new EventEmitter();
             const findOrCreateChannelInCategory = () => true;
             const makeRole = guild => permissions => mentionable => async () => true;
-            assert.lengthOf(inhouseState.queues, 0);
+            assert.isEmpty(inhouseState.queues);
             assert.lengthOf(inhouseState.lobbies, 0);
             assert.isFalse(challenge.accepted);
             inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, makeRole })(inhouseState, challenge, eventEmitter, captain_1, captain_2);

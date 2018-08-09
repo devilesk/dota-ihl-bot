@@ -253,7 +253,7 @@ describe('Functions', () => {
         
         it('return empty', async () => {
             const result = diffMembers([], []);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
         
         it('return empty when no differences', async () => {
@@ -261,7 +261,7 @@ describe('Functions', () => {
             const membersA = [{ id }];
             const membersB = [{ id }];
             const result = diffMembers(membersA, membersB);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
         
         it('return empty when first array is subset', async () => {
@@ -269,7 +269,7 @@ describe('Functions', () => {
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
             const result = diffMembers(membersB, membersA);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
     });
     
@@ -285,23 +285,23 @@ describe('Functions', () => {
         
         it('return empty', async () => {
             const result = intersectMembers([], []);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
         
         it('return empty when none in common', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFFF) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const result = intersectMembers(membersA, membersB);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
         
         it('return empty when none in common multiple', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2) }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3) }];
             let result = intersectMembers(membersA, membersB);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
             result = intersectMembers(membersB, membersA);
-            assert.lengthOf(result, 0);
+            assert.isEmpty(result);
         });
     });
     
@@ -336,7 +336,7 @@ describe('Functions', () => {
     });
     
     describe('invitePlayer', () => {
-        it.only('invite player', async () => {
+        it('invite player', async () => {
             const user = {
                 steamid_64: 'test',
             }
