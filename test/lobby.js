@@ -1347,6 +1347,8 @@ describe('Database - no lobby players', () => {
                 const lobbyState = { lobby_name };
                 const result = await assignLobbyName(lobbyState);
                 assert.notEqual(lobbyState.lobby_name, result.lobby_name);
+                const lobby2 = await getLobby({ lobby_name: result.lobby_name });
+                assert.exists(lobby2);
             });
         });
         
