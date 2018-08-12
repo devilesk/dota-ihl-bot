@@ -722,7 +722,7 @@ describe('Database - with lobby players', () => {
             it('return 0 when all players have a team', async () => {
                 const draftOrder = [1,2,2,1,2,1,1,2];
                 const faction = await getDraftingFaction(draftOrder)(lobby);
-                console.log(faction);
+                assert.equal(faction, 0);
             });
             
             it('return 1 when on first pick', async () => {
@@ -1379,6 +1379,144 @@ describe('Database - no lobby players', () => {
                 };
                 const result = await renameLobbyRole(lobbyState);
                 assert.isTrue(setName.calledOnceWith(lobby_name));
+            });
+        });
+        
+        describe('LobbyStateHandlers', () => {
+            let lobbyState;
+            beforeEach(async () => {
+                const setName = sinon.stub();
+                setName.resolves();
+                const findOrCreateChannelInCategory = sinon.stub();
+                findOrCreateChannelInCategory.resolves({ send: sinon.spy(), overwritePermissions: sinon.spy(), setName });
+                const _makeRole = sinon.stub();
+                _makeRole.resolves({ setName });
+                const makeRole = () => () => () => _makeRole;
+                lobbyState = await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })({
+                    guild: { roles: { get: sinon.spy() } },
+                    category: 'category',
+                    ready_check_timeout: 'ready_check_timeout',
+                    captain_rank_threshold: 'captain_rank_threshold',
+                    captain_role_regexp: 'captain_role_regexp'
+                })(lobby);
+            });
+            
+            describe('STATE_NEW', () => {
+                it('return lobby state with STATE_WAITING_FOR_QUEUE', async () => {
+                    lobbyState.state = CONSTANTS.STATE_NEW;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
+                });
+            });
+            
+            describe('STATE_WAITING_FOR_QUEUE', () => {
+                // TODO
+            });
+            
+            describe('STATE_BEGIN_READY', () => {
+                it.only('return lobby state with STATE_CHECKING_READY', async () => {
+                    lobbyState.state = CONSTANTS.STATE_BEGIN_READY;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_CHECKING_READY);
+                });
+            });
+            
+            describe('STATE_CHECKING_READY', () => {
+                // TODO
+            });
+            
+            describe('STATE_ASSIGNING_CAPTAINS', () => {
+                // TODO
+            });
+            
+            describe('STATE_CHOOSING_SIDE', () => {
+                it('set captain teams and return lobby state with STATE_DRAFTING_PLAYERS', async () => {
+                    lobbyState.state = CONSTANTS.STATE_CHOOSING_SIDE;
+                    const captain_1 = await db.User.find({ where: { id: 1 } });
+                    const captain_2 = await db.User.find({ where: { id: 2 } });
+                    lobbyState.captain_1_user_id = captain_1.id;
+                    lobbyState.captain_2_user_id = captain_2.id;
+                    await addPlayer(lobbyState)(captain_1);
+                    await addPlayer(lobbyState)(captain_2);
+                    let players1 = await lobby.getTeam1Players();
+                    assert.isEmpty(players1);
+                    let players2 = await lobby.getTeam2Players();
+                    assert.isEmpty(players1);
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    players1 = await lobby.getTeam1Players();
+                    assert.lengthOf(players1, 1);
+                    players2 = await lobby.getTeam2Players();
+                    assert.lengthOf(players2, 1);
+                    assert.equal(players1[0].id, captain_1.id);
+                    assert.equal(players2[0].id, captain_2.id);
+                    assert.equal(players1[0].LobbyPlayer.faction, 1);
+                    assert.equal(players2[0].LobbyPlayer.faction, 2);
+                    assert.equal(result.state, CONSTANTS.STATE_DRAFTING_PLAYERS);
+                });
+            });
+            
+            describe('STATE_DRAFTING_PLAYERS', () => {
+                // TODO
+            });
+            
+            describe('STATE_AUTOBALANCING', () => {
+                // TODO
+            });
+            
+            describe('STATE_TEAMS_SELECTED', () => {
+                it('return lobby state with STATE_WAITING_FOR_BOT', async () => {
+                    lobbyState.state = CONSTANTS.STATE_TEAMS_SELECTED;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                });
+            });
+            
+            describe('STATE_WAITING_FOR_BOT', () => {
+                // TODO
+            });
+            
+            describe('STATE_BOT_ASSIGNED', () => {
+                // TODO
+            });
+            
+            describe('STATE_BOT_STARTED', () => {
+                // TODO
+            });
+            
+            describe('STATE_BOT_FAILED', () => {
+                it('return lobby state with STATE_BOT_FAILED', async () => {
+                    lobbyState.state = CONSTANTS.STATE_BOT_FAILED;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_BOT_FAILED);
+                });
+            });
+            
+            describe('STATE_WAITING_FOR_PLAYERS', () => {
+                // TODO
+            });
+            
+            describe('STATE_MATCH_IN_PROGRESS', () => {
+                // TODO
+            });
+            
+            describe('STATE_MATCH_ENDED', () => {
+                it('return lobby state with STATE_MATCH_ENDED', async () => {
+                    lobbyState.state = CONSTANTS.STATE_MATCH_ENDED;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_MATCH_ENDED);
+                });
+            });
+            
+            describe('STATE_PENDING_KILL', () => {
+                // TODO
+            });
+            
+            describe('STATE_KILLED', () => {
+                it('return lobby state with STATE_KILLED', async () => {
+                    lobbyState.state = CONSTANTS.STATE_KILLED;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_KILLED);
+                });
             });
         });
     });
