@@ -5,6 +5,7 @@ const proxyquire = require('proxyquire');
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
 const db = require('../models');
+const guildStub = require('../lib/guildStub');
 const {
     getLobby,
     getPlayers,
@@ -89,11 +90,15 @@ const {
     './dotaBot': {
         isDotaLobbyReady: () => true,
     },
-    './guild': require('../lib/guildStub'),
+    './guild': guildStub,
 });
 const {
     tapP,
 } = require('../lib/util/fp');
+const {
+    findUserById,
+    getChallengeBetweenUsers,
+} = require('../lib/db');
 const CONSTANTS = require('../lib/constants');
 
 const chaiAsPromised = require("chai-as-promised");
@@ -621,7 +626,16 @@ describe('Database - with lobby players', () => {
         });
         
         describe('getPlayersWithCaptainPriority', () => {
-            // TODO
+            it('return players with captain priority from roles', async () => {
+                const guild = 'guild';
+                const user = 'user';
+                const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                const getUserRoles = sinon.stub();
+                getUserRoles.withArgs(guild, sinon.match.any).resolves(roles);
+                const players = await getPlayersWithCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(lobby);
+                assert.equal(getUserRoles.callCount, 10);
+            });
         });
         
         describe('getActiveQueuersWithCaptainPriority', () => {
@@ -1073,6 +1087,7 @@ describe('Database - no lobby players', () => {
             path.resolve(path.join(__dirname, '../testdata/fake-bots.js')),
             path.resolve(path.join(__dirname, '../testdata/fake-queues.js')),
             path.resolve(path.join(__dirname, '../testdata/fake-lobbies.js')),
+            path.resolve(path.join(__dirname, '../testdata/fake-challenges.js')),
         ],
         { logging: false },
     );
@@ -1414,19 +1429,122 @@ describe('Database - no lobby players', () => {
             });
             
             describe('STATE_BEGIN_READY', () => {
-                it.only('return lobby state with STATE_CHECKING_READY', async () => {
+                it('return lobby state with STATE_CHECKING_READY', async () => {
                     lobbyState.state = CONSTANTS.STATE_BEGIN_READY;
                     const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_CHECKING_READY);
+                    assert.exists(result.ready_check_time);
+                });
+                
+                it('destroy challenges from players', async () => {
+                    const user1 = await findUserById(4);
+                    const user2 = await findUserById(3);
+                    let challenge = await getChallengeBetweenUsers(user1)(user2);
+                    assert.exists(challenge);
+                    assert.isTrue(challenge.accepted);
+                    lobbyState.state = CONSTANTS.STATE_BEGIN_READY;
+                    await addPlayers(lobbyState)([user1, user2]);
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    challenge = await getChallengeBetweenUsers(user1)(user2);
+                    assert.notExists(challenge);
                 });
             });
             
             describe('STATE_CHECKING_READY', () => {
-                // TODO
+                it('return lobby state with STATE_CHECKING_READY when < 10 players ready', async () => {
+                    lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_CHECKING_READY);
+                });
+                
+                it('return lobby state with STATE_PENDING_KILL when timed out', async () => {
+                    lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
+                    lobbyState.ready_check_time = 0;
+                    lobbyState.ready_check_timeout = 0;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_PENDING_KILL);
+                });
+                
+                describe('10 ready players', () => {
+                    beforeEach(async () => {
+                        const users = await db.User.findAll({ limit: 10 });
+                        await addPlayers(lobbyState)(users);
+                        for (const user of users) {
+                            await setPlayerReady(true)(lobbyState)(user.id);
+                        }
+                    });
+
+                    it('return lobby state with STATE_CHOOSING_SIDE when QUEUE_TYPE_DRAFT', async () => {
+                        lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
+                        lobbyState.queue_type = CONSTANTS.QUEUE_TYPE_DRAFT;
+                        const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                        assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    });
+
+                    it('return lobby state with STATE_CHOOSING_SIDE when QUEUE_TYPE_CHALLENGE', async () => {
+                        lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
+                        lobbyState.queue_type = CONSTANTS.QUEUE_TYPE_CHALLENGE;
+                        const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                        assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    });
+
+                    it('return lobby state with STATE_AUTOBALANCING when QUEUE_TYPE_AUTO', async () => {
+                        lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
+                        lobbyState.queue_type = CONSTANTS.QUEUE_TYPE_AUTO;
+                        const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                        assert.equal(result.state, CONSTANTS.STATE_AUTOBALANCING);
+                    });
+                });
             });
             
             describe('STATE_ASSIGNING_CAPTAINS', () => {
-                // TODO
+                let getUserRolesStub;
+                let LobbyStateHandlers;
+                
+                beforeEach(async () => {
+                    getUserRolesStub = sinon.stub(guildStub, 'getUserRoles');
+                    getUserRolesStub.resolves([{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }]);
+                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                        './guild': guildStub,
+                    });
+                    LobbyStateHandlers = mock;
+                });
+
+                afterEach(async () => {
+                    guildStub.getUserRoles.restore();
+                });
+  
+                it('return lobby state STATE_CHOOSING_SIDE when captains already assigned', async () => {
+                    lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    assert.isNumber(lobbyState.captain_1_user_id);
+                    assert.isNumber(lobbyState.captain_2_user_id);
+                });
+
+                it('return lobby state STATE_AUTOBALANCING when no captains assigned', async () => {
+                    lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
+                    lobbyState.captain_1_user_id = null;
+                    lobbyState.captain_2_user_id = null;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_AUTOBALANCING);
+                    assert.isNull(lobbyState.captain_1_user_id);
+                    assert.isNull(lobbyState.captain_2_user_id);
+                });
+
+                it.only('return lobby state STATE_CHOOSING_SIDE when captains assigned', async () => {
+                    const users = await db.User.findAll({ limit: 10 });
+                    await addPlayers(lobbyState)(users);
+                    lobbyState.captain_rank_threshold = 1000;
+                    lobbyState.captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
+                    lobbyState.captain_1_user_id = null;
+                    lobbyState.captain_2_user_id = null;
+                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    assert.isNumber(result.captain_1_user_id);
+                    assert.isNumber(result.captain_2_user_id);
+                });
             });
             
             describe('STATE_CHOOSING_SIDE', () => {
