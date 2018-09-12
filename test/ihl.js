@@ -42,8 +42,6 @@ const {
 const CONSTANTS = require('../lib/constants');
 
 describe('Database', () => {
-    let sandbox = null;
-
     sequelizeMockingMocha(
         db.sequelize,
         [
@@ -59,14 +57,6 @@ describe('Database', () => {
         ],
         { logging: false },
     );
-
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-    });
-
-    afterEach(() => {
-        sandbox && sandbox.restore();
-    });
 
     describe('getUserRankTier', () => {
         it('return a rank tier', async () => {

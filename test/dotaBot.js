@@ -46,16 +46,6 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 describe('Functions', () => {
-    let sandbox = null;
-
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-    });
-
-    afterEach(() => {
-        sandbox && sandbox.restore();
-    });
-    
     describe('slotToFaction', () => {
         it('return 1 for radiant', async () => {
             const slot = 0;
@@ -350,21 +340,15 @@ describe('Functions', () => {
 });
 
 describe('DotaBot', () => {
-    let sandbox = null;
     let steamClient, steamUser, steamFriends, dotaClient;
 
     beforeEach(() => {
-        sandbox = sinon.sandbox.create();
         steamClient = new EventEmitter();
         steamUser = new EventEmitter();
         steamFriends = { setPersonaState: () => true, setPersonaName: () => true };
         dotaClient = new EventEmitter();
     });
 
-    afterEach(() => {
-        sandbox && sandbox.restore();
-    });
-    
     describe('constructor', () => {
         it('return DotaBot object with blocking queue', async () => {
             const dotaBot = new DotaBot(steamClient, steamUser, {}, dotaClient, {}, true, true);

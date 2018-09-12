@@ -102,8 +102,6 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 describe('Database - with lobby players', () => {
-    let sandbox = null;
-
     sequelizeMockingMocha(
         db.sequelize,
         [
@@ -118,14 +116,6 @@ describe('Database - with lobby players', () => {
         ],
         { logging: false },
     );
-
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-    });
-
-    afterEach(() => {
-        sandbox && sandbox.restore();
-    });
 
     const lobby_name = 'funny-yak-74';
     
@@ -1073,8 +1063,6 @@ describe('Database - with lobby players', () => {
 });
 
 describe('Database - no lobby players', () => {
-    let sandbox = null;
-
     sequelizeMockingMocha(
         db.sequelize,
         [
@@ -1088,14 +1076,6 @@ describe('Database - no lobby players', () => {
         ],
         { logging: false },
     );
-
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-    });
-
-    afterEach(() => {
-        sandbox && sandbox.restore();
-    });
 
     const lobby_name = 'funny-yak-74';
     
