@@ -61,7 +61,7 @@ describe('Database', () => {
     describe('getUserRankTier', () => {
         it('return a rank tier', async () => {
             const rank_tier = await getUserRankTier('76561198015512690');
-            assert.equal(rank_tier, 65);
+            assert.equal(rank_tier, null);
         });
     });
 
