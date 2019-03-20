@@ -44,7 +44,7 @@ module.exports = class LobbyKickCommand extends Command {
             if (user) {
                 const account_id = convertor.to32(user.steamid_64);
                 await lobbyState.dotaBot.practiceLobbyKick(account_id);
-                msg.say('User kicked from lobby.');
+                await msg.say('User kicked from lobby.');
             }
             else {
                 await msg.say('User not found. (Has user registered with `!register`?)');

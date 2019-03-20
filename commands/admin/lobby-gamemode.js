@@ -43,10 +43,10 @@ module.exports = class LobbyGameModeCommand extends Command {
         const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
         if (lobbyState) {
             ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, lobbyState, game_mode);
-            msg.say(`Game mode ${game_mode}.`).catch(console.error);
+            await msg.say(`Game mode ${game_mode}.`).catch(console.error);
         }
         else {
-            msg.say('Not in a lobby channel.').catch(console.error);
+            await msg.say('Not in a lobby channel.').catch(console.error);
         }
     }
 };

@@ -32,7 +32,7 @@ module.exports = class LobbyKillCommand extends Command {
             ihlManager.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
         }
         else {
-            msg.say('Not in a lobby channel.').catch(console.error);
+            await msg.say('Not in a lobby channel.').catch(console.error);
         }
     }
 };

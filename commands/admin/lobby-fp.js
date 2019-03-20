@@ -43,10 +43,10 @@ module.exports = class LobbyFirstPickCommand extends Command {
         const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
         if (lobbyState) {
             ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_FP, lobbyState, cm_pick);
-            msg.say(`First pick ${cm_pick}.`).catch(console.error);
+            await msg.say(`First pick ${cm_pick}.`).catch(console.error);
         }
         else {
-            msg.say('Not in a lobby channel.').catch(console.error);
+            await msg.say('Not in a lobby channel.').catch(console.error);
         }
     }
 };

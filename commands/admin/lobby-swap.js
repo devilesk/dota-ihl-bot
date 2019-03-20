@@ -31,7 +31,7 @@ module.exports = class LobbySwapCommand extends Command {
             await msg.say('Teams swapped.');
         }
         else {
-            msg.say('Not in a lobby channel.').catch(console.error);
+            await msg.say('Not in a lobby channel.').catch(console.error);
         }
     }
 };
