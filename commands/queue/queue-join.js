@@ -43,7 +43,7 @@ module.exports = class QueueJoinCommand extends Command {
         if (user) {
             if (user.rank_tier) {
                 if (channel) {
-                    lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                    [lobbyState, inhouseState] = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
                     if (lobbyState) {
                         await ihlManager.joinLobbyQueue(lobbyState, user);
                     }

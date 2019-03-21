@@ -42,7 +42,7 @@ module.exports = class QueueLeaveCommand extends Command {
         let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
             if (channel) {
-                lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                [lobbyState, inhouseState] = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
                 if (lobbyState) {
                     await ihlManager.leaveLobbyQueue(lobbyState, user);
                 }

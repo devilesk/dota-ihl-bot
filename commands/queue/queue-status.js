@@ -68,7 +68,7 @@ module.exports = class QueueStatusCommand extends Command {
 
         if (user) {
             if (channel) {
-                lobbyState = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                [lobbyState, inhouseState] = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
                 if (lobbyState) {
                     const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
                     await msg.say(message);
