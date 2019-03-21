@@ -8,9 +8,13 @@ const EventEmitter = require('events').EventEmitter;
 const db = require('../models');
 const {
     findUser,
-    addInhouseState,
-    loadInhouseStates,
     getInhouseState,
+    getIndexOfInhouseState,
+    transformLeagueGuild,
+    addInhouseState,
+    loadInhouseState,
+    loadInhouseStates,
+    loadInhouseStatesFromLeagues,
     getLobbyByChannelId,
     getLobbyByLobbyName,
     isMessageFromAdmin,
@@ -18,8 +22,10 @@ const {
     isMessageFromLobby,
     parseMessage,
     getLobbyFromMessage,
-    ihlManager,
     sendMatchEndMessage,
+    initLeague,
+    IHLManager,
+    ihlManager,
 } = proxyquire('../lib/ihlManager', {
     './guild': require('../lib/guildStub'),
 });
@@ -70,6 +76,195 @@ describe('Database', () => {
             assert.equal(user.id, 2);
             assert.equal(discord_user.id, '112718237040398336');
             assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
+        });
+    });
+    
+    describe('getInhouseState', () => {
+        it('return inhouse state matching guild id', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            const inhouseStates = [inhouseState];
+            assert.deepEqual(getInhouseState(inhouseStates, '123'), inhouseState);
+        });
+        
+        it('return undefined', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            const inhouseStates = [inhouseState];
+            assert.isUndefined(getInhouseState(inhouseStates, '456'));
+        });
+    });
+    
+    describe('getIndexOfInhouseState', () => {
+        it('return 0', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            const inhouseStates = [inhouseState];
+            assert.equal(getIndexOfInhouseState(inhouseStates, '123'), 0);
+        });
+        
+        it('return 1', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            const inhouseStates = [{guild: {id: '456'}}, inhouseState];
+            assert.equal(getIndexOfInhouseState(inhouseStates, '123'), 1);
+        });
+        
+        it('return -1', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            const inhouseStates = [inhouseState];
+            assert.equal(getIndexOfInhouseState(inhouseStates, '456'), -1);
+        });
+    });
+    
+    describe('transformLeagueGuild', () => {
+        it('return LeagueGuildObject', async () => {
+            const guild = {guild: {id: 1}};
+            const get = sinon.stub();
+            get.withArgs(1).returns(guild);
+            const guilds = {get};
+            const league = {id: 1, guild_id: 1};
+            const leagueGuild = transformLeagueGuild(guilds)(league);
+            assert.isTrue(guilds.get.calledOnce);
+            assert.deepEqual(leagueGuild.league, league);
+            assert.deepEqual(leagueGuild.guild, guild);
+        });
+    });
+    
+    describe('addInhouseState', () => {
+        it('return inhouse states with length 2 and inhouseState at end', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            let inhouseStates = [{guild: {id: '456'}}];
+            inhouseStates = addInhouseState(inhouseStates, inhouseState);
+            assert.lengthOf(inhouseStates, 2);
+            assert.notDeepEqual(inhouseStates[0], inhouseState);
+            assert.deepEqual(inhouseStates[1], inhouseState);
+        });
+        
+        it('return inhouseStates with length 3 and inhouseState at end', async () => {
+            const inhouseState = {guild: {id: '123'}};
+            let inhouseStates = [{guild: {id: 'a'}}, {guild: {id: '123'}}, {guild: {id: '456'}}];
+            inhouseStates = addInhouseState(inhouseStates, inhouseState);
+            assert.lengthOf(inhouseStates, 3);
+            assert.notDeepEqual(inhouseStates[0], inhouseState);
+            assert.notDeepEqual(inhouseStates[1], inhouseState);
+            assert.deepEqual(inhouseStates[2], inhouseState);
+        });
+    });
+    
+    describe('loadInhouseState', () => {
+        // TODO
+    });
+    
+    describe('loadInhouseStates', () => {
+        // TODO
+    });
+    
+    describe('getLobbyByChannelId', () => {
+        it('return array of lobby and inhouse state', async () => {
+            const lobby = {channel: {id: 1}};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByChannelId(inhouseStates, '123', 1);
+            assert.deepEqual(inhouse, inhouseState);
+            assert.deepEqual(lobby, lobbyState);
+        });
+        
+        it('return array of null lobby and inhouse state', async () => {
+            const lobby = {channel: {id: 2}};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByChannelId(inhouseStates, '123', 1);
+            assert.deepEqual(inhouse, inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and inhouse state when lobbies empty', async () => {
+            const inhouse = {
+                lobbies: [],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByChannelId(inhouseStates, '123', 1);
+            assert.deepEqual(inhouse, inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and null inhouse state', async () => {
+            const lobby = {channel: {id: 1}};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByChannelId(inhouseStates, '456', 1);
+            assert.isNull(inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and null inhouse state when inhouseStates is empty', async () => {
+            const inhouseStates = [];
+            const [lobbyState, inhouseState] = getLobbyByChannelId(inhouseStates, '456', 1);
+            assert.isNull(inhouseState);
+            assert.isNull(lobbyState);
+        });
+    });
+    
+    describe('getLobbyByLobbyName', () => {
+        it('return array of lobby and inhouse state', async () => {
+            const lobby = {lobby_name: '123'};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByLobbyName(inhouseStates, '123', '123');
+            assert.deepEqual(inhouse, inhouseState);
+            assert.deepEqual(lobby, lobbyState);
+        });
+        
+        it('return array of null lobby and inhouse state', async () => {
+            const lobby = {lobby_name: '456'};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByLobbyName(inhouseStates, '123', '123');
+            assert.deepEqual(inhouse, inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and inhouse state when lobbies empty', async () => {
+            const inhouse = {
+                lobbies: [],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByLobbyName(inhouseStates, '123', '123');
+            assert.deepEqual(inhouse, inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and null inhouse state', async () => {
+            const lobby = {lobby_name: '123'};
+            const inhouse = {
+                lobbies: [lobby],
+                guild: {id: '123'}
+            };
+            const inhouseStates = [inhouse];
+            const [lobbyState, inhouseState] = getLobbyByLobbyName(inhouseStates, '456', '123');
+            assert.isNull(inhouseState);
+            assert.isNull(lobbyState);
+        });
+        
+        it('return array of null lobby and null inhouse state when inhouseStates is empty', async () => {
+            const inhouseStates = [];
+            const [lobbyState, inhouseState] = getLobbyByLobbyName(inhouseStates, '456', '123');
+            assert.isNull(inhouseState);
+            assert.isNull(lobbyState);
         });
     });
 });
