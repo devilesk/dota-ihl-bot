@@ -259,6 +259,37 @@ describe('Database', () => {
             assert.isEmpty(inhouseState.lobbies);
             inhouseState = await loadLobbiesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
             assert.lengthOf(inhouseState.lobbies, 1);
+            assert.isTrue(inhouseState.lobbies[0]);
+        });
+        
+        it('return inhouse state with empty lobbies', async () => {
+            let loadLobbiesIntoInhouse;
+            const findAllActiveLobbiesStub = sinon.stub();
+            findAllActiveLobbiesStub.resolves([{}]);
+            const lobbyToLobbyStateStub = sinon.stub();
+            lobbyToLobbyStateStub.rejects();
+            const { loadLobbiesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
+                './db': {
+                    findAllActiveLobbies: findAllActiveLobbiesStub,
+                },
+                './lobby': {
+                    lobbyToLobbyState: () => () => lobbyToLobbyStateStub,
+                },
+            });
+            loadLobbiesIntoInhouse = mock;
+            
+            let inhouseState = {
+                guild: { id: '422549177151782925' },
+                lobbies: [],
+                queues: [],
+            };
+            const eventEmitter = new EventEmitter();
+            const findOrCreateChannelInCategory = () => true;
+            const makeRole = guild => permissions => mentionable => async () => true;
+            assert.isEmpty(inhouseState.queues);
+            assert.isEmpty(inhouseState.lobbies);
+            inhouseState = await loadLobbiesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
+            assert.isEmpty(inhouseState.lobbies);
         });
     });
 
@@ -288,7 +319,7 @@ describe('Database', () => {
     });
 
     describe('loadQueuesIntoInhouse', () => {
-        it('return inhouse state with loaded lobbies', async () => {
+        it('return inhouse state with loaded queues', async () => {
             let loadQueuesIntoInhouse;
             const findAllEnabledQueuesStub = sinon.stub();
             findAllEnabledQueuesStub.resolves([{}]);
@@ -316,6 +347,36 @@ describe('Database', () => {
             assert.isEmpty(inhouseState.lobbies);
             inhouseState = await loadQueuesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
             assert.lengthOf(inhouseState.queues, 1);
+        });
+        
+        it('return inhouse state with empty queues', async () => {
+            let loadQueuesIntoInhouse;
+            const findAllEnabledQueuesStub = sinon.stub();
+            findAllEnabledQueuesStub.resolves([{}]);
+            const loadQueueStub = sinon.stub();
+            loadQueueStub.rejects();
+            const { loadQueuesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
+                './db': {
+                    findAllEnabledQueues: findAllEnabledQueuesStub,
+                },
+                './queue': {
+                    loadQueue: () => () => loadQueueStub,
+                },
+            });
+            loadQueuesIntoInhouse = mock;
+            
+            let inhouseState = {
+                guild: { id: '422549177151782925' },
+                lobbies: [],
+                queues: [],
+            };
+            const eventEmitter = new EventEmitter();
+            const findOrCreateChannelInCategory = () => true;
+            const makeRole = guild => permissions => mentionable => async () => true;
+            assert.isEmpty(inhouseState.queues);
+            assert.isEmpty(inhouseState.lobbies);
+            inhouseState = await loadQueuesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
+            assert.isEmpty(inhouseState.queues);
         });
     });
 
