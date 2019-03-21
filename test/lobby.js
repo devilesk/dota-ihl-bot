@@ -1340,11 +1340,12 @@ describe('Database - no lobby players', () => {
                 it('nothing when no suitable captains', async () => {
                     const users = await db.User.findAll({ limit: 10 });
                     await addQueuers(lobby)(users);
-                    const checkQueueForCaptains = sinon.stub();
-                    checkQueueForCaptains.resolves([]);
+                    const _checkQueueForCaptains = sinon.stub();
+                    _checkQueueForCaptains.resolves([]);
+                    const checkQueueForCaptains = () => _checkQueueForCaptains;
                     const { lobbyState: result } = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
-                    assert.isTrue(checkQueueForCaptains.calledOnce);
+                    assert.isTrue(_checkQueueForCaptains.calledOnce);
                 });
                 
                 it('pop queue when at least 10 players and suitable captains', async () => {
@@ -1352,13 +1353,14 @@ describe('Database - no lobby players', () => {
                     await addQueuers(lobby)(users);
                     let queuers = await getActiveQueuers()(lobbyState);
                     assert.lengthOf(queuers, 11);
-                    const checkQueueForCaptains = sinon.stub();
-                    checkQueueForCaptains.resolves([users[0], users[1]]);
+                    const _checkQueueForCaptains = sinon.stub();
+                    _checkQueueForCaptains.resolves([users[0], users[1]]);
+                    const checkQueueForCaptains = () => _checkQueueForCaptains;
                     let players = await getPlayers()(lobby);
                     assert.isEmpty(players);
                     const { lobbyState: result } = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BEGIN_READY);
-                    assert.isTrue(checkQueueForCaptains.calledOnce);
+                    assert.isTrue(_checkQueueForCaptains.calledOnce);
                     assert.equal(result.captain_1_user_id, users[0].id);
                     assert.equal(result.captain_2_user_id, users[1].id);
                     players = await getPlayers()(lobby);
