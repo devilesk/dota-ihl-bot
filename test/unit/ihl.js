@@ -5,7 +5,7 @@ const proxyquire = require('proxyquire');
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
 const EventEmitter = require('events').EventEmitter;
-const db = require('../models');
+const db = require('../../models');
 const {
     getUserRankTier,
     registerUser,
@@ -29,31 +29,31 @@ const {
     leaveLobbyQueue,
     leaveAllQueues,
     banInhouseQueue,
-} = proxyquire('../lib/ihl', {
-    './guild': require('../lib/guildStub'),
+} = proxyquire('../../lib/ihl', {
+    './guild': require('../../lib/guildStub'),
 });
 const {
     getActiveQueuers,
-} = require('../lib/lobby');
+} = require('../../lib/lobby');
 const {
     findLeague,
     findUserById,
-} = require('../lib/db');
-const CONSTANTS = require('../lib/constants');
+} = require('../../lib/db');
+const CONSTANTS = require('../../lib/constants');
 
 describe('Database', () => {
     sequelizeMockingMocha(
         db.sequelize,
         [
-            path.resolve(path.join(__dirname, '../testdata/fake-leagues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-seasons.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-users.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-bots.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-queues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbies.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyplayers.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyqueuers.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-challenges.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-bots.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
         ],
         { logging: false },
     );
@@ -237,7 +237,7 @@ describe('Database', () => {
             findAllActiveLobbiesStub.resolves([{}]);
             const lobbyToLobbyStateStub = sinon.stub();
             lobbyToLobbyStateStub.resolves(true);
-            const { loadLobbiesIntoInhouse: mock } = proxyquire('../lib/ihl', {
+            const { loadLobbiesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllActiveLobbies: findAllActiveLobbiesStub,
                 },
@@ -267,7 +267,7 @@ describe('Database', () => {
             let runLobbiesForInhouse;
             const runLobbyStub = sinon.stub();
             runLobbyStub.resolves([{}]);
-            const { runLobbiesForInhouse: mock } = proxyquire('../lib/ihl', {
+            const { runLobbiesForInhouse: mock } = proxyquire('../../lib/ihl', {
                 './lobby': {
                     runLobby: runLobbyStub,
                 },
@@ -294,7 +294,7 @@ describe('Database', () => {
             findAllEnabledQueuesStub.resolves([{}]);
             const loadQueueStub = sinon.stub();
             loadQueueStub.resolves({ queueState: {} });
-            const { loadQueuesIntoInhouse: mock } = proxyquire('../lib/ihl', {
+            const { loadQueuesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllEnabledQueues: findAllEnabledQueuesStub,
                 },
@@ -404,7 +404,7 @@ describe('Database', () => {
             let reloadQueueForInhouse;
             const loadQueueStub = sinon.stub();
             loadQueueStub.resolves({ queueState: { queue_name: 'test' }, lobbyState: { lobby_name: 'test' } });
-            const { reloadQueueForInhouse: mock } = proxyquire('../lib/ihl', {
+            const { reloadQueueForInhouse: mock } = proxyquire('../../lib/ihl', {
                 './queue': {
                     loadQueue: () => () => loadQueueStub,
                 },
@@ -436,7 +436,7 @@ describe('Database', () => {
             let hasActiveLobbies;
             const findActiveLobbiesForUserStub = sinon.stub();
             findActiveLobbiesForUserStub.resolves([{}]);
-            const { hasActiveLobbies: mock } = proxyquire('../lib/ihl', {
+            const { hasActiveLobbies: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findActiveLobbiesForUser: findActiveLobbiesForUserStub,
                 },
@@ -451,7 +451,7 @@ describe('Database', () => {
             let hasActiveLobbies;
             const findActiveLobbiesForUserStub = sinon.stub();
             findActiveLobbiesForUserStub.resolves([]);
-            const { hasActiveLobbies: mock } = proxyquire('../lib/ihl', {
+            const { hasActiveLobbies: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findActiveLobbiesForUser: findActiveLobbiesForUserStub,
                 },
@@ -510,7 +510,7 @@ describe('Database', () => {
             let joinAllQueues;
             const findAllEnabledQueuesStub = sinon.stub();
             findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { joinAllQueues: mock } = proxyquire('../lib/ihl', {
+            const { joinAllQueues: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllEnabledQueues: findAllEnabledQueuesStub,
                 },
@@ -568,7 +568,7 @@ describe('Database', () => {
             let leaveAllQueues;
             const findAllEnabledQueuesStub = sinon.stub();
             findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { leaveAllQueues: mock } = proxyquire('../lib/ihl', {
+            const { leaveAllQueues: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllEnabledQueues: findAllEnabledQueuesStub,
                 },

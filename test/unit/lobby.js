@@ -4,8 +4,8 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const db = require('../models');
-const guildStub = require('../lib/guildStub');
+const db = require('../../models');
+const guildStub = require('../../lib/guildStub');
 const {
     getLobby,
     getPlayers,
@@ -86,17 +86,17 @@ const {
     renameLobbyRole,
     LobbyStateHandlers,
     runLobby,
-} = proxyquire('../lib/lobby', {
+} = proxyquire('../../lib/lobby', {
     './guild': guildStub,
 });
 const {
     tapP,
-} = require('../lib/util/fp');
+} = require('../../lib/util/fp');
 const {
     findUserById,
     getChallengeBetweenUsers,
-} = require('../lib/db');
-const CONSTANTS = require('../lib/constants');
+} = require('../../lib/db');
+const CONSTANTS = require('../../lib/constants');
 
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
@@ -105,14 +105,14 @@ describe('Database - with lobby players', () => {
     sequelizeMockingMocha(
         db.sequelize,
         [
-            path.resolve(path.join(__dirname, '../testdata/fake-leagues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-seasons.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-users.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-bots.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-queues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbies.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyplayers.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyqueuers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-bots.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
         ],
         { logging: false },
     );
@@ -1189,13 +1189,13 @@ describe('Database - no lobby players', () => {
     sequelizeMockingMocha(
         db.sequelize,
         [
-            path.resolve(path.join(__dirname, '../testdata/fake-leagues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-seasons.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-users.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-bots.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-queues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbies.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-challenges.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-bots.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
         ],
         { logging: false },
     );
@@ -1606,7 +1606,7 @@ describe('Database - no lobby players', () => {
                 beforeEach(async () => {
                     getUserRolesStub = sinon.stub(guildStub, 'getUserRoles');
                     getUserRolesStub.resolves([{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }]);
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './guild': guildStub,
                     });
                     LobbyStateHandlers = mock;
@@ -1747,7 +1747,7 @@ describe('Database - no lobby players', () => {
                 it('return lobby state with STATE_BOT_ASSIGNED when assigned a bot', async () => {
                     findUnassignedBotStub = sinon.stub();
                     findUnassignedBotStub.resolves({ id: 99 });
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './db': {
                             findUnassignedBot: findUnassignedBotStub,
                         },
@@ -1764,7 +1764,7 @@ describe('Database - no lobby players', () => {
                 it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => {
                     findUnassignedBotStub = sinon.stub();
                     findUnassignedBotStub.resolves(null);
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './db': {
                             findUnassignedBot: findUnassignedBotStub,
                         },
@@ -1794,7 +1794,7 @@ describe('Database - no lobby players', () => {
                 it('return lobby state with STATE_BOT_STARTED when started a bot', async () => {
                     createDotaBotStub = sinon.stub();
                     createDotaBotStub.resolves({ id: 99, steamid_64: 123, connect: sinon.stub(), createPracticeLobby: sinon.stub(), lobby_id: 456 });
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './dotaBot': {
                             createDotaBot: createDotaBotStub,
                         },
@@ -1812,7 +1812,7 @@ describe('Database - no lobby players', () => {
                 it('return lobby state with STATE_BOT_STARTED when lobby_id exists', async () => {
                     createDotaBotStub = sinon.stub();
                     createDotaBotStub.resolves({ id: 99, steamid_64: 123, connect: sinon.stub(), joinPracticeLobby: sinon.stub(), lobby_id: 456 });
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './dotaBot': {
                             createDotaBot: createDotaBotStub,
                         },
@@ -1831,7 +1831,7 @@ describe('Database - no lobby players', () => {
                 it('return lobby state with STATE_BOT_FAILED when not started a bot', async () => {
                     createDotaBotStub = sinon.stub();
                     createDotaBotStub.resolves(null);
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './dotaBot': {
                             createDotaBot: createDotaBotStub,
                         },
@@ -1851,7 +1851,7 @@ describe('Database - no lobby players', () => {
                     let LobbyStateHandlers;
                     const invitePlayerStub = sinon.stub();
                     invitePlayerStub.resolves(true);
-                    const { LobbyStateHandlers: mock } = proxyquire('../lib/lobby', {
+                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
                         './dotaBot': {
                             invitePlayer: () => invitePlayerStub,
                         },

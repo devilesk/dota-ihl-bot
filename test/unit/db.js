@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const db = require('../models');
+const db = require('../../models');
 const {
     findAllLeagues,
     findAllActiveLobbies,
@@ -41,23 +41,23 @@ const {
     destroyChallengeBetweenUsers,
     destroyAllAcceptedChallengeForUser,
     setChallengeAccepted,
-} = require('../lib/db');
-const CONSTANTS = require('../lib/constants');
+} = require('../../lib/db');
+const CONSTANTS = require('../../lib/constants');
 
 describe('Database', () => {
     sequelizeMockingMocha(
         db.sequelize,
         [
-            path.resolve(path.join(__dirname, '../testdata/fake-leagues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-seasons.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-users.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-bots.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-queues.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbies.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyplayers.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-lobbyqueuers.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-reputations.js')),
-            path.resolve(path.join(__dirname, '../testdata/fake-challenges.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-bots.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-reputations.js')),
+            path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
         ],
         { logging: false },
     );

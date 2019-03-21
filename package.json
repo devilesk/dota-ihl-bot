@@ -12,7 +12,9 @@
     "db:migrate": "sequelize --config config.js db:migrate;",
     "db:seed:all": "sequelize --config config.js db:seed:all;",
     "db": "npm run db:create && npm run db:migrate && npm run db:seed:all",
-    "test": "mocha",
+    "test": "mocha test/unit test/int",
+    "test:unit": "mocha test/unit",
+    "test:int": "mocha test/int",
     "start": "node index.js"
   },
   "author": "devilesk",

@@ -30,7 +30,7 @@ const {
     processMembers,
     invitePlayer,
     DotaBot,
-} = proxyquire('../lib/dotaBot', {
+} = proxyquire('../../lib/dotaBot', {
     'fs': {
         writeFileSync: (path, data) => console.log('stub writeFileSync'),
         readFileSync: (path) => {
@@ -39,8 +39,8 @@ const {
         },
     },
 });
-const CONSTANTS = require('../lib/constants');
-const Queue = require('../lib/util/queue');
+const CONSTANTS = require('../../lib/constants');
+const Queue = require('../../lib/util/queue');
 
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
