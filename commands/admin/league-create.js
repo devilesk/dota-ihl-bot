@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getInhouse,
+    ihlManager, getInhouseState,
 } = require('../../lib/ihlManager');
 
 /**
@@ -23,8 +23,8 @@ module.exports = class LeagueCreateCommand extends Command {
     }
 
     async run(msg) {
-        const inhouse = getInhouse(ihlManager.inhouseStates, guild);
-        if (!inhouse) {
+        const inhouseState = getInhouseState(ihlManager.inhouseStates, msg.channel.guild);
+        if (!inhouseState) {
             ihlManager.createNewLeague(msg.channel.guild);
             await msg.say('Inhouse league created.');
         }
