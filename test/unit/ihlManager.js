@@ -112,7 +112,7 @@ describe('Database', () => {
         it('return inhouse states with length 2 and inhouseState at end', async () => {
             const inhouseState = {guild: {id: '123'}};
             let inhouseStates = [{guild: {id: '456'}}];
-            inhouseStates = addInhouseState(inhouseStates, inhouseState);
+            inhouseStates = addInhouseState(inhouseStates)(inhouseState);
             assert.lengthOf(inhouseStates, 2);
             assert.notDeepEqual(inhouseStates[0], inhouseState);
             assert.deepEqual(inhouseStates[1], inhouseState);
@@ -121,7 +121,7 @@ describe('Database', () => {
         it('return inhouseStates with length 3 and inhouseState at end', async () => {
             const inhouseState = {guild: {id: '123'}};
             let inhouseStates = [{guild: {id: 'a'}}, {guild: {id: '123'}}, {guild: {id: '456'}}];
-            inhouseStates = addInhouseState(inhouseStates, inhouseState);
+            inhouseStates = addInhouseState(inhouseStates)(inhouseState);
             assert.lengthOf(inhouseStates, 3);
             assert.notDeepEqual(inhouseStates[0], inhouseState);
             assert.notDeepEqual(inhouseStates[1], inhouseState);
