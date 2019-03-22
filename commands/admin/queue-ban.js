@@ -1,19 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouseAdmin,
-    isMessageFromAnyInhouse,
-    getInhouseState,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/db');
 
 /**
  * @class QueueBanCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueBanCommand extends Command {
+module.exports = class QueueBanCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-ban',
@@ -36,21 +30,19 @@ module.exports = class QueueBanCommand extends Command {
                     default: 0,
                 },
             ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg) && isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg, { member, timeout }) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild, inhouseState }, { member, timeout }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
-        const inhouseState = getInhouseState(ihlManager.inhouseStates, guild.id);
         
         if (user) {
-            await ihlManager.banInhouseQueue(inhouseState, user, timeout);
+            await this.ihlManager.banInhouseQueue(inhouseState, user, timeout);
             await msg.say(`User kicked from queue and tempbanned for ${timeout} minutes.`);
         }
         else {

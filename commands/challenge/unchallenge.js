@@ -1,21 +1,15 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouse,
-    parseMessage,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUserByDiscordId,
     getChallengeBetweenUsers,
     destroyChallengeBetweenUsers,
 } = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class UnchallengeCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class UnchallengeCommand extends Command {
+module.exports = class UnchallengeCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'unchallenge',
@@ -32,38 +26,31 @@ module.exports = class UnchallengeCommand extends Command {
                     type: 'member',
                 }
             ],
+        }, {
+            lobbyState: false,
         });
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg, { member }) {
-        let { giver, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-        if (giver) {
-            const receiver = await findUserByDiscordId(msg.channel.guild)(member.id);
-            if (receiver) {
-                const challengeFromGiver = await getChallengeBetweenUsers(giver)(receiver);
-                if (challengeFromGiver) {
-                    if (challengeFromGiver.accepted) {
-                        await msg.say('Challenge already accepted.');
-                    }
-                    else {
-                        await destroyChallengeBetweenUsers(giver)(receiver);
-                        await msg.say('Challenge revoked.');
-                    }
+    async onMsg({ msg, guild, inhouseUser }, { member }) {
+        const giver = inhouseUser;
+        const receiver = await findUserByDiscordId(guild)(member.id);
+        if (receiver) {
+            const challengeFromGiver = await getChallengeBetweenUsers(giver)(receiver);
+            if (challengeFromGiver) {
+                if (challengeFromGiver.accepted) {
+                    await msg.say('Challenge already accepted.');
                 }
                 else {
-                    await msg.say('No challenge found.');
+                    await destroyChallengeBetweenUsers(giver)(receiver);
+                    await msg.say('Challenge revoked.');
                 }
             }
             else {
-                await msg.say('Challenged user not found.');
+                await msg.say('No challenge found.');
             }
         }
         else {
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+            await msg.say('Challenged user not found.');
         }
     }
 };

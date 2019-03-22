@@ -1,12 +1,15 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findOrCreateLeague, queryLeaderboardRank } = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
+const {
+    findOrCreateLeague,
+    queryLeaderboardRank,
+} = require('../../lib/db');
 
 /**
  * @class LeaderboardCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LeaderboardCommand extends Command {
+module.exports = class LeaderboardCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'leaderboard',
@@ -14,11 +17,13 @@ module.exports = class LeaderboardCommand extends Command {
             memberName: 'leaderboard',
             guildOnly: true,
             description: 'Show inhouse leaderboard.',
+        }, {
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    async run(msg) {
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild }) {
         const league = await findOrCreateLeague(guild.id);
         const leaderboard = await queryLeaderboardRank(league.id)(league.current_season_id)(10);
         logger.debug(leaderboard.length);

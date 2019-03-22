@@ -1,16 +1,16 @@
-const { Command } = require('discord.js-commando');
+const IHLCommand = require('../../lib/ihlCommand');
 const convertor = require('steam-id-convertor');
 const BigNumber = require('bignumber.js');
-const dotenv = require('dotenv').config();
 const steam = require('steamidconvert')(process.env.STEAM_API_KEY);
-const logger = require('../../lib/logger');
-const { registerUser } = require('../../lib/ihl');
+const {
+    registerUser,
+} = require('../../lib/ihl');
 
 /**
  * @class RegisterCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class RegisterCommand extends Command {
+module.exports = class RegisterCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'register',
@@ -26,13 +26,14 @@ module.exports = class RegisterCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    async run(msg, { text }) {
-        logger.debug('RegisterCommand run');
+    async onMsg({ msg, guild }, { text }) {
         const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
         let user;
         if (text.indexOf('steamcommunity.com/id') !== -1) {
             const vanityName = text.match(/([^\/]*)\/*$/)[1];

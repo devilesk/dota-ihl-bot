@@ -1,13 +1,10 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LobbyStartCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyStartCommand extends Command {
+module.exports = class LobbyStartCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-start',
@@ -15,24 +12,16 @@ module.exports = class LobbyStartCommand extends Command {
             memberName: 'lobby-start',
             guildOnly: true,
             description: 'Start a lobby.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-
-        if (lobbyState) {
-            // TODO: FIX
-            lobbyState.start().then(() => msg.say('Lobby started.')).catch(console.error);
-        }
-        else {
-            await msg.say('Not in a lobby channel.');
-        }
+    async onMsg({ msg, lobbyState }) {
+        // TODO: FIX
+        lobbyState.start().then(() => msg.say('Lobby started.')).catch(console.error);
     }
 };

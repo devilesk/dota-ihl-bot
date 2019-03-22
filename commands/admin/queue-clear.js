@@ -1,16 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     destroyQueuesByGuildId,
 } = require('../../lib/db');
 
 /**
  * @class QueueClearCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueClearCommand extends Command {
+module.exports = class QueueClearCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-clear',
@@ -20,17 +17,15 @@ module.exports = class QueueClearCommand extends Command {
             guildOnly: true,
             description: 'Clear inhouse queue.',
             examples: ['queue-clear', 'queueclear', 'qclear', 'clear'],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-
+    async onMsg({ msg, guild }) {
         await destroyQueuesByGuildId(guild.id);
         await msg.say('Queue cleared.');
     }

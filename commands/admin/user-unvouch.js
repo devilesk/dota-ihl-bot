@@ -1,15 +1,13 @@
-const { Command } = require('discord.js-commando');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
-    ihlManager,
-    getLobbyFromMessage,
-    isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+    findUser,
+} = require('../../lib/db');
 
 /**
  * @class UserVouchCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class UserVouchCommand extends Command {
+module.exports = class UserVouchCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'user-unvouch',
@@ -26,20 +24,19 @@ module.exports = class UserVouchCommand extends Command {
                     type: 'member',
                 },
             ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         
         if (user) {
-            await ihlManager.unvouchUser(user);
+            await this.ihlManager.unvouchUser(user);
             await msg.say('User unvouched.');
         }
         else {

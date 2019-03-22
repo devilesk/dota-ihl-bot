@@ -1,15 +1,12 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, getLobbyFromMessage, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const dota2 = require('dota2');
 const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyGameModeCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyGameModeCommand extends Command {
+module.exports = class LobbyGameModeCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-gamemode',
@@ -29,24 +26,19 @@ module.exports = class LobbyGameModeCommand extends Command {
                     },
                 },
             ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg, { mode }) {
+    async onMsg({ msg, lobbyState }, { mode }) {
         const game_mode = mode == 'cm' ? dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM
             : (mode == 'cd' ? dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CD : dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_AP);
 
-        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-        if (lobbyState) {
-            ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, lobbyState, game_mode);
-            await msg.say(`Game mode ${game_mode}.`).catch(console.error);
-        }
-        else {
-            await msg.say('Not in a lobby channel.').catch(console.error);
-        }
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, lobbyState, game_mode);
+        await msg.say(`Game mode ${game_mode}.`).catch(console.error);
     }
 };

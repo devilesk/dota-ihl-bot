@@ -1,16 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     findLeague,
 } = require('../../lib/db');
 
 /**
  * @class LeagueInfoCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LeagueInfoCommand extends Command {
+module.exports = class LeagueInfoCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-info',
@@ -18,15 +15,15 @@ module.exports = class LeagueInfoCommand extends Command {
             memberName: 'league-info',
             guildOnly: true,
             description: 'Display inhouse league info.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild }) {
         const league = await findLeague(guild.id);
         const data = league.toJSON();
         const fields = Object.keys(data).map(key => ({

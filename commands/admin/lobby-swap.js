@@ -1,13 +1,10 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, getLobbyFromMessage, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LobbySwapCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbySwapCommand extends Command {
+module.exports = class LobbySwapCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-swap',
@@ -16,22 +13,16 @@ module.exports = class LobbySwapCommand extends Command {
             memberName: 'lobby-swap',
             guildOnly: true,
             description: 'Swap lobby teams.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-        
-        if (lobbyState) {
-            ihlManager.emit(CONSTANTS.EVENT_LOBBY_SWAP_TEAMS, lobbyState);
-            await msg.say('Teams swapped.');
-        }
-        else {
-            await msg.say('Not in a lobby channel.').catch(console.error);
-        }
+    async onMsg({ msg }) {
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_SWAP_TEAMS, lobbyState);
+        await msg.say('Teams swapped.');
     }
 };

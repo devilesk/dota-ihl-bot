@@ -1,15 +1,14 @@
-const { Command } = require('discord.js-commando');
+const IHLCommand = require('../../lib/ihlCommand');
 const convertor = require('steam-id-convertor');
 const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
-const { findUserByDiscordId } = require('../../lib/db');
+    findUserByDiscordId,
+} = require('../../lib/db');
 
 /**
  * @class LobbyKickCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyKickCommand extends Command {
+module.exports = class LobbyKickCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-kick',
@@ -25,33 +24,25 @@ module.exports = class LobbyKickCommand extends Command {
                     type: 'member',
                 },
             ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg, { member }) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-
-        if (lobbyState) {
+    async onMsg({ msg, guild, lobbyState }, { member }) {
+        const user = await findUserByDiscordId(guild.id)(member.id);
+        if (user) {
             await member.removeRole(lobbyState.role);
-
-            const user = await findUserByDiscordId(guild.id)(discord_id);
-            if (user) {
-                const account_id = convertor.to32(user.steamid_64);
-                await lobbyState.dotaBot.practiceLobbyKick(account_id);
-                await msg.say('User kicked from lobby.');
-            }
-            else {
-                await msg.say('User not found. (Has user registered with `!register`?)');
-            }
+            const account_id = convertor.to32(user.steamid_64);
+            await lobbyState.dotaBot.practiceLobbyKick(account_id);
+            await msg.say('User kicked from lobby.');
         }
         else {
-            await msg.say('Not in a lobby channel.');
+            await msg.say('User not found. (Has user registered with `!register`?)');
         }
+
     }
 };

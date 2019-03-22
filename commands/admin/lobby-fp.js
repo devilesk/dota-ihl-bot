@@ -1,15 +1,12 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, getLobbyFromMessage, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const dota2 = require('dota2');
 const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyFirstPickCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyFirstPickCommand extends Command {
+module.exports = class LobbyFirstPickCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-fp',
@@ -29,24 +26,19 @@ module.exports = class LobbyFirstPickCommand extends Command {
                     },
                 },
             ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg, { side }) {
+    async onMsg({ msg, lobbyState }, { side }) {
         const cm_pick = side == 'radiant' ? dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_GOOD_GUYS
             : (side == 'dire' ? dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_BAD_GUYS : dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_RANDOM);
 
-        const [lobbyState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-        if (lobbyState) {
-            ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_FP, lobbyState, cm_pick);
-            await msg.say(`First pick ${cm_pick}.`).catch(console.error);
-        }
-        else {
-            await msg.say('Not in a lobby channel.').catch(console.error);
-        }
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_FP, lobbyState, cm_pick);
+        await msg.say(`First pick ${cm_pick}.`).catch(console.error);
     }
 };

@@ -1,12 +1,11 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findUserByDiscordId } = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class NicknameCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class NicknameCommand extends Command {
+module.exports = class NicknameCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'nickname',
@@ -22,22 +21,15 @@ module.exports = class NicknameCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { text }) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
+    async onMsg({ msg, inhouseUser }, { text }) {
         const values = { nickname: text };
-        let user = await findUserByDiscordId(guild.id)(discord_id);
-        if (user) {
-            user = await user.update(values);
-            logger.debug(`User ${discord_id} nickname set to ${text}.`);
-            await msg.say(`Nickname set to ${text}`);
-        }
-        else {
-            logger.debug(`User ${discord_id} not found.`);
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
-        }
+        await inhouseUser.update(values);
+        logger.debug(`User ${inhouseUser.discord_id} nickname set to ${text}.`);
+        await msg.say(`Nickname set to ${text}`);
     }
 };

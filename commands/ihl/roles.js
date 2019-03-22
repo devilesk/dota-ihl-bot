@@ -1,12 +1,11 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findUserByDiscordId } = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class RolesCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class RolesCommand extends Command {
+module.exports = class RolesCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'roles',
@@ -22,32 +21,25 @@ module.exports = class RolesCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { text }) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
+    async onMsg({ msg, inhouseUser }, { text }) {
         const values = {};
         let roles = text.split(',').map(x => parseInt(x)).filter(x => !isNaN(x) && x >= 1 && x <= 5);
         roles = roles.filter((x, pos) => roles.indexOf(x) === pos);
         for (let i = 1; i <= 5; i++) {
             values[`role_${i}`] = roles.indexOf(i);
         }
-        let user = await findUserByDiscordId(guild.id)(discord_id);
-        if (user) {
-            if (roles.length) {
-                user = await user.update(values);
-                logger.debug(`Roles set to ${roles.join(',')}`);
-                await msg.say(`Roles set to ${roles.join(',')}`);
-            }
-            else {
-                await msg.say('No valid roles specified.');
-            }
+        if (roles.length) {
+            await inhouseUser.update(values);
+            logger.debug(`Roles set to ${roles.join(',')}`);
+            await msg.say(`Roles set to ${roles.join(',')}`);
         }
         else {
-            logger.debug(`User ${discord_id} not found.`);
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+            await msg.say('No valid roles specified.');
         }
     }
 };

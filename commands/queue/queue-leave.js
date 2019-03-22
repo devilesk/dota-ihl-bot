@@ -1,21 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouse,
-    parseMessage,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     getLobbyFromInhouseByChannelId,
 } = require('../../lib/ihl');
-const {
-    findUserByDiscordId,
-} = require('../../lib/db');
 
 /**
  * @class QueueLeaveCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueLeaveCommand extends Command {
+module.exports = class QueueLeaveCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-leave',
@@ -33,34 +25,27 @@ module.exports = class QueueLeaveCommand extends Command {
                     default: '',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg, { channel }) {
-        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-        if (user) {
-            if (channel) {
-                lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
-                if (lobbyState) {
-                    await ihlManager.leaveLobbyQueue(lobbyState, user);
-                }
-                else {
-                    await msg.say('Invalid lobby channel.');
-                }
-            }
-            else if (lobbyState) {
-                await ihlManager.leaveLobbyQueue(lobbyState, user);
+    async onMsg({ msg, inhouseState, lobbyState, inhouseUser }, { channel }) {
+        if (channel) {
+            lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
+            if (lobbyState) {
+                await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser);
             }
             else {
-                await ihlManager.leaveAllQueues(inhouseState, user);
+                await msg.say('Invalid lobby channel.');
             }
         }
-        else {
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+        else if (lobbyState) {
+            await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser);
         }
+        else {
+            await this.ihlManager.leaveAllQueues(inhouseState, inhouseUser);
+        }
+
     }
 };

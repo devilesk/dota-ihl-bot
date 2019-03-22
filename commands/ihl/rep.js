@@ -1,15 +1,19 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findUser } = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
-    findUserByDiscordId, findOrCreateLeague, findOrCreateReputation,
+    findUser,
+} = require('../../lib/ihlManager');
+const {
+    findUserByDiscordId,
+    findOrCreateLeague,
+    findOrCreateReputation,
 } = require('../../lib/db');
 
 /**
  * @class RepCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class RepCommand extends Command {
+module.exports = class RepCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'rep',
@@ -25,16 +29,16 @@ module.exports = class RepCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { member }) {
-        logger.debug('RepCommand run');
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild, inhouseUser }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
-        const fromUser = await findUserByDiscordId(guild.id)(msg.author.id);
-        if (discord_user.id !== msg.author.id) {
-            if (user && fromUser) {
+        const fromUser = inhouseUser;
+        if (user && fromUser) {
+            if (user.id !== fromUser.id) {
                 const league = await findOrCreateLeague(guild.id);
                 const [rep, created] = await findOrCreateReputation(league)(fromUser)(user);
                 logger.debug(rep);
@@ -45,6 +49,9 @@ module.exports = class RepCommand extends Command {
                 else {
                     await msg.say(`${discord_user.displayName} already repped.`);
                 }
+            }
+            else {
+                await msg.say(`Cannot rep yourself.`);
             }
         }
     }

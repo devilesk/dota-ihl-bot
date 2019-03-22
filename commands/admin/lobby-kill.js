@@ -1,15 +1,10 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    getLobbyFromMessage,
-    isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LobbyKillCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyKillCommand extends Command {
+module.exports = class LobbyKillCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-kill',
@@ -18,21 +13,15 @@ module.exports = class LobbyKillCommand extends Command {
             memberName: 'lobby-kill',
             guildOnly: true,
             description: 'Kill a lobby.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const [lobbyState, inhouseState] = getLobbyFromMessage(ihlManager.inhouseStates, msg);
-        
-        if (lobbyState) {
-            ihlManager.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
-        }
-        else {
-            await msg.say('Not in a lobby channel.').catch(console.error);
-        }
+    async onMsg({ msg, inhouseState, lobbyState }) {
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
     }
 };

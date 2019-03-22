@@ -1,9 +1,4 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouse,
-    parseMessage,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     getLobbyFromInhouseByChannelId,
 } = require('../../lib/ihl');
@@ -17,9 +12,9 @@ const {
 
 /**
  * @class QueueStatusCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueStatusCommand extends Command {
+module.exports = class QueueStatusCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-status',
@@ -37,6 +32,8 @@ module.exports = class QueueStatusCommand extends Command {
                     default: null,
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
@@ -60,40 +57,30 @@ module.exports = class QueueStatusCommand extends Command {
             return '0 in ${lobbyState.lobby_name} queue.';
         }
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg, { channel }) {
-        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-
-        if (user) {
-            if (channel) {
-                lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
-                if (lobbyState) {
-                    const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
-                    await msg.say(message);
-                }
-                else {
-                    await msg.say('Invalid lobby channel.');
-                }
-            }
-            else if (lobbyState) {
-                const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
+    async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {
+        if (channel) {
+            lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
+            if (lobbyState) {
+                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
                 await msg.say(message);
             }
             else {
-                const queues = await findAllEnabledQueues(inhouseState.guild.id);
-                for (const queue of queues) {
-                    const lobbyState = await getLobby({ lobby_name: queue.queue_name });
-                    const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
-                    await msg.say(message);
-                }
+                await msg.say('Invalid lobby channel.');
             }
         }
-        else {
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+        else if (lobbyState) {
+            const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
+            await msg.say(message);
         }
+        else {
+            const queues = await findAllEnabledQueues(guild.id);
+            for (const queue of queues) {
+                const lobbyState = await getLobby({ lobby_name: queue.queue_name });
+                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
+                await msg.say(message);
+            }
+        }
+
     }
 };

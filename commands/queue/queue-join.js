@@ -1,21 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouse,
-    parseMessage,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     getLobbyFromInhouseByChannelId,
 } = require('../../lib/ihl');
-const {
-    findUserByDiscordId,
-} = require('../../lib/db');
 
 /**
  * @class QueueJoinCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueJoinCommand extends Command {
+module.exports = class QueueJoinCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-join',
@@ -33,39 +25,31 @@ module.exports = class QueueJoinCommand extends Command {
                     default: '',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg, { channel }) {
-        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-        if (user) {
-            if (user.rank_tier) {
-                if (channel) {
-                    lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
-                    if (lobbyState) {
-                        await ihlManager.joinLobbyQueue(lobbyState, user);
-                    }
-                    else {
-                        await msg.say('Invalid lobby channel.');
-                    }
-                }
-                else if (lobbyState) {
-                    await ihlManager.joinLobbyQueue(lobbyState, user);
+    async onMsg({ msg, inhouseState, lobbyState, inhouseUser }, { channel }) {
+        if (inhouseUser.rank_tier) {
+            if (channel) {
+                lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
+                if (lobbyState) {
+                    await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser);
                 }
                 else {
-                    await ihlManager.joinAllQueues(inhouseState, user);
+                    await msg.say('Invalid lobby channel.');
                 }
             }
+            else if (lobbyState) {
+                await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser);
+            }
             else {
-                await msg.say('Badge rank not set. Ping an admin to have them set it for you.');
+                await this.ihlManager.joinAllQueues(inhouseState, inhouseUser);
             }
         }
         else {
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+            await msg.say('Badge rank not set. Ping an admin to have them set it for you.');
         }
     }
 };

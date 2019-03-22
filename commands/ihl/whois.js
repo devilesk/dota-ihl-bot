@@ -1,9 +1,14 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findOrCreateLeague, queryUserLeaderboardRank } = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
+const {
+    findOrCreateLeague,
+    queryUserLeaderboardRank,
+} = require('../../lib/db');
 const convertor = require('steam-id-convertor');
 const CONSTANTS = require('../../lib/constants');
-const { findUser } = require('../../lib/ihlManager');
+const {
+    findUser,
+} = require('../../lib/ihlManager');
 
 const RANK_TO_MEDAL = {
     70: 'Divine',
@@ -23,9 +28,9 @@ const rankTierToMedalName = (rank_tier) => {
 
 /**
  * @class WhoisCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class WhoisCommand extends Command {
+module.exports = class WhoisCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'whois',
@@ -41,11 +46,12 @@ module.exports = class WhoisCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { member }) {
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild }, { member }) {
         let wins = 0;
         let losses = 0;
 

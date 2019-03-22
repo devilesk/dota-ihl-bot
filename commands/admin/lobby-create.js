@@ -1,11 +1,10 @@
-const { Command } = require('discord.js-commando');
-const { ihlManager, getInhouse, isMessageFromAnyInhouseAdmin } = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LobbyCreateCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LobbyCreateCommand extends Command {
+module.exports = class LobbyCreateCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-create',
@@ -13,19 +12,16 @@ module.exports = class LobbyCreateCommand extends Command {
             memberName: 'lobby-create',
             guildOnly: true,
             description: 'Create a lobby.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg) {
-        const discord_id = msg.author.id;
-        const guild = msg.channel.guild;
-        const inhouse = getInhouse(ihlManager.inhouseStates, guild);
-
+    async run({ msg, guild }) {
         // TODO: FIX
-        ihlManager.createLobby(guild).then(lobby => lobby.setupLobbyBot()).catch(console.error);
+        this.ihlManager.createLobby(guild).then(lobby => lobby.setupLobbyBot()).catch(console.error);
     }
 };

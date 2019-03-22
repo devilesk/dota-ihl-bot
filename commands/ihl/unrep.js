@@ -1,15 +1,18 @@
 const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const { findUser } = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
-    findUserByDiscordId, findOrCreateLeague, destroyReputation,
+    findUser,
+} = require('../../lib/ihlManager');
+const {
+    findOrCreateLeague,
+    destroyReputation,
 } = require('../../lib/db');
 
 /**
  * @class UnrepCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class UnrepCommand extends Command {
+module.exports = class UnrepCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'unrep',
@@ -25,16 +28,16 @@ module.exports = class UnrepCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { member }) {
-        logger.debug('UnrepCommand run');
-        const guild = msg.channel.guild;
+    async onMsg({ msg, guild, inhouseUser }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
-        const fromUser = await findUserByDiscordId(guild.id)(msg.author.id);
-        if (discord_user.id !== msg.author.id) {
-            if (user && fromUser) {
+        const fromUser = inhouseUser;
+        if (user && fromUser) {
+            if (user.id !== fromUser.id) {
                 const league = await findOrCreateLeague(guild.id);
                 const count = await destroyReputation(league)(fromUser)(user);
                 logger.debug(count);
@@ -44,6 +47,9 @@ module.exports = class UnrepCommand extends Command {
                 else {
                     await msg.say(`${discord_user.displayName} not repped.`);
                 }
+            }
+            else {
+                await msg.say(`Cannot unrep yourself.`);
             }
         }
     }

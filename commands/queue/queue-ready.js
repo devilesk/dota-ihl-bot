@@ -1,19 +1,11 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouseLobby,
-    parseMessage,
-} = require('../../lib/ihlManager');
-const {
-    findUserByDiscordId,
-} = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
 const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class QueueReadyCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class QueueReadyCommand extends Command {
+module.exports = class QueueReadyCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'queue-ready',
@@ -24,15 +16,8 @@ module.exports = class QueueReadyCommand extends Command {
             description: 'Queue ready check acknowledgement.',
         });
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseLobby(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg) {
-        const { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-        if (lobbyState && user) {
-            ihlManager.emit(CONSTANTS.EVENT_PLAYER_READY, lobbyState, user);
-        }
+    async onMsg({ msg, lobbyState, inhouseUser }) {
+        this.ihlManager.emit(CONSTANTS.EVENT_PLAYER_READY, lobbyState, inhouseUser);
     }
 };

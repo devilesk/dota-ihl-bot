@@ -1,27 +1,13 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager,
-    isMessageFromAnyInhouse,
-    parseMessage,
-} = require('../../lib/ihlManager');
-const {
-    hasActiveLobbies,
-} = require('../../lib/ihl');
-const {
-    findUserByDiscordId,
-    getChallengeBetweenUsers,
-    createChallenge,
-} = require('../../lib/db');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     resolveUser,
 } = require('../../lib/guild');
-const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class ChallengeListCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class ChallengeListCommand extends Command {
+module.exports = class ChallengeListCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'challenge-list',
@@ -31,49 +17,40 @@ module.exports = class ChallengeListCommand extends Command {
             guildOnly: true,
             description: 'View your current challenges.',
             examples: ['challenge-list', 'challenges'],
+        }, {
+            lobbyState: false,
         });
     }
-    
-    hasPermission(msg) {
-        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
-    }
 
-    async run(msg) {
-        const guild = msg.channel.guild;
-        let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
-        if (user) {
-            const receivers = await mapPromise(async (challenge) => {
-                const receiver = await challenge.getRecipient();
-                return resolveUser(guild)(receiver);
-            }, user.getChallengesGiven());
+    async onMsg({ msg, guild, inhouseUser }) {
+        const receivers = await mapPromise(async (challenge) => {
+            const receiver = await challenge.getRecipient();
+            return resolveUser(guild)(receiver);
+        }, inhouseUser.getChallengesGiven());
 
-            const givers = await mapPromise(async (challenge) => {
-                const giver = await challenge.getGiver();
-                return resolveUser(guild)(giver);
-            }, user.getChallengesReceived());
-            
-            let text = '';
-            
-            if (receivers.length) {
-                text += 'Challenges given to: ';
-                text += receivers.join(', ');
-            }
-            else {
-                text += 'No challenges given.';
-            }
-            
-            if (receivers.length) {
-                text += '\nChallenges received from: ';
-                text += givers.join(', ');
-            }
-            else {
-                text += '\nNo challenges received.';
-            }
-            
-            await msg.say(text);
+        const givers = await mapPromise(async (challenge) => {
+            const giver = await challenge.getGiver();
+            return resolveUser(guild)(giver);
+        }, inhouseUser.getChallengesReceived());
+        
+        let text = '';
+        
+        if (receivers.length) {
+            text += 'Challenges given to: ';
+            text += receivers.join(', ');
         }
         else {
-            await msg.say('User not found. (Have you registered your steam id with `!register`?)');
+            text += 'No challenges given.';
         }
+        
+        if (receivers.length) {
+            text += '\nChallenges received from: ';
+            text += givers.join(', ');
+        }
+        else {
+            text += '\nNo challenges received.';
+        }
+        
+        await msg.say(text);
     }
 };

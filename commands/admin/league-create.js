@@ -1,13 +1,10 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, getInhouseState,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LeagueCreateCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class LeagueCreateCommand extends Command {
+module.exports = class LeagueCreateCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-create',
@@ -15,17 +12,18 @@ module.exports = class LeagueCreateCommand extends Command {
             memberName: 'league-create',
             guildOnly: true,
             description: 'Create an inhouse league for the server.',
+        }, {
+            clientOwner: true,
+            inhouseAdmin: false,
+            inhouseState: false,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
 
-    hasPermission(msg) {
-        return this.client.isOwner(msg.author);
-    }
-
-    async run(msg) {
-        const inhouseState = getInhouseState(ihlManager.inhouseStates, msg.channel.guild);
+    async onMsg({ msg, inhouseState, guild }) {
         if (!inhouseState) {
-            ihlManager.createNewLeague(msg.channel.guild);
+            this.ihlManager.createNewLeague(guild);
             await msg.say('Inhouse league created.');
         }
         else {

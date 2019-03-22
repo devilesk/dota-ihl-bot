@@ -1,7 +1,4 @@
-const { Command } = require('discord.js-commando');
-const {
-    ihlManager, isMessageFromAnyInhouseAdmin,
-} = require('../../lib/ihlManager');
+const IHLCommand = require('../../lib/ihlCommand');
 const {
     findLeague, updateLeague,
 } = require('../../lib/db');
@@ -16,9 +13,9 @@ validLeagueAttributes.forEach(a => {
 
 /**
  * @class LeagueUpdateCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-class LeagueUpdateCommand extends Command {
+class LeagueUpdateCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-update',
@@ -42,7 +39,11 @@ class LeagueUpdateCommand extends Command {
                     type: 'string',
                     validate: value => (value ? true : 'Must provide a setting value.'),
                 },
-            ],
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: false,
+            inhouseUser: false,
         });
     }
     
@@ -54,18 +55,11 @@ class LeagueUpdateCommand extends Command {
         return Object.keys(settingMap).indexOf(setting.toLowerCase().replace(/_/g, '')) !== -1;
     }
 
-    hasPermission(msg) {
-        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
-    }
-
-    async run(msg, { setting, value }) {
+    async onMsg({ msg, guild }, { setting, value }) {
         const field = settingMap[setting];
-        const guild = msg.channel.guild;
         await updateLeague(guild.id)({ [field]: value });
         await msg.say(`League setting updated. ${setting} set to ${value}`);
     }
 }
-
-LeagueUpdateCommand.settingMap = settingMap;
 
 module.exports = LeagueUpdateCommand;

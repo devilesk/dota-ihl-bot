@@ -1,13 +1,10 @@
-const logger = require('../../lib/logger');
-const { Command } = require('discord.js-commando');
-const db = require('../../models');
-const Promise = require('bluebird');
+const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class CommendCommand
- * @extends external:Command
+ * @extends IHLCommand
  */
-module.exports = class CommendCommand extends Command {
+module.exports = class CommendCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'commend',
@@ -23,10 +20,12 @@ module.exports = class CommendCommand extends Command {
                     type: 'string',
                 },
             ],
+        }, {
+            lobbyState: false,
         });
     }
 
-    async run(msg, { member }) {
+    async onMsg({ msg }, { member }) {
 
     }
 };
