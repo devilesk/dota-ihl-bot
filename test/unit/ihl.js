@@ -238,7 +238,7 @@ describe('Database', () => {
             assert.isEmpty(inhouseState.queues);
             assert.isEmpty(inhouseState.lobbies);
             assert.isFalse(challenge.accepted);
-            inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, makeRole })(inhouseState, challenge, eventEmitter, captain_1, captain_2);
+            inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, makeRole })({ inhouseState, challenge, eventEmitter, captain_1, captain_2 });
             assert.isTrue(challenge.accepted);
             assert.lengthOf(inhouseState.lobbies, 1);
             assert.lengthOf(inhouseState.queues, 1);
