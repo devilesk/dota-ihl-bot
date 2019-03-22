@@ -40,21 +40,21 @@ module.exports = class PickCommand extends IHLCommand {
                 const result = await isPlayerDraftable(lobbyState)(player);
                 switch (result) {
                 case CONSTANTS.INVALID_DRAFT_CAPTAIN:
-                    this.ihlManager.emit(CONSTANTS.MSG_INVALID_DRAFT_CAPTAIN, lobbyState);
+                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_DRAFT_CAPTAIN, lobbyState);
                     break;
                 case CONSTANTS.INVALID_DRAFT_PLAYER:
-                    this.ihlManager.emit(CONSTANTS.MSG_INVALID_DRAFT_PLAYER, lobbyState);
+                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_DRAFT_PLAYER, lobbyState);
                     break;
                 case CONSTANTS.PLAYER_DRAFT:
-                    this.ihlManager.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, player, faction);
-                    this.ihlManager.emit(CONSTANTS.MSG_PLAYER_DRAFTED, lobbyState, msg.author, member);
+                    this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, player, faction);
+                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_PLAYER_DRAFTED, lobbyState, msg.author, member);
                     break;
                 default:
                     break;
                 }
             }
             else {
-                this.ihlManager.emit(CONSTANTS.MSG_INVALID_PLAYER_NOT_FOUND, lobbyState);
+                this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_PLAYER_NOT_FOUND, lobbyState);
             }
         }
 
