@@ -1,6 +1,7 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
+    unvouchUser,
 } = require('../../lib/db');
 
 /**
@@ -36,7 +37,7 @@ module.exports = class UserVouchCommand extends IHLCommand {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         
         if (user) {
-            await this.ihlManager.unvouchUser(user);
+            await unvouchUser(user);
             await msg.say('User unvouched.');
         }
         else {
