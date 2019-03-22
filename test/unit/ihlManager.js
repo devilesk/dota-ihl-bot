@@ -12,7 +12,6 @@ const {
     getIndexOfInhouseState,
     transformLeagueGuild,
     addInhouseState,
-    loadInhouseState,
     loadInhouseStates,
     loadInhouseStatesFromLeagues,
     getLobbyByChannelId,
@@ -146,10 +145,6 @@ describe('Database', () => {
             assert.notDeepEqual(inhouseStates[1], inhouseState);
             assert.deepEqual(inhouseStates[2], inhouseState);
         });
-    });
-    
-    describe('loadInhouseState', () => {
-        // TODO
     });
     
     describe('loadInhouseStates', () => {

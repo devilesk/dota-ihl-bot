@@ -30,6 +30,7 @@ const {
     leaveLobbyQueue,
     leaveAllQueues,
     banInhouseQueue,
+    loadInhouseState,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
 });
@@ -680,6 +681,10 @@ describe('Database', () => {
             assert.isAtMost(diff, 1000);
             assert.isAtLeast(diff, -1000);
         });
+    });
+    
+    describe('loadInhouseState', () => {
+        // TODO
     });
 
 });
