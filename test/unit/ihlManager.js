@@ -17,6 +17,7 @@ const {
     getLobbyByLobbyName,
     isMessageFromAnyInhouse,
     isMessageFromAnyInhouseAdmin,
+    isMessageFromAnyInhouseLobby,
     isMessageFromLobby,
     parseMessage,
     getLobbyFromMessage,

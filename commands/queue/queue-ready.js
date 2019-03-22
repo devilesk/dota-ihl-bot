@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const {
     ihlManager,
-    isMessageFromLobby,
+    isMessageFromAnyInhouseLobby,
     parseMessage,
 } = require('../../lib/ihlManager');
 const {
@@ -26,7 +26,7 @@ module.exports = class QueueReadyCommand extends Command {
     }
     
     hasPermission(msg) {
-        return isMessageFromLobby(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseLobby(ihlManager.inhouseStates, msg);
     }
 
     async run(msg) {

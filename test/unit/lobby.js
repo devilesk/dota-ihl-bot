@@ -86,6 +86,7 @@ const {
     renameLobbyRole,
     LobbyStateHandlers,
     runLobby,
+    isMessageFromLobby,
 } = proxyquire('../../lib/lobby', {
     './guild': guildStub,
 });
@@ -1971,6 +1972,10 @@ describe('Database - no lobby players', () => {
             it('run lobby state', async () => {
                 // TODO
             });
+        });
+        
+        describe('isMessageFromLobby', () => {
+            // TODO
         });
     });
 });
