@@ -32,6 +32,7 @@ const {
     banInhouseQueue,
     transformLeagueGuild,
     loadInhouseState,
+    isMessageFromInhouse,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
 });
@@ -699,6 +700,10 @@ describe('Database', () => {
     });
     
     describe('loadInhouseState', () => {
+        // TODO
+    });
+    
+    describe('isMessageFromInhouse', () => {
         // TODO
     });
 

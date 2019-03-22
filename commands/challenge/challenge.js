@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const {
     ihlManager,
-    isMessageFromInhouse,
+    isMessageFromAnyInhouse,
     parseMessage,
 } = require('../../lib/ihlManager');
 const {
@@ -38,7 +38,7 @@ module.exports = class ChallengeCommand extends Command {
     }
     
     hasPermission(msg) {
-        return isMessageFromInhouse(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { member }) {
