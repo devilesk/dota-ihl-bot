@@ -3,8 +3,10 @@ const {
     ihlManager,
     isMessageFromAnyInhouse,
     parseMessage,
-    getLobbyByChannelId,
 } = require('../../lib/ihlManager');
+const {
+    getLobbyFromInhouseByChannelId,
+} = require('../../lib/ihl');
 const {
     getActiveQueuers,
 } = require('../../lib/lobby');
@@ -68,7 +70,7 @@ module.exports = class QueueStatusCommand extends Command {
 
         if (user) {
             if (channel) {
-                [lobbyState, inhouseState] = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
                 if (lobbyState) {
                     const message = await QueueStatusCommand.getQueueStatusMessage(msg.guild, lobbyState);
                     await msg.say(message);

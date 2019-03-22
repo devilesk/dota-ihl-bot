@@ -3,8 +3,10 @@ const {
     ihlManager,
     isMessageFromAnyInhouse,
     parseMessage,
-    getLobbyByChannelId,
 } = require('../../lib/ihlManager');
+const {
+    getLobbyFromInhouseByChannelId,
+} = require('../../lib/ihl');
 const {
     findUserByDiscordId,
 } = require('../../lib/db');
@@ -42,7 +44,7 @@ module.exports = class QueueLeaveCommand extends Command {
         let { user, lobbyState, inhouseState } = await parseMessage(ihlManager.inhouseStates, msg);
         if (user) {
             if (channel) {
-                [lobbyState, inhouseState] = getLobbyByChannelId(ihlManager.inhouseStates, msg.guild.id, channel.id);
+                lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
                 if (lobbyState) {
                     await ihlManager.leaveLobbyQueue(lobbyState, user);
                 }
