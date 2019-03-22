@@ -1914,10 +1914,10 @@ describe('Database - no lobby players', () => {
             });
             
             describe('STATE_MATCH_IN_PROGRESS', () => {
-                it('return lobby state with STATE_MATCH_ENDED', async () => {
+                it('return lobby state with STATE_MATCH_IN_PROGRESS', async () => {
                     lobbyState.state = CONSTANTS.STATE_MATCH_IN_PROGRESS;
                     const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_MATCH_ENDED);
+                    assert.equal(result.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
                 });
             });
             
