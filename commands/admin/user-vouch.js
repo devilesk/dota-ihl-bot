@@ -36,7 +36,7 @@ module.exports = class UserVouchCommand extends IHLCommand {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         
         if (user) {
-            await this.ihlManager.vouchUser(user);
+            await user.update({ vouched: true });
             await msg.say('User vouched.');
         }
         else {
