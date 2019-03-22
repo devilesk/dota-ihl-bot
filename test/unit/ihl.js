@@ -11,6 +11,7 @@ const {
     registerUser,
     createInhouseState,
     getLobbyFromInhouse,
+    getLobbyFromInhouseByChannelId,
     addLobbyToInhouse,
     removeLobbyFromInhouseByName,
     removeLobbyFromInhouse,
@@ -121,6 +122,25 @@ describe('Database', () => {
                 lobbies: [{ lobby_name: 'test2' }],
             };
             const lobbyState = getLobbyFromInhouse(inhouseState, 'test');
+            assert.isUndefined(lobbyState);
+        });
+    });
+
+    describe('getLobbyFromInhouseByChannelId', () => {
+        it('return a lobby state', async () => {
+            const inhouseState = {
+                lobbies: [{ channel: {id: 1} }],
+            };
+            const lobbyState = getLobbyFromInhouseByChannelId(inhouseState, 1);
+            assert.exists(lobbyState);
+            assert.equal(lobbyState.channel.id, 1);
+        });
+        
+        it('return null', async () => {
+            const inhouseState = {
+                lobbies: [{ channel: {id: 2} }],
+            };
+            const lobbyState = getLobbyFromInhouseByChannelId(inhouseState, 1);
             assert.isUndefined(lobbyState);
         });
     });
