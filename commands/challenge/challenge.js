@@ -54,7 +54,7 @@ module.exports = class ChallengeCommand extends IHLCommand {
                         if (challengeFromReceiver) {
                             // accept receiver's challenge if not yet accepted
                             if (!challengeFromReceiver.accepted) {
-                                await this.ihlManager.createChallengeLobbyForInhouse(inhouseState, challengeFromReceiver, receiver, giver);
+                                await this.ihlManager.createChallengeLobby(inhouseState, challengeFromReceiver, receiver, giver);
                             }
                         }
                         else {
