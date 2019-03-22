@@ -18,7 +18,6 @@ const {
     isMessageFromAnyInhouseAdmin,
     isMessageFromAnyInhouseLobby,
     isMessageFromLobby,
-    getLobbyFromMessage,
     sendMatchEndMessage,
     initLeague,
     IHLManager,
