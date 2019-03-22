@@ -10,7 +10,6 @@ const {
     findUser,
     getInhouseState,
     getIndexOfInhouseState,
-    transformLeagueGuild,
     addInhouseState,
     loadInhouseStates,
     loadInhouseStatesFromLeagues,
@@ -109,20 +108,6 @@ describe('Database', () => {
             const inhouseState = {guild: {id: '123'}};
             const inhouseStates = [inhouseState];
             assert.equal(getIndexOfInhouseState(inhouseStates, '456'), -1);
-        });
-    });
-    
-    describe('transformLeagueGuild', () => {
-        it('return LeagueGuildObject', async () => {
-            const guild = {guild: {id: 1}};
-            const get = sinon.stub();
-            get.withArgs(1).returns(guild);
-            const guilds = {get};
-            const league = {id: 1, guild_id: 1};
-            const leagueGuild = transformLeagueGuild(guilds)(league);
-            assert.isTrue(guilds.get.calledOnce);
-            assert.deepEqual(leagueGuild.league, league);
-            assert.deepEqual(leagueGuild.guild, guild);
         });
     });
     

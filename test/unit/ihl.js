@@ -30,6 +30,7 @@ const {
     leaveLobbyQueue,
     leaveAllQueues,
     banInhouseQueue,
+    transformLeagueGuild,
     loadInhouseState,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
@@ -680,6 +681,20 @@ describe('Database', () => {
             const diff = user.queue_timeout - Date.now() - 600000;
             assert.isAtMost(diff, 1000);
             assert.isAtLeast(diff, -1000);
+        });
+    });
+    
+    describe('transformLeagueGuild', () => {
+        it('return LeagueGuildObject', async () => {
+            const guild = {guild: {id: 1}};
+            const get = sinon.stub();
+            get.withArgs(1).returns(guild);
+            const guilds = {get};
+            const league = {id: 1, guild_id: 1};
+            const leagueGuild = transformLeagueGuild(guilds)(league);
+            assert.isTrue(guilds.get.calledOnce);
+            assert.deepEqual(leagueGuild.league, league);
+            assert.deepEqual(leagueGuild.guild, guild);
         });
     });
     
