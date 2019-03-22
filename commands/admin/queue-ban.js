@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const {
     ihlManager,
-    isMessageFromAdmin,
+    isMessageFromAnyInhouseAdmin,
     isMessageFromAnyInhouse,
     getInhouseState,
 } = require('../../lib/ihlManager');
@@ -40,7 +40,7 @@ module.exports = class QueueBanCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg) && isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg) && isMessageFromAnyInhouse(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { member, timeout }) {

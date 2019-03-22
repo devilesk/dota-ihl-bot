@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const {
     ihlManager,
     getLobbyFromMessage,
-    isMessageFromAdmin,
+    isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 
 /**
@@ -22,7 +22,7 @@ module.exports = class LobbyKillCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg) {

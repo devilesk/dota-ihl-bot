@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, isMessageFromAdmin,
+    ihlManager, isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 const {
     createSeason,
@@ -22,7 +22,7 @@ module.exports = class LeagueSeasonCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg) {

@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getLobbyFromMessage, isMessageFromAdmin,
+    ihlManager, getLobbyFromMessage, isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 const dota2 = require('dota2');
 const CONSTANTS = require('../../lib/constants');
@@ -33,7 +33,7 @@ module.exports = class LobbyFirstPickCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { side }) {

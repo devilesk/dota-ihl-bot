@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAdmin,
+    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 const {
     findUser,
@@ -30,7 +30,7 @@ module.exports = class LobbyInviteCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { member }) {

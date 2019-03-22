@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAdmin,
+    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 const {
     forceLobbyDraft,
@@ -38,7 +38,7 @@ module.exports = class LobbyDraftCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { captain_1, captain_2 }) {

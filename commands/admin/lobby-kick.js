@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const convertor = require('steam-id-convertor');
 const {
-    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAdmin,
+    ihlManager, getLobbyFromMessage, getInhouse, isMessageFromAnyInhouseAdmin,
 } = require('../../lib/ihlManager');
 const { findUserByDiscordId } = require('../../lib/db');
 
@@ -29,7 +29,7 @@ module.exports = class LobbyKickCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg, { member }) {

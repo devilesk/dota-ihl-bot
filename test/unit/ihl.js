@@ -33,6 +33,7 @@ const {
     transformLeagueGuild,
     loadInhouseState,
     isMessageFromInhouse,
+    isMessageFromInhouseAdmin,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
 });
@@ -704,6 +705,10 @@ describe('Database', () => {
     });
     
     describe('isMessageFromInhouse', () => {
+        // TODO
+    });
+    
+    describe('isMessageFromInhouseAdmin', () => {
         // TODO
     });
 

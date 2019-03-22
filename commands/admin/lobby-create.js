@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { ihlManager, getInhouse, isMessageFromAdmin } = require('../../lib/ihlManager');
+const { ihlManager, getInhouse, isMessageFromAnyInhouseAdmin } = require('../../lib/ihlManager');
 
 /**
  * @class LobbyCreateCommand
@@ -17,7 +17,7 @@ module.exports = class LobbyCreateCommand extends Command {
     }
 
     hasPermission(msg) {
-        return isMessageFromAdmin(ihlManager.inhouseStates, msg);
+        return isMessageFromAnyInhouseAdmin(ihlManager.inhouseStates, msg);
     }
 
     async run(msg) {
