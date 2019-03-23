@@ -1,14 +1,17 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    getLobbyFromInhouseByChannelId,
-} = require('../../lib/ihl');
-const {
+    lobbyToLobbyState,
     getActiveQueuers,
-} = require('../../lib/lobby');
+} = require('./lobby');
 const {
+    findLobbyByDiscordChannel,
     findAllActiveQueues,
     getLobby,
-} = require('../../lib/db');
+} = require('./db');
+const {
+    findOrCreateChannelInCategory,
+    makeRole,
+} = require('./guild');
 
 /**
  * @class QueueStatusCommand
@@ -60,7 +63,9 @@ module.exports = class QueueStatusCommand extends IHLCommand {
 
     async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {
         if (channel) {
-            lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
+            // use lobbyState for given channel
+            lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)({ findOrCreateChannelInCategory, makeRole })(lobby) : null;
             if (lobbyState) {
                 const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
                 await msg.say(message);
@@ -76,11 +81,10 @@ module.exports = class QueueStatusCommand extends IHLCommand {
         else {
             const queues = await findAllEnabledQueues(guild.id);
             for (const queue of queues) {
-                const lobbyState = await getLobby({ lobby_name: queue.queue_name });
-                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
+                const lobby = await getLobby({ lobby_name: queue.queue_name });
+                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobby);
                 await msg.say(message);
             }
         }
-
     }
 };

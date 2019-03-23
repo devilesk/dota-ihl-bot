@@ -1,4 +1,3 @@
-const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
@@ -34,15 +33,12 @@ module.exports = class RepCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, inhouseUser }, { member }) {
+    async onMsg({ msg, league, guild, inhouseUser }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
-                const league = await findOrCreateLeague(guild.id);
                 const [rep, created] = await findOrCreateReputation(league)(fromUser)(user);
-                logger.debug(rep);
-                logger.debug(created);
                 if (created) {
                     await msg.say(`${msg.author.username} reps ${discord_user.displayName}`);
                 }

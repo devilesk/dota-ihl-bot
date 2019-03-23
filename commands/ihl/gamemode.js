@@ -1,4 +1,3 @@
-const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const CONSTANTS = require('../../lib/constants');
 
@@ -34,7 +33,6 @@ module.exports = class GameModeCommand extends IHLCommand {
     async onMsg({ msg, inhouseUser }, { text }) {
         const game_mode = text === 'cm' ? CONSTANTS.DOTA_GAMEMODE_CM : CONSTANTS.DOTA_GAMEMODE_CD;
         await inhouseUser.update({ game_mode_preference: game_mode });
-        logger.debug(`Game mode set to ${text}`);
         await msg.say(`Game mode set to ${text}`);
     }
 };

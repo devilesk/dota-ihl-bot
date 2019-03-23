@@ -1,7 +1,4 @@
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findLeague,
-} = require('../../lib/db');
 
 /**
  * @class LeagueInfoCommand
@@ -23,8 +20,7 @@ module.exports = class LeagueInfoCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }) {
-        const league = await findLeague(guild.id);
+    async onMsg({ msg, league }) {
         const data = league.toJSON();
         const fields = Object.keys(data).map(key => ({
             name: key,

@@ -51,7 +51,7 @@ module.exports = class WhoisCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }, { member }) {
+    async onMsg({ msg, league, guild }, { member }) {
         let wins = 0;
         let losses = 0;
 
@@ -82,7 +82,6 @@ module.exports = class WhoisCommand extends IHLCommand {
             roles = roles.filter(([role, pref]) => pref !== -1).sort(([r1, p1], [r2, p2]) => p1 - p2).map(([r, p]) => r);
             const account_id = convertor.to32(user.steamid_64);
 
-            const league = await findOrCreateLeague(guild.id);
             const [leaderboard] = await user.getLeaderboards({ where: { season_id: league.current_season_id } });
             logger.debug(leaderboard);
             if (leaderboard) {

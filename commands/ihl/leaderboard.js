@@ -23,8 +23,7 @@ module.exports = class LeaderboardCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }) {
-        const league = await findOrCreateLeague(guild.id);
+    async onMsg({ msg, league, guild }) {
         const leaderboard = await queryLeaderboardRank(league.id)(league.current_season_id)(10);
         logger.debug(leaderboard.length);
         const data = leaderboard.map((user) => {

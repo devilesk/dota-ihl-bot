@@ -1,6 +1,6 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    findLeague, updateLeague,
+    updateLeague,
 } = require('../../lib/db');
 const db = require('../../models');
 

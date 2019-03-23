@@ -33,12 +33,11 @@ module.exports = class UnrepCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, inhouseUser }, { member }) {
+    async onMsg({ msg, league, guild, inhouseUser }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
-                const league = await findOrCreateLeague(guild.id);
                 const count = await destroyReputation(league)(fromUser)(user);
                 logger.debug(count);
                 if (count) {

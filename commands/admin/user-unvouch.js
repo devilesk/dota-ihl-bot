@@ -35,7 +35,6 @@ module.exports = class UserVouchCommand extends IHLCommand {
 
     async onMsg({ msg, guild }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
-        
         if (user) {
             await unvouchUser(user);
             await msg.say('User unvouched.');

@@ -1,4 +1,3 @@
-const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 
 /**
@@ -35,7 +34,6 @@ module.exports = class RolesCommand extends IHLCommand {
         }
         if (roles.length) {
             await inhouseUser.update(values);
-            logger.debug(`Roles set to ${roles.join(',')}`);
             await msg.say(`Roles set to ${roles.join(',')}`);
         }
         else {

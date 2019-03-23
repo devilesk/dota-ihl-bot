@@ -1,7 +1,14 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    getLobbyFromInhouseByChannelId,
-} = require('../../lib/ihl');
+    lobbyToLobbyState,
+} = require('./lobby');
+const {
+    findLobbyByDiscordChannel,
+} = require('./db');
+const {
+    findOrCreateChannelInCategory,
+    makeRole,
+} = require('./guild');
 
 /**
  * @class QueueLeaveCommand
@@ -30,9 +37,11 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, inhouseState, lobbyState, inhouseUser }, { channel }) {
+    async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
         if (channel) {
-            lobbyState = getLobbyFromInhouseByChannelId(inhouseState, channel.id);
+            // use lobbyState for given channel
+            lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)({ findOrCreateChannelInCategory, makeRole })(lobby) : null;
             if (lobbyState) {
                 await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser);
             }

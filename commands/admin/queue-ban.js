@@ -40,7 +40,6 @@ module.exports = class QueueBanCommand extends IHLCommand {
 
     async onMsg({ msg, guild, inhouseState }, { member, timeout }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
-        
         if (user) {
             await this.ihlManager.banInhouseQueue(inhouseState, user, timeout);
             await msg.say(`User kicked from queue and tempbanned for ${timeout} minutes.`);
