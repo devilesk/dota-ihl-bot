@@ -43,6 +43,12 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true,
         },
+        channel_id: {
+            type: Sequelize.STRING,
+        },
+        role_id: {
+            type: Sequelize.STRING,
+        },
         lobby_id: {
             type: Sequelize.STRING,
         },

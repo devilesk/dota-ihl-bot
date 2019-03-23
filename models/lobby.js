@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             unique: true,
         },
+        channel_id: DataTypes.STRING,
+        role_id: DataTypes.STRING,
         lobby_id: DataTypes.STRING,
         password: DataTypes.STRING,
         ready_check_time: DataTypes.DATE,
