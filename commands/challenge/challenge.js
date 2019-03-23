@@ -3,6 +3,9 @@ const {
     hasActiveLobbies,
 } = require('../../lib/ihl');
 const {
+    createChallengeLobby,
+} = require('../../lib/lobby');
+const {
     findUserByDiscordId,
     getChallengeBetweenUsers,
     createChallenge,
@@ -54,7 +57,8 @@ module.exports = class ChallengeCommand extends IHLCommand {
                         if (challengeFromReceiver) {
                             // accept receiver's challenge if not yet accepted
                             if (!challengeFromReceiver.accepted) {
-                                await this.ihlManager.createChallengeLobby(inhouseState, challengeFromReceiver, receiver, giver);
+                                await createChallengeLobby({ inhouseState, captain_1: receiver, captain_2: giver });
+                                await destroyChallengeBetweenUsers(giver)(receiver);
                             }
                         }
                         else {

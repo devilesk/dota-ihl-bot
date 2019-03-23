@@ -1,4 +1,7 @@
 const IHLCommand = require('../../lib/ihlCommand');
+const {
+    createNewLeague,
+} = require('../../lib/ihl');
 
 /**
  * @class LeagueCreateCommand
@@ -23,7 +26,7 @@ module.exports = class LeagueCreateCommand extends IHLCommand {
 
     async onMsg({ msg, inhouseState, guild }) {
         if (!inhouseState) {
-            this.ihlManager.createNewLeague(guild);
+            await createNewLeague(guild);
             await msg.say('Inhouse league created.');
         }
         else {
