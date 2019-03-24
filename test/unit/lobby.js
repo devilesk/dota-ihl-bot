@@ -65,12 +65,10 @@ const {
     getLobbyNameFromCaptains,
     resetLobbyState,
     connectDotaBot,
-    disconnectDotaBot,
     createDotaBotLobby,
     setupLobbyBot,
-    killLobby,
+    setLobbyStateKilled,
     isReadyCheckTimedOut,
-    startLobby,
     createLobbyState,
     lobbyToLobbyState,
     forceLobbyDraft,
@@ -82,8 +80,6 @@ const {
     LobbyStateTransitions,
     transitionLobbyState,
     assignLobbyName,
-    renameLobbyChannel,
-    renameLobbyRole,
     LobbyStateHandlers,
     runLobby,
     isMessageFromLobby,
@@ -119,23 +115,24 @@ describe('Database - with lobby players', () => {
     );
 
     const lobby_name = 'funny-yak-74';
+    const id = 1;
     
     describe('getLobby', () => {
         it('return a Lobby given a { lobby_name }', async () => {
-            const lobby = await getLobby({ lobby_name });
-            assert.equal(lobby.lobby_name, lobby_name);
+            const lobby = await getLobby({ id });
+            assert.equal(lobby.id, id);
         });
     
         it('return a Lobby given a Lobby db model', async () => {
-            const lobby = await getLobby(await getLobby({ lobby_name: lobby_name }));
-            assert.equal(lobby.lobby_name, lobby_name);
+            const lobby = await getLobby(await getLobby({ id }));
+            assert.equal(lobby.id, id);
         });
     });
     
     describe('Lobby Functions', () => {
         let lobby;
         beforeEach(async () => {
-            lobby = await getLobby({ lobby_name });
+            lobby = await getLobby({ id });
         });
 
         describe('getPlayers', () => {
@@ -970,83 +967,39 @@ describe('Database - with lobby players', () => {
         describe('resetLobbyState', () => {
             it('set STATE_CHECKING_READY state to STATE_BEGIN_READY', async () => {
                 lobby.state = CONSTANTS.STATE_CHECKING_READY;
-                const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
+                const lobbyState = await resetLobbyState({ state: lobby.state, id: lobby.id });
                 assert.equal(lobbyState.state, CONSTANTS.STATE_BEGIN_READY);
-                lobby = await getLobby({ lobby_name: lobby.lobby_name });
+                lobby = await getLobby({ id: lobby.id });
                 assert.equal(lobby.state, CONSTANTS.STATE_BEGIN_READY);
             });
             
             it('set STATE_BOT_STARTED state to STATE_WAITING_FOR_BOT', async () => {
                 lobby.state = CONSTANTS.STATE_BOT_STARTED;
-                const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
+                const lobbyState = await resetLobbyState({ state: lobby.state, id: lobby.id });
                 assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
-                lobby = await getLobby({ lobby_name: lobby.lobby_name });
+                lobby = await getLobby({ id: lobby.id });
                 assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
             });
             
             it('set STATE_WAITING_FOR_PLAYERS state to STATE_WAITING_FOR_BOT', async () => {
                 lobby.state = CONSTANTS.STATE_WAITING_FOR_PLAYERS;
-                const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
+                const lobbyState = await resetLobbyState({ state: lobby.state, id: lobby.id });
                 assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_BOT);
-                lobby = await getLobby({ lobby_name: lobby.lobby_name });
+                lobby = await getLobby({ id: lobby.id });
                 assert.equal(lobby.state, CONSTANTS.STATE_WAITING_FOR_BOT);
             });
             
             it('set null state to STATE_NEW', async () => {
                 lobby.state = null;
-                const lobbyState = await resetLobbyState({ state: lobby.state, lobby_name: lobby.lobby_name });
+                const lobbyState = await resetLobbyState({ state: lobby.state, id: lobby.id });
                 assert.equal(lobbyState.state, CONSTANTS.STATE_NEW);
-                lobby = await getLobby({ lobby_name: lobby.lobby_name });
+                lobby = await getLobby({ id: lobby.id });
                 assert.equal(lobby.state, CONSTANTS.STATE_NEW);
             });
         });
         
         describe('setupLobbyBot', () => {
             it('setup bot and dota lobby', async () => {
-            });
-        });
-        
-        describe('killLobby', () => {
-            it('delete channel', async () => {
-                const lobbyState = {
-                    lobby_name,
-                    channel: {
-                        delete: sinon.spy(),
-                    }
-                }
-                const result = await killLobby(lobbyState);
-                assert.isNull(result.channel);
-                assert.isTrue(lobbyState.channel.delete.calledOnce);
-                assert.equal(result.state, CONSTANTS.STATE_KILLED);
-            });
-            
-            it('delete role', async () => {
-                const lobbyState = {
-                    lobby_name,
-                    role: {
-                        delete: sinon.spy(),
-                    }
-                }
-                const result = await killLobby(lobbyState);
-                assert.isNull(result.role);
-                assert.isTrue(lobbyState.role.delete.calledOnce);
-                assert.equal(result.state, CONSTANTS.STATE_KILLED);
-            });
-            
-            it('remove players and set queuers active', async () => {
-                const lobbyState = {
-                    lobby_name: lobby.lobby_name,
-                }
-                let players = await getPlayers()(lobbyState);
-                assert.lengthOf(players, 10);
-                const result = await killLobby(lobbyState);
-                players = await getPlayers()(lobbyState);
-                assert.isEmpty(players);
-                let queuers = await getQueuers()(lobbyState);
-                for (const queuer of queuers) {
-                    assert.isTrue(queuer.LobbyQueuer.active);
-                }
-                assert.equal(result.state, CONSTANTS.STATE_KILLED);
             });
         });
         
@@ -1064,29 +1017,6 @@ describe('Database - with lobby players', () => {
                     ready_check_time: Date.now(),
                 });
                 assert.isFalse(result);
-            });
-        });
-        
-        describe('startLobby', () => {
-            it('return match id', async () => {
-                const lobbyState = {
-                    dotaBot: {
-                        launchPracticeLobby: sinon.stub(),
-                        leavePracticeLobby: sinon.stub(),
-                        abandonCurrentGame: sinon.stub(),
-                        disconnect: sinon.spy(),
-                        steamid_64: '123',
-                    }
-                };
-                lobbyState.dotaBot.launchPracticeLobby.resolves({ match_id: 'test' });
-                lobbyState.dotaBot.leavePracticeLobby.resolves(true);
-                lobbyState.dotaBot.abandonCurrentGame.resolves(true);
-                const match_id = await startLobby(lobbyState);
-                assert.equal(match_id, 'test');
-                assert.isTrue(lobbyState.dotaBot.launchPracticeLobby.calledOnce);
-                assert.isTrue(lobbyState.dotaBot.leavePracticeLobby.calledOnce);
-                assert.isTrue(lobbyState.dotaBot.abandonCurrentGame.calledOnce);
-                assert.isTrue(lobbyState.dotaBot.disconnect.calledOnce);
             });
         });
         
@@ -1202,11 +1132,12 @@ describe('Database - no lobby players', () => {
     );
 
     const lobby_name = 'funny-yak-74';
+    const id = 1;
     
     describe('Lobby Functions', () => {
         let lobby;
         beforeEach(async () => {
-            lobby = await getLobby({ lobby_name });
+            lobby = await getLobby({ id });
         });
         
         describe('getPlayers', () => {
@@ -1258,7 +1189,7 @@ describe('Database - no lobby players', () => {
         
         describe('lobbyQueuerToPlayer', () => {
             it('convert queuer to player and set queue activity', async () => {
-                const lobby2 = await getLobby({ lobby_name: 'funny-yak-75' });
+                const lobby2 = await getLobby({ id: 2 });
                 const user = await db.User.find({ where: { id: 1 } });
                 const result = await addQueuer(lobby)(user);
                 await addQueuer(lobby2)(user);
@@ -1282,7 +1213,7 @@ describe('Database - no lobby players', () => {
         
         describe('returnPlayerToQueue', () => {
             it('convert queue back to player and set activity', async () => {
-                const lobby2 = await getLobby({ lobby_name: 'funny-yak-75' });
+                const lobby2 = await getLobby({ id: 2 });
                 const user = await db.User.find({ where: { id: 1 } });
                 const result = await addQueuer(lobby)(user);
                 await addQueuer(lobby2)(user);
@@ -1456,47 +1387,17 @@ describe('Database - no lobby players', () => {
         
         describe('assignLobbyName', () => {
             it('nothing when QUEUE_TYPE_CHALLENGE', async () => {
-                const lobbyState = { lobby_name, queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE };
+                const lobbyState = { id, lobby_name, queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE };
                 const result = await assignLobbyName(lobbyState);
                 assert.equal(lobbyState.lobby_name, result.lobby_name);
             });
             
             it('return renamed lobby state', async () => {
-                const lobbyState = { lobby_name };
+                const lobbyState = { id, lobby_name };
                 const result = await assignLobbyName(lobbyState);
                 assert.notEqual(lobbyState.lobby_name, result.lobby_name);
-                const lobby2 = await getLobby({ lobby_name: result.lobby_name });
+                const lobby2 = await getLobby({ id: result.id });
                 assert.exists(lobby2);
-            });
-        });
-        
-        describe('renameLobbyChannel', () => {
-            it('rename channel to lobby_name', async () => {
-                const setName = sinon.stub();
-                setName.resolves();
-                const lobbyState = {
-                    lobby_name,
-                    channel: {
-                        setName,
-                    }
-                };
-                const result = await renameLobbyChannel(lobbyState);
-                assert.isTrue(setName.calledOnceWith(lobby_name));
-            });
-        });
-        
-        describe('renameLobbyRole', () => {
-            it('rename role to lobby_name', async () => {
-                const setName = sinon.stub();
-                setName.resolves();
-                const lobbyState = {
-                    lobby_name,
-                    role: {
-                        setName,
-                    }
-                };
-                const result = await renameLobbyRole(lobbyState);
-                assert.isTrue(setName.calledOnceWith(lobby_name));
             });
         });
         
@@ -1788,128 +1689,11 @@ describe('Database - no lobby players', () => {
                 });
             });
             
-            describe('STATE_BOT_ASSIGNED', () => {
-                let createDotaBotStub;
-                let LobbyStateHandlers;
-                
-                it('return lobby state with STATE_BOT_STARTED when started a bot', async () => {
-                    createDotaBotStub = sinon.stub();
-                    createDotaBotStub.resolves({ id: 99, steamid_64: 123, connect: sinon.stub(), createPracticeLobby: sinon.stub(), lobby_id: 456 });
-                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
-                        './dotaBot': {
-                            createDotaBot: createDotaBotStub,
-                        },
-                    });
-                    LobbyStateHandlers = mock;
-                    
-                    lobbyState.state = CONSTANTS.STATE_BOT_ASSIGNED;
-                    lobbyState.bot_id = 1;
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_BOT_STARTED);
-                    assert.equal(result.bot_id, 1);
-                    assert.equal(result.lobby_id, 456);
-                });
-                
-                it('return lobby state with STATE_BOT_STARTED when lobby_id exists', async () => {
-                    createDotaBotStub = sinon.stub();
-                    createDotaBotStub.resolves({ id: 99, steamid_64: 123, connect: sinon.stub(), joinPracticeLobby: sinon.stub(), lobby_id: 456 });
-                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
-                        './dotaBot': {
-                            createDotaBot: createDotaBotStub,
-                        },
-                    });
-                    LobbyStateHandlers = mock;
-                    
-                    lobbyState.state = CONSTANTS.STATE_BOT_ASSIGNED;
-                    lobbyState.bot_id = 1;
-                    lobbyState.lobby_id = 456;
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_BOT_STARTED);
-                    assert.equal(result.bot_id, 1);
-                    assert.equal(result.lobby_id, 456);
-                });
-                
-                it('return lobby state with STATE_BOT_FAILED when not started a bot', async () => {
-                    createDotaBotStub = sinon.stub();
-                    createDotaBotStub.resolves(null);
-                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
-                        './dotaBot': {
-                            createDotaBot: createDotaBotStub,
-                        },
-                    });
-                    LobbyStateHandlers = mock;
-                    
-                    lobbyState.state = CONSTANTS.STATE_BOT_ASSIGNED;
-                    lobbyState.bot_id = 1;
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_BOT_FAILED);
-                    assert.notExists(result.bot_id);
-                });
-            });
-            
-            describe('STATE_BOT_STARTED', () => {
-                it('return lobby state with STATE_WAITING_FOR_PLAYERS', async () => {
-                    let LobbyStateHandlers;
-                    const invitePlayerStub = sinon.stub();
-                    invitePlayerStub.resolves(true);
-                    const { LobbyStateHandlers: mock } = proxyquire('../../lib/lobby', {
-                        './dotaBot': {
-                            invitePlayer: () => invitePlayerStub,
-                        },
-                    });
-                    LobbyStateHandlers = mock;
-                    
-                    const users = await db.User.findAll({ limit: 10 });
-                    await addPlayers(lobbyState)(users);
-                    lobbyState.state = CONSTANTS.STATE_BOT_STARTED;
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_PLAYERS);
-                    assert.equal(invitePlayerStub.callCount, 10);
-                });
-            });
-            
             describe('STATE_BOT_FAILED', () => {
                 it('return lobby state with STATE_BOT_FAILED', async () => {
                     lobbyState.state = CONSTANTS.STATE_BOT_FAILED;
                     const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BOT_FAILED);
-                });
-            });
-            
-            describe('STATE_WAITING_FOR_PLAYERS', () => {
-                it('return lobby state with STATE_MATCH_IN_PROGRESS when all players ready', async () => {
-                    const launchPracticeLobbyStub = sinon.stub();
-                    launchPracticeLobbyStub.resolves({ match_id: 123 });
-                    const leavePracticeLobbyStub = sinon.stub();
-                    leavePracticeLobbyStub.resolves(true);
-                    const abandonCurrentGameStub = sinon.stub();
-                    abandonCurrentGameStub.resolves(true);
-                    const disconnectStub = sinon.stub();
-                    disconnectStub.resolves(true);
-                    lobbyState.state = CONSTANTS.STATE_WAITING_FOR_PLAYERS;
-                    lobbyState.bot_id = 1;
-                    lobbyState.dotaBot = {
-                        factionCache: {},
-                        playerState: {},
-                        launchPracticeLobby: launchPracticeLobbyStub,
-                        leavePracticeLobby: leavePracticeLobbyStub,
-                        abandonCurrentGame: abandonCurrentGameStub,
-                        disconnect: disconnectStub,
-                    };
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
-                    assert.equal(result.match_id, 123);
-                    assert.isNull(result.bot_id);
-                });
-                
-                it('return lobby state with STATE_WAITING_FOR_PLAYERS when not all players ready', async () => {
-                    lobbyState.state = CONSTANTS.STATE_WAITING_FOR_PLAYERS;
-                    lobbyState.dotaBot = {
-                        factionCache: { 'a': 1 },
-                        playerState: {},
-                    };
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_PLAYERS);
                 });
             });
             
@@ -1926,36 +1710,6 @@ describe('Database - no lobby players', () => {
                     lobbyState.state = CONSTANTS.STATE_MATCH_ENDED;
                     const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_MATCH_ENDED);
-                });
-            });
-            
-            describe('STATE_PENDING_KILL', () => {
-                it('return lobby state with STATE_KILLED', async () => {
-                    const users = await db.User.findAll({ limit: 10 });
-                    await addQueuer(lobbyState)(users[0]);
-                    let queues = await users[0].getQueues();
-                    queues[0].LobbyQueuer.active = false;
-                    await queues[0].LobbyQueuer.save();
-                    queues = await users[0].getQueues();
-                    assert.isFalse(queues[0].LobbyQueuer.active);
-                    await addPlayers(lobbyState)(users);
-                    let players = await getPlayers()(lobbyState);
-                    assert.lengthOf(players, 10);
-                    lobbyState.state = CONSTANTS.STATE_PENDING_KILL;
-                    lobbyState.channel = { delete: sinon.stub() };
-                    lobbyState.role = { delete: sinon.stub() };
-                    const disconnectStub = sinon.stub();
-                    disconnectStub.resolves(true);
-                    lobbyState.dotaBot = { disconnect: disconnectStub };
-                    const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_KILLED);
-                    assert.isNull(result.channel);
-                    assert.isNull(result.role);
-                    assert.isNull(result.dotaBot);
-                    players = await getPlayers()(result);
-                    assert.isEmpty(players);
-                    queues = await users[0].getQueues();
-                    assert.isTrue(queues[0].LobbyQueuer.active);
                 });
             });
             

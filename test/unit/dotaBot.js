@@ -29,6 +29,8 @@ const {
     membersToPlayerState,
     processMembers,
     invitePlayer,
+    disconnectDotaBot,
+    startDotaLobby,
     DotaBot,
 } = proxyquire('../../lib/dotaBot', {
     'fs': {
@@ -37,6 +39,9 @@ const {
             console.log('stub readFileSync')
             return true;
         },
+    },
+    './db': {
+        updateBotStatusBySteamId: () => sinon.stub(),
     },
 });
 const CONSTANTS = require('../../lib/constants');
@@ -477,6 +482,37 @@ describe('DotaBot', () => {
             assert.isTrue(memberJoinedSpy.calledTwice);
             assert.isFalse(memberChangedSlotSpy.called);
             assert.isTrue(readySpy.called);
+        });
+    });
+        
+    describe('disconnectDotaBot', () => {
+        it('disconnect bot', async () => {
+            const dotaBot = {
+                disconnect: sinon.stub(),
+                steamid_64: '123',
+            };
+            dotaBot.disconnect.resolves(true);
+            await disconnectDotaBot(dotaBot);
+            assert.isTrue(dotaBot.disconnect.calledOnce);
+        });
+    });
+        
+    describe('startDotaLobby', () => {
+        it('return match id', async () => {
+            const dotaBot = {
+                launchPracticeLobby: sinon.stub(),
+                leavePracticeLobby: sinon.stub(),
+                abandonCurrentGame: sinon.stub(),
+                steamid_64: '123',
+            };
+            dotaBot.launchPracticeLobby.resolves({ match_id: 'test' });
+            dotaBot.leavePracticeLobby.resolves(true);
+            dotaBot.abandonCurrentGame.resolves(true);
+            const match_id = await startDotaLobby(dotaBot);
+            assert.equal(match_id, 'test');
+            assert.isTrue(dotaBot.launchPracticeLobby.calledOnce);
+            assert.isTrue(dotaBot.leavePracticeLobby.calledOnce);
+            assert.isTrue(dotaBot.abandonCurrentGame.calledOnce);
         });
     });
 });

@@ -10,31 +10,12 @@ const {
     getUserRankTier,
     registerUser,
     createInhouseState,
-    getLobbyFromInhouse,
-    getLobbyFromInhouseByChannelId,
-    addLobbyToInhouse,
-    removeLobbyFromInhouseByName,
-    removeLobbyFromInhouse,
-    createChallengeLobbyForInhouse,
-    loadLobbiesIntoInhouse,
-    runLobbiesForInhouse,
-    loadQueuesIntoInhouse,
-    getQueueFromInhouseByName,
-    getQueueFromInhouseByType,
-    addQueueToInhouse,
-    removeQueueFromInhouse,
-    reloadQueueForInhouse,
     hasActiveLobbies,
     joinLobbyQueue,
-    joinAllQueues,
+    getAllLobbyQueues,
     leaveLobbyQueue,
-    leaveAllQueues,
+    getAllLobbyQueuesForUser,
     banInhouseQueue,
-    transformLeagueGuild,
-    loadInhouseState,
-    isMessageFromInhouse,
-    isMessageFromInhouseAdmin,
-    isMessageFromInhouseLobby,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
 });
@@ -112,411 +93,6 @@ describe('Database', () => {
         });
     });
 
-    describe('getLobbyFromInhouse', () => {
-        it('return a lobby state', async () => {
-            const inhouseState = {
-                lobbies: [{ lobby_name: 'test' }],
-            };
-            const lobbyState = getLobbyFromInhouse(inhouseState, 'test');
-            assert.exists(lobbyState);
-            assert.equal(lobbyState.lobby_name, 'test');
-        });
-        
-        it('return null', async () => {
-            const inhouseState = {
-                lobbies: [{ lobby_name: 'test2' }],
-            };
-            const lobbyState = getLobbyFromInhouse(inhouseState, 'test');
-            assert.isUndefined(lobbyState);
-        });
-    });
-
-    describe('getLobbyFromInhouseByChannelId', () => {
-        it('return a lobby state', async () => {
-            const inhouseState = {
-                lobbies: [{ channel: {id: 1} }],
-            };
-            const lobbyState = getLobbyFromInhouseByChannelId(inhouseState, 1);
-            assert.exists(lobbyState);
-            assert.equal(lobbyState.channel.id, 1);
-        });
-        
-        it('return null', async () => {
-            const inhouseState = {
-                lobbies: [{ channel: {id: 2} }],
-            };
-            const lobbyState = getLobbyFromInhouseByChannelId(inhouseState, 1);
-            assert.isUndefined(lobbyState);
-        });
-    });
-
-    describe('addLobbyToInhouse', () => {
-        it('add new lobby', async () => {
-            const lobby = { lobby_name: 'test' };
-            let inhouseState = {
-                lobbies: [],
-            };
-            inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.strictEqual(lobby, inhouseState.lobbies[0]);
-        });
-        
-        it('add second lobby', async () => {
-            const lobby = { lobby_name: 'test' };
-            let inhouseState = {
-                lobbies: [{ lobby_name: 'test2' }],
-            };
-            inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            assert.lengthOf(inhouseState.lobbies, 2);
-        });
-        
-        it('add existing lobby', async () => {
-            const lobby = { lobby_name: 'test' };
-            let inhouseState = {
-                lobbies: [lobby],
-            };
-            inhouseState = addLobbyToInhouse(inhouseState, lobby);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.strictEqual(lobby, inhouseState.lobbies[0]);
-        });
-    });
-
-    describe('removeLobbyFromInhouseByName', () => {
-        it('remove lobby', async () => {
-            let inhouseState = {
-                lobbies: [{ lobby_name: 'test' }],
-            };
-            inhouseState = removeLobbyFromInhouseByName('test')(inhouseState);
-            assert.isEmpty(inhouseState.lobbies);
-        });
-        
-        it('remove second lobby', async () => {
-            let inhouseState = {
-                lobbies: [{ lobby_name: 'test2' }, { lobby_name: 'test' }],
-            };
-            inhouseState = removeLobbyFromInhouseByName('test')(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
-        });
-    });
-
-    describe('removeLobbyFromInhouse', () => {
-        it('remove lobby', async () => {
-            let inhouseState = {
-                lobbies: [{ lobby_name: 'test' }],
-            };
-            inhouseState = removeLobbyFromInhouse({ lobby_name: 'test' })(inhouseState);
-            assert.isEmpty(inhouseState.lobbies);
-        });
-        
-        it('remove second lobby', async () => {
-            let inhouseState = {
-                lobbies: [{ lobby_name: 'test2' }, { lobby_name: 'test' }],
-            };
-            inhouseState = removeLobbyFromInhouse({ lobby_name: 'test' })(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.equal(inhouseState.lobbies[0].lobby_name, 'test2');
-        });
-    });
-
-    describe('createChallengeLobbyForInhouse', () => {
-        it('create challenge lobby', async () => {
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [],
-                queues: [],
-            };
-            const captain_1 = await db.User.find({ where: { id: 2 } });
-            const captain_2 = await db.User.find({ where: { id: 1 } });
-            const challenge = await db.Challenge.find({ where: { id: 1 } });
-            const resolveUser = sinon.stub();
-            resolveUser.withArgs(sinon.match.any, captain_1.discord_id).resolves({ displayName: 'test1' });
-            resolveUser.withArgs(sinon.match.any, captain_2.discord_id).resolves({ displayName: 'test2' });
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            assert.isEmpty(inhouseState.queues);
-            assert.isEmpty(inhouseState.lobbies);
-            assert.isFalse(challenge.accepted);
-            inhouseState = await createChallengeLobbyForInhouse({ resolveUser, findOrCreateChannelInCategory, makeRole })({ inhouseState, challenge, eventEmitter, captain_1, captain_2 });
-            assert.isTrue(challenge.accepted);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.lengthOf(inhouseState.queues, 1);
-            const queue = inhouseState.queues[0];
-            const lobbyState = inhouseState.lobbies[0];
-            assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
-            assert.equal(lobbyState.queue_type, CONSTANTS.QUEUE_TYPE_CHALLENGE);
-            assert.equal(queue.queue_name, lobbyState.lobby_name);
-            assert.equal(lobbyState.captain_1_user_id, captain_1.id);
-            assert.equal(lobbyState.captain_2_user_id, captain_2.id);
-            const queuers = await getActiveQueuers()(lobbyState);
-            assert.lengthOf(queuers, 2);
-            assert.equal(lobbyState.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
-        });
-    });
-
-    describe('loadLobbiesIntoInhouse', () => {
-        it('return inhouse state with loaded lobbies', async () => {
-            let loadLobbiesIntoInhouse;
-            const findAllActiveLobbiesStub = sinon.stub();
-            findAllActiveLobbiesStub.resolves([{}]);
-            const lobbyToLobbyStateStub = sinon.stub();
-            lobbyToLobbyStateStub.resolves(true);
-            const { loadLobbiesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllActiveLobbies: findAllActiveLobbiesStub,
-                },
-                './lobby': {
-                    lobbyToLobbyState: () => () => lobbyToLobbyStateStub,
-                },
-            });
-            loadLobbiesIntoInhouse = mock;
-            
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [],
-                queues: [],
-            };
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            assert.isEmpty(inhouseState.queues);
-            assert.isEmpty(inhouseState.lobbies);
-            inhouseState = await loadLobbiesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 1);
-            assert.isTrue(inhouseState.lobbies[0]);
-        });
-        
-        it('return inhouse state with empty lobbies', async () => {
-            let loadLobbiesIntoInhouse;
-            const findAllActiveLobbiesStub = sinon.stub();
-            findAllActiveLobbiesStub.resolves([{}]);
-            const lobbyToLobbyStateStub = sinon.stub();
-            lobbyToLobbyStateStub.rejects();
-            const { loadLobbiesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllActiveLobbies: findAllActiveLobbiesStub,
-                },
-                './lobby': {
-                    lobbyToLobbyState: () => () => lobbyToLobbyStateStub,
-                },
-            });
-            loadLobbiesIntoInhouse = mock;
-            
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [],
-                queues: [],
-            };
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            assert.isEmpty(inhouseState.queues);
-            assert.isEmpty(inhouseState.lobbies);
-            inhouseState = await loadLobbiesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
-            assert.isEmpty(inhouseState.lobbies);
-        });
-    });
-
-    describe('runLobbiesForInhouse', () => {
-        it('return inhouse state and run lobbies', async () => {
-            let runLobbiesForInhouse;
-            const runLobbyStub = sinon.stub();
-            runLobbyStub.resolves([{}]);
-            const { runLobbiesForInhouse: mock } = proxyquire('../../lib/ihl', {
-                './lobby': {
-                    runLobby: runLobbyStub,
-                },
-            });
-            runLobbiesForInhouse = mock;
-            
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [{}, {}],
-                queues: [],
-            };
-            const eventEmitter = new EventEmitter();
-            assert.isEmpty(inhouseState.queues);
-            assert.lengthOf(inhouseState.lobbies, 2);
-            inhouseState = await runLobbiesForInhouse(eventEmitter)(inhouseState);
-            assert.lengthOf(inhouseState.lobbies, 2);
-        });
-    });
-
-    describe('loadQueuesIntoInhouse', () => {
-        it('return inhouse state with loaded queues', async () => {
-            let loadQueuesIntoInhouse;
-            const findAllEnabledQueuesStub = sinon.stub();
-            findAllEnabledQueuesStub.resolves([{}]);
-            const loadQueueStub = sinon.stub();
-            loadQueueStub.resolves({ queueState: {} });
-            const { loadQueuesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllEnabledQueues: findAllEnabledQueuesStub,
-                },
-                './queue': {
-                    loadQueue: () => () => loadQueueStub,
-                },
-            });
-            loadQueuesIntoInhouse = mock;
-            
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [],
-                queues: [],
-            };
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            assert.isEmpty(inhouseState.queues);
-            assert.isEmpty(inhouseState.lobbies);
-            inhouseState = await loadQueuesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
-            assert.lengthOf(inhouseState.queues, 1);
-        });
-        
-        it('return inhouse state with empty queues', async () => {
-            let loadQueuesIntoInhouse;
-            const findAllEnabledQueuesStub = sinon.stub();
-            findAllEnabledQueuesStub.resolves([{}]);
-            const loadQueueStub = sinon.stub();
-            loadQueueStub.rejects();
-            const { loadQueuesIntoInhouse: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllEnabledQueues: findAllEnabledQueuesStub,
-                },
-                './queue': {
-                    loadQueue: () => () => loadQueueStub,
-                },
-            });
-            loadQueuesIntoInhouse = mock;
-            
-            let inhouseState = {
-                guild: { id: '422549177151782925' },
-                lobbies: [],
-                queues: [],
-            };
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            assert.isEmpty(inhouseState.queues);
-            assert.isEmpty(inhouseState.lobbies);
-            inhouseState = await loadQueuesIntoInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(inhouseState);
-            assert.isEmpty(inhouseState.queues);
-        });
-    });
-
-    describe('getQueueFromInhouseByName', () => {
-        it('return queue from inhouse state', async () => {
-            const inhouseState = {
-                queues: [
-                    {
-                        queue_name: 'test',
-                    },
-                    {
-                        queue_name: 'test2',
-                    },
-                ],
-            };
-            const queue = getQueueFromInhouseByName(inhouseState, 'test');
-            assert.equal(queue.queue_name, 'test');
-        });
-    });
-
-    describe('getQueueFromInhouseByType', () => {
-        it('return queue from inhouse state', async () => {
-            const inhouseState = {
-                queues: [
-                    {
-                        queue_type: 'test',
-                    },
-                    {
-                        queue_type: 'test2',
-                    },
-                ],
-            };
-            const queue = getQueueFromInhouseByType(inhouseState, 'test');
-            assert.equal(queue.queue_type, 'test');
-        });
-    });
-
-    describe('addQueueToInhouse', () => {
-        it('add queue to inhouse state', async () => {
-            const queue = {
-                queue_name: 'test',
-            }
-            let inhouseState = {
-                queues: [],
-            };
-            inhouseState = addQueueToInhouse(inhouseState, queue);
-            assert.lengthOf(inhouseState.queues, 1);
-        });
-        
-        it('do not add existing queue to inhouse state', async () => {
-            const queue = {
-                queue_name: 'test',
-            }
-            let inhouseState = {
-                queues: [{ queue_name: 'test' }],
-            };
-            inhouseState = addQueueToInhouse(inhouseState, queue);
-            assert.lengthOf(inhouseState.queues, 1);
-        });
-    });
-
-    describe('removeQueueFromInhouse', () => {
-        it('remove queue from inhouse state', async () => {
-            let inhouseState = {
-                queues: [{ queue_name: 'test' }],
-            };
-            inhouseState = removeQueueFromInhouse(inhouseState, 'test');
-            assert.isEmpty(inhouseState.queues);
-        });
-    });
-
-    describe('reloadQueueForInhouse', () => {
-        it('remove challenge queue from inhouse state', async () => {
-            let inhouseState = {
-                queues: [{ queue_name: 'test' }],
-            };
-            const lobbyState = { lobby_name: 'test', queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE };
-            const eventEmitter = new EventEmitter();
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            inhouseState = await reloadQueueForInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(lobbyState)(inhouseState);
-            assert.isEmpty(inhouseState.queues);
-        });
-        
-        it('reload queue from inhouse state', async () => {
-            let reloadQueueForInhouse;
-            const loadQueueStub = sinon.stub();
-            loadQueueStub.resolves({ queueState: { queue_name: 'test' }, lobbyState: { lobby_name: 'test' } });
-            const { reloadQueueForInhouse: mock } = proxyquire('../../lib/ihl', {
-                './queue': {
-                    loadQueue: () => () => loadQueueStub,
-                },
-            });
-            reloadQueueForInhouse = mock;
-
-            const findOrCreateChannelInCategory = () => true;
-            const makeRole = guild => permissions => mentionable => async () => true;
-            
-            let inhouseState = {
-                lobbies: [],
-                queues: [
-                    {
-                        queue_name: 'test2',
-                        queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
-                    }
-                ],
-            };
-            const lobbyState = { lobby_name: 'test', queue_type: CONSTANTS.QUEUE_TYPE_DRAFT };
-            const eventEmitter = new EventEmitter();
-            inhouseState = await reloadQueueForInhouse(eventEmitter)({ findOrCreateChannelInCategory, makeRole })(lobbyState)(inhouseState);
-            assert.lengthOf(inhouseState.queues, 2);
-            assert.lengthOf(inhouseState.lobbies, 1);
-        });
-    });
-
     describe('hasActiveLobbies', () => {
         it('return true when user has active lobbies', async () => {
             let hasActiveLobbies;
@@ -591,17 +167,17 @@ describe('Database', () => {
         });
     });
 
-    describe('joinAllQueues', () => {
+    describe('getAllLobbyQueues', () => {
         it('join all queues', async () => {
-            let joinAllQueues;
+            let getAllLobbyQueues;
             const findAllEnabledQueuesStub = sinon.stub();
             findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { joinAllQueues: mock } = proxyquire('../../lib/ihl', {
+            const { getAllLobbyQueues: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllEnabledQueues: findAllEnabledQueuesStub,
                 },
             });
-            joinAllQueues = mock;
+            getAllLobbyQueues = mock;
             
             const inhouseState = {
                 guild: {
@@ -612,7 +188,7 @@ describe('Database', () => {
             const eventEmitter = new EventEmitter();
             let queues = await user.getQueues();
             assert.isEmpty(queues);
-            await joinAllQueues(inhouseState, user, eventEmitter);
+            await getAllLobbyQueues(inhouseState, user, eventEmitter);
             queues = await user.getQueues();
             assert.lengthOf(queues, 2);
         });
@@ -638,7 +214,7 @@ describe('Database', () => {
         });
     });
 
-    describe('leaveAllQueues', () => {
+    describe('getAllLobbyQueuesForUser', () => {
         it('do nothing when lobby not exist for queue', async () => {
             const inhouseState = {
                 guild: {
@@ -647,19 +223,19 @@ describe('Database', () => {
             }
             const user = await findUserById(1);
             const eventEmitter = new EventEmitter();
-            await leaveAllQueues(inhouseState, user, eventEmitter);
+            await getAllLobbyQueuesForUser(inhouseState, user, eventEmitter);
         });
 
         it('remove user from all queues', async () => {
-            let leaveAllQueues;
+            let getAllLobbyQueuesForUser;
             const findAllEnabledQueuesStub = sinon.stub();
             findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { leaveAllQueues: mock } = proxyquire('../../lib/ihl', {
+            const { getAllLobbyQueuesForUser: mock } = proxyquire('../../lib/ihl', {
                 './db': {
                     findAllEnabledQueues: findAllEnabledQueuesStub,
                 },
             });
-            leaveAllQueues = mock;
+            getAllLobbyQueuesForUser = mock;
             
             const inhouseState = {
                 guild: {
@@ -670,7 +246,7 @@ describe('Database', () => {
             const eventEmitter = new EventEmitter();
             let queues = await user.getQueues();
             assert.lengthOf(queues, 2);
-            await leaveAllQueues(inhouseState, user, eventEmitter);
+            await getAllLobbyQueuesForUser(inhouseState, user, eventEmitter);
             queues = await user.getQueues();
             assert.isEmpty(queues);
         });
@@ -686,35 +262,4 @@ describe('Database', () => {
             assert.isAtLeast(diff, -1000);
         });
     });
-    
-    describe('transformLeagueGuild', () => {
-        it('return LeagueGuildObject', async () => {
-            const guild = {guild: {id: 1}};
-            const get = sinon.stub();
-            get.withArgs(1).returns(guild);
-            const guilds = {get};
-            const league = {id: 1, guild_id: 1};
-            const leagueGuild = transformLeagueGuild(guilds)(league);
-            assert.isTrue(guilds.get.calledOnce);
-            assert.deepEqual(leagueGuild.league, league);
-            assert.deepEqual(leagueGuild.guild, guild);
-        });
-    });
-    
-    describe('loadInhouseState', () => {
-        // TODO
-    });
-    
-    describe('isMessageFromInhouse', () => {
-        // TODO
-    });
-    
-    describe('isMessageFromInhouseAdmin', () => {
-        // TODO
-    });
-    
-    describe('isMessageFromInhouseLobby', () => {
-        // TODO
-    });
-
 });

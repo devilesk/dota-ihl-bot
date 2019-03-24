@@ -17,7 +17,8 @@ const {
     findOrCreateBot,
     findOrCreateLobby,
     findOrCreateLobbyForGuild,
-    findLobby,
+    findLobbyByName,
+    findLobbyById,
     findBot,
     findAllUnassignedBot,
     findUnassignedBot,
@@ -71,8 +72,8 @@ describe('Database', () => {
 
     describe('findAllActiveLobbies', () => {
         it('return lobbies', async () => {
-            const lobbies = await findAllActiveLobbies('422549177151782925');
-            assert.lengthOf(lobbies, 1);
+            const lobbies = await findAllActiveLobbies();
+            assert.lengthOf(lobbies, 3);
         });
     });
 
@@ -166,10 +167,21 @@ describe('Database', () => {
         });
     });
 
-    describe('findLobby', () => {
+    describe('findLobbyByName', () => {
         it('return existing lobby', async () => {
             const league = await findLeague('422549177151782925');
-            const lobby = await findLobby('funny-yak-74');
+            const lobby = await findLobbyByName('funny-yak-74');
+            assert.exists(lobby);
+            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.league_id, league.id);
+            assert.equal(lobby.season_id, league.current_season_id);
+        });
+    });
+
+    describe('findLobbyById', () => {
+        it('return existing lobby', async () => {
+            const league = await findLeague('422549177151782925');
+            const lobby = await findLobbyById(1);
             assert.exists(lobby);
             assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
             assert.equal(lobby.league_id, league.id);
@@ -284,18 +296,18 @@ describe('Database', () => {
 
     describe('updateLobbyState', () => {
         it('update lobby state', async () => {
-            const result = await updateLobbyState({ lobby_name: 'funny-yak-74', password: 'pass' });
+            const result = await updateLobbyState({ id: 1, password: 'pass' });
             assert.lengthOf(result, 1);
-            const lobby = await findLobby('funny-yak-74');
+            const lobby = await findLobbyById(1);
             assert.equal(lobby.password, 'pass');
         });
     });
 
     describe('updateLobbyName', () => {
         it('update lobby name', async () => {
-            const result = await updateLobbyName('funny-yak-74')('renamed-lobby');
+            const result = await updateLobbyName({ id: 1 })('renamed-lobby');
             assert.lengthOf(result, 1);
-            const lobby = await findLobby('renamed-lobby');
+            const lobby = await findLobbyByName('renamed-lobby');
             assert.exists(lobby);
             assert.equal(lobby.id, 1);
         });
