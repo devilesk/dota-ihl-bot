@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
         timestamp: DataTypes.DATE,
     }, { underscored: true });
     Reputation.associate = (models) => {
-        Reputation.belongsTo(models.League);
         Reputation.belongsTo(models.User, {
             as: 'Recipient',
             foreignKey: 'recipient_user_id',

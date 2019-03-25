@@ -1,14 +1,15 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     lobbyToLobbyState,
-} = require('./lobby');
+} = require('../../lib/lobby');
 const {
     findLobbyByDiscordChannel,
-} = require('./db');
+} = require('../../lib/db');
 const {
     findOrCreateChannelInCategory,
     makeRole,
-} = require('./guild');
+} = require('../../lib/guild');
 
 /**
  * @class QueueJoinCommand
@@ -38,23 +39,27 @@ module.exports = class QueueJoinCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
+        logger.debug(`QueueJoinCommand lobbyState ${lobbyState}`);
         if (inhouseUser.rank_tier) {
             if (channel) {
                 // use lobbyState for given channel
                 lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                lobbyState = lobby ? await lobbyToLobbyState(inhouseState)({ findOrCreateChannelInCategory, makeRole })(lobby) : null;
+                lobbyState = lobby ? await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })(inhouseState)(lobby) : null;
                 if (lobbyState) {
-                    await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser);
+                    logger.debug('QueueJoinCommand channel found... joining queue');
+                    await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.author);
                 }
                 else {
                     await msg.say('Invalid lobby channel.');
                 }
             }
             else if (lobbyState) {
-                await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser);
+                logger.debug('QueueJoinCommand lobby found... joining queue');
+                await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.author);
             }
             else {
-                await this.ihlManager.joinAllQueues(inhouseState, inhouseUser);
+                logger.debug('QueueJoinCommand joining all queues');
+                await this.ihlManager.joinAllQueues(inhouseState, inhouseUser, msg.author);
             }
         }
         else {

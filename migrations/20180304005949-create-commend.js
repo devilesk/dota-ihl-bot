@@ -15,15 +15,6 @@ module.exports = {
                 key: 'id',
             },
         },
-        season_id: {
-            allowNull: false,
-            type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
-            references: {
-                model: 'Seasons',
-                key: 'id',
-            },
-        },
         recipient_user_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
@@ -53,6 +44,9 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.addIndex('Commends', ['lobby_id']))
+    .then(() => queryInterface.addIndex('Commends', ['recipient_user_id']))
+    .then(() => queryInterface.addIndex('Commends', ['giver_user_id'])),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Commends'),
 };

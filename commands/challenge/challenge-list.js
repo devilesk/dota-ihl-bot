@@ -1,7 +1,11 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     resolveUser,
 } = require('../../lib/guild');
+const {
+    mapPromise,
+} = require('../../lib/util/fp');
 
 /**
  * @class ChallengeListCommand
@@ -23,15 +27,18 @@ module.exports = class ChallengeListCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseUser }) {
+        logger.debug(`ChallengeListCommand`);
         const receivers = await mapPromise(async (challenge) => {
             const receiver = await challenge.getRecipient();
             return resolveUser(guild)(receiver);
-        }, inhouseUser.getChallengesGiven());
-
+        })(inhouseUser.getChallengesGiven());
+        logger.debug(`ChallengeListCommand receivers ${receivers}`);
+        
         const givers = await mapPromise(async (challenge) => {
             const giver = await challenge.getGiver();
             return resolveUser(guild)(giver);
-        }, inhouseUser.getChallengesReceived());
+        })(inhouseUser.getChallengesReceived());
+        logger.debug(`ChallengeListCommand givers ${givers}`);
         
         let text = '';
         
@@ -43,7 +50,7 @@ module.exports = class ChallengeListCommand extends IHLCommand {
             text += 'No challenges given.';
         }
         
-        if (receivers.length) {
+        if (givers.length) {
             text += '\nChallenges received from: ';
             text += givers.join(', ');
         }

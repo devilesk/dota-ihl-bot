@@ -1,10 +1,8 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    forceLobbyDraft,
-} = require('../../lib/lobby');
-const {
     findUser,
-} = require('../../lib/db');
+} = require('../../lib/ihlManager');
+const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyDraftCommand
@@ -23,12 +21,12 @@ module.exports = class LobbyDraftCommand extends IHLCommand {
                 {
                     key: 'captain_1',
                     prompt: 'Provide a captain.',
-                    type: 'member',
+                    type: 'string',
                 },
                 {
                     key: 'captain_2',
                     prompt: 'Provide a captain.',
-                    type: 'member',
+                    type: 'string',
                 },
             ],
         }, {

@@ -47,6 +47,7 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.addIndex('Bots', ['league_id'])),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Bots'),
 };

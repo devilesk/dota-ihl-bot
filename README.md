@@ -1,1 +1,36 @@
 # dota-ihl-bot
+
+## Installation
+
+**Tested with Node.js 10.9.0**
+
+**Tested with PostgreSQL 9.5.14**
+
+`npm install`
+
+`.env` file
+
+```bash
+DB_NAME=ihl
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_HOST=127.0.0.1
+TOKEN=
+COMMAND_PREFIX=!
+OWNER_DISCORD_ID=
+MATCH_POLL_INTERVAL=5000
+INVITE_URL=
+CLIENT_ID=
+CLIENT_SECRET=
+CALLBACK_URL=
+STEAM_API_KEY=
+LOGGER_SILENT=false
+LOGGER_LEVEL=debug
+LOGGER_EXCEPTIONLOGFILE=exceptions.log
+LOGGER_DIRNAME=logs
+LOGGER_FILENAME=application-%DATE%.log
+LOGGER_DATEPATTERN=YYYY-MM-DD-HH
+LOGGER_ZIPPEDARCHIVE=true
+LOGGER_MAXSIZE=20m
+LOGGER_MAXFILES=14d
+```

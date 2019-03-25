@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         lobby_name: {
             allowNull: false,
             type: DataTypes.STRING,
-            unique: true,
         },
         channel_id: DataTypes.STRING,
         role_id: DataTypes.STRING,
@@ -27,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
         match_id: DataTypes.STRING,
+        fail_reason: DataTypes.STRING,
         started_at: DataTypes.DATE,
         finished_at: DataTypes.DATE,
         valve_data: DataTypes.JSONB,

@@ -28,7 +28,7 @@ module.exports = {
         },
         bot_id: {
             type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
                 model: 'Bots',
                 key: 'id',
@@ -41,7 +41,6 @@ module.exports = {
         lobby_name: {
             allowNull: false,
             type: Sequelize.STRING,
-            unique: true,
         },
         channel_id: {
             type: Sequelize.STRING,
@@ -69,9 +68,12 @@ module.exports = {
         match_id: {
             type: Sequelize.STRING,
         },
+        fail_reason: {
+            type: Sequelize.STRING,
+        },
         captain_1_user_id: {
             type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
                 model: 'Users',
                 key: 'id',
@@ -79,7 +81,7 @@ module.exports = {
         },
         captain_2_user_id: {
             type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
             references: {
                 model: 'Users',
                 key: 'id',
@@ -105,6 +107,12 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.addIndex('Lobbies', ['league_id']))
+    .then(() => queryInterface.addIndex('Lobbies', ['season_id']))
+    .then(() => queryInterface.addConstraint('Lobbies', ['season_id', 'lobby_name'], {
+        type: 'unique',
+        name: 'uq_lobbies_season_id_lobby_name',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Lobbies'),
 };

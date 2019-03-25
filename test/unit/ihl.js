@@ -171,7 +171,7 @@ describe('Database', () => {
         it('return MSG_QUEUE_JOINED', async () => {
             const user = await findUserById(11);
             user.queue_timeout = 0;
-            const value = await joinLobbyQueue(user)({ id: 2 });
+            const value = await joinLobbyQueue(user)({ id: 2, state: CONSTANTS.STATE_WAITING_FOR_QUEUE });
             assert.equal(CONSTANTS.MSG_QUEUE_JOINED, value);
         });
     });

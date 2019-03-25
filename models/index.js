@@ -6,9 +6,9 @@ const logger = require('../lib/logger');
 const basename = path.basename(__filename);
 const config = require('../config.js');
 
-config.logging = function (str) {
+config.logging = config.logging ? function (str) {
     logger.debug(str);
-};
+} : false;
 
 class Database {
     constructor(config) {

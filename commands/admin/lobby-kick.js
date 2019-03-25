@@ -3,6 +3,7 @@ const convertor = require('steam-id-convertor');
 const {
     findUserByDiscordId,
 } = require('../../lib/db');
+const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyKickCommand

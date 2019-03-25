@@ -1,7 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    findOrCreateLeague,
     queryUserLeaderboardRank,
 } = require('../../lib/db');
 const convertor = require('steam-id-convertor');
@@ -48,6 +47,7 @@ module.exports = class WhoisCommand extends IHLCommand {
             ],
         }, {
             lobbyState: false,
+            inhouseUser: false,
         });
     }
 
@@ -132,6 +132,11 @@ module.exports = class WhoisCommand extends IHLCommand {
                         {
                             name: 'Win-Loss',
                             value: `${wins}-${losses}`,
+                            inline: true,
+                        },
+                        {
+                            name: 'Game Mode Pref.',
+                            value: `${user.game_mode_preference.replace('DOTA_GAMEMODE_', '')}`,
                             inline: true,
                         },
                         {

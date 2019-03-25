@@ -1,7 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
-    findOrCreateLeague,
     queryLeaderboardRank,
 } = require('../../lib/db');
 
@@ -40,7 +39,7 @@ module.exports = class LeaderboardCommand extends IHLCommand {
                 fields: [
                     {
                         name: 'Leaderboard',
-                        value: data.join('\n'),
+                        value: data.join('\n') || 'N/A',
                     },
                 ],
             },

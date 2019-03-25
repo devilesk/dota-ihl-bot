@@ -1,7 +1,7 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
-} = require('../../lib/db');
+} = require('../../lib/ihlManager');
 
 /**
  * @class UserVouchCommand
@@ -21,7 +21,7 @@ module.exports = class UserVouchCommand extends IHLCommand {
                 {
                     key: 'member',
                     prompt: 'Provide a user to vouch.',
-                    type: 'member',
+                    type: 'string',
                 },
             ],
         }, {

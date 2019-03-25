@@ -37,9 +37,11 @@ module.exports = {
             type: Sequelize.DATE,
         },
     })
-        .then(() => queryInterface.addConstraint('LobbyQueuers', ['lobby_id', 'user_id'], {
-            type: 'primary key',
-            name: 'pk_lobbyqueuers_lobby_id_user_id',
-        })),
+    .then(() => queryInterface.addIndex('LobbyQueuers', ['lobby_id']))
+    .then(() => queryInterface.addIndex('LobbyQueuers', ['user_id']))
+    .then(() => queryInterface.addConstraint('LobbyQueuers', ['lobby_id', 'user_id'], {
+        type: 'primary key',
+        name: 'pk_lobbyqueuers_lobby_id_user_id',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('LobbyQueuers'),
 };

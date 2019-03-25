@@ -1,7 +1,8 @@
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
-} = require('../../lib/db');
+} = require('../../lib/ihlManager');
+const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyInviteCommand
@@ -20,7 +21,7 @@ module.exports = class LobbyInviteCommand extends IHLCommand {
                 {
                     key: 'member',
                     prompt: 'Provide a user to invite.',
-                    type: 'member',
+                    type: 'string',
                 },
             ],
         }, {

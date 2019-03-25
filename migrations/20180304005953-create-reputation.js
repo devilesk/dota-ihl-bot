@@ -6,15 +6,6 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
-            allowNull: false,
-            type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
-            references: {
-                model: 'Leagues',
-                key: 'id',
-            },
-        },
         recipient_user_id: {
             allowNull: false,
             type: Sequelize.INTEGER,
@@ -44,6 +35,8 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.addIndex('Reputations', ['recipient_user_id']))
+    .then(() => queryInterface.addIndex('Reputations', ['giver_user_id'])),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Reputations'),
 };

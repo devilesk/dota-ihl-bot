@@ -8,8 +8,8 @@ const validLeagueAttributes = Object.keys(db.League.attributes).filter(key => !d
 const settingMap = {};
 
 validLeagueAttributes.forEach(a => {
-    settingMap[a.replace(/_/g, '')] = a;
-})
+    settingMap[a.toLowerCase().replace(/_/g, '')] = a;
+});
 
 /**
  * @class LeagueUpdateCommand
@@ -39,6 +39,7 @@ class LeagueUpdateCommand extends IHLCommand {
                     type: 'string',
                     validate: value => (value ? true : 'Must provide a setting value.'),
                 },
+            ],
         }, {
             inhouseAdmin: true,
             inhouseState: true,
@@ -47,7 +48,7 @@ class LeagueUpdateCommand extends IHLCommand {
         });
     }
     
-    static get settingMap(){
+    static get settingMap() {
         return settingMap;
     }
 
@@ -56,7 +57,8 @@ class LeagueUpdateCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }, { setting, value }) {
-        const field = settingMap[setting];
+        const field = settingMap[setting.toLowerCase().replace(/_/g, '')];
+        console.log({ [field]: value });
         await updateLeague(guild.id)({ [field]: value });
         await msg.say(`League setting updated. ${setting} set to ${value}`);
     }

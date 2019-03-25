@@ -23,6 +23,7 @@ module.exports = class NicknameCommand extends IHLCommand {
             ],
         }, {
             lobbyState: false,
+            inhouseUserVouched: false,
         });
     }
 

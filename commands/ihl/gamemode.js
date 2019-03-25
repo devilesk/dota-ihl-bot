@@ -27,6 +27,7 @@ module.exports = class GameModeCommand extends IHLCommand {
             ],
         }, {
             lobbyState: false,
+            inhouseUserVouched: false,
         });
     }
 

@@ -54,6 +54,9 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.addIndex('Leaderboards', ['league_id']))
+    .then(() => queryInterface.addIndex('Leaderboards', ['season_id']))
+    .then(() => queryInterface.addIndex('Leaderboards', ['user_id'])),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Leaderboards'),
 };

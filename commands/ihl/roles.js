@@ -22,6 +22,7 @@ module.exports = class RolesCommand extends IHLCommand {
             ],
         }, {
             lobbyState: false,
+            inhouseUserVouched: false,
         });
     }
 

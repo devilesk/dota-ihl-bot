@@ -4,16 +4,16 @@ const {
     getQueuers,
     removeQueuer,
     lobbyToLobbyState,
-} = require('./lobby');
+} = require('../../lib/lobby');
 const {
     findLobbyById,
     findLobbyByDiscordChannel,
-} = require('./db');
+} = require('../../lib/db');
 const {
     findOrCreateChannelInCategory,
     makeRole,
-} = require('./guild');
-const db = require('../models');
+} = require('../../lib/guild');
+const db = require('../../models');
 
 /**
  * @class QueueLeaveCommand
@@ -46,19 +46,19 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
         if (channel) {
             // use lobbyState for given channel
             const lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)({ findOrCreateChannelInCategory, makeRole })(lobby) : null;
+            lobbyState = lobby ? await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })(inhouseState)(lobby) : null;
             if (lobbyState) {
-                this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser);
+                this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
             }
             else {
                 await msg.say('Invalid lobby channel.');
             }
         }
         else if (lobbyState) {
-            this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser);
+            this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
         }
         else {
-            this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser);
+            this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser, msg.author);
         }
 
     }

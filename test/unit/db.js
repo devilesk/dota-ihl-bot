@@ -362,9 +362,8 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const giver = await findUserById(1);
             const receiver = await findUserById(2);
-            const rep = await findOrCreateReputation(league)(giver)(receiver);
+            const [rep, created] = await findOrCreateReputation(giver)(receiver);
             assert.exists(rep);
-            assert.equal(rep.league_id, 1);
             assert.equal(rep.giver_user_id, giver.id);
             assert.equal(rep.recipient_user_id, receiver.id);
         });
@@ -375,7 +374,7 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const giver = await findUserById(3);
             const receiver = await findUserById(1);
-            const result = await destroyReputation(league)(giver)(receiver);
+            const result = await destroyReputation(giver)(receiver);
             assert.equal(result, 1);
         });
     });

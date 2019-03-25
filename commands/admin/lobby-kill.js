@@ -1,4 +1,5 @@
 const IHLCommand = require('../../lib/ihlCommand');
+const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyKillCommand
