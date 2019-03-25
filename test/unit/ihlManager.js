@@ -8,17 +8,9 @@ const EventEmitter = require('events').EventEmitter;
 const db = require('../../models');
 const {
     findUser,
-    getInhouseState,
-    getIndexOfInhouseState,
-    addInhouseState,
     loadInhouseStates,
     loadInhouseStatesFromLeagues,
-    isMessageFromAnyInhouse,
-    isMessageFromAnyInhouseAdmin,
-    isMessageFromAnyInhouseLobby,
-    isMessageFromLobby,
     sendMatchEndMessage,
-    initLeague,
     IHLManager,
     ihlManager,
 } = proxyquire('../../lib/ihlManager', {
@@ -42,7 +34,6 @@ describe('Database', () => {
         ],
         { logging: false },
     );
-    
     describe('findUser', () => {
         it('return user matching discord id', async () => {
             const guild = {
@@ -71,61 +62,6 @@ describe('Database', () => {
             assert.equal(user.id, 2);
             assert.equal(discord_user.id, '112718237040398336');
             assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
-        });
-    });
-    
-    describe('getInhouseState', () => {
-        it('return inhouse state matching guild id', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            const inhouseStates = [inhouseState];
-            assert.deepEqual(getInhouseState(inhouseStates, '123'), inhouseState);
-        });
-        
-        it('return undefined', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            const inhouseStates = [inhouseState];
-            assert.isUndefined(getInhouseState(inhouseStates, '456'));
-        });
-    });
-    
-    describe('getIndexOfInhouseState', () => {
-        it('return 0', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            const inhouseStates = [inhouseState];
-            assert.equal(getIndexOfInhouseState(inhouseStates, '123'), 0);
-        });
-        
-        it('return 1', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            const inhouseStates = [{guild: {id: '456'}}, inhouseState];
-            assert.equal(getIndexOfInhouseState(inhouseStates, '123'), 1);
-        });
-        
-        it('return -1', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            const inhouseStates = [inhouseState];
-            assert.equal(getIndexOfInhouseState(inhouseStates, '456'), -1);
-        });
-    });
-    
-    describe('addInhouseState', () => {
-        it('return inhouse states with length 2 and inhouseState at end', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            let inhouseStates = [{guild: {id: '456'}}];
-            inhouseStates = addInhouseState(inhouseStates)(inhouseState);
-            assert.lengthOf(inhouseStates, 2);
-            assert.notDeepEqual(inhouseStates[0], inhouseState);
-            assert.deepEqual(inhouseStates[1], inhouseState);
-        });
-        
-        it('return inhouseStates with length 3 and inhouseState at end', async () => {
-            const inhouseState = {guild: {id: '123'}};
-            let inhouseStates = [{guild: {id: 'a'}}, {guild: {id: '123'}}, {guild: {id: '456'}}];
-            inhouseStates = addInhouseState(inhouseStates)(inhouseState);
-            assert.lengthOf(inhouseStates, 3);
-            assert.notDeepEqual(inhouseStates[0], inhouseState);
-            assert.notDeepEqual(inhouseStates[1], inhouseState);
-            assert.deepEqual(inhouseStates[2], inhouseState);
         });
     });
     

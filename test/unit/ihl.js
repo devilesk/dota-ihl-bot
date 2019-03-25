@@ -10,6 +10,9 @@ const {
     getUserRankTier,
     registerUser,
     createInhouseState,
+    initLeague,
+    createNewLeague,
+    createLobbiesFromQueues,
     hasActiveLobbies,
     joinLobbyQueue,
     getAllLobbyQueues,
@@ -18,6 +21,9 @@ const {
     banInhouseQueue,
 } = proxyquire('../../lib/ihl', {
     './guild': require('../../lib/guildStub'),
+    './lobby': {
+        lobbyToLobbyState: () => () => async () => sinon.stub(),
+    }
 });
 const {
     getActiveQueuers,
@@ -44,6 +50,9 @@ describe('Database', () => {
         ],
         { logging: false },
     );
+    
+    const lobby_name = 'funny-yak-74';
+    const id = 1;
 
     describe('getUserRankTier', () => {
         it('return a rank tier', async () => {
@@ -78,7 +87,7 @@ describe('Database', () => {
                 },
                 guild: {},
             }
-            const inhouseState = await createInhouseState(new EventEmitter())(args);
+            const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
         });
         
@@ -88,9 +97,21 @@ describe('Database', () => {
                 league,
                 guild: {},
             }
-            const inhouseState = await createInhouseState(new EventEmitter())(args);
+            const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
         });
+    });
+    
+    describe('initLeague', () => {
+        // TODO
+    });
+    
+    describe('createNewLeague', () => {
+        // TODO
+    });
+    
+    describe('createLobbiesFromQueues', () => {
+        // TODO
     });
 
     describe('hasActiveLobbies', () => {
@@ -126,91 +147,61 @@ describe('Database', () => {
     });
 
     describe('joinLobbyQueue', () => {
-        it('emit MSG_QUEUE_BANNED when user timed out', async () => {
+        it('return MSG_QUEUE_BANNED when user timed out', async () => {
             const user = await findUserById(1);
             user.queue_timeout = Date.now() + 10000;
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.MSG_QUEUE_BANNED, listener);
-            await joinLobbyQueue(user, eventEmitter)({ lobby_name: 'test' });
-            assert.isTrue(listener.calledOnce);
+            const value = await joinLobbyQueue(user)({ lobby_name: 'test' });
+            assert.equal(CONSTANTS.MSG_QUEUE_BANNED, value);
         });
         
-        it('emit MSG_QUEUE_ALREADY_JOINED when user already in queue', async () => {
+        it('return MSG_QUEUE_ALREADY_JOINED when user already in queue', async () => {
             const user = await findUserById(1);
             user.queue_timeout = 0;
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, listener);
-            await joinLobbyQueue(user, eventEmitter)({ lobby_name: 'funny-yak-74' });
-            assert.isTrue(listener.calledOnce);
+            const value = await joinLobbyQueue(user)({ id });
+            assert.equal(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, value);
         });
         
-        it('emit MSG_QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
+        it('return MSG_QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
             const user = await findUserById(2);
             user.queue_timeout = 0;
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, listener);
-            await joinLobbyQueue(user, eventEmitter)({ lobby_name: 'funny-yak-75' });
-            assert.isTrue(listener.calledOnce);
+            const value = await joinLobbyQueue(user)({ id: 2 });
+            assert.equal(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, value);
         });
         
-        it('emit MSG_QUEUE_JOINED', async () => {
+        it('return MSG_QUEUE_JOINED', async () => {
             const user = await findUserById(11);
             user.queue_timeout = 0;
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.MSG_QUEUE_JOINED, listener);
-            await joinLobbyQueue(user, eventEmitter)({ lobby_name: 'funny-yak-75' });
-            assert.isTrue(listener.calledOnce);
+            const value = await joinLobbyQueue(user)({ id: 2 });
+            assert.equal(CONSTANTS.MSG_QUEUE_JOINED, value);
         });
     });
 
     describe('getAllLobbyQueues', () => {
-        it('join all queues', async () => {
-            let getAllLobbyQueues;
-            const findAllEnabledQueuesStub = sinon.stub();
-            findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { getAllLobbyQueues: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllEnabledQueues: findAllEnabledQueuesStub,
-                },
-            });
-            getAllLobbyQueues = mock;
-            
+        it('return queuing lobbies for inhouse', async () => {
             const inhouseState = {
                 guild: {
                     id: '422549177151782925',
                 },
+                category: {
+                    name: 'test',
+                },
             }
-            const user = await findUserById(11);
-            const eventEmitter = new EventEmitter();
-            let queues = await user.getQueues();
-            assert.isEmpty(queues);
-            await getAllLobbyQueues(inhouseState, user, eventEmitter);
-            queues = await user.getQueues();
-            assert.lengthOf(queues, 2);
+            const lobbyStates = await getAllLobbyQueues(inhouseState);
+            assert.lengthOf(lobbyStates, 1);
         });
     });
     
     describe('leaveLobbyQueue', () => {
-        it('emit MSG_QUEUE_LEFT when user already in queue', async () => {
+        it('return true when user already in queue', async () => {
             const user = await findUserById(1);
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.MSG_QUEUE_LEFT, listener);
-            await leaveLobbyQueue(user, eventEmitter)({ lobby_name: 'funny-yak-74' });
-            assert.isTrue(listener.calledOnce);
+            const value = await leaveLobbyQueue(user)({ id });
+            assert.isTrue(value);
         });
         
-        it('emit EVENT_QUEUE_NOT_JOINED when not in queue', async () => {
+        it('return false when not in queue', async () => {
             const user = await findUserById(11);
-            const eventEmitter = new EventEmitter();
-            const listener = sinon.spy();
-            eventEmitter.on(CONSTANTS.EVENT_QUEUE_NOT_JOINED, listener);
-            await leaveLobbyQueue(user, eventEmitter)({ lobby_name: 'funny-yak-75' });
-            assert.isTrue(listener.calledOnce);
+            const value = await leaveLobbyQueue(user)({ id: 2 });
+            assert.isFalse(value);
         });
     });
 
@@ -220,35 +211,13 @@ describe('Database', () => {
                 guild: {
                     id: '422549177151782925',
                 },
-            }
-            const user = await findUserById(1);
-            const eventEmitter = new EventEmitter();
-            await getAllLobbyQueuesForUser(inhouseState, user, eventEmitter);
-        });
-
-        it('remove user from all queues', async () => {
-            let getAllLobbyQueuesForUser;
-            const findAllEnabledQueuesStub = sinon.stub();
-            findAllEnabledQueuesStub.resolves([{ queue_name: 'funny-yak-74' }, { queue_name: 'funny-yak-75' }]);
-            const { getAllLobbyQueuesForUser: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findAllEnabledQueues: findAllEnabledQueuesStub,
-                },
-            });
-            getAllLobbyQueuesForUser = mock;
-            
-            const inhouseState = {
-                guild: {
-                    id: '422549177151782925',
+                category: {
+                    name: 'test',
                 },
             }
             const user = await findUserById(1);
-            const eventEmitter = new EventEmitter();
-            let queues = await user.getQueues();
-            assert.lengthOf(queues, 2);
-            await getAllLobbyQueuesForUser(inhouseState, user, eventEmitter);
-            queues = await user.getQueues();
-            assert.isEmpty(queues);
+            const lobbies = await getAllLobbyQueuesForUser(inhouseState, user);
+            assert.lengthOf(lobbies, 2);
         });
     });
 

@@ -30,6 +30,7 @@ const {
     findLobbyByMatchId,
     updateLeague,
     updateLobbyState,
+    updateLobby,
     updateLobbyName,
     updateBotStatusBySteamId,
     updateBotStatus,
@@ -73,7 +74,7 @@ describe('Database', () => {
     describe('findAllActiveLobbies', () => {
         it('return lobbies', async () => {
             const lobbies = await findAllActiveLobbies();
-            assert.lengthOf(lobbies, 3);
+            assert.lengthOf(lobbies, 5);
         });
     });
 
@@ -294,9 +295,9 @@ describe('Database', () => {
         });
     });
 
-    describe('updateLobbyState', () => {
+    describe('updateLobby', () => {
         it('update lobby state', async () => {
-            const result = await updateLobbyState({ id: 1, password: 'pass' });
+            const result = await updateLobby({ id: 1, password: 'pass' });
             assert.lengthOf(result, 1);
             const lobby = await findLobbyById(1);
             assert.equal(lobby.password, 'pass');

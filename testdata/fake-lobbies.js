@@ -83,4 +83,21 @@ module.exports = [
             updated_at: new Date(),
         }
     },
+    {
+        model: "Lobby",
+        data: {
+            id: 6,
+            league_id: 1,
+            season_id: 1,
+            queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
+            lobby_name: 'funny-1',
+            password: 'rd2l',
+            state: CONSTANTS.STATE_WAITING_FOR_QUEUE,
+            captain_1_user_id: 1,
+            captain_2_user_id: 4,
+            match_id: '123',
+            created_at: new Date(),
+            updated_at: new Date(),
+        }
+    },
 ]
