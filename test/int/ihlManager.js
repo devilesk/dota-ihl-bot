@@ -17,6 +17,7 @@ const {
     './guild': require('../../lib/guildStub'),
 });
 const CONSTANTS = require('../../lib/constants');
+const dotenv = require('dotenv').config();
 
 describe('Database', () => {
     sequelizeMockingMocha(
