@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     Season.associate = (models) => {
         Season.belongsTo(models.League);
         Season.hasMany(models.Lobby);
-        Season.hasMany(models.Commend);
         Season.hasMany(models.Leaderboard);
 
         Season.addScope('active', {

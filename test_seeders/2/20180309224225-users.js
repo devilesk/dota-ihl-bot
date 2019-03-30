@@ -24,7 +24,7 @@ module.exports = {
     {
         id: 2,
         league_id: 1,
-        steamid_64: '76561198136290105',
+        steamid_64: '76561198002069391',
         discord_id: '112718237040398336',
         nickname: 'Ari*',
         role_1: -1,
@@ -44,7 +44,7 @@ module.exports = {
     {
         id: 3,
         league_id: 1,
-        steamid_64: '76561198151093473',
+        steamid_64: '76561198007202563',
         discord_id: '424329081862225921',
         nickname: 'Sponge',
         role_1: -1,
@@ -64,7 +64,7 @@ module.exports = {
     {
         id: 4,
         league_id: 1,
-        steamid_64: '76561198068904086',
+        steamid_64: '76561198056207790',
         discord_id: '361185987373826051',
         nickname: 'MellowPrincess',
         role_1: -1,
@@ -84,7 +84,7 @@ module.exports = {
     {
         id: 5,
         league_id: 1,
-        steamid_64: '76561197978831683',
+        steamid_64: '76561198006744028',
         discord_id: '95704393151680512',
         nickname: 'Sasquatch',
         role_1: -1,
@@ -104,7 +104,7 @@ module.exports = {
     {
         id: 6,
         league_id: 1,
-        steamid_64: '76561198024087473',
+        steamid_64: '76561198141833531',
         discord_id: '93164485178564608',
         nickname: 'PooNaNi',
         role_1: -1,
@@ -124,7 +124,7 @@ module.exports = {
     {
         id: 7,
         league_id: 1,
-        steamid_64: '76561198038335275',
+        steamid_64: '76561198084283419',
         discord_id: '108018188054286336',
         nickname: 'Badger',
         role_1: -1,
@@ -144,7 +144,7 @@ module.exports = {
     {
         id: 8,
         league_id: 1,
-        steamid_64: '76561197995253668',
+        steamid_64: '76561198053292860',
         discord_id: '76783098456444928',
         nickname: 'Tomb the Ram of Thunder',
         role_1: -1,
@@ -184,7 +184,7 @@ module.exports = {
     {
         id: 10,
         league_id: 1,
-        steamid_64: '76561198047112485',
+        steamid_64: '76561198132465299',
         discord_id: '122154474390159362',
         nickname: 'Autoattacks',
         role_1: -1,
@@ -204,7 +204,7 @@ module.exports = {
     {
         id: 11,
         league_id: 1,
-        steamid_64: '76561198045206080',
+        steamid_64: '76561198085487944',
         discord_id: '149649478691979264',
         nickname: 'rawr',
         role_1: -1,
