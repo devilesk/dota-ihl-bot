@@ -12,6 +12,7 @@ const {
     getValveMatchDetails,
     setMatchDetails,
     setMatchPlayerDetails,
+    updatePlayerRatings,
     createMatchEndMessageEmbed,
     MatchTracker,
 } = require('../../lib/matchTracker');
@@ -56,7 +57,7 @@ describe('Database', () => {
         });
     });
     
-    describe.only('setMatchPlayerDetails', () => {
+    describe('setMatchPlayerDetails', () => {
         it('set lobby players match stats', async () => {
             let lobby = await setMatchDetails({ id: 1 });
             await setMatchPlayerDetails(lobby);
@@ -70,11 +71,22 @@ describe('Database', () => {
                 expect(player.LobbyPlayer.xpm).to.be.a('number');
                 assert.equal(player.LobbyPlayer.lose, player.LobbyPlayer.faction === 1);
                 assert.equal(player.LobbyPlayer.win, player.LobbyPlayer.faction === 2);
-                assert.equal(player.LobbyPlayer.lose, player.rating === 975);
-                assert.equal(player.LobbyPlayer.win, player.rating === 1025);
             }
             lobby = await getLobby({ id: lobby.id });
             assert.equal(lobby.winner, 2);
+        });
+    });
+    
+    describe('updatePlayerRatings', () => {
+        it('set lobby players match stats', async () => {
+            let lobby = await setMatchDetails({ id: 1 });
+            await setMatchPlayerDetails(lobby);
+            await updatePlayerRatings({ id: 1 });
+            const players = await getPlayers()(lobby);
+            for (const player of players) {
+                assert.equal(player.LobbyPlayer.lose, player.rating === 990);
+                assert.equal(player.LobbyPlayer.win, player.rating === 1010);
+            }
         });
     });
     

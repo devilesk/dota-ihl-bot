@@ -47,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 1000,
         },
+        elo_k_factor: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 20,
+        },
         default_game_mode: {
             allowNull: false,
             type: DataTypes.STRING,
