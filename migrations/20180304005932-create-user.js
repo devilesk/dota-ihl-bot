@@ -61,6 +61,11 @@ module.exports = {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
         },
+        rating: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 1000,
+        },
         rank_tier: {
             type: Sequelize.INTEGER,
         },

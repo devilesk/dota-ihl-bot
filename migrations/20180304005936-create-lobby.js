@@ -68,6 +68,11 @@ module.exports = {
         match_id: {
             type: Sequelize.STRING,
         },
+        winner: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         fail_reason: {
             type: Sequelize.STRING,
         },

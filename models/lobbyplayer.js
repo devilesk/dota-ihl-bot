@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        win: {
+            allowNull: false,
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        lose: {
+            allowNull: false,
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
         hero_id: {
             allowNull: false,
             type: DataTypes.INTEGER,

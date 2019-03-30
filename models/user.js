@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        rating: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 1000,
+        },
         rank_tier: DataTypes.INTEGER,
         game_mode_preference: {
             allowNull: false,

@@ -28,6 +28,16 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
+        win: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
+        lose: {
+            allowNull: false,
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
         hero_id: {
             allowNull: false,
             type: Sequelize.INTEGER,

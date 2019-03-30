@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
         match_id: DataTypes.STRING,
+        winner: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
         fail_reason: DataTypes.STRING,
         started_at: DataTypes.DATE,
         finished_at: DataTypes.DATE,
