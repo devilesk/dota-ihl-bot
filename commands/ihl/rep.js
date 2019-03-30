@@ -3,7 +3,6 @@ const {
     findUser,
 } = require('../../lib/ihlManager');
 const {
-    findUserByDiscordId,
     findOrCreateReputation,
 } = require('../../lib/db');
 

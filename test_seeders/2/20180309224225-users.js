@@ -1,7 +1,8 @@
-const CONSTANTS = require('../lib/constants');
+const CONSTANTS = require('../../lib/constants');
 
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Users', [{
+        id: 1,
         league_id: 1,
         steamid_64: '76561198015512690',
         discord_id: '76864899866697728',
@@ -21,6 +22,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 2,
         league_id: 1,
         steamid_64: '76561198136290105',
         discord_id: '112718237040398336',
@@ -40,6 +42,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 3,
         league_id: 1,
         steamid_64: '76561198151093473',
         discord_id: '424329081862225921',
@@ -59,6 +62,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 4,
         league_id: 1,
         steamid_64: '76561198068904086',
         discord_id: '361185987373826051',
@@ -78,6 +82,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 5,
         league_id: 1,
         steamid_64: '76561197978831683',
         discord_id: '95704393151680512',
@@ -97,6 +102,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 6,
         league_id: 1,
         steamid_64: '76561198024087473',
         discord_id: '93164485178564608',
@@ -116,6 +122,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 7,
         league_id: 1,
         steamid_64: '76561198038335275',
         discord_id: '108018188054286336',
@@ -135,6 +142,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 8,
         league_id: 1,
         steamid_64: '76561197995253668',
         discord_id: '76783098456444928',
@@ -154,6 +162,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 9,
         league_id: 1,
         steamid_64: '76561198026721661',
         discord_id: '103292711313899520',
@@ -173,6 +182,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 10,
         league_id: 1,
         steamid_64: '76561198047112485',
         discord_id: '122154474390159362',
@@ -192,6 +202,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 11,
         league_id: 1,
         steamid_64: '76561198045206080',
         discord_id: '149649478691979264',
@@ -210,12 +221,12 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
     },
-
     {
+        id: 12,
         league_id: 1,
         steamid_64: '76561198077337441',
-        discord_id: '1361185987373826051',
-        nickname: 'Test1',
+        discord_id: '85614143951892480',
+        nickname: 'UB3R-B0T',
         role_1: -1,
         role_2: -1,
         role_3: -1,
@@ -231,10 +242,11 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 13,
         league_id: 1,
-        steamid_64: '76561198135828361',
-        discord_id: '195704393151680512',
-        nickname: 'Test2',
+        steamid_64: '76561198035954102',
+        discord_id: '398690824721924107',
+        nickname: 'AdvaithBot',
         role_1: -1,
         role_2: -1,
         role_3: -1,
@@ -250,10 +262,11 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 14,
         league_id: 1,
         steamid_64: '76561198013337613',
-        discord_id: '171370425099100160',
-        nickname: 'Test3',
+        discord_id: '276060004262477825',
+        nickname: 'Koya',
         role_1: -1,
         role_2: -1,
         role_3: -1,
@@ -269,10 +282,11 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 15,
         league_id: 1,
         steamid_64: '76561197984954207',
-        discord_id: '1108018188054286336',
-        nickname: 'Test4',
+        discord_id: '239631525350604801',
+        nickname: 'Pancake',
         role_1: -1,
         role_2: -1,
         role_3: -1,
@@ -288,10 +302,11 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 16,
         league_id: 1,
-        steamid_64: '76561198010115720',
-        discord_id: '176783098456444928',
-        nickname: 'Test5',
+        steamid_64: '76561198035149291',
+        discord_id: '206955935229280256',
+        nickname: 'Senpai',
         role_1: -1,
         role_2: -1,
         role_3: -1,
@@ -306,7 +321,9 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
     },
+    
     {
+        id: 17,
         league_id: 1,
         steamid_64: '76561198032905940',
         discord_id: '1103292711313899520',
@@ -326,6 +343,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 18,
         league_id: 1,
         steamid_64: '76561198150158005',
         discord_id: '1122154474390159362',
@@ -345,6 +363,7 @@ module.exports = {
         updated_at: new Date(),
     },
     {
+        id: 19,
         league_id: 1,
         steamid_64: '76561198117347893',
         discord_id: '1149649478691979264',

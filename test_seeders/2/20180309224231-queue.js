@@ -1,4 +1,4 @@
-const CONSTANTS = require('../lib/constants');
+const CONSTANTS = require('../../lib/constants');
 
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Queues', [
