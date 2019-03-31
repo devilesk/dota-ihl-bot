@@ -79,6 +79,7 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    }),
+    })
+    .then(() => queryInterface.sequelize.query('CREATE EXTENSION fuzzystrmatch;')),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Leagues'),
 };
