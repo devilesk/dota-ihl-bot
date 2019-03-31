@@ -95,6 +95,8 @@ describe('Database', () => {
             const lobby = await setMatchDetails({ id: 1 });
             const embed = await createMatchEndMessageEmbed(lobby.match_id);
             assert.exists(embed);
+            assert.equal(embed.embed.fields[1].name, 'JBay7');
+            assert.equal(embed.embed.fields[2].name, 'Sabo');
         });
     });
     
