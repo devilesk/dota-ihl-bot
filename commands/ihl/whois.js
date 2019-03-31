@@ -10,6 +10,7 @@ const {
 } = require('../../lib/ihlManager');
 
 const RANK_TO_MEDAL = {
+    80: 'Immortal',
     70: 'Divine',
     60: 'Ancient',
     50: 'Legend',
@@ -17,12 +18,23 @@ const RANK_TO_MEDAL = {
     30: 'Crusader',
     20: 'Guardian',
     10: 'Herald',
+    0: 'Uncalibrated',
 };
 
 const rankTierToMedalName = (rank_tier) => {
+    logger.debug(`rankTierToMedalName ${rank_tier}`);
+    rank_tier = rank_tier || 0;
     const rank = Math.floor(rank_tier / 10) * 10;
-    const tier = Math.min(rank_tier % 10, 5);
-    return `${RANK_TO_MEDAL[rank]} ${tier}`;
+    const tier = rank_tier % 10;
+    logger.debug(`rankTierToMedalName ${rank} ${tier}`);
+    let medal = 'Unknown';
+    if (rank >= 0 && rank < 90) {
+        medal = `${RANK_TO_MEDAL[rank]}`;
+        if (rank !== 80 && rank > 0 && tier > 0) {
+            medal += ` ${tier}`;
+        }
+    }
+    return medal;
 };
 
 /**
