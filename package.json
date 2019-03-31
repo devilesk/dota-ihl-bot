@@ -17,7 +17,7 @@
     "db": "npm run db:create && npm run db:migrate && npm run db:seed:all",
     "db:test1": "npm run db:create && npm run db:migrate && npm run db:seed:test1",
     "db:test2": "npm run db:create && npm run db:migrate && npm run db:seed:test2",
-    "test": "mocha test/unit test/int",
+    "test": "mocha test/unit",
     "test:unit": "mocha test/unit",
     "test:int": "mocha test/int",
     "start": "node index.js"

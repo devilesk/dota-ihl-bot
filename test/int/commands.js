@@ -185,7 +185,7 @@ describe('RegisterCommand', () => {
     it('fail with bad steam vanity link', async () => {
         const text = 'https://steamcommunity.com/id/devileskasdfasdfsdadfs';
         await cmd.onMsg({ msg, guild }, { text });
-        assert.isTrue(msg.say.calledWith(`Could not get steam id from ${text}`));
+        assert.isTrue(msg.say.calledWith('Invalid steam id.'));
     });
 
     it('register with steam profiles link', async () => {
