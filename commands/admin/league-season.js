@@ -15,6 +15,14 @@ module.exports = class LeagueSeasonCommand extends IHLCommand {
             memberName: 'league-season',
             guildOnly: true,
             description: 'Start a new inhouse league season.',
+            examples: ['league-season 2'],
+            args: [
+                {
+                    key: 'name',
+                    prompt: 'Provide a season name.',
+                    type: 'string',
+                },
+            ],
         }, {
             inhouseAdmin: true,
             inhouseState: true,
@@ -23,8 +31,8 @@ module.exports = class LeagueSeasonCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }) {
-        await createSeason(guild.id);
-        await msg.say('New league season started.');
+    async onMsg({ msg, guild }, { name }) {
+        await createSeason(guild.id)(name);
+        await msg.say(`New season ${name} started.`);
     }
 };

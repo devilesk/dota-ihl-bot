@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Season = sequelize.define('Season', {
+        name: DataTypes.STRING,
         active: DataTypes.BOOLEAN,
     },
     {

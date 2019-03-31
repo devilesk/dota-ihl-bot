@@ -420,7 +420,7 @@ describe('Database - with lobby players', () => {
         describe('calcBalanceTeams', () => {
             it('balance teams', async () => {
                 const players = await getPlayers()(lobby);
-                const teams = await calcBalanceTeams(players);
+                const teams = await calcBalanceTeams(player => player.rank_tier)(players);
                 assert.lengthOf(teams, 2);
                 assert.lengthOf(teams[0], 5);
                 assert.lengthOf(teams[1], 5);
@@ -439,7 +439,7 @@ describe('Database - with lobby players', () => {
                     { rank_tier: 9 },
                     { rank_tier: 10 },
                 ];
-                const teams = await calcBalanceTeams(players);
+                const teams = await calcBalanceTeams(player => player.rank_tier)(players);
                 assert.lengthOf(teams, 2);
                 assert.lengthOf(teams[0], 5);
                 assert.lengthOf(teams[1], 5);
@@ -814,7 +814,7 @@ describe('Database - with lobby players', () => {
                 }
                 players = await getPlayers()(lobby);
                 players.forEach(player => assert.equal(player.LobbyPlayer.faction, 0));
-                await autoBalanceTeams(lobby);
+                await autoBalanceTeams(player => player.rank_tier)(lobby);
                 players = await getPlayers()(lobby);
                 let team_1_count = 0;
                 let team_2_count = 0;
@@ -1029,7 +1029,7 @@ describe('Database - with lobby players', () => {
         });
         
         describe('createLobbyState', () => {
-            it('return lobbyState object', async () => {
+            it.only('return lobbyState object', async () => {
                 const lobbyState = {
                     guild: 'guild',
                     category: 'category',
@@ -1038,6 +1038,7 @@ describe('Database - with lobby players', () => {
                     ready_check_timeout: 'ready_check_timeout',
                     captain_rank_threshold: 'captain_rank_threshold',
                     captain_role_regexp: 'captain_role_regexp',
+                    matchmaking_system: 'elo',
                     ready_check_time: 'ready_check_time',
                     state: 'state',
                     bot_id: 'bot_id',
