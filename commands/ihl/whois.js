@@ -159,7 +159,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                         },
                         {
                             name: 'Links',
-                            value: `[DB](https://www.dotabuff.com/players/${account_id})/[OD](https://www.opendota.com/players/${account_id})/[Steam](http://steamcommunity.com/profiles/${user.steamid_64})`,
+                            value: `[DB](https://www.dotabuff.com/players/${account_id})/[OD](https://www.opendota.com/players/${account_id})/[SZ](https://stratz.com/en-us/player/${account_id})/[Steam](http://steamcommunity.com/profiles/${user.steamid_64})`,
                             inline: true,
                         },
                     ],

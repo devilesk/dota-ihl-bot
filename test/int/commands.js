@@ -223,4 +223,16 @@ describe('RegisterCommand', () => {
         await cmd.onMsg({ msg, guild }, { text });
         assert.isTrue(msg.say.calledWith('Invalid steam id.'));
     });
+
+    it('register with stratz link', async () => {
+        const text = 'https://stratz.com/en-us/player/55246962';
+        await cmd.onMsg({ msg, guild }, { text });
+        assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+    });
+
+    it('fail with a bad stratz link', async () => {
+        const text = 'https://stratz.com/en-us/player/asdf6962';
+        await cmd.onMsg({ msg, guild }, { text });
+        assert.isTrue(msg.say.calledWith('Invalid steam id.'));
+    });
 });
