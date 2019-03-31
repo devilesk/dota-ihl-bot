@@ -130,8 +130,9 @@ describe('Database', () => {
 
     describe('createSeason', () => {
         it('create new season', async () => {
-            const season = await createSeason('422549177151782925');
+            const season = await createSeason('422549177151782925')('2');
             assert.exists(season);
+            assert.equal(season.name, '2');
             const league = await season.getLeague();
             assert.equal(league.current_season_id, season.id);
         });
