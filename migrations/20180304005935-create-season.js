@@ -15,6 +15,9 @@ module.exports = {
                 key: 'id',
             },
         },
+        name: {
+            type: Sequelize.STRING,
+        },
         active: {
             allowNull: false,
             type: Sequelize.BOOLEAN,

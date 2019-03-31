@@ -37,6 +37,10 @@ module.exports = {
         },
     })
     .then(() => queryInterface.addIndex('Reputations', ['recipient_user_id']))
-    .then(() => queryInterface.addIndex('Reputations', ['giver_user_id'])),
+    .then(() => queryInterface.addIndex('Reputations', ['giver_user_id']))
+    .then(() => queryInterface.addConstraint('Reputations', ['recipient_user_id', 'giver_user_id'], {
+        type: 'unique',
+        name: 'uq_reputations_recipient_user_id_giver_user_id',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Reputations'),
 };

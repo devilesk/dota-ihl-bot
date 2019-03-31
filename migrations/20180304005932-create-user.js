@@ -93,6 +93,14 @@ module.exports = {
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Users', ['league_id'])),
+    .then(() => queryInterface.addIndex('Users', ['league_id']))
+    .then(() => queryInterface.addConstraint('Users', ['league_id', 'steamid_64'], {
+        type: 'unique',
+        name: 'uq_users_league_id_steamid_64',
+    }))
+    .then(() => queryInterface.addConstraint('Users', ['league_id', 'discord_id'], {
+        type: 'unique',
+        name: 'uq_users_league_id_discord_id',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Users'),
 };

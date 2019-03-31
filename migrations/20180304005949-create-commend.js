@@ -47,6 +47,10 @@ module.exports = {
     })
     .then(() => queryInterface.addIndex('Commends', ['lobby_id']))
     .then(() => queryInterface.addIndex('Commends', ['recipient_user_id']))
-    .then(() => queryInterface.addIndex('Commends', ['giver_user_id'])),
+    .then(() => queryInterface.addIndex('Commends', ['giver_user_id']))
+    .then(() => queryInterface.addConstraint('Commends', ['lobby_id', 'recipient_user_id', 'giver_user_id'], {
+        type: 'unique',
+        name: 'uq_commends_lobby_id_recipient_user_id_giver_user_id',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Commends'),
 };

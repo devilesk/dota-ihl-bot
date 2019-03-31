@@ -44,6 +44,10 @@ module.exports = {
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Queues', ['league_id'])),
+    .then(() => queryInterface.addIndex('Queues', ['league_id']))
+    .then(() => queryInterface.addConstraint('Queues', ['league_id', 'queue_type'], {
+        type: 'unique',
+        name: 'uq_queues_league_id_queue_type',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Queues'),
 };

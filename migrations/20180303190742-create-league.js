@@ -56,6 +56,11 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 20,
         },
+        matchmaking_system: {
+            allowNull: false,
+            type: Sequelize.STRING,
+            defaultValue: 'badge',
+        },
         default_game_mode: {
             allowNull: false,
             type: Sequelize.STRING,
