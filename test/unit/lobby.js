@@ -1029,7 +1029,7 @@ describe('Database - with lobby players', () => {
         });
         
         describe('createLobbyState', () => {
-            it.only('return lobbyState object', async () => {
+            it('return lobbyState object', async () => {
                 const lobbyState = {
                     guild: 'guild',
                     category: 'category',
