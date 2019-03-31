@@ -62,6 +62,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: 'Inhouse Lobby ${lobby_id}',
         },
+        leagueid: {
+            type: DataTypes.INTEGER,
+        },
     },
     {
         underscored: true,

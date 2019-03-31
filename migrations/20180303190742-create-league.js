@@ -71,6 +71,9 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: 'Inhouse Lobby ${lobby_id}',
         },
+        leagueid: {
+            type: Sequelize.INTEGER,
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,
