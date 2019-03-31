@@ -170,6 +170,12 @@ describe('RegisterCommand', () => {
         assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
     });
 
+    it('register with account_id', async () => {
+        const text = '55246962';
+        await cmd.onMsg({ msg, guild }, { text });
+        assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+    });
+
     it('fail with a bad steamid_64', async () => {
         const text = 'asdf6962';
         await cmd.onMsg({ msg, guild }, { text });
