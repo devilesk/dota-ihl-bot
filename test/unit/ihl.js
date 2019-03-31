@@ -84,6 +84,8 @@ describe('Database', () => {
                     channel_name: 'channel',
                     admin_role_name: 'admin',
                     default_game_mode: 'cm',
+                    matchmaking_system: 'elo',
+                    leagueid: 1,
                 },
                 guild: {},
             }

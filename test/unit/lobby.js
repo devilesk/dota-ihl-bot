@@ -1038,7 +1038,9 @@ describe('Database - with lobby players', () => {
                     ready_check_timeout: 'ready_check_timeout',
                     captain_rank_threshold: 'captain_rank_threshold',
                     captain_role_regexp: 'captain_role_regexp',
+                    default_game_mode: 'cm',
                     matchmaking_system: 'elo',
+                    leagueid: 1,
                     ready_check_time: 'ready_check_time',
                     state: 'state',
                     bot_id: 'bot_id',
@@ -1067,7 +1069,10 @@ describe('Database - with lobby players', () => {
                     category: 'category',
                     ready_check_timeout: 'ready_check_timeout',
                     captain_rank_threshold: 'captain_rank_threshold',
-                    captain_role_regexp: 'captain_role_regexp'
+                    captain_role_regexp: 'captain_role_regexp',
+                    default_game_mode: 'default_game_mode',
+                    matchmaking_system: 'matchmaking_system',
+                    leagueid: 'leagueid',
                 })(lobby);
                 assert.exists(lobbyState);
                 assert.isTrue(findOrCreateChannelInCategory.calledOnce);
