@@ -136,6 +136,12 @@ module.exports = (sequelize, DataTypes) => {
             },
         }));
 
+        User.addScope('nickname', value => ({
+            where: {
+                nickname: value,
+            },
+        }));
+
         User.addScope('id', value => ({
             where: {
                 id: value,

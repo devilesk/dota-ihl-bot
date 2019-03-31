@@ -72,10 +72,16 @@ module.exports = class WhoisCommand extends IHLCommand {
         let footerText;
         switch (result_type) {
         case CONSTANTS.MATCH_EXACT_DISCORD_MENTION:
-            footerText = `Exact match for ${discord_user} by discord mention`;
+            footerText = `Exact match for ${discord_user.displayName} by discord mention`;
             break;
         case CONSTANTS.MATCH_EXACT_DISCORD_NAME:
             footerText = `Exact match for ${member} by discord name`;
+            break;
+        case CONSTANTS.MATCH_STEAMID_64:
+            footerText = `Parsed steam id for ${discord_user.displayName}`;
+            break;
+        case CONSTANTS.MATCH_EXACT_NICKNAME:
+            footerText = `Exact match for ${member} by nickname`;
             break;
         case CONSTANTS.MATCH_CLOSEST_NICKNAME:
             footerText = `Closest match for ${member} by nickname`;
@@ -162,6 +168,9 @@ module.exports = class WhoisCommand extends IHLCommand {
                     },
                 },
             });
+        }
+        else {
+            await msg.say(`${member} not found.`);
         }
     }
 };
