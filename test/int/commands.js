@@ -1,3 +1,8 @@
+const Collection = require('discord.js/src/util/Collection');
+const Argument = require('discord.js-commando/src/commands/argument');
+Argument.validateInfo = function () {};
+const Command = require('discord.js-commando/src/commands/base');
+Command.validateInfo = function () {};
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -7,108 +12,246 @@ const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha
 const EventEmitter = require('events').EventEmitter;
 const db = require('../../models');
 const {
-    findUser,
-    loadInhouseStates,
-    loadInhouseStatesFromLeagues,
-    sendMatchEndMessage,
-    createClient,
+    MockDotaBot,
+    MockMember,
+    MockChannel,
+    MockRole,
+    MockMessage,
+    MockGuild,
+    MockClient,
+} = require('../../lib/mocks');
+const {
     IHLManager,
 } = require('../../lib/ihlManager');
 const {
     createNewLeague,
 } = require('../../lib/ihl');
+const {
+    findLeague,
+    findBot,
+    findAllBots,
+} = require('../../lib/db');
+const BotAddCommand = require('../../commands/admin/bot-add');
+const BotRemoveCommand = require('../../commands/admin/bot-remove');
+const BotListCommand = require('../../commands/admin/bot-list');
 const LeagueCreateCommand = require('../../commands/admin/league-create');
-class MockIHLCommand {
-    constructor() {}
-}
-const RegisterCommand = proxyquire('../../commands/ihl/register', {
-    '../../lib/ihlCommand': MockIHLCommand,
-});
+const RegisterCommand = require('../../commands/ihl/register');
 const CONSTANTS = require('../../lib/constants');
 const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
 console.log(path.join(__dirname, './.env'));
 
-const Collection = require('discord.js/src/util/Collection');
-
-class MockChannel {
-    constructor(channelName, channelType) {
-        
-    }
-    
-    async setParent() {
-        return this;
-    }
-    
-    async setPosition() {
-        return this;
-    }
-    
-    async setName() {
-        return this;
-    }
-    
-    async setTopic() {
-        return this;
-    }
-    
-    async overwritePermissions() {
-        return this;
-    }
-}
-
-class MockRole {
-    constructor(roleName) {
-        
-    }
-    
-    async setName() {
-        return this;
-    }
-    
-    async setPermissions() {
-        return this;
-    }
-    
-    async setMentionable() {
-        return this;
-    }
-}
-
-const createMockClient = () => {
-    const guild = {
-        id: '422549177151782925',
-        roles: new Collection(),
-        channels: new Collection(),
-        members: new Collection(),
-        createChannel: (channelName, channelType) => new MockChannel(channelName, channelType),
-        createRole: ({ roleName }) => new MockRole(roleName),
-    }
-    const client = new EventEmitter();
-    client.registry = {
-        registerDefaultTypes: () => client.registry,
-        registerGroups: () => client.registry,
-        registerDefaultGroups: () => client.registry,
-        registerDefaultCommands: () => client.registry,
-        registerCommandsIn: () => client.registry,
-    };
-    client.user = {
-        id: '419520125012541441',
-        tag: 'rd2l-bot#8499',
-    };
-    client.guilds = new Collection([['422549177151782925', guild]]);
-    client.login = () => client.emit('ready');
-    return client;
-};
+sequelizeMockingMocha(
+    db.sequelize,
+    [],
+    { logging: false },
+);
 
 let ihlManager;
 
+describe('BotAddCommand', () => {
+    let guild;
+    let league;
+    let inhouseState = {};
+    let msg = {
+        author: {
+            id: '76864899866697728',
+        },
+        say: sinon.stub(),
+    };
+    let cmd;
+    beforeEach(done => {
+        ihlManager = new IHLManager(process.env);
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
+        guild = client.guilds.first();
+        cmd = new BotAddCommand(client);
+        msg.say.reset();
+        ihlManager.eventEmitter.on('ready', async () => {
+            await createNewLeague(guild);
+            league = await findLeague(guild.id);
+            done();
+        });
+        ihlManager.init(client);
+    });
+
+    it('add bot', async () => {
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+    });
+
+    it('add bot then update bot', async () => {
+        let bot;
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+        bot = await findBot(1);
+        assert.equal(bot.steamid_64, '76561198015512690');
+        assert.equal(bot.account_name, 'account_name');
+        assert.equal(bot.persona_name, 'persona_name');
+        assert.equal(bot.password, 'password');
+        msg.say.reset();
+        await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name: 'account_name2', persona_name: 'persona_name2', password: 'password2' });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} updated.`));
+        bot = await findBot(1);
+        assert.equal(bot.steamid_64, '76561198015512690');
+        assert.equal(bot.account_name, 'account_name2');
+        assert.equal(bot.persona_name, 'persona_name2');
+        assert.equal(bot.password, 'password2');
+    });
+});
+
+describe('BotRemoveCommand', () => {
+    let guild;
+    let league;
+    let inhouseState = {};
+    let msg = {
+        author: {
+            id: '76864899866697728',
+        },
+        say: sinon.stub(),
+    };
+    let cmd;
+    let addCmd;
+    beforeEach(done => {
+        ihlManager = new IHLManager(process.env);
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
+        guild = client.guilds.first();
+        cmd = new BotRemoveCommand(client);
+        addCmd = new BotAddCommand(client);
+        msg.say.reset();
+        ihlManager.eventEmitter.on('ready', async () => {
+            await createNewLeague(guild);
+            league = await findLeague(guild.id);
+            done();
+        });
+        ihlManager.init(client);
+    });
+
+    it('remove bot that does not exist', async () => {
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await cmd.onMsg({ msg, guild, league }, { steamid_64 });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
+        const bots = await findAllBots(league);
+        assert.empty(bots);
+    });
+
+    it('add bot then remove bot', async () => {
+        let bot;
+        let bots;
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await addCmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+        bot = await findBot(1);
+        assert.equal(bot.steamid_64, '76561198015512690');
+        assert.equal(bot.account_name, 'account_name');
+        assert.equal(bot.persona_name, 'persona_name');
+        assert.equal(bot.password, 'password');
+        bots = await findAllBots(league);
+        assert.lengthOf(bots, 1);
+        msg.say.reset();
+        await cmd.onMsg({ msg, guild, league }, { steamid_64 });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
+        bots = await findAllBots(league);
+        assert.empty(bots);
+    });
+});
+
+describe('BotListCommand', () => {
+    let guild;
+    let league;
+    let inhouseState = {};
+    let msg = {
+        author: {
+            id: '76864899866697728',
+        },
+        say: sinon.stub(),
+    };
+    let cmd;
+    let addCmd;
+    beforeEach(done => {
+        ihlManager = new IHLManager(process.env);
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
+        guild = client.guilds.first();
+        cmd = new BotListCommand(client);
+        addCmd = new BotAddCommand(client);
+        msg.say.reset();
+        ihlManager.eventEmitter.on('ready', async () => {
+            await createNewLeague(guild);
+            league = await findLeague(guild.id);
+            done();
+        });
+        ihlManager.init(client);
+    });
+
+    it('list no bots', async () => {
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await cmd.onMsg({ msg, guild, league });
+        sinon.assert.calledWith(msg.say, {
+            embed: {
+                color: 3447003,
+                fields: [
+                    {
+                        name: 'Bots',
+                        value: '',
+                        inline: false,
+                    }
+                ],
+            }
+        });
+    });
+
+    it('add bot then list bots', async () => {
+        let bot;
+        const steamid_64 = '76561198015512690';
+        const account_name = 'account_name';
+        const persona_name = 'persona_name';
+        const password = 'password';
+        await addCmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
+        assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+        bot = await findBot(1);
+        assert.equal(bot.steamid_64, '76561198015512690');
+        assert.equal(bot.account_name, 'account_name');
+        assert.equal(bot.persona_name, 'persona_name');
+        assert.equal(bot.password, 'password');
+        msg.say.reset();
+        await cmd.onMsg({ msg, guild, league });
+        sinon.assert.calledWith(msg.say, {
+            embed: {
+                color: 3447003,
+                fields: [
+                    {
+                        name: 'Bots',
+                        value: `**76561198015512690**
+Account Name: account_name
+Display Name: persona_name
+Status: BOT_OFFLINE`,
+                        inline: false,
+                    }
+                ],
+            }
+        });
+    });
+});
+
 describe('LeagueCreateCommand', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [],
-        { logging: false },
-    );
-    
     let guild;
     let inhouseState = {};
     let msg = {
@@ -117,7 +260,8 @@ describe('LeagueCreateCommand', () => {
     let cmd;
     beforeEach(done => {
         ihlManager = new IHLManager(process.env);
-        const client = createMockClient();
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
         guild = client.guilds.first();
         cmd = new LeagueCreateCommand(client);
         ihlManager.eventEmitter.on('ready', done);
@@ -136,12 +280,6 @@ describe('LeagueCreateCommand', () => {
 });
 
 describe('RegisterCommand', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [],
-        { logging: false },
-    );
-    
     let guild;
     let inhouseState = {};
     let msg = {
@@ -153,7 +291,8 @@ describe('RegisterCommand', () => {
     let cmd;
     beforeEach(done => {
         ihlManager = new IHLManager(process.env);
-        const client = createMockClient();
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
         guild = client.guilds.first();
         cmd = new RegisterCommand(client);
         msg.say.reset();
