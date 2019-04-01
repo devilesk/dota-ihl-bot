@@ -32,7 +32,7 @@ module.exports = class BotRemoveCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, inhouseState, guild, league }, { steamid_64 }) {
+    async onMsg({ msg, league }, { steamid_64 }) {
         await destroyBotBySteamID64(league)(steamid_64);
         await msg.say(`Bot ${steamid_64} removed.`);
     }

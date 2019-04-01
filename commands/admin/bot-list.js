@@ -29,14 +29,12 @@ module.exports = class BotListCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg }) {
+    async onMsg({ msg, league }) {
         const bots = await findAllBots(league);
         const bot_details = bots.map(createBotDetails).join('\t\n\n');
         await msg.say({
             embed: {
                 color: 3447003,
-                title,
-                description,
                 fields: [
                     {
                         name: 'Bots',

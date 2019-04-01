@@ -48,7 +48,7 @@ module.exports = class BotAddCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, inhouseState, guild, league }, { steamid_64, account_name, persona_name, password }) {
+    async onMsg({ msg, league }, { steamid_64, account_name, persona_name, password }) {
         const [bot, created] = await findOrCreateBot(league, steamid_64, account_name, persona_name, password);
         if (created) {
             await msg.say(`Bot ${steamid_64} added.`);
