@@ -141,7 +141,7 @@ describe('Database', () => {
     describe('findOrCreateBot', () => {
         it('create new bot', async () => {
             const league = await findLeague('422549177151782925');
-            const bot = await findOrCreateBot(league, '123', 'bot3', 'bot3', 'pass');
+            const [bot, created] = await findOrCreateBot(league, '123', 'bot3', 'bot3', 'pass');
             assert.exists(bot);
             assert.equal(bot.league_id, league.id);
         });

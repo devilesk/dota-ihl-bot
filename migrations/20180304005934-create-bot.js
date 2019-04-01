@@ -22,15 +22,15 @@ module.exports = {
             type: Sequelize.STRING,
             unique: true,
         },
-        steam_name: {
+        account_name: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        steam_user: {
+        persona_name: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        steam_pass: {
+        password: {
             allowNull: false,
             type: Sequelize.STRING,
         },
@@ -48,6 +48,10 @@ module.exports = {
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Bots', ['league_id'])),
+    .then(() => queryInterface.addIndex('Bots', ['league_id']))
+    .then(() => queryInterface.addConstraint('Bots', ['league_id', 'steamid_64'], {
+        type: 'unique',
+        name: 'uq_bots_league_id_steamid_64',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Bots'),
 };

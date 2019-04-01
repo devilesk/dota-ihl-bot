@@ -6,15 +6,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        steam_name: {
+        account_name: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        steam_user: {
+        persona_name: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        steam_pass: {
+        password: {
             allowNull: false,
             type: DataTypes.STRING,
         },
