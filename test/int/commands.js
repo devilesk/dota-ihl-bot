@@ -35,6 +35,7 @@ const BotAddCommand = require('../../commands/admin/bot-add');
 const BotRemoveCommand = require('../../commands/admin/bot-remove');
 const BotListCommand = require('../../commands/admin/bot-list');
 const LeagueCreateCommand = require('../../commands/admin/league-create');
+const LeagueSeasonCommand = require('../../commands/admin/league-season');
 const RegisterCommand = require('../../commands/ihl/register');
 const CONSTANTS = require('../../lib/constants');
 const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
@@ -276,6 +277,40 @@ describe('LeagueCreateCommand', () => {
     it('say Inhouse league already exists', async () => {
         await cmd.onMsg({ msg, inhouseState: {}, guild });
         assert.isTrue(msg.say.calledWith('Inhouse league already exists.'));
+    });
+});
+
+describe('LeagueSeasonCommand', () => {
+    let guild;
+    let inhouseState = {};
+    let msg = {
+        say: sinon.stub(),
+    };
+    let cmd;
+    let addCmd;
+    beforeEach(done => {
+        ihlManager = new IHLManager(process.env);
+        const client = new MockClient();
+        client.initRandomGuilds(1, 2, 5, 3, 20);
+        guild = client.guilds.first();
+        cmd = new LeagueSeasonCommand(client);
+        addCmd = new LeagueCreateCommand(client);
+        ihlManager.eventEmitter.on('ready', done);
+        ihlManager.init(client);
+    });
+
+    it('create new season with name Test', async () => {
+        let league;
+        const name = 'Test';
+        await addCmd.onMsg({ msg, guild });
+        assert.isTrue(msg.say.calledWith('Inhouse league created.'));
+        league = await findLeague(guild.id);
+        assert.equal(league.current_season_id, 1);
+        msg.say.reset();
+        await cmd.onMsg({ msg, guild }, { name });
+        assert.isTrue(msg.say.calledWith(`New season ${name} started.`));
+        league = await findLeague(guild.id);
+        assert.equal(league.current_season_id, 2);
     });
 });
 
