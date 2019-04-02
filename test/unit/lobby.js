@@ -205,11 +205,13 @@ describe('Database - with lobby players', () => {
         
         describe('addRoleToPlayers', () => {
             it('add role to players', async () => {
+                lobby.inhouseState = {};
                 const players = await addRoleToPlayers(lobby);
                 assert.lengthOf(players, 10);
             });
             
             it('return lobby when tapped', async () => {
+                lobby.inhouseState = {};
                 const result = await tapP(addRoleToPlayers)(lobby);
                 assert.strictEqual(result, lobby);
             });
@@ -360,6 +362,7 @@ describe('Database - with lobby players', () => {
         
         describe('addRoleToQueuers', () => {
             it('add role to queuers', async () => {
+                lobby.inhouseState = {};
                 const queuers = await addRoleToQueuers(lobby);
                 assert.lengthOf(queuers, 10);
             });
@@ -690,9 +693,11 @@ describe('Database - with lobby players', () => {
                 const getRoles = sinon.stub();
                 getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
                 const getUserRoles = guild => getRoles;
-                lobby.guild = guild;
-                lobby.captain_role_regexp = 'Tier ([0-9]+) Captain';
-                lobby.captain_rank_threshold = 1000;
+                lobby.inhouseState = {
+                    guild,
+                    captain_role_regexp: 'Tier ([0-9]+) Captain',
+                    captain_rank_threshold: 1000,
+                }
                 const captains = await checkQueueForCaptains(getUserRoles)(lobby);
                 assert.isEmpty(captains);
             });
@@ -703,9 +708,11 @@ describe('Database - with lobby players', () => {
                 const getRoles = sinon.stub();
                 getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);                
                 const getUserRoles = guild => getRoles;
-                lobby.guild = guild;
-                lobby.captain_role_regexp = 'Tier ([0-9]+) Captain';
-                lobby.captain_rank_threshold = 1000;
+                lobby.inhouseState = {
+                    guild,
+                    captain_role_regexp: 'Tier ([0-9]+) Captain',
+                    captain_rank_threshold: 1000,
+                };
                 const captains = await checkQueueForCaptains(getUserRoles)(lobby);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].id, 1);
@@ -720,9 +727,11 @@ describe('Database - with lobby players', () => {
                 const getRoles = sinon.stub();
                 getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
                 const getUserRoles = guild => getRoles;
-                lobby.guild = guild;
-                lobby.captain_role_regexp = 'Tier ([0-9]+) Captain';
-                lobby.captain_rank_threshold = 1000;
+                lobby.inhouseState = {
+                    guild,
+                    captain_role_regexp: 'Tier ([0-9]+) Captain',
+                    captain_rank_threshold: 1000,
+                };
                 const captains = await assignCaptains(getUserRoles)(lobby);
                 assert.isEmpty(captains);
             });
@@ -733,9 +742,11 @@ describe('Database - with lobby players', () => {
                 const getRoles = sinon.stub();
                 getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);
                 const getUserRoles = guild => getRoles;
-                lobby.guild = guild;
-                lobby.captain_role_regexp = 'Tier ([0-9]+) Captain';
-                lobby.captain_rank_threshold = 1000;
+                lobby.inhouseState = {
+                    guild,
+                    captain_role_regexp: 'Tier ([0-9]+) Captain',
+                    captain_rank_threshold: 1000,
+                };
                 const captains = await assignCaptains(getUserRoles)(lobby);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].id, 1);
@@ -842,6 +853,7 @@ describe('Database - with lobby players', () => {
         
         describe('assignGameMode', () => {
             it('return game mode preferred by lobby players', async () => {
+                lobby.inhouseState = {};
                 assert.equal(lobby.game_mode, CONSTANTS.DOTA_GAMEMODE_CM);
                 const lobbyState = await assignGameMode(lobby);
                 assert.equal(lobbyState.game_mode, CONSTANTS.DOTA_GAMEMODE_CD);
@@ -1014,14 +1026,18 @@ describe('Database - with lobby players', () => {
         describe('isReadyCheckTimedOut', () => {
             it('return true', async () => {
                 const result = isReadyCheckTimedOut({
-                    ready_check_timeout: 0,
+                    inhouseState: {
+                        ready_check_timeout: 0,
+                    },
                     ready_check_time: Date.now() - 100,
                 });
                 assert.isTrue(result);
             });
             it('return false', async () => {
                 const result = isReadyCheckTimedOut({
-                    ready_check_timeout: 1000,
+                    inhouseState: {
+                        ready_check_timeout: 1000,
+                    },
                     ready_check_time: Date.now(),
                 });
                 assert.isFalse(result);
@@ -1031,17 +1047,19 @@ describe('Database - with lobby players', () => {
         describe('createLobbyState', () => {
             it('return lobbyState object', async () => {
                 const lobbyState = {
-                    guild: 'guild',
-                    category: 'category',
+                    inhouseState: {
+                        guild: 'guild',
+                        category: 'category',
+                        ready_check_timeout: 'ready_check_timeout',
+                        captain_rank_threshold: 'captain_rank_threshold',
+                        captain_role_regexp: 'captain_role_regexp',
+                        default_game_mode: 'cm',
+                        matchmaking_system: 'elo',
+                        leagueid: 1,
+                        ready_check_time: 'ready_check_time',
+                    },
                     channel: 'channel',
                     role: 'role',
-                    ready_check_timeout: 'ready_check_timeout',
-                    captain_rank_threshold: 'captain_rank_threshold',
-                    captain_role_regexp: 'captain_role_regexp',
-                    default_game_mode: 'cm',
-                    matchmaking_system: 'elo',
-                    leagueid: 1,
-                    ready_check_time: 'ready_check_time',
                     state: 'state',
                     bot_id: 'bot_id',
                     queue_type: 'queue_type',
@@ -1477,7 +1495,9 @@ describe('Database - no lobby players', () => {
                     await addPlayers(lobbyState)(users);
                     lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
                     lobbyState.ready_check_time = 0;
-                    lobbyState.ready_check_timeout = 0;
+                    lobbyState.inhouseState = {
+                        ready_check_timeout: 0,
+                    };
                     const { lobbyState: result } = await LobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
                 });
@@ -1555,8 +1575,10 @@ describe('Database - no lobby players', () => {
                 it('return lobby state STATE_CHOOSING_SIDE when captains assigned', async () => {
                     const users = await db.User.findAll({ limit: 10 });
                     await addPlayers(lobbyState)(users);
-                    lobbyState.captain_rank_threshold = 1000;
-                    lobbyState.captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    lobbyState.inhouseState = {
+                        captain_role_regexp: 'Tier ([0-9]+) Captain',
+                        captain_rank_threshold: 1000,
+                    }
                     lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
                     lobbyState.captain_1_user_id = null;
                     lobbyState.captain_2_user_id = null;

@@ -22,7 +22,6 @@ module.exports = class LobbyStartCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }) {
-        //lobbyState.start().then(() => msg.say('Lobby started.')).catch(console.error);
         this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_LOBBY_START, lobbyState);
         await msg.say('Lobby started.');
     }

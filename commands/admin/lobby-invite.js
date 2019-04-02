@@ -35,7 +35,6 @@ module.exports = class LobbyInviteCommand extends IHLCommand {
     async onMsg({ msg, guild, lobbyState }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         if (user) {
-            //await lobbyState.dotaBot.inviteToLobby(user.steamid_64);
             this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_LOBBY_INVITE, lobbyState, user.steamid_64);
             await user.addRole(lobbyState.role);
             await msg.say('User invited to lobby.');
