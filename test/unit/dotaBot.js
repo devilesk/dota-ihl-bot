@@ -503,16 +503,19 @@ describe('DotaBot', () => {
                 launchPracticeLobby: sinon.stub(),
                 leavePracticeLobby: sinon.stub(),
                 abandonCurrentGame: sinon.stub(),
+                leaveChat: sinon.stub(),
                 steamid_64: '123',
             };
             dotaBot.launchPracticeLobby.resolves({ match_id: 'test' });
             dotaBot.leavePracticeLobby.resolves(true);
             dotaBot.abandonCurrentGame.resolves(true);
+            dotaBot.leaveChat.resolves(true);
             const match_id = await startDotaLobby(dotaBot);
             assert.equal(match_id, 'test');
             assert.isTrue(dotaBot.launchPracticeLobby.calledOnce);
             assert.isTrue(dotaBot.leavePracticeLobby.calledOnce);
             assert.isTrue(dotaBot.abandonCurrentGame.calledOnce);
+            assert.isTrue(dotaBot.leaveChat.calledOnce);
         });
     });
 });
