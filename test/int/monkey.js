@@ -43,7 +43,6 @@ const CONSTANTS = require('../../lib/constants');
 const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
 console.log(path.join(__dirname, './.env'));
 
-
 const getRandomInt = require('../../lib/util/getRandomInt');
 
 const client = new MockClient();
@@ -159,8 +158,8 @@ const onReady = async () => {
             await user.update({ vouched: true });
         }
     }
-    //await joinLobby();
-    randomInput();
+    await joinLobby();
+    //randomInput();
     //testAutobalance();
     //testDraft();
 }
@@ -169,7 +168,7 @@ const run = async () => {
     //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
     ihlManager = new IHLManager(process.env);
     ihlManager.eventEmitter.on('ready', onReady);
-    ihlManager.eventEmitter.on(CONSTANTS.STATE_COMPLETED, joinLobby);
+    //ihlManager.eventEmitter.on(CONSTANTS.STATE_COMPLETED, joinLobby);
     ihlManager.init(client);
 };
 
