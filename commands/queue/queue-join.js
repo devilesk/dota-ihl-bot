@@ -59,7 +59,7 @@ module.exports = class QueueJoinCommand extends IHLCommand {
             }
             else {
                 logger.debug('QueueJoinCommand joining all queues');
-                await this.ihlManager.joinAllQueues(inhouseState, inhouseUser, msg.author);
+                await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.author);
             }
         }
         else {
