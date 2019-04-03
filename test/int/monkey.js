@@ -103,6 +103,42 @@ const randomInput = () => {
     setTimeout(randomInput, Math.random() * 1000);
 }
 
+const testAutobalance = () => {
+    const guild = client.guilds.first();
+    lobby_channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+    const members = guild.members.array();
+    for (let i = 0; i < 10; i++) {
+        const member = members[i];
+        const msg = new MockMessage(guild, lobby_channel, member);
+        queueJoinCommand.run(msg, {});
+    }
+    ihlManager.eventEmitter.on(CONSTANTS.STATE_CHECKING_READY, () => {
+        for (let i = 0; i < 10; i++) {
+            const member = members[i];
+            const msg = new MockMessage(guild, lobby_channel, member);
+            queueReadyCommand.run(msg, {});
+        }
+    });
+}
+
+const testDraft = () => {
+    const guild = client.guilds.first();
+    lobby_channel = guild.channels.find(channel => channel.name === 'player-draft-queue');
+    const members = guild.members.array();
+    for (let i = 0; i < 10; i++) {
+        const member = members[i];
+        const msg = new MockMessage(guild, lobby_channel, member);
+        queueJoinCommand.run(msg, {});
+    }
+    ihlManager.eventEmitter.on(CONSTANTS.STATE_CHECKING_READY, () => {
+        for (let i = 0; i < 10; i++) {
+            const member = members[i];
+            const msg = new MockMessage(guild, lobby_channel, member);
+            queueReadyCommand.run(msg, {});
+        }
+    });
+}
+
 const onReady = async () => {
     ihlManager.matchTracker.run = async () => {
         if (ihlManager.matchTracker.lobbies.length) {
@@ -125,6 +161,8 @@ const onReady = async () => {
     }
     //await joinLobby();
     randomInput();
+    //testAutobalance();
+    //testDraft();
 }
 
 const run = async () => {
