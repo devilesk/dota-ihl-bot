@@ -1,4 +1,5 @@
 const logger = require('../../lib/logger');
+const spawn = require('../../lib/util/spawn');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
 Argument.validateInfo = function () {};
@@ -10,8 +11,8 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
 const SequelizeMocking = require('sequelize-mocking').SequelizeMocking;
-const EventEmitter = require('events').EventEmitter;
-const hri = require('human-readable-ids').hri;
+const { EventEmitter } = require('events');
+const { hri } = require('human-readable-ids');
 const db = require('../../models');
 const {
     MockDotaBot,
@@ -187,16 +188,17 @@ const onReady = async () => {
         }
     }
     //await joinLobby();
-    //randomInput();
+    randomInput();
     //testAutobalance();
-    testDraft();
+    //testDraft();
 }
 
 const run = async () => {
+    await spawn('npm', ['run', 'db:init']);
     //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
     ihlManager = new IHLManager(process.env);
     ihlManager.on('ready', onReady);
-    //ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
+    ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
     ihlManager.init(client);
 };
 
