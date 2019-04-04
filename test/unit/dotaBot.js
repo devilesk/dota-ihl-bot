@@ -9,30 +9,7 @@ const steam = require('steam');
 const dota2 = require('dota2');
 const EventEmitter = require('events').EventEmitter;
 const Long = require("long");
-const {
-    slotToFaction,
-    updatePlayerState,
-    isDotaLobbyReady,
-    connectToSteam,
-    logOnToSteam,
-    connectToDota,
-    updateServers,
-    updateMachineAuth,
-    defaultLobbyOptions,
-    createSteamClient,
-    createSteamUser,
-    createSteamFriends,
-    createDotaClient,
-    createDotaBot,
-    diffMembers,
-    intersectMembers,
-    membersToPlayerState,
-    processMembers,
-    invitePlayer,
-    disconnectDotaBot,
-    startDotaLobby,
-    DotaBot,
-} = proxyquire('../../lib/dotaBot', {
+const DotaBot = proxyquire('../../lib/dotaBot', {
     'fs': {
         writeFileSync: (path, data) => console.log('stub writeFileSync'),
         readFileSync: (path) => {
@@ -54,71 +31,71 @@ describe('Functions', () => {
     describe('slotToFaction', () => {
         it('return 1 for radiant', async () => {
             const slot = 0;
-            const faction = slotToFaction(slot);
+            const faction = DotaBot.slotToFaction(slot);
             assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_GOOD_GUYS, slot);
             assert.equal(faction, 1);
         });
         
         it('return 2 for dire', async () => {
             const slot = 1;
-            const faction = slotToFaction(slot);
+            const faction = DotaBot.slotToFaction(slot);
             assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_BAD_GUYS, slot);
             assert.equal(faction, 2);
         });
         
         it('return null when not 0 or 1', async () => {
-            assert.isNull(slotToFaction(-1));
-            assert.isNull(slotToFaction(2));
+            assert.isNull(DotaBot.slotToFaction(-1));
+            assert.isNull(DotaBot.slotToFaction(2));
         });
     });
     
     describe('updatePlayerState', () => {
         it('return playerState with steamid_64 faction value 1', async () => {
             const steamid_64 = '123';
-            const playerState = updatePlayerState(steamid_64, 0, {});
+            const playerState = DotaBot.updatePlayerState(steamid_64, 0, {});
             assert.deepEqual(playerState, { [steamid_64]: 1 });
         });
         
         it('return playerState with steamid_64 faction value 2', async () => {
             const steamid_64 = '123';
-            const playerState = updatePlayerState(steamid_64, 1, {});
+            const playerState = DotaBot.updatePlayerState(steamid_64, 1, {});
             assert.deepEqual(playerState, { [steamid_64]: 2 });
         });
         
         it('return updated playerState', async () => {
             const steamid_64 = '123';
-            let playerState = updatePlayerState(steamid_64, 0,  { [steamid_64]: 2 });
+            let playerState = DotaBot.updatePlayerState(steamid_64, 0,  { [steamid_64]: 2 });
             assert.deepEqual(playerState, { [steamid_64]: 1 });
-            playerState = updatePlayerState(steamid_64, 1,  playerState);
+            playerState = DotaBot.updatePlayerState(steamid_64, 1,  playerState);
             assert.deepEqual(playerState, { [steamid_64]: 2 });
         });
         
         it('delete player', async () => {
-            const playerState = updatePlayerState('1', null,  { '1': 1 });
+            const playerState = DotaBot.updatePlayerState('1', null,  { '1': 1 });
             assert.deepEqual(playerState, {});
         });
         
         it('delete player when slot not 0 or 1', async () => {
-            let playerState = updatePlayerState('1', -1,  { '1': 1 });
+            let playerState = DotaBot.updatePlayerState('1', -1,  { '1': 1 });
             assert.deepEqual(playerState, {});
-            playerState = updatePlayerState('1', 2,  { '1': 1 });
+            playerState = DotaBot.updatePlayerState('1', 2,  { '1': 1 });
             assert.deepEqual(playerState, {});
         });
         
         it('multiple players', async () => {
-            let playerState = updatePlayerState('1', 0,  {});
-            playerState = updatePlayerState('2', 1,  playerState);
-            playerState = updatePlayerState('3', 0,  playerState);
+            let playerState = DotaBot.updatePlayerState('1', 0,  {});
+            playerState = DotaBot.updatePlayerState('2', 1,  playerState);
+            playerState = DotaBot.updatePlayerState('3', 0,  playerState);
             assert.deepEqual(playerState, { '1': 1, '2': 2, '3': 1 });
         });
         
         it('multiple players with a delete', async () => {
-            let playerState = updatePlayerState('1', 0,  {});
-            playerState = updatePlayerState('2', 1,  playerState);
-            playerState = updatePlayerState('3', 0,  playerState);
-            playerState = updatePlayerState('2', 2,  playerState);
+            let playerState = DotaBot.updatePlayerState('1', 0,  {});
+            playerState = DotaBot.updatePlayerState('2', 1,  playerState);
+            playerState = DotaBot.updatePlayerState('3', 0,  playerState);
+            playerState = DotaBot.updatePlayerState('2', 2,  playerState);
             assert.deepEqual(playerState, { '1': 1, '3': 1 });
-            playerState = updatePlayerState('1', null,  playerState);
+            playerState = DotaBot.updatePlayerState('1', null,  playerState);
             assert.deepEqual(playerState, { '3': 1 });
         });
     });
@@ -127,25 +104,25 @@ describe('Functions', () => {
         it('return true when fromCache is subset of playerState', async () => {
             const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3};
             const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
-            assert.isTrue(isDotaLobbyReady(fromCache, playerState));
+            assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return true when null', async () => {
             const fromCache = {'1': null};
             const playerState = {};
-            assert.isTrue(isDotaLobbyReady(fromCache, playerState));
+            assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return false when 0', async () => {
             const fromCache = {'1': 0};
             const playerState = {};
-            assert.isFalse(isDotaLobbyReady(fromCache, playerState));
+            assert.isFalse(DotaBot.isDotaLobbyReady(fromCache, playerState));
         });
         
         it('return false when fromCache is not subset of playerState', async () => {
             const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3, 'a': 0};
             const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
-            assert.isFalse(isDotaLobbyReady(fromCache, playerState));
+            assert.isFalse(DotaBot.isDotaLobbyReady(fromCache, playerState));
         });
     });
     
@@ -154,7 +131,7 @@ describe('Functions', () => {
             const steamClient = new EventEmitter();
             steamClient.connect = () => steamClient.emit('connected');
             sinon.spy(steamClient, "connect");
-            const result = await connectToSteam(steamClient);
+            const result = await DotaBot.connectToSteam(steamClient);
             assert.isTrue(steamClient.connect.calledOnce);
             assert.equal(steamClient, result);
         });
@@ -165,7 +142,7 @@ describe('Functions', () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
             sinon.spy(steamClient, "logOn");
-            const result = await logOnToSteam({})(steamClient);
+            const result = await DotaBot.logOnToSteam({})(steamClient);
             assert.isTrue(steamClient.logOn.calledOnce);
             assert.equal(steamClient, result);
         });
@@ -174,21 +151,21 @@ describe('Functions', () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.Fail });
             sinon.spy(steamClient, "logOn");
-            return assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(DotaBot.logOnToSteam({})(steamClient));
         });
 
         it('call logOn and reject on error event', async () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('error');
             sinon.spy(steamClient, "logOn");
-            return assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(DotaBot.logOnToSteam({})(steamClient));
         });
 
         it('call logOn and reject on loggedOff event', async () => {
             const steamClient = new EventEmitter();
             steamClient.logOn = () => steamClient.emit('loggedOff');
             sinon.spy(steamClient, "logOn");
-            return assert.isRejected(logOnToSteam({})(steamClient));
+            return assert.isRejected(DotaBot.logOnToSteam({})(steamClient));
         });
         
         it('call logOn and resolve on logOnResponse event with client, ignore subsequent events', async () => {
@@ -200,7 +177,7 @@ describe('Functions', () => {
                 steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
             }
             sinon.spy(steamClient, "logOn");
-            const result = await logOnToSteam({})(steamClient);
+            const result = await DotaBot.logOnToSteam({})(steamClient);
             assert.isTrue(steamClient.logOn.calledOnce);
             assert.equal(steamClient, result);
         });
@@ -211,7 +188,7 @@ describe('Functions', () => {
             const dotaClient = new EventEmitter();
             dotaClient.launch = () => dotaClient.emit('ready');
             sinon.spy(dotaClient, "launch");
-            const result = await connectToDota(dotaClient);
+            const result = await DotaBot.connectToDota(dotaClient);
             assert.isTrue(dotaClient.launch.calledOnce);
             assert.equal(dotaClient, result);
         });
@@ -221,7 +198,7 @@ describe('Functions', () => {
         it('assign servers to steam object', async () => {
             const steam = {};
             const servers = { '1': 1, '2': 2 };
-            updateServers(steam)(servers);
+            DotaBot.updateServers(steam)(servers);
             assert.property(steam, 'servers');
             assert.equal(steam.servers, servers);
         });
@@ -231,7 +208,7 @@ describe('Functions', () => {
         it('calls callback with sha_file object', async () => {
             const sha_file = crypto.createHash('sha1').update('data').digest();
             const callback = sinon.spy();
-            updateMachineAuth('path')({ bytes: 'data' }, callback);
+            DotaBot.updateMachineAuth('path')({ bytes: 'data' }, callback);
             assert.isTrue(callback.withArgs({ sha_file }).calledOnce);
         });
     });
@@ -241,13 +218,13 @@ describe('Functions', () => {
             const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
-            const result = diffMembers(membersA, membersB);
+            const result = DotaBot.diffMembers(membersA, membersB);
             assert.lengthOf(result, 1);
             assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFF1)), 0);
         });
         
         it('return empty', async () => {
-            const result = diffMembers([], []);
+            const result = DotaBot.diffMembers([], []);
             assert.isEmpty(result);
         });
         
@@ -255,7 +232,7 @@ describe('Functions', () => {
             const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
             const membersA = [{ id }];
             const membersB = [{ id }];
-            const result = diffMembers(membersA, membersB);
+            const result = DotaBot.diffMembers(membersA, membersB);
             assert.isEmpty(result);
         });
         
@@ -263,7 +240,7 @@ describe('Functions', () => {
             const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
-            const result = diffMembers(membersB, membersA);
+            const result = DotaBot.diffMembers(membersB, membersA);
             assert.isEmpty(result);
         });
     });
@@ -273,29 +250,29 @@ describe('Functions', () => {
             const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
             const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id }];
-            const result = intersectMembers(membersA, membersB);
+            const result = DotaBot.intersectMembers(membersA, membersB);
             assert.lengthOf(result, 1);
             assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFFF)), 0);
         });
         
         it('return empty', async () => {
-            const result = intersectMembers([], []);
+            const result = DotaBot.intersectMembers([], []);
             assert.isEmpty(result);
         });
         
         it('return empty when none in common', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFFF) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
-            const result = intersectMembers(membersA, membersB);
+            const result = DotaBot.intersectMembers(membersA, membersB);
             assert.isEmpty(result);
         });
         
         it('return empty when none in common multiple', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2) }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3) }];
-            let result = intersectMembers(membersA, membersB);
+            let result = DotaBot.intersectMembers(membersA, membersB);
             assert.isEmpty(result);
-            result = intersectMembers(membersB, membersA);
+            result = DotaBot.intersectMembers(membersB, membersA);
             assert.isEmpty(result);
         });
     });
@@ -303,7 +280,7 @@ describe('Functions', () => {
     describe('membersToPlayerState', () => {
         it('return an object mapping steamids to slots', async () => {
             const members = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2 }];
-            const playerState = membersToPlayerState(members);
+            const playerState = DotaBot.membersToPlayerState(members);
             assert.deepEqual(playerState, {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 2,
@@ -316,7 +293,7 @@ describe('Functions', () => {
         it('return object with members who left, joined, or changed slot', async () => {
             const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }];
             const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }];
-            const members = processMembers(membersA, membersB);
+            const members = DotaBot.processMembers(membersA, membersB);
             assert.hasAllKeys(members, ['joined', 'left', 'changedSlot']);
             assert.lengthOf(members.joined, 1);
             assert.lengthOf(members.left, 1);
@@ -338,7 +315,7 @@ describe('Functions', () => {
             const dotaBot = {
                 inviteToLobby: sinon.spy(),
             }
-            const result = await invitePlayer(dotaBot)(user);
+            const result = await DotaBot.invitePlayer(dotaBot)(user);
             assert(dotaBot.inviteToLobby.calledOnce);
         });
     });
@@ -355,8 +332,8 @@ describe('DotaBot', () => {
     });
 
     describe('constructor', () => {
-        it('return DotaBot object with blocking queue', async () => {
-            const dotaBot = new DotaBot(steamClient, steamUser, {}, dotaClient, {}, true, true);
+        it('return DotaBot.DotaBot object with blocking queue', async () => {
+            const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, {}, dotaClient, {}, true, true);
             assert.equal(dotaBot.state, Queue.State.BLOCKED);
         });
     });
@@ -366,7 +343,7 @@ describe('DotaBot', () => {
             steamClient.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
             sinon.spy(steamClient, "logOn");
             const steamFriends = { setPersonaState: () => true, setPersonaName: () => true };
-            const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+            const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.logOnToSteam();
             assert.isTrue(steamClient.logOn.calledOnce);
         });
@@ -376,7 +353,7 @@ describe('DotaBot', () => {
         it('connect to dota and release queue', async () => {
             dotaClient.launch = () => dotaClient.emit('ready');
             sinon.spy(dotaClient, "launch");
-            const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+            const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.connectToDota();
             assert.isTrue(dotaClient.launch.calledOnce);
             assert.equal(dotaBot.state, Queue.State.IDLE);
@@ -391,7 +368,7 @@ describe('DotaBot', () => {
             sinon.spy(steamClient, "logOn");
             dotaClient.launch = () => dotaClient.emit('ready');
             sinon.spy(dotaClient, "launch");
-            const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+            const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.connect();
             assert.isTrue(steamClient.connect.calledOnce);
             assert.isTrue(steamClient.logOn.calledOnce);
@@ -405,7 +382,7 @@ describe('DotaBot', () => {
             sinon.spy(steamClient, "disconnect");
             dotaClient.exit = () => true;
             sinon.spy(dotaClient, "exit");
-            const dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+            const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             await dotaBot.disconnect();
             assert.isTrue(steamClient.disconnect.calledOnce);
             assert.isTrue(dotaClient.exit.calledOnce);
@@ -417,7 +394,7 @@ describe('DotaBot', () => {
         let dotaBot, memberLeftSpy, memberJoinedSpy, memberChangedSlotSpy, readySpy;
         
         beforeEach(() => {
-            dotaBot = new DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+            dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
             memberLeftSpy = sinon.spy();
             memberJoinedSpy = sinon.spy();
             memberChangedSlotSpy = sinon.spy();
@@ -492,7 +469,7 @@ describe('DotaBot', () => {
                 steamid_64: '123',
             };
             dotaBot.disconnect.resolves(true);
-            await disconnectDotaBot(dotaBot);
+            await DotaBot.disconnectDotaBot(dotaBot);
             assert.isTrue(dotaBot.disconnect.calledOnce);
         });
     });
@@ -510,7 +487,7 @@ describe('DotaBot', () => {
             dotaBot.leavePracticeLobby.resolves(true);
             dotaBot.abandonCurrentGame.resolves(true);
             dotaBot.leaveChat.resolves(true);
-            const match_id = await startDotaLobby(dotaBot);
+            const match_id = await DotaBot.startDotaLobby(dotaBot);
             assert.equal(match_id, 'test');
             assert.isTrue(dotaBot.launchPracticeLobby.calledOnce);
             assert.isTrue(dotaBot.leavePracticeLobby.calledOnce);

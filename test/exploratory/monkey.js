@@ -34,11 +34,7 @@ const {
     },
 });
 const Lobby = require('../../lib/lobby');
-const {
-    findOrCreateBot,
-    findLeague,
-    findOrCreateUser,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
 console.log(path.join(__dirname, './.env'));
@@ -177,19 +173,19 @@ const onReady = async () => {
     for (const guild of client.guilds.array()) {
         const msg = new MockMessage(guild, guild.channels.random(), client.owner);
         await leagueCreateCommand.run(msg, {});
-        const league = await findLeague(guild.id);
+        const league = await Db.findLeague(guild.id);
         await league.update({ captain_rank_threshold: 100 });
-        await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
         for (const member of guild.members.array()) {
-            const user = await findOrCreateUser(league, getRandomInt(100000000).toString(), member.id, getRandomInt(70) + 10);
+            const user = await Db.findOrCreateUser(league, getRandomInt(100000000).toString(), member.id, getRandomInt(70) + 10);
             await user.update({ vouched: true });
         }
     }
     //await joinLobby();
-    randomInput();
-    //testAutobalance();
+    //randomInput();
+    testAutobalance();
     //testDraft();
 }
 
@@ -198,7 +194,7 @@ const run = async () => {
     //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
     ihlManager = new IHLManager(process.env);
     ihlManager.on('ready', onReady);
-    ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
+    //ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
     ihlManager.init(client);
 };
 
