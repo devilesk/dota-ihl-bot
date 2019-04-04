@@ -71,6 +71,11 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: 'Inhouse Lobby ${lobby_id}',
         },
+        draft_order: {
+            allowNull: false,
+            type: Sequelize.STRING,
+            defaultValue: 'ABBABAAB',
+        },
         leagueid: {
             type: Sequelize.INTEGER,
         },
