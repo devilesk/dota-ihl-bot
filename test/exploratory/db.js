@@ -62,5 +62,13 @@ describe('Database', () => {
             lobby1 = await findLobbyById(1);
             console.log(lobby1);
         });
+        it.only('return leagues', async () => {
+            Object.values(db.sequelize.models).map((model) => {
+                model.truncate({
+                    cascade: true,
+                    restartIdentity: true,
+                });
+            });
+        });
     });
 });

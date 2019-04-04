@@ -1,3 +1,6 @@
+const logger = require('../../lib/logger');
+const spawn = require('../../lib/util/spawn');
+const Promise = require('bluebird');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
 Argument.validateInfo = function () {};
@@ -8,7 +11,6 @@ const assert = chai.assert;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire').noCallThru();
 const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
 const EventEmitter = require('events').EventEmitter;
 const db = require('../../models');
 const {
@@ -41,13 +43,23 @@ const CONSTANTS = require('../../lib/constants');
 const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
 console.log(path.join(__dirname, './.env'));
 
-sequelizeMockingMocha(
-    db.sequelize,
-    [],
-    { logging: false },
-);
+before(async () => {
+    await spawn('npm', ['run', 'db:init']);
+});
 
 let ihlManager;
+
+afterEach(async () => {
+    await Promise.all(
+        Object.values(db.sequelize.models)
+            .map((model) => model.truncate({
+                cascade: true,
+                restartIdentity: true,
+            }))
+    );
+});
+
+after(() => { db.sequelize.close() })
 
 describe('BotAddCommand', () => {
     let guild;
@@ -67,7 +79,7 @@ describe('BotAddCommand', () => {
         guild = client.guilds.first();
         cmd = new BotAddCommand(client);
         msg.say.reset();
-        ihlManager.eventEmitter.on('ready', async () => {
+        ihlManager.on('ready', async () => {
             await createNewLeague(guild);
             league = await findLeague(guild.id);
             done();
@@ -128,7 +140,7 @@ describe('BotRemoveCommand', () => {
         cmd = new BotRemoveCommand(client);
         addCmd = new BotAddCommand(client);
         msg.say.reset();
-        ihlManager.eventEmitter.on('ready', async () => {
+        ihlManager.on('ready', async () => {
             await createNewLeague(guild);
             league = await findLeague(guild.id);
             done();
@@ -191,7 +203,7 @@ describe('BotListCommand', () => {
         cmd = new BotListCommand(client);
         addCmd = new BotAddCommand(client);
         msg.say.reset();
-        ihlManager.eventEmitter.on('ready', async () => {
+        ihlManager.on('ready', async () => {
             await createNewLeague(guild);
             league = await findLeague(guild.id);
             done();
@@ -265,7 +277,7 @@ describe('LeagueCreateCommand', () => {
         client.initRandomGuilds(1, 2, 5, 3, 20);
         guild = client.guilds.first();
         cmd = new LeagueCreateCommand(client);
-        ihlManager.eventEmitter.on('ready', done);
+        ihlManager.on('ready', done);
         ihlManager.init(client);
     });
 
@@ -295,7 +307,7 @@ describe('LeagueSeasonCommand', () => {
         guild = client.guilds.first();
         cmd = new LeagueSeasonCommand(client);
         addCmd = new LeagueCreateCommand(client);
-        ihlManager.eventEmitter.on('ready', done);
+        ihlManager.on('ready', done);
         ihlManager.init(client);
     });
 
@@ -331,7 +343,7 @@ describe('RegisterCommand', () => {
         guild = client.guilds.first();
         cmd = new RegisterCommand(client);
         msg.say.reset();
-        ihlManager.eventEmitter.on('ready', async () => {
+        ihlManager.on('ready', async () => {
             await createNewLeague(guild);
             done();
         });
