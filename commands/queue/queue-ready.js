@@ -1,3 +1,4 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const CONSTANTS = require('../../lib/constants');
 
@@ -18,6 +19,7 @@ module.exports = class QueueReadyCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState, inhouseUser }) {
-        this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_PLAYER_READY, lobbyState, inhouseUser);
+        logger.debug(`QueueReadyCommand ${lobbyState.id} ${inhouseUser.id}`);
+        this.ihlManager.emit(CONSTANTS.EVENT_PLAYER_READY, lobbyState, inhouseUser);
     }
 };

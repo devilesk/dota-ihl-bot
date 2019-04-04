@@ -44,7 +44,7 @@ module.exports = class QueueJoinCommand extends IHLCommand {
             if (channel) {
                 // use lobbyState for given channel
                 lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                lobbyState = lobby ? await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })(inhouseState)(lobby) : null;
+                lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
                 if (lobbyState) {
                     logger.debug('QueueJoinCommand channel found... joining queue');
                     await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.author);

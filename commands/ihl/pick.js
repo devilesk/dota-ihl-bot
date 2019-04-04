@@ -1,9 +1,12 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
+const {
+    findUser,
+} = require('../../lib/ihlManager');
 const {
     isCaptain,
     getPlayerByDiscordId,
     getDraftingFaction,
-    isPlayerDraftable,
 } = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
@@ -25,38 +28,19 @@ module.exports = class PickCommand extends IHLCommand {
                 {
                     key: 'member',
                     prompt: 'Provide a player mention.',
-                    type: 'member',
+                    type: 'string',
                 },
             ],
         });
     }
 
-    async onMsg({ msg, lobbyState, inhouseUser }, { member }) {
-        const captain = await getPlayerByDiscordId(lobbyState)(inhouseUser.discord_id);
-        const faction = await getDraftingFaction(lobbyState);
-        if (isCaptain(lobbyState)(captain) && captain.faction === faction) {
-            const player = await getPlayerByDiscordId(lobbyState)(member.id);
-            if (player) {
-                const result = await isPlayerDraftable(lobbyState)(player);
-                switch (result) {
-                case CONSTANTS.INVALID_DRAFT_CAPTAIN:
-                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_DRAFT_CAPTAIN, lobbyState);
-                    break;
-                case CONSTANTS.INVALID_DRAFT_PLAYER:
-                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_DRAFT_PLAYER, lobbyState);
-                    break;
-                case CONSTANTS.PLAYER_DRAFT:
-                    this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, player, faction);
-                    this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_PLAYER_DRAFTED, lobbyState, msg.author, member);
-                    break;
-                default:
-                    break;
-                }
-            }
-            else {
-                this.ihlManager.eventEmitter.emit(CONSTANTS.MSG_INVALID_PLAYER_NOT_FOUND, lobbyState);
-            }
+    async onMsg({ msg, guild, lobbyState, inhouseUser }, { member }) {
+        logger.debug('PickCommand');
+        const [user, discord_user, result_type] = await findUser(guild)(member);
+        const captain = inhouseUser;
+        if (isCaptain(lobbyState)(captain)) {
+            logger.debug(`PickCommand isCaptain ${captain.id}`);
+            this.ihlManager.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, captain, user, discord_user);
         }
-
     }
 };

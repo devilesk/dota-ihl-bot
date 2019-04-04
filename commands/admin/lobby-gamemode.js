@@ -38,7 +38,7 @@ module.exports = class LobbyGameModeCommand extends IHLCommand {
         const game_mode = mode === 'cm' ? dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CM
             : (mode === 'cd' ? dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_CD : dota2.schema.lookupEnum('DOTA_GameMode').values.DOTA_GAMEMODE_AP);
 
-        this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, lobbyState, game_mode);
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_SET_GAMEMODE, lobbyState, game_mode);
         await msg.say(`Game mode ${game_mode}.`).catch(console.error);
     }
 };

@@ -46,7 +46,7 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
         if (channel) {
             // use lobbyState for given channel
             const lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })(inhouseState)(lobby) : null;
+            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
                 this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
             }

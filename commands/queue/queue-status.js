@@ -68,7 +68,7 @@ module.exports = class QueueStatusCommand extends IHLCommand {
         if (channel) {
             // use lobbyState for given channel
             lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await lobbyToLobbyState({ findOrCreateChannelInCategory, makeRole })(inhouseState)(lobby) : null;
+            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
                 const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
                 await msg.say(message);

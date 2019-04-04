@@ -23,6 +23,6 @@ module.exports = class LobbyKillCommand extends IHLCommand {
     }
 
     async onMsg({ msg, inhouseState, lobbyState }) {
-        this.ihlManager.eventEmitter.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
+        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_KILL, lobbyState, inhouseState);
     }
 };

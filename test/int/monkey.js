@@ -1,3 +1,4 @@
+const logger = require('../../lib/logger');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
 Argument.validateInfo = function () {};
@@ -31,9 +32,7 @@ const {
         createMatchEndMessageEmbed: async match_id => {},
     },
 });
-const {
-    getLobby,
-} = require('../../lib/lobby');
+const Lobby = require('../../lib/lobby');
 const {
     findOrCreateBot,
     findLeague,
@@ -52,6 +51,7 @@ const QueueJoinCommand = require('../../commands/queue/queue-join');
 const QueueReadyCommand = require('../../commands/queue/queue-ready');
 const QueueLeaveCommand = require('../../commands/queue/queue-leave');
 const QueueStatusCommand = require('../../commands/queue/queue-status');
+const PickCommand = require('../../commands/ihl/pick');
 
 let ihlManager;
 let lobby_channel;
@@ -60,6 +60,7 @@ const queueJoinCommand = new QueueJoinCommand(client);
 const queueReadyCommand = new QueueReadyCommand(client);
 const queueLeaveCommand = new QueueLeaveCommand(client);
 const queueStatusCommand = new QueueStatusCommand(client);
+const pickCommand = new PickCommand(client);
 const commands = new Collection([
     [1, leagueCreateCommand],
     [2, queueJoinCommand],
@@ -111,7 +112,7 @@ const testAutobalance = () => {
         const msg = new MockMessage(guild, lobby_channel, member);
         queueJoinCommand.run(msg, {});
     }
-    ihlManager.eventEmitter.on(CONSTANTS.STATE_CHECKING_READY, () => {
+    ihlManager.on(CONSTANTS.STATE_CHECKING_READY, () => {
         for (let i = 0; i < 10; i++) {
             const member = members[i];
             const msg = new MockMessage(guild, lobby_channel, member);
@@ -129,20 +130,46 @@ const testDraft = () => {
         const msg = new MockMessage(guild, lobby_channel, member);
         queueJoinCommand.run(msg, {});
     }
-    ihlManager.eventEmitter.on(CONSTANTS.STATE_CHECKING_READY, () => {
+    ihlManager.once(CONSTANTS.STATE_CHECKING_READY, () => {
         for (let i = 0; i < 10; i++) {
             const member = members[i];
             const msg = new MockMessage(guild, lobby_channel, member);
             queueReadyCommand.run(msg, {});
         }
     });
+    ihlManager.once(CONSTANTS.STATE_DRAFTING_PLAYERS, (lobbyState) => {
+        randomDraft(lobbyState);
+    });
+}
+
+const randomDraft = async lobbyState => {
+    const lobby = await Lobby.getLobby(lobbyState);
+    logger.debug(`randomDraft ${lobby.lobby_name} ${lobby.captain_1_user_id} ${lobby.captain_2_user_id}`);
+    const guild = client.guilds.first();
+    lobby_channel = guild.channels.find(channel => channel.name === lobby.lobby_name);
+    const members = guild.members.array();
+    const r = getRandomInt(2);
+    let captain;
+    if (r === 0) {
+        captain = await Lobby.getPlayerByUserId(lobbyState)(lobby.captain_1_user_id);
+    }
+    else {
+        captain = await Lobby.getPlayerByUserId(lobbyState)(lobby.captain_2_user_id);
+    }
+    logger.debug(`randomDraft captain ${captain} ${captain.discord_id}`);
+    let msg;
+    msg = new MockMessage(guild, lobby_channel, guild.members.get(captain.discord_id));
+    pickCommand.run(msg, { member: guild.members.random().displayName });
+    if (lobby.state === CONSTANTS.STATE_DRAFTING_PLAYERS) {
+        setTimeout(async () => randomDraft(lobbyState), Math.random() * 1000);
+    }
 }
 
 const onReady = async () => {
     ihlManager.matchTracker.run = async () => {
         if (ihlManager.matchTracker.lobbies.length) {
             const lobbyOrState = ihlManager.matchTracker.lobbies.shift();
-            const lobby = await getLobby(lobbyOrState);
+            const lobby = await Lobby.getLobby(lobbyOrState);
             ihlManager.matchTracker.emit(CONSTANTS.EVENT_MATCH_ENDED, lobby);
         }
     }
@@ -150,6 +177,7 @@ const onReady = async () => {
         const msg = new MockMessage(guild, guild.channels.random(), client.owner);
         await leagueCreateCommand.run(msg, {});
         const league = await findLeague(guild.id);
+        await league.update({ captain_rank_threshold: 100 });
         await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
         await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
         await findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
@@ -158,17 +186,17 @@ const onReady = async () => {
             await user.update({ vouched: true });
         }
     }
-    await joinLobby();
+    //await joinLobby();
     //randomInput();
     //testAutobalance();
-    //testDraft();
+    testDraft();
 }
 
 const run = async () => {
     //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
     ihlManager = new IHLManager(process.env);
-    ihlManager.eventEmitter.on('ready', onReady);
-    //ihlManager.eventEmitter.on(CONSTANTS.STATE_COMPLETED, joinLobby);
+    ihlManager.on('ready', onReady);
+    //ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
     ihlManager.init(client);
 };
 
