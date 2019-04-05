@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
         },
     }, { underscored: true });
     Bot.associate = (models) => {
-        Bot.belongsTo(models.League);
         Bot.hasMany(models.Lobby);
+        Bot.belongsToMany(models.League, { as: 'Leagues', through: models.LeagueBot });
     };
     return Bot;
 };

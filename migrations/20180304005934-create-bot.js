@@ -8,15 +8,6 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
-            allowNull: false,
-            type: Sequelize.INTEGER,
-            onDelete: 'CASCADE',
-            references: {
-                model: 'Leagues',
-                key: 'id',
-            },
-        },
         steamid_64: {
             allowNull: false,
             type: Sequelize.STRING,
@@ -47,11 +38,6 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
         },
-    })
-    .then(() => queryInterface.addIndex('Bots', ['league_id']))
-    .then(() => queryInterface.addConstraint('Bots', ['league_id', 'steamid_64'], {
-        type: 'unique',
-        name: 'uq_bots_league_id_steamid_64',
-    })),
+    }),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Bots'),
 };
