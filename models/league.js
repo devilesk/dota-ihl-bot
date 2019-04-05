@@ -87,27 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         League.hasMany(models.User);
         League.hasMany(models.Lobby);
         League.hasMany(models.Leaderboard);
-        League.belongsToMany(models.Bot, { as: 'Bots', through: models.LeagueBot });
-        
-        League.belongsToMany(models.Bot, {
-            through: {
-                model: models.LeagueBot,
-                scope: {
-                    ticketed: true,
-                },
-            },
-            as: 'TicketedBots',
-        });
-        
-        League.belongsToMany(models.Bot, {
-            through: {
-                model: models.LeagueBot,
-                scope: {
-                    ticketed: false,
-                },
-            },
-            as: 'UnticketedBots',
-        });
+        League.belongsToMany(models.Ticket, { as: 'Tickets', through: models.LeagueTicket });
     };
     return League;
 };
