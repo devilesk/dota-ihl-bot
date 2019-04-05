@@ -43,18 +43,23 @@ module.exports = (sequelize, DataTypes) => {
     Lobby.associate = (models) => {
         Lobby.belongsTo(models.League);
         Lobby.belongsTo(models.Season);
-        Lobby.belongsTo(models.Bot);
+        Lobby.belongsTo(models.Bot, {
+            foreignKey: 'bot_id',
+            constraints: false,
+        });
         Lobby.belongsToMany(models.User, { as: 'Players', through: models.LobbyPlayer });
         Lobby.belongsToMany(models.User, { as: 'Queuers', through: models.LobbyQueuer });
 
         Lobby.belongsTo(models.User, {
             as: 'Captain1',
             foreignKey: 'captain_1_user_id',
+            constraints: false,
         });
 
         Lobby.belongsTo(models.User, {
             as: 'Captain2',
             foreignKey: 'captain_2_user_id',
+            constraints: false,
         });
         
         Lobby.belongsToMany(models.User, {

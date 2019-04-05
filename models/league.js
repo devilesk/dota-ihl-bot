@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         current_season_id: {
             type: DataTypes.INTEGER,
         },
+        current_ticket_id: {
+            type: DataTypes.INTEGER,
+        },
         ready_check_timeout: {
             allowNull: false,
             type: DataTypes.INTEGER,
@@ -88,6 +91,16 @@ module.exports = (sequelize, DataTypes) => {
         League.hasMany(models.Lobby);
         League.hasMany(models.Leaderboard);
         League.belongsToMany(models.Ticket, { as: 'Tickets', through: models.LeagueTicket });
+        League.belongsTo(models.Season, {
+            as: 'CurrentSeason',
+            foreignKey: 'current_season_id',
+            constraints: false,
+        });
+        League.belongsTo(models.Ticket, {
+            as: 'CurrentTicket',
+            foreignKey: 'current_ticket_id',
+            constraints: false,
+        });
     };
     return League;
 };
