@@ -31,7 +31,7 @@
     "bluebird": "^3.5.3",
     "discord.js": "^11.4.2",
     "discord.js-commando": "0.10.0",
-    "dota2": "^6.2.0",
+    "dota2": "github:devilesk/node-dota2#dota-ihl-bot",
     "dotaconstants": "^6.16.0",
     "dotenv": "^7.0.0",
     "erlpack": "github:hammerandchisel/erlpack",
