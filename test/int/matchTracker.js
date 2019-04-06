@@ -36,6 +36,11 @@ describe('Database', () => {
             const data = await getOpenDotaMatchDetails('4578557761');
             assert.exists(data);
         });
+        
+        it('return bad opendota match data', async () => {
+            const data = await getOpenDotaMatchDetails('aaaa4578aa557761aa');
+            assert.isNull(data);
+        });
     });
     
     describe('getValveMatchDetails', () => {
@@ -43,6 +48,7 @@ describe('Database', () => {
             const data = await getValveMatchDetails('4578557761');
             assert.exists(data);
         });
+        
         it('return null valve match data', async () => {
             const data = await getValveMatchDetails('aaaa4578aa557761aa');
             assert.isNull(data);

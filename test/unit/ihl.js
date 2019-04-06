@@ -55,9 +55,13 @@ describe('Database', () => {
     const id = 1;
 
     describe('getUserRankTier', () => {
-        it('return a rank tier', async () => {
+        it('return a null rank tier', async () => {
             const rank_tier = await getUserRankTier('76561198015512690');
-            assert.equal(rank_tier, null);
+            assert.isNull(rank_tier);
+        });
+        it('return a rank tier', async () => {
+            const rank_tier = await getUserRankTier('76561198065444496');
+            assert.exists(rank_tier);
         });
     });
 
