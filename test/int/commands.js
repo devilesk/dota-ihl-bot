@@ -31,7 +31,7 @@ const {
 const {
     findLeague,
     findBot,
-    findAllBots,
+    findAllBotsForLeague,
 } = require('../../lib/db');
 const BotAddCommand = require('../../commands/admin/bot-add');
 const BotRemoveCommand = require('../../commands/admin/bot-remove');
@@ -155,7 +155,7 @@ describe('BotRemoveCommand', () => {
         const password = 'password';
         await cmd.onMsg({ msg, guild, league }, { steamid_64 });
         assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
-        const bots = await findAllBots(league);
+        const bots = await findAllBotsForLeague(league);
         assert.empty(bots);
     });
 
@@ -173,12 +173,12 @@ describe('BotRemoveCommand', () => {
         assert.equal(bot.account_name, 'account_name');
         assert.equal(bot.persona_name, 'persona_name');
         assert.equal(bot.password, 'password');
-        bots = await findAllBots(league);
+        bots = await findAllBotsForLeague(league);
         assert.lengthOf(bots, 1);
         msg.say.reset();
         await cmd.onMsg({ msg, guild, league }, { steamid_64 });
         assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
-        bots = await findAllBots(league);
+        bots = await findAllBotsForLeague(league);
         assert.empty(bots);
     });
 });

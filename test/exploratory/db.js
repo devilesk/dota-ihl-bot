@@ -62,13 +62,27 @@ describe('Database', () => {
             lobby1 = await findLobbyById(1);
             console.log(lobby1);
         });
-        it.only('return leagues', async () => {
+        it('return leagues', async () => {
             Object.values(db.sequelize.models).map((model) => {
                 model.truncate({
                     cascade: true,
                     restartIdentity: true,
                 });
             });
+        });
+        it.only('return leagues', async () => {
+            const league = await findOrCreateLeague('test')([
+                { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
+                { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue' },
+            ]);
+            const season = await league.getCurrentSeason();
+            console.log(season.id);
+            let ticket = await league.getCurrentTicket();
+            console.log(ticket);
+            await db.Ticket.create({ league_id: 1, leagueid: 2, name: 'test', start_timestamp: Date.now(), end_timestamp: Date.now() });
+            await league.update({ current_ticket_id: 1 });
+            ticket = await league.getCurrentTicket();
+            console.log(ticket);
         });
     });
 });

@@ -16,9 +16,6 @@ module.exports = {
         current_season_id: {
             type: Sequelize.INTEGER,
         },
-        current_ticket_id: {
-            type: Sequelize.INTEGER,
-        },
         ready_check_timeout: {
             allowNull: false,
             type: Sequelize.INTEGER,

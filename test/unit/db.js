@@ -21,7 +21,6 @@ const {
     findLobbyById,
     findBot,
     findAllUnassignedBot,
-    findUnassignedBot,
     findUserById,
     findUserByDiscordId,
     findUserBySteamId64,
@@ -140,10 +139,9 @@ describe('Database', () => {
 
     describe('findOrCreateBot', () => {
         it('create new bot', async () => {
-            const league = await findLeague('422549177151782925');
-            const [bot, created] = await findOrCreateBot(league, '123', 'bot3', 'bot3', 'pass');
+            const [bot, created] = await findOrCreateBot('123', 'bot3', 'bot3', 'pass');
             assert.exists(bot);
-            assert.equal(bot.league_id, league.id);
+            assert.equal(bot.steamid_64, '123');
         });
     });
 
@@ -193,11 +191,9 @@ describe('Database', () => {
 
     describe('findBot', () => {
         it('return existing bot', async () => {
-            const league = await findLeague('422549177151782925');
             const bot = await findBot(1);
             assert.exists(bot);
             assert.equal(bot.id, 1);
-            assert.equal(bot.league_id, league.id);
         });
     });
 
@@ -206,14 +202,6 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const bots = await findAllUnassignedBot();
             assert.lengthOf(bots, 1);
-        });
-    });
-
-    describe('findUnassignedBot', () => {
-        it('return bot not assigned to a lobby', async () => {
-            const league = await findLeague('422549177151782925');
-            const bot = await findUnassignedBot();
-            assert.exists(bot);
         });
     });
 

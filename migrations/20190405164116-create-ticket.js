@@ -8,7 +8,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        dota_league_id: {
+        leagueid: {
             allowNull: false,
             type: Sequelize.INTEGER,
             unique: true,
@@ -21,11 +21,9 @@ module.exports = {
             type: Sequelize.DATE,
         },
         start_timestamp: {
-            allowNull: false,
             type: Sequelize.DATE,
         },
         end_timestamp: {
-            allowNull: false,
             type: Sequelize.DATE,
         },
         created_at: {

@@ -175,9 +175,9 @@ const onReady = async () => {
         await leagueCreateCommand.run(msg, {});
         const league = await Db.findLeague(guild.id);
         await league.update({ captain_rank_threshold: 100 });
-        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await Db.findOrCreateBot(league, getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
         for (const member of guild.members.array()) {
             const user = await Db.findOrCreateUser(league, getRandomInt(100000000).toString(), member.id, getRandomInt(70) + 10);
             await user.update({ vouched: true });

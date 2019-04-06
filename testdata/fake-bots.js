@@ -5,7 +5,6 @@ module.exports = [
         model: "Bot",
         data: {
             id: 1,
-            league_id: 1,
             steamid_64: '999991',
             account_name: 'bot1',
             password: 'bot1',
@@ -19,7 +18,6 @@ module.exports = [
         model: "Bot",
         data: {
             id: 2,
-            league_id: 1,
             steamid_64: '999992',
             account_name: 'bot2',
             persona_name: 'bot2',

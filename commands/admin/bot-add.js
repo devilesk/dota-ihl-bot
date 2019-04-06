@@ -1,8 +1,7 @@
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findOrCreateBot,
-    updateBot,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
+const DotaBot = require('../../lib/dotaBot');
+const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class BotAddCommand
@@ -41,21 +40,30 @@ module.exports = class BotAddCommand extends IHLCommand {
                 },
             ],
         }, {
-            inhouseAdmin: true,
-            inhouseState: true,
+            clientOwner: true,
+            inhouseAdmin: false,
+            inhouseState: false,
             lobbyState: false,
             inhouseUser: false,
         });
     }
 
-    async onMsg({ msg, league }, { steamid_64, account_name, persona_name, password }) {
-        const [bot, created] = await findOrCreateBot(league, steamid_64, account_name, persona_name, password);
+    async onMsg({ msg }, { steamid_64, account_name, persona_name, password }) {
+        const [bot, created] = await Db.findOrCreateBot(steamid_64, account_name, persona_name, password);
         if (created) {
             await msg.say(`Bot ${steamid_64} added.`);
         }
         else {
-            await updateBot(league)(steamid_64)({ account_name, persona_name, password });
+            await Db.updateBot(steamid_64)({ account_name, persona_name, password });
             await msg.say(`Bot ${steamid_64} updated.`);
         }
+        await Db.updateBotStatus(CONSTANTS.BOT_LOADING)(bot.id);
+        const dotaBot = await DotaBot.createDotaBot(bot);
+        await DotaBot.connectDotaBot(dotaBot);
+        await msg.say(`Bot ${steamid_64} connected.`);
+        const tickets = await DotaBot.loadDotaBotTickets(dotaBot);
+        await msg.say(`${tickets.length} tickets loaded.`);
+        await DotaBot.disconnectDotaBot(dotaBot);
+        await msg.say(`Bot ${steamid_64} disconnected.`);
     }
 };

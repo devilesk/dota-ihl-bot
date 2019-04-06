@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     }, { underscored: true });
     Bot.associate = (models) => {
         Bot.hasMany(models.Lobby);
-        Bot.belongsToMany(models.Ticket, { as: 'Tickets', through: models.BotTicket });
+        Bot.belongsToMany(models.Ticket, { through: models.BotTicket });
     };
     return Bot;
 };
