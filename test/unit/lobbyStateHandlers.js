@@ -268,10 +268,27 @@ describe('Database - with lobby players', () => {
         });
         
         describe('STATE_AUTOBALANCING', () => {
-            it('return lobby state with STATE_TEAMS_SELECTED', async () => {
+            it('return lobby state with STATE_TEAMS_SELECTED arranging teams by rank_tier', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.state = CONSTANTS.STATE_AUTOBALANCING;
+                let players1 = await lobby.getTeam1Players();
+                let players2 = await lobby.getTeam2Players();
+                assert.isEmpty(players1);
+                assert.isEmpty(players2);
+                const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
+                assert.equal(result.state, CONSTANTS.STATE_TEAMS_SELECTED);
+                players1 = await lobby.getTeam1Players();
+                players2 = await lobby.getTeam2Players();
+                assert.lengthOf(players1, 5);
+                assert.lengthOf(players2, 5);
+            });
+            
+            it('return lobby state with STATE_TEAMS_SELECTED arranging teams by rating', async () => {
+                const users = await db.User.findAll({ limit: 10 });
+                await Lobby.addPlayers(lobbyState)(users);
+                lobbyState.state = CONSTANTS.STATE_AUTOBALANCING;
+                lobbyState.inhouseState.matchmaking_system = 'elo'
                 let players1 = await lobby.getTeam1Players();
                 let players2 = await lobby.getTeam2Players();
                 assert.isEmpty(players1);

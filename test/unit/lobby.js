@@ -845,7 +845,7 @@ describe('Database - with lobby players', () => {
         });
         
         describe('autoBalanceTeams', () => {
-            it('set teams', async () => {
+            it('set teams using rank_tier', async () => {
                 let players = await getPlayers()(lobby);
                 assert.lengthOf(players, 10);
                 for (const player of players) {
@@ -854,6 +854,30 @@ describe('Database - with lobby players', () => {
                 players = await getPlayers()(lobby);
                 players.forEach(player => assert.equal(player.LobbyPlayer.faction, 0));
                 await autoBalanceTeams(player => player.rank_tier)(lobby);
+                players = await getPlayers()(lobby);
+                let team_1_count = 0;
+                let team_2_count = 0;
+                for (const player of players) {
+                    if (player.LobbyPlayer.faction == 1) {
+                        team_1_count++;
+                    }
+                    else if (player.LobbyPlayer.faction == 2) {
+                        team_2_count++;
+                    }
+                }
+                assert.equal(team_1_count, 5);
+                assert.equal(team_2_count, 5);
+            });
+            
+            it('set teams using rating', async () => {
+                let players = await getPlayers()(lobby);
+                assert.lengthOf(players, 10);
+                for (const player of players) {
+                    await setPlayerTeam(0)(lobby)(player.id);
+                }
+                players = await getPlayers()(lobby);
+                players.forEach(player => assert.equal(player.LobbyPlayer.faction, 0));
+                await autoBalanceTeams(player => player.rating)(lobby);
                 players = await getPlayers()(lobby);
                 let team_1_count = 0;
                 let team_2_count = 0;
