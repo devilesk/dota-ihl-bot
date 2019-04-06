@@ -501,8 +501,10 @@ describe('Database - with lobby players', () => {
         });
         
         describe('selectCaptainPairFromTiers', () => {
+            const playerRatingFunction = player => player.rank_tier;
+            
             it('return an empty array when tiers empty', async () => {
-                const captains = selectCaptainPairFromTiers(0)({});
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)({});
                 assert.isEmpty(captains);
             });
 
@@ -510,7 +512,7 @@ describe('Database - with lobby players', () => {
                 const tiers = {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }]
                 }
-                const captains = selectCaptainPairFromTiers(0)(tiers);
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)(tiers);
                 assert.isEmpty(captains);
             });
 
@@ -518,7 +520,7 @@ describe('Database - with lobby players', () => {
                 const tiers = {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }]
                 }
-                const captains = selectCaptainPairFromTiers(1)(tiers);
+                const captains = selectCaptainPairFromTiers(1)(playerRatingFunction)(tiers);
                 assert.lengthOf(captains, 2);
             });
 
@@ -527,7 +529,7 @@ describe('Database - with lobby players', () => {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }],
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
-                const captains = selectCaptainPairFromTiers(0)(tiers);
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)(tiers);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].rank_tier, 10);
             });
@@ -537,7 +539,7 @@ describe('Database - with lobby players', () => {
                     '0': [],
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
-                const captains = selectCaptainPairFromTiers(0)(tiers);
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)(tiers);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].rank_tier, 10);
             });
@@ -547,7 +549,7 @@ describe('Database - with lobby players', () => {
                     '0': [{ rank_tier: 0 }, { rank_tier: 0 }],
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
-                const captains = selectCaptainPairFromTiers(0)(tiers);
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)(tiers);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].rank_tier, 0);
             });
@@ -557,7 +559,7 @@ describe('Database - with lobby players', () => {
                     '0': [{ rank_tier: 0 }, { rank_tier: 1 }, { rank_tier: 1 }],
                     '1': [{ rank_tier: 10 }, { rank_tier: 10 }],
                 }
-                const captains = selectCaptainPairFromTiers(0)(tiers);
+                const captains = selectCaptainPairFromTiers(0)(playerRatingFunction)(tiers);
                 assert.lengthOf(captains, 2);
                 assert.equal(captains[0].rank_tier, 1);
             });
