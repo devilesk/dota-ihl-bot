@@ -28,6 +28,7 @@ const {
 const {
     createNewLeague,
 } = require('../../lib/ihl');
+const DotaBot = require('../../lib/dotaBot');
 const {
     findLeague,
     findBot,
@@ -46,6 +47,11 @@ console.log(path.join(__dirname, './.env'));
 before(async () => {
     await spawn('npm', ['run', 'db:init']);
 });
+
+sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
+    return new MockDotaBot(config);
+});
+sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
 
 let ihlManager;
 
