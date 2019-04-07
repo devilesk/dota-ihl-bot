@@ -13,7 +13,7 @@ module.exports = class BotStatusCommand extends IHLCommand {
             group: 'admin',
             memberName: 'bot-status',
             guildOnly: true,
-            description: 'Manually set a bot status.',,
+            description: 'Manually set a bot status.',
             examples: ['bot-status 76561197960287930 BOT_UNAVAILABLE', 'bot-status 76561197960287930 BOT_ONLINE', 'bot-status 76561197960287930 BOT_OFFLINE'],
             args: [
                 {

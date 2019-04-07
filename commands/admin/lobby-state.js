@@ -13,7 +13,7 @@ module.exports = class LobbyStateCommand extends IHLCommand {
             group: 'admin',
             memberName: 'lobby-state',
             guildOnly: true,
-            description: 'Manually set a lobby state and run it.',,
+            description: 'Manually set a lobby state and run it.',
             examples: ['lobby-state STATE_WAITING_FOR_QUEUE', 'lobby-state STATE_FAILED', 'lobby-state STATE_COMPLETED'],
             args: [
                 {
