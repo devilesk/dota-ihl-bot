@@ -3,11 +3,7 @@ const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/ihlManager');
-const {
-    isCaptain,
-    getPlayerByDiscordId,
-    getDraftingFaction,
-} = require('../../lib/lobby');
+const Lobby = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -38,7 +34,7 @@ module.exports = class PickCommand extends IHLCommand {
         logger.debug('PickCommand');
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const captain = inhouseUser;
-        if (isCaptain(lobbyState)(captain)) {
+        if (Lobby.isCaptain(lobbyState)(captain)) {
             logger.debug(`PickCommand isCaptain ${captain.id}`);
             this.ihlManager.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, captain, user, discord_user);
         }

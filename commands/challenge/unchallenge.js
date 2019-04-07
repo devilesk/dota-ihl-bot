@@ -1,9 +1,6 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUserByDiscordId,
-    getChallengeBetweenUsers,
-    destroyChallengeBetweenUsers,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class UnchallengeCommand
@@ -33,15 +30,15 @@ module.exports = class UnchallengeCommand extends IHLCommand {
 
     async onMsg({ msg, guild, inhouseUser }, { member }) {
         const giver = inhouseUser;
-        const receiver = await findUserByDiscordId(guild.id)(member.id);
+        const receiver = await Db.findUserByDiscordId(guild.id)(member.id);
         if (receiver) {
-            const challengeFromGiver = await getChallengeBetweenUsers(giver)(receiver);
+            const challengeFromGiver = await Db.getChallengeBetweenUsers(giver)(receiver);
             if (challengeFromGiver) {
                 if (challengeFromGiver.accepted) {
                     await msg.say('Challenge already accepted.');
                 }
                 else {
-                    await destroyChallengeBetweenUsers(giver)(receiver);
+                    await Db.destroyChallengeBetweenUsers(giver)(receiver);
                     await msg.say('Challenge revoked.');
                 }
             }

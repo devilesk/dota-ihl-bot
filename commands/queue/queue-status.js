@@ -1,20 +1,8 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    getAllLobbyQueues,
-} = require('../../lib/ihl');
-const {
-    getLobby,
-    lobbyToLobbyState,
-    getActiveQueuers,
-} = require('../../lib/lobby');
-const {
-    findLobbyByDiscordChannel,
-    findAllEnabledQueues,
-} = require('../../lib/db');
-const {
-    findOrCreateChannelInCategory,
-    makeRole,
-} = require('../../lib/guild');
+const Ihl = require('../../lib/ihl');
+const Lobby = require('../../lib/lobby');
+const Db = require('../../lib/db');
 
 /**
  * @class QueueStatusCommand
@@ -44,7 +32,7 @@ module.exports = class QueueStatusCommand extends IHLCommand {
     }
 
     static async getQueueNames(guild, lobbyState) {
-        const queuers = await getActiveQueuers()(lobbyState);
+        const queuers = await Lobby.getActiveQueuers()(lobbyState);
         return queuers.map((queuer) => {
             const discord_user = guild.member(queuer.discord_id);
             if (discord_user) {
@@ -67,8 +55,8 @@ module.exports = class QueueStatusCommand extends IHLCommand {
     async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {
         if (channel) {
             // use lobbyState for given channel
-            lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
+            lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
                 const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
                 await msg.say(message);
@@ -82,7 +70,7 @@ module.exports = class QueueStatusCommand extends IHLCommand {
             await msg.say(message);
         }
         else {
-            const lobbyStates = await getAllLobbyQueues(inhouseState);
+            const lobbyStates = await Ihl.getAllLobbyQueues(inhouseState);
             for (const lobbyState of lobbyStates) {
                 const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
                 await msg.say(message);

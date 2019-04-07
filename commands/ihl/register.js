@@ -1,9 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    parseSteamID64,
-    registerUser,
-} = require('../../lib/ihl');
+const Ihl = require('../../lib/ihl');
 
 /**
  * @class RegisterCommand
@@ -40,9 +37,9 @@ module.exports = class RegisterCommand extends IHLCommand {
         }
         else {
             try {
-                steamid_64 = await parseSteamID64(text);
+                steamid_64 = await Ihl.parseSteamID64(text);
                 if (steamid_64 != null) {
-                    user = await registerUser(guild.id, steamid_64, discord_id);
+                    user = await Ihl.registerUser(guild.id, steamid_64, discord_id);
 
                     if (user) {
                         logger.debug(`RegisterCommand Registered ${user.steamid_64}`);

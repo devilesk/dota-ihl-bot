@@ -1,3 +1,4 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const Db = require('../../lib/db');
 const DotaBot = require('../../lib/dotaBot');

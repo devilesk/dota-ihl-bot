@@ -1,7 +1,6 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    destroyQueuesByGuildId,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class QueueClearCommand
@@ -26,7 +25,7 @@ module.exports = class QueueClearCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }) {
-        await destroyQueuesByGuildId(guild.id);
+        await Db.destroyQueuesByGuildId(guild.id);
         await msg.say('Queue cleared.');
     }
 };

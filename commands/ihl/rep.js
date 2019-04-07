@@ -1,10 +1,9 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/ihlManager');
-const {
-    findOrCreateReputation,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class RepCommand
@@ -39,7 +38,7 @@ module.exports = class RepCommand extends IHLCommand {
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
                 console.log(`RepCommand ${user.id} ${fromUser.id}`);
-                const [rep, created] = await findOrCreateReputation(fromUser)(user);
+                const [rep, created] = await Db.findOrCreateReputation(fromUser)(user);
                 if (created) {
                     await msg.say(`${msg.author.username} reps ${discord_user.displayName}`);
                 }

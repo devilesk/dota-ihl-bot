@@ -1,8 +1,7 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const convertor = require('steam-id-convertor');
-const {
-    findUserByDiscordId,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -34,7 +33,7 @@ module.exports = class LobbyKickCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState }, { member }) {
-        const user = await findUserByDiscordId(guild.id)(member.id);
+        const user = await Db.findUserByDiscordId(guild.id)(member.id);
         if (user) {
             await member.removeRole(lobbyState.role);
             const account_id = convertor.to32(user.steamid_64);

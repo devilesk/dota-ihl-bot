@@ -3,13 +3,8 @@ const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/ihlManager');
-const {
-    findLobbyByMatchId,
-    destroyCommend,
-} = require('../../lib/db');
-const {
-    getPlayers,
-} = require('../../lib/lobby');
+const Db = require('../../lib/db');
+const Lobby = require('../../lib/lobby');
 
 /**
  * @class UncommendCommand
@@ -44,13 +39,13 @@ module.exports = class UncommendCommand extends IHLCommand {
     async onMsg({ msg, league, guild, inhouseUser }, { member, match_id }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
-        const lobby = await findLobbyByMatchId(match_id);
-        const players = await getPlayers()(lobby);
+        const lobby = await Db.findLobbyByMatchId(match_id);
+        const players = await Lobby.getPlayers()(lobby);
         if (lobby) {
             if (user && fromUser) {
                 if (players.find(player => player.id === user.id) && players.find(player => player.id === fromUser.id)) {
                     if (user.id !== fromUser.id) {
-                        const count = await destroyCommend(lobby)(fromUser)(user);
+                        const count = await Db.destroyCommend(lobby)(fromUser)(user);
                         logger.debug(count);
                         if (count) {
                             await msg.say(`${msg.author.username} uncommends ${discord_user.displayName}`);

@@ -1,11 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    resolveUser,
-} = require('../../lib/guild');
-const {
-    mapPromise,
-} = require('../../lib/util/fp');
+const Guild = require('../../lib/guild');
+const Fp = require('../../lib/util/fp');
 
 /**
  * @class ChallengeListCommand
@@ -28,15 +24,15 @@ module.exports = class ChallengeListCommand extends IHLCommand {
 
     async onMsg({ msg, guild, inhouseUser }) {
         logger.debug(`ChallengeListCommand`);
-        const receivers = await mapPromise(async (challenge) => {
+        const receivers = await Fp.mapPromise(async (challenge) => {
             const receiver = await challenge.getRecipient();
-            return resolveUser(guild)(receiver);
+            return Guild.resolveUser(guild)(receiver);
         })(inhouseUser.getChallengesGiven());
         logger.debug(`ChallengeListCommand receivers ${receivers}`);
         
-        const givers = await mapPromise(async (challenge) => {
+        const givers = await Fp.mapPromise(async (challenge) => {
             const giver = await challenge.getGiver();
-            return resolveUser(guild)(giver);
+            return Guild.resolveUser(guild)(giver);
         })(inhouseUser.getChallengesReceived());
         logger.debug(`ChallengeListCommand givers ${givers}`);
         

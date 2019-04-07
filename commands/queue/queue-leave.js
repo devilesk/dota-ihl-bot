@@ -1,19 +1,7 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    hasQueuer,
-    getQueuers,
-    removeQueuer,
-    lobbyToLobbyState,
-} = require('../../lib/lobby');
-const {
-    findLobbyById,
-    findLobbyByDiscordChannel,
-} = require('../../lib/db');
-const {
-    findOrCreateChannelInCategory,
-    makeRole,
-} = require('../../lib/guild');
-const db = require('../../models');
+const Lobby = require('../../lib/lobby');
+const Db = require('../../lib/db');
 
 /**
  * @class QueueLeaveCommand
@@ -45,8 +33,8 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
     async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
         if (channel) {
             // use lobbyState for given channel
-            const lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
+            const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
                 this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
             }

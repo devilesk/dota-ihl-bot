@@ -1,7 +1,6 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findAllBotsForLeague,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 const createBotDetails = data => `**${data.steamid_64}**
 Account Name: ${data.account_name}
@@ -30,7 +29,7 @@ module.exports = class BotListCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league }) {
-        const bots = await findAllBotsForLeague(league);
+        const bots = await Db.findAllBotsForLeague(league);
         const bot_details = bots.map(createBotDetails).join('\t\n\n');
         await msg.say({
             embed: {

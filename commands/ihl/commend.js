@@ -3,13 +3,8 @@ const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/ihlManager');
-const {
-    findLobbyByMatchId,
-    findOrCreateCommend,
-} = require('../../lib/db');
-const {
-    getPlayers,
-} = require('../../lib/lobby');
+const Db = require('../../lib/db');
+const Lobby = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -46,8 +41,8 @@ module.exports = class CommendCommand extends IHLCommand {
         console.log(`CommendCommand`);
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
-        const lobby = await findLobbyByMatchId(match_id);
-        const players = await getPlayers()(lobby);
+        const lobby = await Db.findLobbyByMatchId(match_id);
+        const players = await Lobby.getPlayers()(lobby);
         if (lobby) {
             logger.debug(`CommendCommand ${lobby.state}`);
             if (lobby.state === CONSTANTS.STATE_COMPLETED) {
@@ -63,7 +58,7 @@ module.exports = class CommendCommand extends IHLCommand {
                         logger.debug(`CommendCommand users on team`);
                         if (user.id !== fromUser.id) {
                             console.log(`CommendCommand ${user.id} ${fromUser.id}`);
-                            const [rep, created] = await findOrCreateCommend(lobby)(fromUser)(user);
+                            const [rep, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
                             if (created) {
                                 await msg.say(`${msg.author.username} commends ${discord_user.displayName}`);
                             }

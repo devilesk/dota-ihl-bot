@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    queryUserLeaderboardRank,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 const convertor = require('steam-id-convertor');
 const CONSTANTS = require('../../lib/constants');
 const {
@@ -109,7 +107,7 @@ module.exports = class WhoisCommand extends IHLCommand {
             const rep = (await user.getReputationsReceived()).length;
             const commends = (await user.getCommendsReceived()).length;
 
-            const rank = await queryUserLeaderboardRank(league.id)(league.current_season_id)(user.id);
+            const rank = await Db.queryUserLeaderboardRank(league.id)(league.current_season_id)(user.id);
 
             logger.debug(`rank ${rank}`);
 

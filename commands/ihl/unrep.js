@@ -3,9 +3,7 @@ const IHLCommand = require('../../lib/ihlCommand');
 const {
     findUser,
 } = require('../../lib/ihlManager');
-const {
-    destroyReputation,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class UnrepCommand
@@ -38,7 +36,7 @@ module.exports = class UnrepCommand extends IHLCommand {
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
-                const count = await destroyReputation(fromUser)(user);
+                const count = await Db.destroyReputation(fromUser)(user);
                 logger.debug(count);
                 if (count) {
                     await msg.say(`${msg.author.username} unreps ${discord_user.displayName}`);

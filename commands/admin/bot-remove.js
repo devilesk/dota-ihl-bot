@@ -1,7 +1,6 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    destroyBotBySteamID64,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class BotRemoveCommand
@@ -25,15 +24,16 @@ module.exports = class BotRemoveCommand extends IHLCommand {
                 },
             ],
         }, {
-            inhouseAdmin: true,
-            inhouseState: true,
+            clientOwner: true,
+            inhouseAdmin: false,
+            inhouseState: false,
             lobbyState: false,
             inhouseUser: false,
         });
     }
 
-    async onMsg({ msg, league }, { steamid_64 }) {
-        await destroyBotBySteamID64(league)(steamid_64);
+    async onMsg({ msg }, { steamid_64 }) {
+        await Db.destroyBotBySteamID64(steamid_64);
         await msg.say(`Bot ${steamid_64} removed.`);
     }
 };

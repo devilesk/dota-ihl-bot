@@ -1,15 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    lobbyToLobbyState,
-} = require('../../lib/lobby');
-const {
-    findLobbyByDiscordChannel,
-} = require('../../lib/db');
-const {
-    findOrCreateChannelInCategory,
-    makeRole,
-} = require('../../lib/guild');
+const Lobby = require('../../lib/lobby');
+const Db = require('../../lib/db');
 
 /**
  * @class QueueJoinCommand
@@ -43,8 +35,8 @@ module.exports = class QueueJoinCommand extends IHLCommand {
         if (inhouseUser.rank_tier) {
             if (channel) {
                 // use lobbyState for given channel
-                lobby = inhouseState ? await findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                lobbyState = lobby ? await lobbyToLobbyState(inhouseState)(lobby) : null;
+                lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+                lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
                 if (lobbyState) {
                     logger.debug('QueueJoinCommand channel found... joining queue');
                     await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.author);

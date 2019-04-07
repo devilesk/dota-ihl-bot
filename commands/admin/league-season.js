@@ -1,7 +1,6 @@
+const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    createSeason,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class LeagueSeasonCommand
@@ -32,7 +31,7 @@ module.exports = class LeagueSeasonCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }, { name }) {
-        await createSeason(guild.id)(name);
+        await Db.createSeason(guild.id)(name);
         await msg.say(`New season ${name} started.`);
     }
 };

@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    queryLeaderboardRank,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 
 /**
  * @class LeaderboardCommand
@@ -23,7 +21,7 @@ module.exports = class LeaderboardCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league, guild }) {
-        const leaderboard = await queryLeaderboardRank(league.id)(league.current_season_id)(10);
+        const leaderboard = await Db.queryLeaderboardRank(league.id)(league.current_season_id)(10);
         logger.debug(leaderboard.length);
         const data = leaderboard.map((user) => {
             const member = guild.members.get(user.discord_id);
