@@ -54,6 +54,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        rating_diff: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
     }, { underscored: true });
     LobbyPlayer.associate = (models) => {
         LobbyPlayer.belongsTo(models.Lobby);

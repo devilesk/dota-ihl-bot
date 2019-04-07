@@ -330,10 +330,10 @@ describe('Database - with lobby players', () => {
             
             it('return lobby state with STATE_BOT_ASSIGNED when bot already assigned', async () => {
                 lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
-                lobbyState.bot_id = 1000;
+                lobbyState.bot_id = 1;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_BOT_ASSIGNED);
-                assert.equal(result.bot_id, 1000);
+                assert.equal(result.bot_id, 1);
             });
         });
         
@@ -354,8 +354,16 @@ describe('Database - with lobby players', () => {
         });
         
         describe('STATE_MATCH_ENDED', () => {
-            it('return lobby state with STATE_COMPLETED', async () => {
+            it('return lobby state with STATE_MATCH_ENDED', async () => {
                 lobbyState.state = CONSTANTS.STATE_MATCH_ENDED;
+                const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
+                assert.equal(result.state, CONSTANTS.STATE_MATCH_ENDED);
+            });
+        });
+        
+        describe('STATE_MATCH_STATS', () => {
+            it('return lobby state with STATE_COMPLETED', async () => {
+                lobbyState.state = CONSTANTS.STATE_MATCH_STATS;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_COMPLETED);
             });

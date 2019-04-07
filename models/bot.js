@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.BOT_OFFLINE,
         },
+        lobby_count: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
     }, { underscored: true });
     Bot.associate = (models) => {
         Bot.hasMany(models.Lobby);

@@ -10,7 +10,7 @@ const {
     findUser,
     loadInhouseStates,
     loadInhouseStatesFromLeagues,
-    sendMatchEndMessage,
+    sendMatchStatsMessage,
     createClient,
     IHLManager,
 } = require('../../lib/ihlManager');

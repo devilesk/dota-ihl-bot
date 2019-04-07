@@ -57,6 +57,10 @@ module.exports = {
     })
     .then(() => queryInterface.addIndex('Leaderboards', ['league_id']))
     .then(() => queryInterface.addIndex('Leaderboards', ['season_id']))
-    .then(() => queryInterface.addIndex('Leaderboards', ['user_id'])),
+    .then(() => queryInterface.addIndex('Leaderboards', ['user_id']))
+    .then(() => queryInterface.addConstraint('Leaderboards', ['league_id', 'season_id', 'user_id'], {
+        type: 'unique',
+        name: 'uq_leaderboards_league_id_season_id_user_id',
+    })),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('Leaderboards'),
 };

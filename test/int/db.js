@@ -30,7 +30,7 @@ afterEach(async () => {
 
 after(() => { db.sequelize.close() })
 
-describe.only('Bot Functions', () => {
+describe('Bot Functions', () => {
     let ticket1;
     let league1;
     let league2;

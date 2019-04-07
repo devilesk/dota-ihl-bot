@@ -68,6 +68,11 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
+        rating_diff: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

@@ -30,6 +30,11 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.BOT_OFFLINE,
         },
+        lobby_count: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         created_at: {
             allowNull: false,
             type: Sequelize.DATE,

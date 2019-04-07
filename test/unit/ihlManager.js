@@ -10,7 +10,7 @@ const {
     findUser,
     loadInhouseStates,
     loadInhouseStatesFromLeagues,
-    sendMatchEndMessage,
+    sendMatchStatsMessage,
     IHLManager,
     ihlManager,
 } = proxyquire('../../lib/ihlManager', {

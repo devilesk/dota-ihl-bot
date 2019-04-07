@@ -112,14 +112,14 @@ describe('Database', () => {
             const lobby = await getLobby({ id: 1 });
             matchTracker.addLobby(lobby);
             const spy = sinon.spy();
-            matchTracker.on(CONSTANTS.EVENT_MATCH_ENDED, spy);
+            matchTracker.on(CONSTANTS.EVENT_MATCH_STATS, spy);
             await matchTracker.run();
             sinon.assert.calledOnce(spy);
             assert.empty(matchTracker.lobbies);
         });
         it('load lobbies in progress', async () => {
             const matchTracker = new MatchTracker(1000);
-            await matchTracker.loadInProgressLobbies();
+            await matchTracker.loadLobbies();
             assert.lengthOf(matchTracker.lobbies, 1);
         });
         it('add lobby', async () => {
@@ -133,7 +133,7 @@ describe('Database', () => {
             const lobby = await getLobby({ id: 1 });
             matchTracker.addLobby(lobby);
             const spy = sinon.spy();
-            matchTracker.on(CONSTANTS.EVENT_MATCH_ENDED, spy);
+            matchTracker.on(CONSTANTS.EVENT_MATCH_STATS, spy);
             matchTracker.disable();
             await matchTracker.run();
             sinon.assert.notCalled(spy);
@@ -144,7 +144,7 @@ describe('Database', () => {
             const lobby = await getLobby({ id: 1 });
             matchTracker.addLobby(lobby);
             const spy = sinon.spy();
-            matchTracker.on(CONSTANTS.EVENT_MATCH_ENDED, spy);
+            matchTracker.on(CONSTANTS.EVENT_MATCH_STATS, spy);
             matchTracker.disable();
             matchTracker.enable();
             await matchTracker.run();

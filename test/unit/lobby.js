@@ -1168,7 +1168,6 @@ describe('Database - with lobby players', () => {
                 const result = await forceLobbyDraft(lobbyState, { id: 1 }, { id: 2 });
                 chai.assert.equal(result.captain_1_user_id, 1);
                 chai.assert.equal(result.captain_2_user_id, 2);
-                chai.assert.isNull(result.bot_id);
             });
             
             it('do not set lobbyState to draft', async () => {

@@ -483,20 +483,14 @@ describe('DotaBot', () => {
         it('return match id', async () => {
             const dotaBot = {
                 launchPracticeLobby: sinon.stub(),
-                leavePracticeLobby: sinon.stub(),
-                abandonCurrentGame: sinon.stub(),
                 leaveLobbyChat: sinon.stub(),
                 steamid_64: '123',
             };
             dotaBot.launchPracticeLobby.resolves({ match_id: 'test' });
-            dotaBot.leavePracticeLobby.resolves(true);
-            dotaBot.abandonCurrentGame.resolves(true);
             dotaBot.leaveLobbyChat.resolves(true);
             const match_id = await DotaBot.startDotaLobby(dotaBot);
             assert.equal(match_id, 'test');
             assert.isTrue(dotaBot.launchPracticeLobby.calledOnce);
-            assert.isTrue(dotaBot.leavePracticeLobby.calledOnce);
-            assert.isTrue(dotaBot.abandonCurrentGame.calledOnce);
             assert.isTrue(dotaBot.leaveLobbyChat.calledOnce);
         });
     });
