@@ -10,6 +10,7 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'ticket-remove',
+            aliases: ['remove-ticket'],
             group: 'admin',
             memberName: 'ticket-remove',
             guildOnly: true,
@@ -32,6 +33,6 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
 
     async onMsg({ msg, guild, league }, { leagueid }) {
         this.ihlManager.emit(CONSTANTS.EVENT_LEAGUE_TICKET_REMOVE, league, leagueid);
-        await msg.say(`Removed ticket ${name} from the league.`);
+        await msg.say(`Removed ticket ${leagueid} from the league.`);
     }
 };

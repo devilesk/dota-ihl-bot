@@ -10,6 +10,7 @@ module.exports = class LeagueTicketCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-ticket',
+            aliases: ['set-ticket', 'ticket-set'],
             group: 'admin',
             memberName: 'league-ticket',
             guildOnly: true,
@@ -30,8 +31,8 @@ module.exports = class LeagueTicketCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, league }, { leagueid, name }) {
+    async onMsg({ msg, guild, league }, { leagueid }) {
         this.ihlManager.emit(CONSTANTS.EVENT_LEAGUE_TICKET_SET, league, leagueid);
-        await msg.say(`League set to use ticket ${name}.`);
+        await msg.say(`League set to use ticket ${leagueid}.`);
     }
 };

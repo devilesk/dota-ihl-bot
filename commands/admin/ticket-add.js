@@ -10,6 +10,7 @@ module.exports = class TicketAddCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'ticket-add',
+            aliases: ['add-ticket'],
             group: 'admin',
             memberName: 'ticket-add',
             guildOnly: true,
