@@ -113,6 +113,45 @@ describe('Bot Functions', () => {
     });
 });
 
+describe('Leaderboard', () => {
+    let league, user1, user2, user3, user4;
+    
+    beforeEach(async () => {
+        league = await Ihl.initLeague({ id: '123' });
+        user1 = await Db.findOrCreateUser(league, '123', '123', 50);
+        user2 = await Db.findOrCreateUser(league, '456', '456', 50);
+        user3 = await Db.findOrCreateUser(league, '789', '789', 50);
+        user4 = await Db.findOrCreateUser(league, '111', '111', 50);
+        await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user1.id, rating: 1000, wins: 1, losses: 0 });
+        await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user2.id, rating: 1100, wins: 2, losses: 0 });
+        await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user3.id, rating: 1200, wins: 3, losses: 0 });
+        await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user4.id, rating: 1200, wins: 3, losses: 0 });
+    });
+    
+    it('queryUserLeaderboardRank', async () => {
+        const rank1 = await Db.queryUserLeaderboardRank(league.id)(1)(user1.id);
+        const rank2 = await Db.queryUserLeaderboardRank(league.id)(1)(user2.id);
+        const rank3 = await Db.queryUserLeaderboardRank(league.id)(1)(user3.id);
+        const rank4 = await Db.queryUserLeaderboardRank(league.id)(1)(user4.id);
+        assert.equal(rank1, 4);
+        assert.equal(rank2, 3);
+        assert.equal(rank3, 1);
+        assert.equal(rank4, 1);
+    });
+    it('queryLeaderboardRank', async () => {
+        let rows = await Db.queryLeaderboardRank(league.id)(1)(1);
+        assert.lengthOf(rows, 1);
+        rows = await Db.queryLeaderboardRank(league.id)(1)(2);
+        assert.lengthOf(rows, 2);
+        rows = await Db.queryLeaderboardRank(league.id)(1)(4);
+        assert.lengthOf(rows, 4);
+        assert.equal(rows[3].rank, 4);
+        assert.equal(rows[2].rank, 3);
+        assert.equal(rows[1].rank, 1);
+        assert.equal(rows[0].rank, 1);
+    });
+});
+
 describe('upsetTicket', () => {
     it('insert ticket', async () => {
         let ticket = await Db.upsertTicket({
