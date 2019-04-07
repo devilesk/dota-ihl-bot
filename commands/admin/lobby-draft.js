@@ -39,8 +39,8 @@ module.exports = class LobbyDraftCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState }, { captain_1, captain_2 }) {
-        const [captain_1, discord_user_1, result_type_1] = await findUser(guild)(captain_1);
-        const [captain_2, discord_user_2, result_type_2] = await findUser(guild)(captain_2);
+        const [captain_1_user, discord_user_1, result_type_1] = await findUser(guild)(captain_1);
+        const [captain_2_user, discord_user_2, result_type_2] = await findUser(guild)(captain_2);
         if (captain_1_user && captain_2_user) {
             this.ihlManager.emit(CONSTANTS.EVENT_FORCE_LOBBY_DRAFT, lobbyState, captain_1, captain_2);
             await msg.say('Lobby set to player draft.');

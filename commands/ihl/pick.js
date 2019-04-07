@@ -34,7 +34,7 @@ module.exports = class PickCommand extends IHLCommand {
         logger.debug('PickCommand');
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const captain = inhouseUser;
-        if (Lobby.isCaptain(lobbyState)(captain)) {
+        if (Lobby.isCaptain(lobbyState)(captain) && user) {
             logger.debug(`PickCommand isCaptain ${captain.id}`);
             this.ihlManager.emit(CONSTANTS.EVENT_PICK_PLAYER, lobbyState, captain, user, discord_user);
         }
