@@ -49,6 +49,7 @@ describe('Database - with lobby players', () => {
             registerLobbyTimeout: () => {},
             unregisterLobbyTimeout: () => {},
             onCreateLobbyQueue: () => {},
+            botLeaveLobby: () => {},
             emit: () => {},
             bots: [],
             matchTracker: {},
