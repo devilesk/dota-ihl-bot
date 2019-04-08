@@ -23,7 +23,13 @@ module.exports = class LobbyStartCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }) {
-        this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_START, lobbyState);
-        await msg.say('Lobby started.');
+        logger.debug('LobbyStartCommand');
+        if (lobbyState.state === CONSTANTS.STATE_WAITING_FOR_PLAYERS) {
+            const started = await this.ihlManager[CONSTANTS.EVENT_LOBBY_START](lobbyState);
+            await msg.say(started ? 'Lobby started.' : 'Lobby not started.');
+        }
+        else {
+            await msg.say('Lobby must be in waiting for players state before starting.');
+        }
     }
 };

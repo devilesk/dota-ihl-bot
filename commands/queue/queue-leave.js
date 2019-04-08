@@ -36,18 +36,30 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
             const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
             lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
-                this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
+                const inQueue = await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.member);
+                if (inQueue) {
+                    await Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
+                }
+                else {
+                    await msg.say(`${msg.member.displayName} not in queue.`);
+                }
             }
             else {
                 await msg.say('Invalid lobby channel.');
             }
         }
         else if (lobbyState) {
-            this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.author);
+            const inQueue = await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.member);
+            if (inQueue) {
+                await Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
+            }
+            else {
+                await msg.say(`${msg.member.displayName} not in queue.`);
+            }
         }
         else {
-            this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser, msg.author);
+            await this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser, msg.member);
+            await msg.say(`${msg.member.displayName} left all queues.`);
         }
-
     }
 };

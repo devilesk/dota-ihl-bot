@@ -10,7 +10,7 @@ module.exports = class BotStatusCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'bot-status',
-            group: 'admin',
+            group: 'owner',
             memberName: 'bot-status',
             guildOnly: true,
             description: 'Manually set a bot status.',
@@ -41,7 +41,7 @@ module.exports = class BotStatusCommand extends IHLCommand {
     }
 
     async run({ msg }, { steamid_64, status }) {
-        this.ihlManager.emit(CONSTANTS.EVENT_BOT_SET_STATUS, steamid_64, status);
+        await this.ihlManager[CONSTANTS.EVENT_BOT_SET_STATUS](steamid_64, status);
         await msg.say(`Bot ${steamid_64} status set to ${status}`);
     }
 };

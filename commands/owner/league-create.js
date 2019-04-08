@@ -9,7 +9,7 @@ module.exports = class LeagueCreateCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-create',
-            group: 'admin',
+            group: 'owner',
             memberName: 'league-create',
             guildOnly: true,
             description: 'Create an inhouse league for the server.',

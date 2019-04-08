@@ -32,12 +32,11 @@ module.exports = class RepCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league, guild, inhouseUser }, { member }) {
-        console.log(`RepCommand`);
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
-                console.log(`RepCommand ${user.id} ${fromUser.id}`);
+                logger.debug(`RepCommand ${user.id} ${fromUser.id}`);
                 const [rep, created] = await Db.findOrCreateReputation(fromUser)(user);
                 if (created) {
                     await msg.say(`${msg.author.username} reps ${discord_user.displayName}`);

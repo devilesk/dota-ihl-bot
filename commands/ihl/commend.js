@@ -38,7 +38,6 @@ module.exports = class CommendCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league, guild, inhouseUser }, { member, match_id }) {
-        console.log(`CommendCommand`);
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         const lobby = await Db.findLobbyByMatchId(match_id);
@@ -57,7 +56,7 @@ module.exports = class CommendCommand extends IHLCommand {
                     else {
                         logger.debug(`CommendCommand users on team`);
                         if (user.id !== fromUser.id) {
-                            console.log(`CommendCommand ${user.id} ${fromUser.id}`);
+                            logger.debug(`CommendCommand ${user.id} ${fromUser.id}`);
                             const [rep, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
                             if (created) {
                                 await msg.say(`${msg.author.username} commends ${discord_user.displayName}`);

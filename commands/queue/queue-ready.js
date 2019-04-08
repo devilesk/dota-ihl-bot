@@ -19,7 +19,6 @@ module.exports = class QueueReadyCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState, inhouseUser }) {
-        logger.debug(`QueueReadyCommand ${lobbyState.id} ${inhouseUser.id}`);
-        this.ihlManager.emit(CONSTANTS.EVENT_PLAYER_READY, lobbyState, inhouseUser);
+        await this.ihlManager[CONSTANTS.EVENT_PLAYER_READY](lobbyState, inhouseUser);
     }
 };

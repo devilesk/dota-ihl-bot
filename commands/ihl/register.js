@@ -33,7 +33,7 @@ module.exports = class RegisterCommand extends IHLCommand {
         let user;
         let steamid_64;
         if (inhouseUser) {
-            msg.say(`${msg.author.username} already registered.`);
+            await msg.say(`${msg.author.username} already registered.`);
         }
         else {
             try {

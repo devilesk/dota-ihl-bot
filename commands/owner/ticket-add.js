@@ -11,7 +11,7 @@ module.exports = class TicketAddCommand extends IHLCommand {
         super(client, {
             name: 'ticket-add',
             aliases: ['add-ticket'],
-            group: 'admin',
+            group: 'owner',
             memberName: 'ticket-add',
             guildOnly: true,
             description: 'Add a dota ticket to the league.',
@@ -29,7 +29,8 @@ module.exports = class TicketAddCommand extends IHLCommand {
                 },
             ],
         }, {
-            inhouseAdmin: true,
+            clientOwner: true,
+            inhouseAdmin: false,
             inhouseState: true,
             lobbyState: false,
             inhouseUser: false,
@@ -37,7 +38,7 @@ module.exports = class TicketAddCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, league }, { leagueid, name }) {
-        this.ihlManager.emit(CONSTANTS.EVENT_LEAGUE_TICKET_ADD, league, leagueid, name);
+        await this.ihlManager[CONSTANTS.EVENT_LEAGUE_TICKET_ADD](league, leagueid, name);
         await msg.say(`Added ticket ${name} to league.`);
     }
 };

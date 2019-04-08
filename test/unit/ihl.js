@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -25,13 +26,7 @@ const {
         lobbyToLobbyState: () => () => async () => sinon.stub(),
     }
 });
-const {
-    getActiveQueuers,
-} = require('../../lib/lobby');
-const {
-    findLeague,
-    findUserById,
-} = require('../../lib/db');
+const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 
 describe('Database', () => {
@@ -98,7 +93,7 @@ describe('Database', () => {
         });
         
         it('return an inhouse state from a league', async () => {
-            const league = await findLeague('422549177151782925');
+            const league = await Db.findLeague('422549177151782925');
             const args = {
                 league,
                 guild: {},
@@ -153,32 +148,32 @@ describe('Database', () => {
     });
 
     describe('joinLobbyQueue', () => {
-        it('return MSG_QUEUE_BANNED when user timed out', async () => {
-            const user = await findUserById(1);
+        it('return QUEUE_BANNED when user timed out', async () => {
+            const user = await Db.findUserById(1);
             user.queue_timeout = Date.now() + 10000;
             const value = await joinLobbyQueue(user)({ lobby_name: 'test' });
-            assert.equal(CONSTANTS.MSG_QUEUE_BANNED, value);
+            assert.equal(CONSTANTS.QUEUE_BANNED, value);
         });
         
-        it('return MSG_QUEUE_ALREADY_JOINED when user already in queue', async () => {
-            const user = await findUserById(1);
+        it('return QUEUE_ALREADY_JOINED when user already in queue', async () => {
+            const user = await Db.findUserById(1);
             user.queue_timeout = 0;
             const value = await joinLobbyQueue(user)({ id });
-            assert.equal(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, value);
+            assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
         
-        it('return MSG_QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
-            const user = await findUserById(2);
+        it('return QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
+            const user = await Db.findUserById(2);
             user.queue_timeout = 0;
             const value = await joinLobbyQueue(user)({ id: 2 });
-            assert.equal(CONSTANTS.MSG_QUEUE_ALREADY_JOINED, value);
+            assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
         
-        it('return MSG_QUEUE_JOINED', async () => {
-            const user = await findUserById(11);
+        it('return QUEUE_JOINED', async () => {
+            const user = await Db.findUserById(11);
             user.queue_timeout = 0;
             const value = await joinLobbyQueue(user)({ id: 2, state: CONSTANTS.STATE_WAITING_FOR_QUEUE });
-            assert.equal(CONSTANTS.MSG_QUEUE_JOINED, value);
+            assert.equal(CONSTANTS.QUEUE_JOINED, value);
         });
     });
 
@@ -199,13 +194,13 @@ describe('Database', () => {
     
     describe('leaveLobbyQueue', () => {
         it('return true when user already in queue', async () => {
-            const user = await findUserById(1);
+            const user = await Db.findUserById(1);
             const value = await leaveLobbyQueue(user)({ id });
             assert.isTrue(value);
         });
         
         it('return false when not in queue', async () => {
-            const user = await findUserById(11);
+            const user = await Db.findUserById(11);
             const value = await leaveLobbyQueue(user)({ id: 2 });
             assert.isFalse(value);
         });
@@ -221,7 +216,7 @@ describe('Database', () => {
                     name: 'test',
                 },
             }
-            const user = await findUserById(1);
+            const user = await Db.findUserById(1);
             const lobbies = await getAllLobbyQueuesForUser(inhouseState, user);
             assert.lengthOf(lobbies, 2);
         });
@@ -229,7 +224,7 @@ describe('Database', () => {
 
     describe('banInhouseQueue', () => {
         it('set user timeout', async () => {
-            let user = await findUserById(1);
+            let user = await Db.findUserById(1);
             assert.notExists(user.queue_timeout);
             user = await banInhouseQueue(user, 10);
             const diff = user.queue_timeout - Date.now() - 600000;

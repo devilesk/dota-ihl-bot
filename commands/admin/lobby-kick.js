@@ -37,7 +37,7 @@ module.exports = class LobbyKickCommand extends IHLCommand {
         if (user) {
             await member.removeRole(lobbyState.role);
             const account_id = convertor.to32(user.steamid_64);
-            this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_KICK, lobbyState, account_id);
+            await this.ihlManager[CONSTANTS.EVENT_LOBBY_KICK](lobbyState, account_id);
             await msg.say('User kicked from lobby.');
         }
         else {

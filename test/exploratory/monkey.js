@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('../../lib/logger');
 const spawn = require('../../lib/util/spawn');
 const Collection = require('discord.js/src/util/Collection');
@@ -14,35 +15,24 @@ const SequelizeMocking = require('sequelize-mocking').SequelizeMocking;
 const { EventEmitter } = require('events');
 const { hri } = require('human-readable-ids');
 const db = require('../../models');
-const {
-    MockDotaBot,
-    MockMember,
-    MockChannel,
-    MockRole,
-    MockMessage,
-    MockGuild,
-    MockClient,
-} = require('../../lib/mocks');
-const {
-    IHLManager,
-} = proxyquire('../../lib/ihlManager', {
-    './dotaBot': {
-        createDotaBot: config => new MockDotaBot(config),
-    },
-    './matchTracker': {
-        createMatchEndMessageEmbed: async match_id => {},
-    },
-});
+const Mocks = require('../mocks');
+const DotaBot = require('../../lib/dotaBot');
+const MatchTracker = require('../../lib/matchTracker');
+const IHLManager = require('../../lib/ihlManager');
 const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
-const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
-console.log(path.join(__dirname, './.env'));
+
+sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => {});
+sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
+    return new Mocks.MockDotaBot(config);
+});
+sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
 
 const getRandomInt = require('../../lib/util/getRandomInt');
 
-const client = new MockClient();
-client.initRandomGuilds(1, 2, 5, 3, 20);
+const client = new Mocks.MockClient();
+let guild;
 const LeagueCreateCommand = require('../../commands/admin/league-create');
 const QueueJoinCommand = require('../../commands/queue/queue-join');
 const QueueReadyCommand = require('../../commands/queue/queue-ready');
@@ -72,7 +62,7 @@ const joinLobby = async () => {
     let c = 0;
     for (const member of guild.members.array()) {
         if (c === 20) break;
-        const msg = new MockMessage(guild, lobby_channel, member);
+        const msg = new Mocks.MockMessage(guild, lobby_channel, member);
         queueJoinCommand.run(msg, {});
         c++;
     }
@@ -84,7 +74,7 @@ const readyUp = async () => {
     let c = 0;
     for (const member of guild.members.array()) {
         if (c === 20) break;
-        const msg = new MockMessage(guild, lobby_channel, member);
+        const msg = new Mocks.MockMessage(guild, lobby_channel, member);
         queueReadyCommand.run(msg, {});
         c++;
     }
@@ -95,26 +85,31 @@ const randomInput = () => {
     const channel = guild.channels.random();
     const member = guild.members.random();
     const command = commands.random();
-    const msg = new MockMessage(guild, channel, member);
+    const msg = new Mocks.MockMessage(guild, channel, member);
     command.run(msg, {});
     setTimeout(randomInput, Math.random() * 1000);
 }
 
 const testAutobalance = () => {
-    const guild = client.guilds.first();
     lobby_channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+    console.log('testAutobalance START', lobby_channel.id, lobby_channel.name);
     const members = guild.members.array();
+    console.log('testAutobalance JOINING QUEUE');
     for (let i = 0; i < 10; i++) {
         const member = members[i];
-        const msg = new MockMessage(guild, lobby_channel, member);
+        const msg = new Mocks.MockMessage(guild, lobby_channel, member);
         queueJoinCommand.run(msg, {});
     }
     ihlManager.on(CONSTANTS.STATE_CHECKING_READY, () => {
+        console.log('testAutobalance READYING UP', lobby_channel.id, lobby_channel.name);
         for (let i = 0; i < 10; i++) {
             const member = members[i];
-            const msg = new MockMessage(guild, lobby_channel, member);
+            const msg = new Mocks.MockMessage(guild, lobby_channel, member);
             queueReadyCommand.run(msg, {});
         }
+    });
+    ihlManager.on(CONSTANTS.STATE_MATCH_IN_PROGRESS, lobbyState => {
+        ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobbyState.match_id);
     });
 }
 
@@ -124,13 +119,13 @@ const testDraft = () => {
     const members = guild.members.array();
     for (let i = 0; i < 10; i++) {
         const member = members[i];
-        const msg = new MockMessage(guild, lobby_channel, member);
+        const msg = new Mocks.MockMessage(guild, lobby_channel, member);
         queueJoinCommand.run(msg, {});
     }
     ihlManager.once(CONSTANTS.STATE_CHECKING_READY, () => {
         for (let i = 0; i < 10; i++) {
             const member = members[i];
-            const msg = new MockMessage(guild, lobby_channel, member);
+            const msg = new Mocks.MockMessage(guild, lobby_channel, member);
             queueReadyCommand.run(msg, {});
         }
     });
@@ -155,7 +150,7 @@ const randomDraft = async lobbyState => {
     }
     logger.debug(`randomDraft captain ${captain} ${captain.discord_id}`);
     let msg;
-    msg = new MockMessage(guild, lobby_channel, guild.members.get(captain.discord_id));
+    msg = new Mocks.MockMessage(guild, lobby_channel, guild.members.get(captain.discord_id));
     pickCommand.run(msg, { member: guild.members.random().displayName });
     if (lobby.state === CONSTANTS.STATE_DRAFTING_PLAYERS) {
         setTimeout(async () => randomDraft(lobbyState), Math.random() * 1000);
@@ -167,21 +162,15 @@ const onReady = async () => {
         if (ihlManager.matchTracker.lobbies.length) {
             const lobbyOrState = ihlManager.matchTracker.lobbies.shift();
             const lobby = await Lobby.getLobby(lobbyOrState);
-            ihlManager.matchTracker.emit(CONSTANTS.EVENT_MATCH_ENDED, lobby);
+            //ihlManager.matchTracker.emit(CONSTANTS.EVENT_MATCH_ENDED, lobby);
+            //ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobby.match_id);
         }
     }
-    for (const guild of client.guilds.array()) {
-        const msg = new MockMessage(guild, guild.channels.random(), client.owner);
-        await leagueCreateCommand.run(msg, {});
-        const league = await Db.findLeague(guild.id);
-        await league.update({ captain_rank_threshold: 100 });
-        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-        for (const member of guild.members.array()) {
-            const user = await Db.findOrCreateUser(league, getRandomInt(100000000).toString(), member.id, getRandomInt(70) + 10);
-            await user.update({ vouched: true });
-        }
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+    for (let i = 0; i < 20; i++) {
+        await Mocks.MockMember.Factory().toGuild(guild).toDatabase();
     }
     //await joinLobby();
     //randomInput();
@@ -191,11 +180,16 @@ const onReady = async () => {
 
 const run = async () => {
     await spawn('npm', ['run', 'db:init']);
+    await client.initDefault();
+    guild = client.guilds.first();
+    await guild.toDatabase({ captain_rank_threshold: 100 });
     //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
-    ihlManager = new IHLManager(process.env);
-    ihlManager.on('ready', onReady);
+    ihlManager = new IHLManager.IHLManager(process.env);
+    //ihlManager.on('ready', onReady);
     //ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
-    ihlManager.init(client);
+    await ihlManager.init(client);
+    console.log('test');
+    onReady();
 };
 
 run();

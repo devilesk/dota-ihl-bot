@@ -1,8 +1,10 @@
 .env
+.env.*
 config.json
 config/
 node_modules/
 logs/
+prod_seeders/
 .nyc_output/
 *.log
 TODO

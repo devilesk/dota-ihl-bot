@@ -14,6 +14,12 @@ class Database {
     constructor(config) {
         this.config = config;
         this.Sequelize = Sequelize;
+        this.init();
+    }
+    
+    init() {
+        if (this.sequelize) return;
+        
         this.sequelize = new Sequelize(this.config.database, this.config.username, this.config.password, this.config);
 
         fs
@@ -29,6 +35,11 @@ class Database {
                 this[modelName].associate(this);
             }
         });
+    }
+    
+    async close() {
+        await this.sequelize.close();
+        this.sequelize = null;
     }
 }
 

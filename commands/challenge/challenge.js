@@ -59,7 +59,7 @@ module.exports = class ChallengeCommand extends IHLCommand {
                                 // accept receiver's challenge if not yet accepted
                                 if (!challengeFromReceiver.accepted) {
                                     logger.debug(`ChallengeCommand challenge accepted.`);
-                                    await Lobby.createChallengeLobby({ inhouseState, captain_1: receiver, captain_2: giver, challenge: challengeFromReceiver });
+                                    await this.ihlManager.createChallengeLobby(inhouseState, receiver, giver, challengeFromReceiver);
                                     //await Db.destroyChallengeBetweenUsers(receiver)(giver);
                                     await msg.say(`${msg.author} accepts challenge from ${member}.`);
                                 }

@@ -43,6 +43,7 @@ module.exports = class WhoisCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'whois',
+            aliases: ['who', 'info', 'stats', 'lookup'],
             group: 'ihl',
             memberName: 'whois',
             guildOnly: true,
@@ -121,6 +122,11 @@ module.exports = class WhoisCommand extends IHLCommand {
                             inline: true,
                         },
                         {
+                            name: 'Nickname',
+                            value: user.nickname || 'N/A',
+                            inline: true,
+                        },
+                        {
                             name: 'Medal',
                             value: rankTierToMedalName(user.rank_tier),
                             inline: true,
@@ -141,8 +147,8 @@ module.exports = class WhoisCommand extends IHLCommand {
                             inline: true,
                         },
                         {
-                            name: 'Commends/Rep',
-                            value: `${commends}/${rep}`,
+                            name: 'Rep/Commends',
+                            value: `${rep}/${commends}`,
                             inline: true,
                         },
                         {
@@ -151,8 +157,18 @@ module.exports = class WhoisCommand extends IHLCommand {
                             inline: true,
                         },
                         {
-                            name: 'Game Mode Pref.',
+                            name: 'Preferred Mode',
                             value: `${user.game_mode_preference.replace('DOTA_GAMEMODE_', '')}`,
+                            inline: true,
+                        },
+                        {
+                            name: 'Vouched',
+                            value: `${user.vouched}`,
+                            inline: true,
+                        },
+                        {
+                            name: 'Queue Timeout',
+                            value: Date.now() < user.queue_timeout ? user.queue_timeout : null,
                             inline: true,
                         },
                         {
@@ -160,7 +176,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                             value: `[DB](https://www.dotabuff.com/players/${account_id})/[OD](https://www.opendota.com/players/${account_id})/[SZ](https://stratz.com/en-us/player/${account_id})/[Steam](http://steamcommunity.com/profiles/${user.steamid_64})`,
                             inline: true,
                         },
-                    ],
+                    ].filter(field => field.value !== null),
                     footer: {
                         text: footerText,
                     },

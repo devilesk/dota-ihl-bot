@@ -68,6 +68,26 @@ module.exports = {
         match_id: {
             type: Sequelize.STRING,
         },
+        selection_priority: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        player_first_pick: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        first_pick: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
+        radiant_faction: {
+            allowNull: false,
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+        },
         winner: {
             allowNull: false,
             type: Sequelize.INTEGER,

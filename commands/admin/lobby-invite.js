@@ -37,13 +37,12 @@ module.exports = class LobbyInviteCommand extends IHLCommand {
     async onMsg({ msg, guild, lobbyState }, { member }) {
         const [user, discord_user, result_type] = await findUser(guild)(member);
         if (user) {
-            this.ihlManager.emit(CONSTANTS.EVENT_LOBBY_INVITE, lobbyState, user.steamid_64);
+            await this.ihlManager[CONSTANTS.EVENT_LOBBY_INVITE](lobbyState, user);
             await Guild.addRoleToUser(guild)(lobbyState.role)(discord_user);
             await msg.say('User invited to lobby.');
         }
         else {
             await msg.say('User not found. (Has user registered with `!register`?)');
         }
-
     }
 };

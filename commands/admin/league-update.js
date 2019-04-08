@@ -57,7 +57,6 @@ class LeagueUpdateCommand extends IHLCommand {
 
     async onMsg({ msg, guild }, { setting, value }) {
         const field = settingMap[setting.toLowerCase().replace(/_/g, '')];
-        console.log({ [field]: value });
         await Db.updateLeague(guild.id)({ [field]: value });
         await msg.say(`League setting updated. ${setting} set to ${value}`);
     }

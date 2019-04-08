@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -5,14 +6,13 @@ const proxyquire = require('proxyquire');
 const path = require('path');
 const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
 const db = require('../../models');
-const guildStub = require('../../lib/guildStub');
 const {
     getLobby,
     getPlayers,
     getPlayerByUserId,
     getPlayerBySteamId,
     getPlayerByDiscordId,
-    getNoTeamPlayers,
+    getNoFactionPlayers,
     getNotReadyPlayers,
     getReadyPlayers,
     mapPlayers,
@@ -23,7 +23,7 @@ const {
     updateLobbyPlayer,
     updateLobbyPlayerBySteamId,
     setPlayerReady,
-    setPlayerTeam,
+    setPlayerFaction,
     sortQueuersAsc,
     getQueuers,
     getActiveQueuers,
@@ -95,7 +95,7 @@ const {
     getChallengeBetweenUsers,
 } = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
-const Mocks = require('../../lib/mocks');
+const Mocks = require('../mocks');
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
@@ -172,9 +172,9 @@ describe('Database - with lobby players', () => {
             });
         });
 
-        describe('getNoTeamPlayers', () => {
+        describe('getNoFactionPlayers', () => {
             it('return players not on a team', async () => {
-                const players = await getNoTeamPlayers()(lobby);
+                const players = await getNoFactionPlayers()(lobby);
                 assert.isEmpty(players);
             });
         });
@@ -286,9 +286,9 @@ describe('Database - with lobby players', () => {
             });
         });
         
-        describe('setPlayerTeam', () => {
+        describe('setPlayerFaction', () => {
             it('set lobby player faction', async () => {
-                await setPlayerTeam(2)(lobby)(1);
+                await setPlayerFaction(2)(lobby)(1);
                 const player = await getPlayerByUserId(lobby)(1);
                 assert.equal(player.LobbyPlayer.faction, 2);
             });
@@ -627,160 +627,157 @@ describe('Database - with lobby players', () => {
             });
         });
         
-        describe('playerToCaptainPriority', () => {
-            it('return player with captain priority 0 from roles', async () => {
-                const guild = 'guild';
-                const user = 'user';
-                const captain_role_regexp = 'Tier ([0-9]+) Captain';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(user).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                const [player, priority] = await playerToCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(user);
-                assert.isTrue(getRoles.calledOnceWith(user));
-                assert.equal(player, user);
-                assert.equal(priority, 0);
+        describe('Uses getUserRoles', () => {
+            let getRoles;
+            let getUserRoles;
+            
+            beforeEach(async () => {
+                getRoles = sinon.stub();
+                getUserRoles = sinon.stub(Guild, 'getUserRoles');
+                getUserRoles.callsFake(guild => getRoles);
             });
             
-            it('return player with captain priority Infinity from no matching roles', async () => {
-                const guild = 'guild';
-                const user = 'user';
-                const captain_role_regexp = 'Tier ([0-9]+) Captain';
-                const roles = [{ name: 'Tier X Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(user).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                const [player, priority] = await playerToCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(user);
-                assert.isTrue(getRoles.calledOnceWith(user));
-                assert.equal(player, user);
-                assert.equal(priority, Infinity);
+            afterEach(async () => {
+                Guild.getUserRoles.restore();
             });
             
-            it('return player with captain priority Infinity from no roles', async () => {
-                const guild = 'guild';
-                const user = 'user';
-                const captain_role_regexp = 'Tier ([0-9]+) Captain';
-                const roles = [];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(user).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                const [player, priority] = await playerToCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(user);
-                assert.isTrue(getRoles.calledOnceWith(user));
-                assert.equal(player, user);
-                assert.equal(priority, Infinity);
-            });
-        });
-        
-        describe('getPlayersWithCaptainPriority', () => {
-            it('return players with captain priority from roles', async () => {
-                const guild = 'guild';
-                const user = 'user';
-                const captain_role_regexp = 'Tier ([0-9]+) Captain';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                const players = await getPlayersWithCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(lobby);
-                assert.equal(getRoles.callCount, 10);
-                players.forEach(([player, priority]) => {
-                    if (player.id === 1) {
-                        assert.equal(priority, 0);
-                    }
-                    else {
-                        assert.equal(priority, Infinity);
-                    }
+            describe('playerToCaptainPriority', () => {
+                it('return player with captain priority 0 from roles', async () => {
+                    const guild = 'guild';
+                    const user = 'user';
+                    const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(user).resolves(roles);
+                    const [player, priority] = await playerToCaptainPriority(guild)(captain_role_regexp)(user);
+                    assert.isTrue(getRoles.calledOnceWith(user));
+                    assert.equal(player, user);
+                    assert.equal(priority, 0);
+                });
+                
+                it('return player with captain priority Infinity from no matching roles', async () => {
+                    const guild = 'guild';
+                    const user = 'user';
+                    const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    const roles = [{ name: 'Tier X Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(user).resolves(roles);
+                    const [player, priority] = await playerToCaptainPriority(guild)(captain_role_regexp)(user);
+                    assert.isTrue(getRoles.calledOnceWith(user));
+                    assert.equal(player, user);
+                    assert.equal(priority, Infinity);
+                });
+                
+                it('return player with captain priority Infinity from no roles', async () => {
+                    const guild = 'guild';
+                    const user = 'user';
+                    const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    const roles = [];
+                    getRoles.withArgs(user).resolves(roles);
+                    const [player, priority] = await playerToCaptainPriority(guild)(captain_role_regexp)(user);
+                    assert.isTrue(getRoles.calledOnceWith(user));
+                    assert.equal(player, user);
+                    assert.equal(priority, Infinity);
                 });
             });
-        });
-        
-        describe('getActiveQueuersWithCaptainPriority', () => {
-            it('return actively queuing players with captain priority', async () => {
-                const guild = 'guild';
-                const user = 'user';
-                const captain_role_regexp = 'Tier ([0-9]+) Captain';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                const queuers = await getActiveQueuersWithCaptainPriority(getUserRoles)(guild)(captain_role_regexp)(lobby);
-                assert.lengthOf(queuers, 9);
-                assert.equal(getRoles.callCount, 9);
-                queuers.forEach(([player, priority]) => {
-                    if (player.id === 1) {
-                        assert.equal(priority, 0);
-                    }
-                    else {
-                        assert.equal(priority, Infinity);
-                    }
+            
+            describe('getPlayersWithCaptainPriority', () => {
+                it('return players with captain priority from roles', async () => {
+                    const guild = 'guild';
+                    const user = 'user';
+                    const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
+                    const players = await getPlayersWithCaptainPriority(guild)(captain_role_regexp)(lobby);
+                    assert.equal(getRoles.callCount, 10);
+                    players.forEach(([player, priority]) => {
+                        if (player.id === 1) {
+                            assert.equal(priority, 0);
+                        }
+                        else {
+                            assert.equal(priority, Infinity);
+                        }
+                    });
                 });
             });
-        });
-        
-        describe('checkQueueForCaptains', () => {
-            it('return an empty array', async () => {
-                const guild = 'guild';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                lobby.inhouseState = {
-                    guild,
-                    captain_role_regexp: 'Tier ([0-9]+) Captain',
-                    captain_rank_threshold: 1000,
-                }
-                const captains = await checkQueueForCaptains(getUserRoles)(lobby);
-                assert.isEmpty(captains);
+            
+            describe('getActiveQueuersWithCaptainPriority', () => {
+                it('return actively queuing players with captain priority', async () => {
+                    const guild = 'guild';
+                    const user = 'user';
+                    const captain_role_regexp = 'Tier ([0-9]+) Captain';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
+                    const queuers = await getActiveQueuersWithCaptainPriority(guild)(captain_role_regexp)(lobby);
+                    assert.lengthOf(queuers, 9);
+                    assert.equal(getRoles.callCount, 9);
+                    queuers.forEach(([player, priority]) => {
+                        if (player.id === 1) {
+                            assert.equal(priority, 0);
+                        }
+                        else {
+                            assert.equal(priority, Infinity);
+                        }
+                    });
+                });
             });
             
-            it('return captain pair', async () => {
-                const guild = 'guild';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);                
-                const getUserRoles = guild => getRoles;
-                lobby.inhouseState = {
-                    guild,
-                    captain_role_regexp: 'Tier ([0-9]+) Captain',
-                    captain_rank_threshold: 1000,
-                };
-                const captains = await checkQueueForCaptains(getUserRoles)(lobby);
-                assert.lengthOf(captains, 2);
-                assert.equal(captains[0].id, 1);
-                assert.equal(captains[1].id, 3);
-            });
-        });
-        
-        describe('assignCaptains', () => {
-            it('return an empty array', async () => {
-                const guild = 'guild';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                lobby.inhouseState = {
-                    guild,
-                    captain_role_regexp: 'Tier ([0-9]+) Captain',
-                    captain_rank_threshold: 1000,
-                };
-                const captains = await assignCaptains(getUserRoles)(lobby);
-                assert.isEmpty(captains);
+            describe('checkQueueForCaptains', () => {
+                it('return an empty array', async () => {
+                    const guild = 'guild';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
+                    lobby.inhouseState = {
+                        guild,
+                        captain_role_regexp: 'Tier ([0-9]+) Captain',
+                        captain_rank_threshold: 1000,
+                    }
+                    const captains = await checkQueueForCaptains(lobby);
+                    assert.isEmpty(captains);
+                });
+                
+                it('return captain pair', async () => {
+                    const guild = 'guild';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);                
+                    lobby.inhouseState = {
+                        guild,
+                        captain_role_regexp: 'Tier ([0-9]+) Captain',
+                        captain_rank_threshold: 1000,
+                    };
+                    const captains = await checkQueueForCaptains(lobby);
+                    assert.lengthOf(captains, 2);
+                    assert.equal(captains[0].id, 1);
+                    assert.equal(captains[1].id, 3);
+                });
             });
             
-            it('return captain pair', async () => {
-                const guild = 'guild';
-                const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
-                const getRoles = sinon.stub();
-                getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);
-                const getUserRoles = guild => getRoles;
-                lobby.inhouseState = {
-                    guild,
-                    captain_role_regexp: 'Tier ([0-9]+) Captain',
-                    captain_rank_threshold: 1000,
-                };
-                const captains = await assignCaptains(getUserRoles)(lobby);
-                assert.lengthOf(captains, 2);
-                assert.equal(captains[0].id, 1);
-                assert.equal(captains[1].id, 3);
+            describe('assignCaptains', () => {
+                it('return an empty array', async () => {
+                    const guild = 'guild';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1)).resolves(roles);
+                    lobby.inhouseState = {
+                        guild,
+                        captain_role_regexp: 'Tier ([0-9]+) Captain',
+                        captain_rank_threshold: 1000,
+                    };
+                    const captains = await assignCaptains(lobby);
+                    assert.isEmpty(captains);
+                });
+                
+                it('return captain pair', async () => {
+                    const guild = 'guild';
+                    const roles = [{ name: 'Tier 0 Captain' }, { name: 'Inhouse Player' }];
+                    getRoles.withArgs(sinon.match.any).resolves([]).withArgs(sinon.match.has('id', 1).or(sinon.match.has('id', 3))).resolves(roles);
+                    lobby.inhouseState = {
+                        guild,
+                        captain_role_regexp: 'Tier ([0-9]+) Captain',
+                        captain_rank_threshold: 1000,
+                    };
+                    const captains = await assignCaptains(lobby);
+                    assert.lengthOf(captains, 2);
+                    assert.equal(captains[0].id, 1);
+                    assert.equal(captains[1].id, 3);
+                });
             });
         });
         
@@ -851,7 +848,7 @@ describe('Database - with lobby players', () => {
                 let players = await getPlayers()(lobby);
                 assert.lengthOf(players, 10);
                 for (const player of players) {
-                    await setPlayerTeam(0)(lobby)(player.id);
+                    await setPlayerFaction(0)(lobby)(player.id);
                 }
                 players = await getPlayers()(lobby);
                 players.forEach(player => assert.equal(player.LobbyPlayer.faction, 0));
@@ -875,7 +872,7 @@ describe('Database - with lobby players', () => {
                 let players = await getPlayers()(lobby);
                 assert.lengthOf(players, 10);
                 for (const player of players) {
-                    await setPlayerTeam(0)(lobby)(player.id);
+                    await setPlayerFaction(0)(lobby)(player.id);
                 }
                 players = await getPlayers()(lobby);
                 players.forEach(player => assert.equal(player.LobbyPlayer.faction, 0));
@@ -929,8 +926,9 @@ describe('Database - with lobby players', () => {
                 players[0].LobbyPlayer = { faction: 1 };
                 players[1].LobbyPlayer = { faction: 2 };
                 await lobby.setPlayers(players, { through: { faction: 0 } });
-                const noTeam = await lobby.getNoTeamPlayers();
+                const noTeam = await lobby.getNoFactionPlayers();
                 assert.equal(noTeam.length, 8);
+                await lobby.update({ player_first_pick: 1 });
                 faction = await getDraftingFaction(draftOrder)(lobby);
                 assert.equal(faction, 1);
             });
@@ -941,8 +939,9 @@ describe('Database - with lobby players', () => {
                 const players = await lobby.getPlayers();
                 players[0].LobbyPlayer.faction = 0;
                 await players[0].LobbyPlayer.save();
-                const noTeam = await lobby.getNoTeamPlayers();
+                const noTeam = await lobby.getNoFactionPlayers();
                 assert.equal(noTeam.length, 1);
+                await lobby.update({ player_first_pick: 1 });
                 faction = await getDraftingFaction(draftOrder)(lobby);
                 assert.equal(faction, 2);
             });
@@ -979,7 +978,7 @@ describe('Database - with lobby players', () => {
             });
             
             it('return INVALID_DRAFT_PLAYER when player is on a team', async () => {
-                const players = await lobby.getTeam1Players();
+                const players = await lobby.getFaction1Players();
                 const result = await isPlayerDraftable(lobby)(players[1]);
                 assert.equal(result, CONSTANTS.INVALID_DRAFT_PLAYER);
             });
@@ -1131,7 +1130,6 @@ describe('Database - with lobby players', () => {
         
         describe('lobbyToLobbyState', () => {
             it('return lobbyState', async () => {
-                console.log(guild.id, lobby.id, lobby.lobby_name, lobby.get({ plain: true }));
                 const lobbyState = await lobbyToLobbyState({
                     guild,
                     category: 'category',
@@ -1339,12 +1337,11 @@ describe('Database - no lobby players', () => {
                 it('nothing when no suitable captains', async () => {
                     const users = await db.User.findAll({ limit: 10 });
                     await addQueuers(lobby)(users);
-                    const _checkQueueForCaptains = sinon.stub();
-                    _checkQueueForCaptains.resolves([]);
-                    const checkQueueForCaptains = () => _checkQueueForCaptains;
+                    const checkQueueForCaptains = sinon.stub();
+                    checkQueueForCaptains.resolves([]);
                     const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
-                    assert.isTrue(_checkQueueForCaptains.calledOnce);
+                    assert.isTrue(checkQueueForCaptains.calledOnce);
                 });
                 
                 it('pop queue when at least 10 players and suitable captains', async () => {
@@ -1352,14 +1349,13 @@ describe('Database - no lobby players', () => {
                     await addQueuers(lobby)(users);
                     let queuers = await getActiveQueuers()(lobbyState);
                     assert.lengthOf(queuers, 11);
-                    const _checkQueueForCaptains = sinon.stub();
-                    _checkQueueForCaptains.resolves([users[0], users[1]]);
-                    const checkQueueForCaptains = () => _checkQueueForCaptains;
+                    const checkQueueForCaptains = sinon.stub();
+                    checkQueueForCaptains.resolves([users[0], users[1]]);
                     let players = await getPlayers()(lobby);
                     assert.isEmpty(players);
                     const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BEGIN_READY);
-                    assert.isTrue(_checkQueueForCaptains.calledOnce);
+                    assert.isTrue(checkQueueForCaptains.calledOnce);
                     assert.equal(result.captain_1_user_id, users[0].id);
                     assert.equal(result.captain_2_user_id, users[1].id);
                     players = await getPlayers()(lobby);
@@ -1450,13 +1446,13 @@ describe('Database - no lobby players', () => {
         
         describe('assignLobbyName', () => {
             it('nothing when QUEUE_TYPE_CHALLENGE', async () => {
-                const lobbyState = { id, lobby_name, queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE };
+                const lobbyState = { id, lobby_name, queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE, inhouseState: { lobby_name_template: 'Inhouse Lobby ${lobby_id}' } };
                 const result = await assignLobbyName(lobbyState);
-                assert.equal(lobbyState.lobby_name, result.lobby_name);
+                assert.equal(result.lobby_name, 'inhouse-lobby-1');
             });
             
             it('return renamed lobby state', async () => {
-                const lobbyState = { id, lobby_name };
+                const lobbyState = { id, lobby_name, inhouseState: { lobby_name_template: 'Inhouse Lobby ${lobby_id}' } };
                 const result = await assignLobbyName(lobbyState);
                 assert.notEqual(lobbyState.lobby_name, result.lobby_name);
                 const lobby2 = await getLobby({ id: result.id });
