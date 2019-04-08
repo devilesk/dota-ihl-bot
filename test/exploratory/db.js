@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -55,7 +56,6 @@ describe('Database', () => {
         it('return leagues', async () => {
             let lobby1 = await findLobbyById(1);
             let players = await lobby1.getPlayers();
-            console.log(players.length);
             await lobby1.destroy();
             players = await lobby1.getPlayers();
             console.log(players.length);

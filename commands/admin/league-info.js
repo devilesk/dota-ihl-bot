@@ -1,5 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
+const Db = require('../../lib/db');
+const Fp = require('../../lib/util/fp');
 
 /**
  * @class LeagueInfoCommand
@@ -23,11 +25,21 @@ module.exports = class LeagueInfoCommand extends IHLCommand {
 
     async onMsg({ msg, league }) {
         const data = league.toJSON();
+        logger.debug(data);
         const fields = Object.keys(data).map(key => ({
             name: key,
-            value: data[key],
+            value: data[key] || 'N/A',
             inline: true,
         }));
+        const tickets = await Db.getTicketsOf()(league);
+        const ticketNames = tickets.map(ticket => `${ticket.leagueid} - ${ticket.name}`).join(', ');
+        if (tickets.length) {
+            fields.push({
+                name: 'Available Tickets',
+                value: ticketNames,
+                inline: false,
+            });
+        }
         await msg.channel.send({
             embed: {
                 color: 100000,

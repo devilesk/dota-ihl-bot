@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -14,7 +15,7 @@ const LobbyQueueHandlers = require('../../lib/lobbyQueueHandlers')({ Db, Guild, 
 const LobbyStateHandlers = require('../../lib/lobbyStateHandlers');
 const Fp = require('../../lib/util/fp');
 const CONSTANTS = require('../../lib/constants');
-const Mocks = require('../../lib/mocks');
+const Mocks = require('../mocks');
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
@@ -51,6 +52,7 @@ describe('Database - with lobby players', () => {
             onCreateLobbyQueue: () => {},
             botLeaveLobby: () => {},
             emit: () => {},
+            once: () => {},
             bots: [],
             matchTracker: {},
         }, LobbyStateHandlers.LobbyStateHandlers({ DotaBot, Db, Guild, Lobby, MatchTracker, LobbyQueueHandlers }));
@@ -73,6 +75,7 @@ describe('Database - with lobby players', () => {
                 captain_rank_threshold: 'captain_rank_threshold',
                 captain_role_regexp: 'captain_role_regexp',
                 draft_order: 'ABBABAAB',
+                lobby_name_template: 'Inhouse Lobby ${lobby_id}',
             })(lobby);
         });
         
@@ -140,18 +143,18 @@ describe('Database - with lobby players', () => {
                     }
                 });
 
-                it('return lobby state with STATE_CHOOSING_SIDE when QUEUE_TYPE_DRAFT', async () => {
+                it('return lobby state with STATE_SELECTION_PRIORITY when QUEUE_TYPE_DRAFT', async () => {
                     lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
                     lobbyState.queue_type = CONSTANTS.QUEUE_TYPE_DRAFT;
                     const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
                 });
 
-                it('return lobby state with STATE_CHOOSING_SIDE when QUEUE_TYPE_CHALLENGE', async () => {
+                it('return lobby state with STATE_SELECTION_PRIORITY when QUEUE_TYPE_CHALLENGE', async () => {
                     lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
                     lobbyState.queue_type = CONSTANTS.QUEUE_TYPE_CHALLENGE;
                     const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                    assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                    assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
                 });
 
                 it('return lobby state with STATE_AUTOBALANCING when QUEUE_TYPE_AUTO', async () => {
@@ -169,10 +172,10 @@ describe('Database - with lobby players', () => {
                 guild.createRole({ roleName: 'Inhouse Player' });
             });
             
-            it('return lobby state STATE_CHOOSING_SIDE when captains already assigned', async () => {
+            it('return lobby state STATE_SELECTION_PRIORITY when captains already assigned', async () => {
                 lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
                 assert.isNumber(lobbyState.captain_1_user_id);
                 assert.isNumber(lobbyState.captain_2_user_id);
             });
@@ -187,7 +190,7 @@ describe('Database - with lobby players', () => {
                 assert.isNull(lobbyState.captain_2_user_id);
             });
 
-            it('return lobby state STATE_CHOOSING_SIDE when captains assigned', async () => {
+            it('return lobby state STATE_SELECTION_PRIORITY when captains assigned', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.inhouseState = {
@@ -201,35 +204,99 @@ describe('Database - with lobby players', () => {
                 lobbyState.captain_1_user_id = null;
                 lobbyState.captain_2_user_id = null;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                assert.equal(result.state, CONSTANTS.STATE_CHOOSING_SIDE);
+                assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
                 assert.isNumber(result.captain_1_user_id);
                 assert.isNumber(result.captain_2_user_id);
             });
         });
         
-        describe('STATE_CHOOSING_SIDE', () => {
-            it('set captain teams and return lobby state with STATE_DRAFTING_PLAYERS', async () => {
-                lobbyState.state = CONSTANTS.STATE_CHOOSING_SIDE;
+        describe('STATE_SELECTION_PRIORITY', () => {
+            it('set captain factions, STATE_SELECTION_PRIORITY, and selection_priority', async () => {
+                lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
                 const captain_1 = await db.User.findOne({ where: { id: 1 } });
                 const captain_2 = await db.User.findOne({ where: { id: 2 } });
                 lobbyState.captain_1_user_id = captain_1.id;
                 lobbyState.captain_2_user_id = captain_2.id;
                 await Lobby.addPlayer(lobbyState)(captain_1);
                 await Lobby.addPlayer(lobbyState)(captain_2);
-                let players1 = await lobby.getTeam1Players();
+                let players1 = await lobby.getFaction1Players();
                 assert.isEmpty(players1);
-                let players2 = await lobby.getTeam2Players();
+                let players2 = await lobby.getFaction2Players();
                 assert.isEmpty(players1);
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                players1 = await lobby.getTeam1Players();
+                players1 = await lobby.getFaction1Players();
                 assert.lengthOf(players1, 1);
-                players2 = await lobby.getTeam2Players();
+                players2 = await lobby.getFaction2Players();
+                assert.lengthOf(players2, 1);
+                assert.equal(players1[0].id, captain_1.id);
+                assert.equal(players2[0].id, captain_2.id);
+                assert.equal(players1[0].LobbyPlayer.faction, 1);
+                assert.equal(players2[0].LobbyPlayer.faction, 2);
+                assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
+                assert.isAbove(result.selection_priority, 0);
+                assert.equal(result.first_pick, 0);
+                assert.equal(result.radiant_faction, 0);
+            });
+            
+            it('return lobby state with STATE_SELECTION_PRIORITY', async () => {
+                lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
+                const captain_1 = await db.User.findOne({ where: { id: 1 } });
+                const captain_2 = await db.User.findOne({ where: { id: 2 } });
+                lobbyState.captain_1_user_id = captain_1.id;
+                lobbyState.captain_2_user_id = captain_2.id;
+                await Lobby.addPlayer(lobbyState)(captain_1);
+                await Lobby.addPlayer(lobbyState)(captain_2);
+                let players1 = await lobby.getFaction1Players();
+                assert.isEmpty(players1);
+                let players2 = await lobby.getFaction2Players();
+                assert.isEmpty(players1);
+                lobbyState.selection_priority = 1;
+                lobbyState.first_pick = 1;
+                const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
+                players1 = await lobby.getFaction1Players();
+                assert.lengthOf(players1, 1);
+                players2 = await lobby.getFaction2Players();
+                assert.lengthOf(players2, 1);
+                assert.equal(players1[0].id, captain_1.id);
+                assert.equal(players2[0].id, captain_2.id);
+                assert.equal(players1[0].LobbyPlayer.faction, 1);
+                assert.equal(players2[0].LobbyPlayer.faction, 2);
+                assert.equal(result.state, CONSTANTS.STATE_SELECTION_PRIORITY);
+                assert.equal(result.selection_priority, 1);
+                assert.equal(result.first_pick, 1);
+                assert.equal(result.radiant_faction, 0);
+            });
+            
+            it('return lobby state with STATE_DRAFTING_PLAYERS', async () => {
+                lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
+                const captain_1 = await db.User.findOne({ where: { id: 1 } });
+                const captain_2 = await db.User.findOne({ where: { id: 2 } });
+                lobbyState.captain_1_user_id = captain_1.id;
+                lobbyState.captain_2_user_id = captain_2.id;
+                await Lobby.addPlayer(lobbyState)(captain_1);
+                await Lobby.addPlayer(lobbyState)(captain_2);
+                let players1 = await lobby.getFaction1Players();
+                assert.isEmpty(players1);
+                let players2 = await lobby.getFaction2Players();
+                assert.isEmpty(players1);
+                lobbyState.selection_priority = 1;
+                lobbyState.player_first_pick = 1;
+                lobbyState.first_pick = 1;
+                lobbyState.radiant_faction = 1;
+                const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
+                players1 = await lobby.getFaction1Players();
+                assert.lengthOf(players1, 1);
+                players2 = await lobby.getFaction2Players();
                 assert.lengthOf(players2, 1);
                 assert.equal(players1[0].id, captain_1.id);
                 assert.equal(players2[0].id, captain_2.id);
                 assert.equal(players1[0].LobbyPlayer.faction, 1);
                 assert.equal(players2[0].LobbyPlayer.faction, 2);
                 assert.equal(result.state, CONSTANTS.STATE_DRAFTING_PLAYERS);
+                assert.equal(result.selection_priority, 1);
+                assert.equal(result.player_first_pick, 1);
+                assert.equal(result.first_pick, 1);
+                assert.equal(result.radiant_faction, 1);
             });
         });
         
@@ -246,9 +313,10 @@ describe('Database - with lobby players', () => {
                     await Lobby.addPlayers(lobbyState)(users);
                     lobbyState.captain_1_user_id = users[0].id;
                     lobbyState.captain_2_user_id = users[1].id;
-                    await Lobby.setPlayerTeam(1)(lobbyState)(lobbyState.captain_1_user_id);
-                    await Lobby.setPlayerTeam(2)(lobbyState)(lobbyState.captain_2_user_id);
+                    await Lobby.setPlayerFaction(1)(lobbyState)(lobbyState.captain_1_user_id);
+                    await Lobby.setPlayerFaction(2)(lobbyState)(lobbyState.captain_2_user_id);
                     lobbyState.state = CONSTANTS.STATE_DRAFTING_PLAYERS;
+                    lobbyState.player_first_pick = 1;
                     const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_DRAFTING_PLAYERS);
                 });
@@ -258,10 +326,11 @@ describe('Database - with lobby players', () => {
                     await Lobby.addPlayers(lobbyState)(users);
                     lobbyState.captain_1_user_id = users[0].id;
                     lobbyState.captain_2_user_id = users[1].id;
-                    await Lobby.setPlayerTeam(1)(lobbyState)(lobbyState.captain_1_user_id);
-                    await Lobby.setPlayerTeam(1)(lobbyState)(users[2].id);
-                    await Lobby.setPlayerTeam(2)(lobbyState)(lobbyState.captain_2_user_id);
+                    await Lobby.setPlayerFaction(1)(lobbyState)(lobbyState.captain_1_user_id);
+                    await Lobby.setPlayerFaction(1)(lobbyState)(users[2].id);
+                    await Lobby.setPlayerFaction(2)(lobbyState)(lobbyState.captain_2_user_id);
                     lobbyState.state = CONSTANTS.STATE_DRAFTING_PLAYERS;
+                    lobbyState.player_first_pick = 1;
                     const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_DRAFTING_PLAYERS);
                 });
@@ -273,14 +342,14 @@ describe('Database - with lobby players', () => {
                 const users = await db.User.findAll({ limit: 10 });
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.state = CONSTANTS.STATE_AUTOBALANCING;
-                let players1 = await lobby.getTeam1Players();
-                let players2 = await lobby.getTeam2Players();
+                let players1 = await lobby.getFaction1Players();
+                let players2 = await lobby.getFaction2Players();
                 assert.isEmpty(players1);
                 assert.isEmpty(players2);
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_TEAMS_SELECTED);
-                players1 = await lobby.getTeam1Players();
-                players2 = await lobby.getTeam2Players();
+                players1 = await lobby.getFaction1Players();
+                players2 = await lobby.getFaction2Players();
                 assert.lengthOf(players1, 5);
                 assert.lengthOf(players2, 5);
             });
@@ -290,14 +359,14 @@ describe('Database - with lobby players', () => {
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.state = CONSTANTS.STATE_AUTOBALANCING;
                 lobbyState.inhouseState.matchmaking_system = 'elo'
-                let players1 = await lobby.getTeam1Players();
-                let players2 = await lobby.getTeam2Players();
+                let players1 = await lobby.getFaction1Players();
+                let players2 = await lobby.getFaction2Players();
                 assert.isEmpty(players1);
                 assert.isEmpty(players2);
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_TEAMS_SELECTED);
-                players1 = await lobby.getTeam1Players();
-                players2 = await lobby.getTeam2Players();
+                players1 = await lobby.getFaction1Players();
+                players2 = await lobby.getFaction2Players();
                 assert.lengthOf(players1, 5);
                 assert.lengthOf(players2, 5);
             });
@@ -318,12 +387,14 @@ describe('Database - with lobby players', () => {
                 lobbyState.bot_id = null;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_BOT_ASSIGNED);
-                assert.equal(result.bot_id, 3);
+                assert.equal(result.bot_id, 1);
             });
             
             it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => { 
                 lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
                 lobbyState.bot_id = null;
+                const findUnassignedBot = sinon.stub(Db, 'findUnassignedBot');
+                findUnassignedBot.resolves(null);
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_BOT);
                 assert.notExists(result.bot_id);

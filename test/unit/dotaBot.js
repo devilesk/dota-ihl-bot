@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
@@ -11,11 +12,8 @@ const EventEmitter = require('events').EventEmitter;
 const Long = require("long");
 const DotaBot = proxyquire('../../lib/dotaBot', {
     'fs': {
-        writeFileSync: (path, data) => console.log('stub writeFileSync'),
-        readFileSync: (path) => {
-            console.log('stub readFileSync')
-            return true;
-        },
+        writeFileSync: (path, data) => {},
+        readFileSync: (path) => true,
     },
     './db': {
         updateBotStatusBySteamId: () => sinon.stub(),
@@ -28,24 +26,24 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 describe('Functions', () => {
-    describe('slotToFaction', () => {
+    describe('slotToTeam', () => {
         it('return 1 for radiant', async () => {
             const slot = 0;
-            const faction = DotaBot.slotToFaction(slot);
+            const faction = DotaBot.slotToTeam(slot);
             assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_GOOD_GUYS, slot);
             assert.equal(faction, 1);
         });
         
         it('return 2 for dire', async () => {
             const slot = 1;
-            const faction = DotaBot.slotToFaction(slot);
+            const faction = DotaBot.slotToTeam(slot);
             assert.equal(dota2.schema.lookupEnum('DOTA_GC_TEAM').values.DOTA_GC_TEAM_BAD_GUYS, slot);
             assert.equal(faction, 2);
         });
         
         it('return null when not 0 or 1', async () => {
-            assert.isNull(DotaBot.slotToFaction(-1));
-            assert.isNull(DotaBot.slotToFaction(2));
+            assert.isNull(DotaBot.slotToTeam(-1));
+            assert.isNull(DotaBot.slotToTeam(2));
         });
     });
     
@@ -417,7 +415,7 @@ describe('DotaBot', () => {
             const newLobby = {
                 members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }],
             }
-            dotaBot.factionCache = {
+            dotaBot.teamCache = {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: null,
@@ -436,7 +434,7 @@ describe('DotaBot', () => {
             const newLobby = {
                 members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }],
             }
-            dotaBot.factionCache = {
+            dotaBot.teamCache = {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: 1,
@@ -455,7 +453,7 @@ describe('DotaBot', () => {
             const newLobby = {
                 members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }],
             }
-            dotaBot.factionCache = {
+            dotaBot.teamCache = {
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                 [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 2,
             }

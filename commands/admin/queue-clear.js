@@ -16,6 +16,14 @@ module.exports = class QueueClearCommand extends IHLCommand {
             guildOnly: true,
             description: 'Clear inhouse queue.',
             examples: ['queue-clear', 'queueclear', 'qclear', 'clear'],
+            args: [
+                {
+                    key: 'channel',
+                    prompt: 'Provide a channel.',
+                    type: 'channel',
+                    default: '',
+                },
+            ],
         }, {
             inhouseAdmin: true,
             inhouseState: true,
@@ -24,8 +32,29 @@ module.exports = class QueueClearCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }) {
-        await Db.destroyQueuesByGuildId(guild.id);
-        await msg.say('Queue cleared.');
+    async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {
+        if (channel) {
+            // use lobbyState for given channel
+            const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
+            if (lobbyState) {
+                logger.debug('QueueClearCommand channel found... clearing queue');
+                await this.ihlManager.clearLobbyQueue(lobbyState);
+                await msg.say('Queue cleared.');
+            }
+            else {
+                await msg.say('Invalid lobby channel.');
+            }
+        }
+        else if (lobbyState) {
+            logger.debug('QueueClearCommand lobby found... clearing queue');
+            await this.ihlManager.clearLobbyQueue(lobbyState);
+            await msg.say('Queue cleared.');
+        }
+        else {
+            logger.debug('QueueClearCommand clearing all queues');
+            await this.ihlManager.clearAllLobbyQueues(inhouseState);
+            await msg.say('All queues cleared.');
+        }
     }
 };

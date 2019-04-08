@@ -11,7 +11,7 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
         super(client, {
             name: 'ticket-remove',
             aliases: ['remove-ticket'],
-            group: 'admin',
+            group: 'owner',
             memberName: 'ticket-remove',
             guildOnly: true,
             description: 'Remove a dota ticket from the league.',
@@ -24,7 +24,8 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
                 },
             ],
         }, {
-            inhouseAdmin: true,
+            clientOwner: true,
+            inhouseAdmin: false,
             inhouseState: true,
             lobbyState: false,
             inhouseUser: false,
@@ -32,7 +33,7 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, league }, { leagueid }) {
-        this.ihlManager.emit(CONSTANTS.EVENT_LEAGUE_TICKET_REMOVE, league, leagueid);
+        await this.ihlManager[CONSTANTS.EVENT_LEAGUE_TICKET_REMOVE](league, leagueid);
         await msg.say(`Removed ticket ${leagueid} from the league.`);
     }
 };

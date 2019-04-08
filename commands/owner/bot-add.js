@@ -13,7 +13,7 @@ module.exports = class BotAddCommand extends IHLCommand {
         super(client, {
             name: 'bot-add',
             aliases: ['bot-create', 'bot-update', 'add-bot', 'create-bot', 'update-bot'],
-            group: 'admin',
+            group: 'owner',
             memberName: 'bot-add',
             guildOnly: true,
             description: 'Add a bot to the inhouse league.',
@@ -52,19 +52,20 @@ module.exports = class BotAddCommand extends IHLCommand {
     async onMsg({ msg }, { steamid_64, account_name, persona_name, password }) {
         const [bot, created] = await Db.findOrCreateBot(steamid_64, account_name, persona_name, password);
         if (created) {
+            await Db.updateBotStatus(CONSTANTS.BOT_LOADING)(bot.id);
+            const dotaBot = await DotaBot.createDotaBot(bot);
+            await DotaBot.connectDotaBot(dotaBot);
+            await msg.say(`Bot ${steamid_64} connected.`);
+            const tickets = await DotaBot.loadDotaBotTickets(dotaBot);
+            await msg.say(`${tickets.length} tickets loaded.`);
+            await DotaBot.disconnectDotaBot(dotaBot);
+            await msg.say(`Bot ${steamid_64} disconnected.`);
+            this.ihlManager.emit(CONSTANTS.EVENT_BOT_AVAILABLE);
             await msg.say(`Bot ${steamid_64} added.`);
         }
         else {
             await Db.updateBot(steamid_64)({ account_name, persona_name, password });
             await msg.say(`Bot ${steamid_64} updated.`);
         }
-        await Db.updateBotStatus(CONSTANTS.BOT_LOADING)(bot.id);
-        const dotaBot = await DotaBot.createDotaBot(bot);
-        await DotaBot.connectDotaBot(dotaBot);
-        await msg.say(`Bot ${steamid_64} connected.`);
-        const tickets = await DotaBot.loadDotaBotTickets(dotaBot);
-        await msg.say(`${tickets.length} tickets loaded.`);
-        await DotaBot.disconnectDotaBot(dotaBot);
-        await msg.say(`Bot ${steamid_64} disconnected.`);
     }
 };

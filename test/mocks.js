@@ -1,11 +1,23 @@
-const logger = require('./logger');
+const logger = require('../lib/logger');
+const requireAll = require('require-all');
+const path = require('path');
 const Collection = require('discord.js/src/util/Collection');
 const SnowflakeUtil = require('discord.js/src/util/Snowflake');
 const { hri } = require('human-readable-ids');
 const { EventEmitter } = require('events');
 const sinon = require('sinon');
 const dota2 = require('dota2');
-const getRandomInt = require('./util/getRandomInt');
+const getRandomInt = require('../lib/util/getRandomInt');
+const CONSTANTS = require('../lib/constants');
+const TestHelper = require('./helper');
+const db = require('../models');
+const Db = require('../lib/db');
+const Argument = require('discord.js-commando/src/commands/argument');
+Argument.validateInfo = function () {};
+const Command = require('discord.js-commando/src/commands/base');
+Command.validateInfo = function () {};
+const chai = require('chai');
+const assert = chai.assert;
 
 class MockDotaBot extends EventEmitter {
     constructor(config) {
@@ -16,14 +28,23 @@ class MockDotaBot extends EventEmitter {
         this.lobby_id = null;
         this.game_name = null;
         this.pass_key = null;
-        this.factionCache = {};
+        this.teamCache = {};
         this.steamClient = {
             logOn: () => {},
         };
     }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockDotaBot(), data);
+    }
+    
+    async toDatabase(data = {}) {
+        this._model = await db.Bot.create(Object.assign({}, this.config, data));
+        return this;
+    }
 
     get playerState() {
-        return this.factionCache;
+        return this.teamCache;
     }
 
     async connect() {}
@@ -36,7 +57,7 @@ class MockDotaBot extends EventEmitter {
 
     async launchPracticeLobby() {
         return {
-            match_id: getRandomInt(100000000).toString(),
+            match_id: TestHelper.randomNumberString(),
         };
     }
 
@@ -61,7 +82,7 @@ class MockDotaBot extends EventEmitter {
     }
 
     async createPracticeLobby({ game_name, pass_key }) {
-        this.lobby_id = getRandomInt(100000000).toString();
+        this.lobby_id = TestHelper.randomNumberString();
         this.game_name = game_name;
         this.pass_key = pass_key;
         return dota2.EResult.k_EResultOK;
@@ -77,16 +98,47 @@ class MockMember {
         this.name = hri.random();
         this.username = this.name;
         this.displayName = this.name;
+        this.tag = this.name + '#' + TestHelper.randomNumberString(9999);
         this.roles = new Collection();
-        for (let i = 0; i < getRandomInt(5); i++) {
-            const role = guild.roles.random();
-            this.roles.set(role.id, role);
-        }
+    }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockMember(), data);
+    }
+    
+    async toDatabase(data = {}) {
+        this._model = await db.User.create(Object.assign({}, {
+            league_id: this.guild._model.id,
+            steamid_64: TestHelper.randomSteamID64(),
+            discord_id: this.id,
+            nickname: TestHelper.randomName(),
+            role_1: TestHelper.randomNumber(5) + 1,
+            role_2: TestHelper.randomNumber(5) + 1,
+            role_3: TestHelper.randomNumber(5) + 1,
+            role_4: TestHelper.randomNumber(5) + 1,
+            role_5: TestHelper.randomNumber(5) + 1,
+            vouched: true,
+            rating: TestHelper.randomNumber(1500) + 500,
+            rank_tier: TestHelper.randomNumber(80) + 1,
+            commends: TestHelper.randomNumber(10),
+            reputation: TestHelper.randomNumber(10),
+        }, data));
+        return this;
+    }
+    
+    toGuild(guild) {
+        this.guild = guild;
+        guild.members.set(this.id, this);
+        return this;
     }
 
     async addRole(role) {
         this.roles.set(role.id, role);
         return this;
+    }
+    
+    toMention() {
+        return `<@${this.id}>`
     }
 }
 
@@ -96,11 +148,22 @@ class MockChannel {
         this.guild = guild;
         this.name = channelName;
         this.type = channelType;
+        this.parentID = null;
         this.send = async text => logger.debug(text);
-        console.log('MockChannel', this.name);
+    }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockChannel(), data);
+    }
+    
+    toGuild(guild) {
+        this.guild = guild;
+        guild.channels.set(this.id, this);
+        return this;
     }
 
-    async setParent() {
+    async setParent(category) {
+        this.parentID = category.id;
         return this;
     }
 
@@ -109,6 +172,7 @@ class MockChannel {
     }
 
     async setName(name) {
+        assert.match(name, /^[0-9a-z-]+$/);
         this.name = name;
         return this;
     }
@@ -131,6 +195,21 @@ class MockRole {
         this.id = SnowflakeUtil.generate();
         this.guild = guild;
         this.name = roleName;
+    }
+    
+    toGuild(guild) {
+        this.guild = guild;
+        guild.roles.set(this.id, this);
+        return this;
+    }
+    
+    toMember(member) {
+        member.roles.set(this.id, this);
+        return this;
+    }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockRole(), data);
     }
 
     async setName(name) {
@@ -159,14 +238,50 @@ class MockMessage {
         this.member = member;
         this.say = async text => logger.debug(text);
     }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockMessage(), data);
+    }
 }
 
 class MockGuild {
-    constructor() {
-        this.id = SnowflakeUtil.generate();
+    constructor(id) {
+        this.id = id || SnowflakeUtil.generate();
         this.roles = new Collection();
         this.channels = new Collection();
         this.members = new Collection();
+    }
+    
+    static Factory(data = {}) {
+        return Object.assign(new MockMessage(), data);
+    }
+    
+    async toDatabase(data = {}) {
+        this._model = await Db.findOrCreateLeague(this.id)([
+            { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
+            { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue' },
+        ]);
+        this._model.update(data);
+        return this;
+    }
+    
+    toClient(client) {
+        client.guilds.set(this.id, this);
+        return this;
+    }
+    
+    async initDefault() {
+        const category = new MockChannel(this, 'inhouses', 'category');
+        category.toGuild(this);
+        let channel = new MockChannel(this, 'general', 'channel');
+        await channel.toGuild(this).setParent(category);
+        channel = new MockChannel(this, 'player-draft-queue', 'channel');
+        await channel.toGuild(this).setParent(category);
+        channel = new MockChannel(this, 'autobalanced-queue', 'channel');
+        await channel.toGuild(this).setParent(category);
+        const adminRole = new MockRole(this, 'Inhouse Admin');
+        adminRole.toGuild(this);
+        return this;
     }
 
     initRandomChannels(num) {
@@ -222,14 +337,8 @@ class MockClient extends EventEmitter {
     constructor() {
         super();
 
-        this.owner = {
-            id: SnowflakeUtil.generate(),
-            tag: 'owner#1111',
-        };
-        this.user = {
-            id: SnowflakeUtil.generate(),
-            tag: 'bot#8499',
-        };
+        this.owner = new MockMember();
+        this.user = new MockMember();
         this.guilds = new Collection();
         this.registry = {
             registerDefaultTypes: () => this.registry,
@@ -239,6 +348,12 @@ class MockClient extends EventEmitter {
             registerCommandsIn: () => this.registry,
             types: new Collection(),
         };
+    }
+    
+    async initDefault() {
+        const guild = new MockGuild();
+        await guild.toClient(this).initDefault();
+        return this;
     }
 
     isOwner(user) {
@@ -258,6 +373,29 @@ class MockClient extends EventEmitter {
     }
 }
 
+const obj = requireAll(path.join(__dirname, '../commands'));
+const MockCommandsList = [];
+for (const group of Object.values(obj)) {
+    for (let command of Object.values(group)) {
+        if (typeof command.default === 'function') command = command.default;
+        MockCommandsList.push(command);
+    }
+}
+
+class MockCommands {
+    constructor(client) {
+        this.client = client;
+        this.registry = {};
+        for (const command of MockCommandsList) {
+            this.registry[command.name.replace('Command', '')] = new command(this.client);
+            this[command.name.replace('Command', '')] = async ({ guild, channel, member }, args = {}) => {
+                const msg = new MockMessage(guild, channel, member);
+                return this.registry[command.name.replace('Command', '')].run(msg, args);
+            }
+        }
+    }
+}
+
 module.exports = {
     MockDotaBot,
     MockMember,
@@ -266,4 +404,6 @@ module.exports = {
     MockMessage,
     MockGuild,
     MockClient,
+    MockCommandsList,
+    MockCommands,
 };

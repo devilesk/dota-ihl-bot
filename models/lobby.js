@@ -26,6 +26,26 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
         match_id: DataTypes.STRING,
+        selection_priority: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        player_first_pick: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        first_pick: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
+        radiant_faction: {
+            allowNull: false,
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        },
         winner: {
             allowNull: false,
             type: DataTypes.INTEGER,
@@ -89,7 +109,7 @@ module.exports = (sequelize, DataTypes) => {
                     faction: 0,
                 },
             },
-            as: 'NoTeamPlayers',
+            as: 'NoFactionPlayers',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -99,7 +119,7 @@ module.exports = (sequelize, DataTypes) => {
                     faction: 1,
                 },
             },
-            as: 'Team1Players',
+            as: 'Faction1Players',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -109,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
                     faction: 2,
                 },
             },
-            as: 'Team2Players',
+            as: 'Faction2Players',
         });
         
         Lobby.belongsToMany(models.User, {

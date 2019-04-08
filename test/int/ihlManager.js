@@ -1,195 +1,228 @@
+const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+const logger = require('../../lib/logger');
+const spawn = require('../../lib/util/spawn');
 const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('sinon');
-const proxyquire = require('proxyquire').noCallThru();
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const EventEmitter = require('events').EventEmitter;
 const db = require('../../models');
-const {
-    findUser,
-    loadInhouseStates,
-    loadInhouseStatesFromLeagues,
-    sendMatchStatsMessage,
-    createClient,
-    IHLManager,
-} = require('../../lib/ihlManager');
-const {
-    createNewLeague,
-} = require('../../lib/ihl');
-const {
-    createNewLeague,
-} = require('../../lib/ihl');
+const Mocks = require('../mocks');
+const TestHelper = require('../helper');
+const DotaBot = require('../../lib/dotaBot');
+const MatchTracker = require('../../lib/matchTracker');
+const IHLManager = require('../../lib/ihlManager');
+const Ihl = require('../../lib/ihl');
+const Lobby = require('../../lib/lobby');
+const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
-const dotenv = require('dotenv').config({ path: path.join(__dirname, './.env') });
-console.log(path.join(__dirname, './.env'));
+const Promise = require('bluebird');
 
-const Collection = require('discord.js/src/util/Collection');
+const nockBack = require('nock').back;
+nockBack.fixtures = 'test/fixtures/';
+nockBack.setMode('record');
 
-class MockChannel {
-    constructor(channelName, channelType) {
-        
-    }
-    
-    async setParent() {
-        return this;
-    }
-    
-    async setPosition() {
-        return this;
-    }
-    
-    async setName() {
-        return this;
-    }
-    
-    async setTopic() {
-        return this;
-    }
-    
-    async overwritePermissions() {
-        return this;
-    }
-}
-
-class MockRole {
-    constructor(roleName) {
-        
-    }
-    
-    async setName() {
-        return this;
-    }
-    
-    async setPermissions() {
-        return this;
-    }
-    
-    async setMentionable() {
-        return this;
-    }
-}
-
-const createMockClient = () => {
-    const guild = {
-        id: '422549177151782925',
-        roles: new Collection(),
-        channels: new Collection(),
-        members: new Collection(),
-        createChannel: (channelName, channelType) => new MockChannel(channelName, channelType),
-        createRole: ({ roleName }) => new MockRole(roleName),
-    }
-    const client = new EventEmitter();
-    client.registry = {
-        registerDefaultTypes: () => client.registry,
-        registerGroups: () => client.registry,
-        registerDefaultGroups: () => client.registry,
-        registerDefaultCommands: () => client.registry,
-        registerCommandsIn: () => client.registry,
-    };
-    client.user = {
-        id: '419520125012541441',
-        tag: 'rd2l-bot#8499',
-    };
-    client.guilds = new Collection([['422549177151782925', guild]]);
-    client.login = () => client.emit('ready');
-    return client;
-};
-
-let ihlManager;
-
-describe('findUser', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
-            path.resolve(path.join(__dirname, '../../testdata/int-ihlManager.js')),
-        ],
-        { logging: false },
-    );
-    
-    beforeEach(done => {
-        ihlManager = new IHLManager(process.env);
-        const client = createMockClient();
-        ihlManager.eventEmitter.on('ready', done);
-        ihlManager.init(client);
-    });
-
-    it('return user matching discord id', async () => {
-        const guild = {
-            id: '422549177151782925',
-            members: [],
-        }
-        guild.members.get = sinon.stub();
-        guild.members.get.withArgs('76864899866697728').returns('discord_user');
-        const [user, discord_user, result_type] = await findUser(guild)('<@76864899866697728>');
-        assert.equal(user.id, 1);
-        assert.equal(discord_user, 'discord_user');
-        assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
-    });
-    
-    it('return user matching discord name', async () => {
-        const guild = {
-            id: '422549177151782925',
-            members: [
-                {
-                    id: '76864899866697728',
-                    displayName: 'Test',
-                }
-            ],
-        }
-        const [user, discord_user, result_type] = await findUser(guild)('test');
-        assert.equal(user.id, 1);
-        assert.equal(discord_user.id, '76864899866697728');
-        assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
-    });
-});
-
-describe('ihlManager', () => {
-
-    
+describe('IHLManager', () => {        
     let client;
-    
-    before(() => {
-        console.log('0');
-        client = createMockClient();
-    });
-    
-    beforeEach(() => {
-        console.log('db');
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
-            path.resolve(path.join(__dirname, '../../testdata/int-ihlManager.js')),
-        ],
-        { logging: false },
-    );
-    });
-    
-    describe.only('#init', () => {
-        before(() => {
-            console.log('1a');
-            ihlManager = new IHLManager(process.env);
+    let ihlManager;
+    let guild;
+    let commands;
+
+    before(async () => {
+        ({ nockDone} = await nockBack('int_ihlManager.json'));
+        db.init();
+        await spawn('npm', ['run', 'db:init']);
+        sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => {});
+        sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
+            return new Mocks.MockDotaBot(config);
         });
-    
-        it('emit ready', done => {
-            ihlManager.eventEmitter.on('ready', () => {
-                done();
-            });
-            ihlManager.init(client);
-        });
+        sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
     });
-    
-    describe.only('post init', () => {
-        before(done => {
-            console.log('1b');
-            ihlManager = new IHLManager(process.env);
-            client = createMockClient();
-            ihlManager.eventEmitter.on('ready', done);
-            ihlManager.init(client);
+
+    beforeEach(async () => {
+        client = new Mocks.MockClient();
+        await client.initDefault();
+        guild = client.guilds.first();
+        await guild.toDatabase({ captain_rank_threshold: 100 });
+        ihlManager = new IHLManager.IHLManager(process.env);
+        await ihlManager.init(client);
+    });
+        
+    afterEach(async () => {
+        await Promise.all(
+            Object.values(db.sequelize.models)
+                .map((model) => model.truncate({
+                    cascade: true,
+                    restartIdentity: true,
+                }))
+        );
+    });
+
+    after(async () => {
+        await nockDone();
+        MatchTracker.createMatchEndMessageEmbed.restore();
+        DotaBot.createDotaBot.restore();
+        DotaBot.loadDotaBotTickets.restore();
+        await db.close();
+    });
+
+    describe('findUser', () => {
+        let member;
+        
+        beforeEach(async () => {
+            member = new Mocks.MockMember(guild);
+            await member.toGuild(guild).toDatabase();
+        });
+
+        it('return user matching discord id', async () => {
+            const [user, discord_user, result_type] = await IHLManager.findUser(guild)(`<@${member.id}>`);
+            assert.equal(user.id, 1);
+            assert.equal(discord_user, member);
+            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
         });
         
-        it('emit ready', () => {
-            assert.isTrue(true);
+        it('return user matching discord name', async () => {
+            const [user, discord_user, result_type] = await IHLManager.findUser(guild)(member.name);
+            assert.equal(user.id, 1);
+            assert.equal(discord_user.id, member.id);
+            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
+        });
+    });
+
+    describe('Lobbies', () => {
+        let nockDone;
+        
+        const selectionCommands = [
+            ['First', 'First', 'Radiant'],
+            ['First', 'First', 'Dire'],
+            ['First', 'Second', 'Radiant'],
+            ['First', 'Second', 'Dire'],
+            ['First', 'Radiant', 'First'],
+            ['First', 'Radiant', 'Second'],
+            ['First', 'Dire', 'First'],
+            ['First', 'Dire', 'Second'],
+            ['Second', 'First', 'Radiant'],
+            ['Second', 'First', 'Dire'],
+            ['Second', 'Second', 'Radiant'],
+            ['Second', 'Second', 'Dire'],
+            ['Second', 'Radiant', 'First'],
+            ['Second', 'Radiant', 'Second'],
+            ['Second', 'Dire', 'First'],
+            ['Second', 'Dire', 'Second'],
+        ];
+
+        beforeEach(async () => {
+            commands = new Mocks.MockCommands(client);
+            for (let i = 0; i < 10; i++) {
+                const member = new Mocks.MockMember(guild);
+                await member.toGuild(guild).toDatabase();
+            }
+            sinon.stub(DotaBot, 'startDotaLobby');
+        });
+        
+        afterEach(async () => {
+            DotaBot.startDotaLobby.restore();
+        });
+        
+        it('autobalanced-queue', async () => {
+            channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+            for (const [id, member] of guild.members) {
+                await commands.QueueJoin({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (const [id, member] of guild.members) {
+                await commands.QueueReady({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            DotaBot.startDotaLobby.resolves(6450130);
+            await commands.BotAdd({ guild, channel, member: client.owner }, {
+                steamid_64: TestHelper.randomNumberString(),
+                account_name: TestHelper.randomName(),
+                persona_name: TestHelper.randomName(),
+                password: TestHelper.randomName()
+            });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
+            await TestHelper.waitForEvent(ihlManager)('empty');
+        });
+        
+        selectionCommands.forEach(function(selectionCommand) {
+            it(`player-draft-queue selection priority: ${selectionCommand.join(',')}`, async () => {
+                let lobbyState;
+                const captain_role = new Mocks.MockRole(guild, 'Tier 1 Captain');
+                const captain_1 = guild.members.array()[0];
+                await captain_1._model.update({ rank_tier: 20 });
+                const captain_2 = guild.members.array()[1];
+                await captain_2._model.update({ rank_tier: 20 });
+                captain_role.toGuild(guild).toMember(captain_1).toMember(captain_2);
+                channel = guild.channels.find(channel => channel.name === 'player-draft-queue');
+                for (const [id, member] of guild.members) {
+                    await commands.QueueJoin({ guild, channel, member });
+                }
+                await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+                for (const [id, member] of guild.members) {
+                    await commands.QueueReady({ guild, channel, member });
+                }
+                lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+                await commands[selectionCommand[0]]({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_2 : captain_1 });
+                lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+                await commands[selectionCommand[1]]({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_1 : captain_2 });
+                lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+                await commands[selectionCommand[2]]({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_2 : captain_1 });
+                for (let i = 2; i < 10; i++) {
+                    lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_DRAFTING_PLAYERS);
+                    const draft_order = lobbyState.inhouseState.draft_order;
+                    let captain = ((draft_order[i - 2] === 'A' && lobbyState.player_first_pick === 1) || (draft_order[i - 2] === 'B' && lobbyState.player_first_pick === 2)) ? captain_1 : captain_2;
+                    await commands.Pick({ guild, channel, member: captain }, { member: guild.members.array()[i].toMention() });
+                }
+                await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+                DotaBot.startDotaLobby.resolves(6450130);
+                await commands.BotAdd({ guild, channel, member: client.owner }, {
+                    steamid_64: TestHelper.randomNumberString(),
+                    account_name: TestHelper.randomName(),
+                    persona_name: TestHelper.randomName(),
+                    password: TestHelper.randomName()
+                });
+                await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
+                await TestHelper.waitForEvent(ihlManager)('empty');
+            });
+        });
+        
+        it('challenge-queue', async () => {
+            let lobbyState;
+            const captain_1 = guild.members.array()[0];
+            const captain_2 = guild.members.array()[1];
+            channel = guild.channels.find(channel => channel.name === 'general');
+            await commands.Challenge({ guild, channel, member: captain_1 }, { member: captain_2 });
+            await commands.Challenge({ guild, channel, member: captain_2 }, { member: captain_1 });
+            lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE);
+            channel = guild.channels.find(channel => channel.name === lobbyState.lobby_name);
+            for (let i = 2; i < 10; i++) {
+                await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (const [id, member] of guild.members) {
+                await commands.QueueReady({ guild, channel, member });
+            }
+            lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+            await commands.First({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_2 : captain_1 });
+            lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+            await commands.First({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_1 : captain_2 });
+            lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_SELECTION_PRIORITY);
+            await commands.Radiant({ guild, channel, member: lobbyState.selection_priority === 1 ? captain_2 : captain_1 });
+            for (let i = 2; i < 10; i++) {
+                lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_DRAFTING_PLAYERS);
+                const draft_order = lobbyState.inhouseState.draft_order;
+                let captain = ((draft_order[i - 2] === 'A' && lobbyState.player_first_pick === 1) || (draft_order[i - 2] === 'B' && lobbyState.player_first_pick === 2)) ? captain_1 : captain_2;
+                await commands.Pick({ guild, channel, member: captain }, { member: guild.members.array()[i].toMention() });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            DotaBot.startDotaLobby.resolves(6450130);
+            await commands.BotAdd({ guild, channel, member: client.owner }, {
+                steamid_64: TestHelper.randomNumberString(),
+                account_name: TestHelper.randomName(),
+                persona_name: TestHelper.randomName(),
+                password: TestHelper.randomName()
+            });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
+            await TestHelper.waitForEvent(ihlManager)('empty');
         });
     });
 });
