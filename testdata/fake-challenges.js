@@ -4,7 +4,6 @@ module.exports = [
     {
         model: "Challenge",
         data: {
-            id: 1,
             recipient_user_id: 1,
             giver_user_id: 2,
             accepted: false,
@@ -15,7 +14,6 @@ module.exports = [
     {
         model: "Challenge",
         data: {
-            id: 2,
             recipient_user_id: 2,
             giver_user_id: 3,
             accepted: false,
@@ -26,7 +24,6 @@ module.exports = [
     {
         model: "Challenge",
         data: {
-            id: 3,
             recipient_user_id: 3,
             giver_user_id: 4,
             accepted: true,

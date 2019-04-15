@@ -1,19 +1,9 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const logger = require('../../lib/logger');
-const spawn = require('../../lib/util/spawn');
-const Promise = require('bluebird');
+require('../common');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
 Argument.validateInfo = function () {};
 const Command = require('discord.js-commando/src/commands/base');
 Command.validateInfo = function () {};
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire').noCallThru();
-const path = require('path');
-const EventEmitter = require('events').EventEmitter;
-const db = require('../../models');
 const {
     MockDotaBot,
     MockMember,
@@ -39,7 +29,6 @@ const BotListCommand = require('../../commands/admin/bot-list');
 const LeagueCreateCommand = require('../../commands/owner/league-create');
 const LeagueSeasonCommand = require('../../commands/admin/league-season');
 const RegisterCommand = require('../../commands/ihl/register');
-const CONSTANTS = require('../../lib/constants');
 
 const nockBack = require('nock').back;
 nockBack.fixtures = 'test/fixtures/';
@@ -62,29 +51,16 @@ describe('Commands', () => {
 
     before(async () => {
         ({ nockDone} = await nockBack('int_commands.json', { before: prepareScope, afterRecord }));
-        db.init();
-        await spawn('npm', ['run', 'db:init']);
         sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
             return new MockDotaBot(config);
         });
         sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
     });
 
-    afterEach(async () => {
-        await Promise.all(
-            Object.values(db.sequelize.models)
-                .map((model) => model.truncate({
-                    cascade: true,
-                    restartIdentity: true,
-                }))
-        );
-    });
-
     after(async () => {
         await nockDone();
         DotaBot.createDotaBot.restore();
         DotaBot.loadDotaBotTickets.restore();
-        await db.close();
     });
 
     describe('BotAddCommand', () => {
@@ -377,7 +353,7 @@ Tickets: `,
         });
 
         it('fail with a bad steamid_64', async () => {
-            const text = 'asdf6962';
+            const text = 'asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));
         });
@@ -401,7 +377,7 @@ Tickets: `,
         });
 
         it('fail with a bad steam profiles link', async () => {
-            const text = 'https://steamcommunity.com/profiles/asdf6962';
+            const text = 'https://steamcommunity.com/profiles/asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));
         });
@@ -413,7 +389,7 @@ Tickets: `,
         });
 
         it('fail with a bad dotabuff link', async () => {
-            const text = 'https://www.dotabuff.com/players/asdf6962';
+            const text = 'https://www.dotabuff.com/players/asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));
         });
@@ -425,7 +401,7 @@ Tickets: `,
         });
 
         it('fail with a bad opendota link', async () => {
-            const text = 'https://www.opendota.com/players/asdf6962';
+            const text = 'https://www.opendota.com/players/asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));
         });
@@ -437,7 +413,7 @@ Tickets: `,
         });
 
         it('fail with a bad stratz link', async () => {
-            const text = 'https://stratz.com/en-us/player/asdf6962';
+            const text = 'https://stratz.com/en-us/player/asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));
         });

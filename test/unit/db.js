@@ -1,11 +1,4 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const db = require('../../models');
+require('../common');
 const {
     findAllLeagues,
     findAllActiveLobbies,
@@ -43,12 +36,10 @@ const {
     destroyAllAcceptedChallengeForUser,
     setChallengeAccepted,
 } = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
 
 describe('Database', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    beforeEach(done => {
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -59,9 +50,10 @@ describe('Database', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-reputations.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
 
     describe('findAllLeagues', () => {
         it('return leagues', async () => {
@@ -114,7 +106,7 @@ describe('Database', () => {
             ]);
             assert.exists(league);
             const queues = await league.getQueues();
-            assert.lengthOf(queues, 4);
+            assert.lengthOf(queues, 3);
         });
         it('return new league', async () => {
             const league = await findOrCreateLeague('123')([
@@ -242,12 +234,21 @@ describe('Database', () => {
     });
 
     describe('findOrCreateQueue', () => {
-        it('create new queue', async () => {
+        it('create existing queue', async () => {
             const league = await findLeague('422549177151782925');
             const queue = await findOrCreateQueue(league, true, CONSTANTS.QUEUE_TYPE_AUTO, 'auto-queue');
             assert.exists(queue);
             assert.isTrue(queue.enabled);
             assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_AUTO);
+            assert.equal(queue.queue_name, 'autobalanced-queue');
+            assert.equal(queue.league_id, league.id);
+        });
+        it('create existing queue', async () => {
+            const league = await findLeague('422549177151782925');
+            const queue = await findOrCreateQueue(league, false, 'test', 'auto-queue');
+            assert.exists(queue);
+            assert.isFalse(queue.enabled);
+            assert.equal(queue.queue_type, 'test');
             assert.equal(queue.queue_name, 'auto-queue');
             assert.equal(queue.league_id, league.id);
         });

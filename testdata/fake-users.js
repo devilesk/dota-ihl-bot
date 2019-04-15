@@ -2,7 +2,6 @@ const CONSTANTS = require('../lib/constants');
 
 const data = [
     {
-        id: 1,
         league_id: 1,
         steamid_64: '76561198015512690',
         discord_id: '76864899866697728',
@@ -22,7 +21,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 2,
         league_id: 1,
         steamid_64: '76561198136290105',
         discord_id: '112718237040398336',
@@ -42,7 +40,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 3,
         league_id: 1,
         steamid_64: '76561198151093473',
         discord_id: '424329081862225921',
@@ -62,7 +59,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 4,
         league_id: 1,
         steamid_64: '76561198068904086',
         discord_id: '361185987373826051',
@@ -82,7 +78,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 5,
         league_id: 1,
         steamid_64: '76561197978831683',
         discord_id: '95704393151680512',
@@ -102,7 +97,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 6,
         league_id: 1,
         steamid_64: '76561198024087473',
         discord_id: '93164485178564608',
@@ -122,7 +116,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 7,
         league_id: 1,
         steamid_64: '76561198038335275',
         discord_id: '108018188054286336',
@@ -142,7 +135,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 8,
         league_id: 1,
         steamid_64: '76561197995253668',
         discord_id: '76783098456444928',
@@ -162,7 +154,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 9,
         league_id: 1,
         steamid_64: '76561198026721661',
         discord_id: '103292711313899520',
@@ -182,7 +173,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 10,
         league_id: 1,
         steamid_64: '76561198047112485',
         discord_id: '122154474390159362',
@@ -202,7 +192,6 @@ const data = [
         updated_at: new Date(),
     },
     {
-        id: 11,
         league_id: 1,
         steamid_64: '76561198045206080',
         discord_id: '149649478691979264',

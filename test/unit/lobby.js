@@ -1,11 +1,4 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const db = require('../../models');
+require('../common');
 const {
     getLobby,
     getPlayers,
@@ -94,21 +87,13 @@ const {
     findUserById,
     getChallengeBetweenUsers,
 } = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
-const Mocks = require('../mocks');
-const chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
 
 let guild;
 
-beforeEach(async () => {
-    guild = new Mocks.MockGuild();
-});
-
 describe('Database - with lobby players', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    beforeEach(done => {
+        guild = new Mocks.MockGuild();
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -117,9 +102,10 @@ describe('Database - with lobby players', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
     
     const lobby_name = 'funny-yak-74';
     const id = 1;
@@ -1187,9 +1173,9 @@ describe('Database - with lobby players', () => {
 });
 
 describe('Database - no lobby players', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    beforeEach(done => {
+        guild = new Mocks.MockGuild();
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -1197,9 +1183,10 @@ describe('Database - no lobby players', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
 
     const lobby_name = 'funny-yak-74';
     const id = 1;

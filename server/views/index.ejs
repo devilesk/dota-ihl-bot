@@ -1,0 +1,59 @@
+<html>
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+    .btn-discord {
+        background: #7289DA;
+        border: 2px solid rgba(0,0,0,.1);
+    }
+    .btn-discord:hover, .btn-discord:not(:disabled):not(.disabled):active, .btn-discord:not(:disabled):not(.disabled):active:focus {
+        background: #4e5d94;
+        border-color: #4e5d94;
+    }
+    .btn-discord:focus {
+        box-shadow: none;
+    }
+    .container {
+        padding-top: 50px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <img src="img/logo.png" width="100"/>
+        <h2>dota-ihl-bot</h2>
+        <hr class="col-lg-4 offset-lg-4">
+        <% if (guildId) { %>
+            <% if (!user) { %>
+            <a href="/auth/discord" class="btn btn-primary btn-discord">Log in with Discord</a>
+            <% } else { %>
+                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=64" />
+                <h5><%= user.username %>#<%= user.discriminator %></h5>
+                <p><a href='/logout'>Logout</a></p>
+                <hr class="col-lg-4 offset-lg-4">
+                <% if (!user.steam) { %>
+                    <p><a href="/auth/steam"><img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_02.png" /></a></p>
+                <% } else { %>
+                    <a href="<%= user.steam.profileUrl %>" target="_blank"><img src="<%= user.steam.avatar %>" /><br><h5><%= user.steam.name %></h5></a>
+                    <% if (!registered) { %><p><a href='/auth/steam'>Change</a></p><% } %>
+                <% } %>
+                <hr class="col-lg-4 offset-lg-4">
+                <% if (!registered) { %>
+                <form action="/register" method="post">
+                    <input type="hidden" id="guildId" name="guildId" value="<%= guildId %>">
+                    <input type="hidden" id="discordId" name="discordId" value="<%= user.id %>">
+                    <input type="hidden" id="steamId" name="steamId" value="<%= user.steam ? user.steam.id : '' %>">
+                    <button type="submit" class="btn<% if (!user.steam) { %> btn-danger<% } else { %> btn-primary<% } %>"<% if (!user.steam) { %> disabled<% } %>>Register</button>
+                </form>
+                <% } else { %>
+                <div class="alert alert-success col-lg-4 offset-lg-4" role="alert">Registered</div>
+                <% } %>
+            <% } %>
+        <% } %>
+    </div>
+</body>
+</html>

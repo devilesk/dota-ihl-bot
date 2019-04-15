@@ -6,7 +6,8 @@ const SnowflakeUtil = require('discord.js/src/util/Snowflake');
 const { hri } = require('human-readable-ids');
 const { EventEmitter } = require('events');
 const sinon = require('sinon');
-const dota2 = require('dota2');
+const steam = require('steam');
+const Long = require('long');
 const getRandomInt = require('../lib/util/getRandomInt');
 const CONSTANTS = require('../lib/constants');
 const TestHelper = require('./helper');
@@ -25,7 +26,7 @@ class MockDotaBot extends EventEmitter {
 
         this.config = config;
         this.steamid_64 = config.steamid_64;
-        this.lobby_id = null;
+        this.lobby_id = Long.ZERO;
         this.game_name = null;
         this.pass_key = null;
         this.teamCache = {};
@@ -57,7 +58,7 @@ class MockDotaBot extends EventEmitter {
 
     async launchPracticeLobby() {
         return {
-            match_id: TestHelper.randomNumberString(),
+            match_id: TestHelper.randomMatchId(),
         };
     }
 
@@ -76,16 +77,16 @@ class MockDotaBot extends EventEmitter {
     async leaveLobbyChat() {}
 
     async joinPracticeLobby(lobby_id, { game_name, pass_key }) {
-        this.lobby_id = lobby_id;
+        this.lobby_id = Long.fromString(lobby_id);
         this.game_name = game_name;
         this.pass_key = pass_key;
     }
 
     async createPracticeLobby({ game_name, pass_key }) {
-        this.lobby_id = TestHelper.randomNumberString();
+        this.lobby_id = TestHelper.randomLong();
         this.game_name = game_name;
         this.pass_key = pass_key;
-        return dota2.EResult.k_EResultOK;
+        return steam.EResult.OK;
     }
 
     async requestLeagueInfoListAdmins() {}

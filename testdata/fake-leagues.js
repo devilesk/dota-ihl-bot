@@ -2,7 +2,6 @@ module.exports = [
     {
         model: "League",
         data: {
-            id: 1,
             guild_id: '422549177151782925',
             ready_check_timeout: 5000,
             captain_rank_threshold: 3,
@@ -17,7 +16,6 @@ module.exports = [
     {
         model: "League",
         data: {
-            id: 2,
             guild_id: '88641069939453952',
             ready_check_timeout: 5000,
             captain_rank_threshold: 3,
