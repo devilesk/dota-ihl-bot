@@ -4,7 +4,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             user_id: 1,
@@ -18,7 +17,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             user_id: 2,
@@ -32,7 +30,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             user_id: 3,
@@ -46,7 +43,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             user_id: 4,
@@ -60,7 +56,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 2,
             season_id: 1,
             user_id: 5,
@@ -74,7 +69,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             user_id: 6,
@@ -88,7 +82,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 2,
             user_id: 6,
@@ -102,7 +95,6 @@ module.exports = [
     {
         model: "Leaderboard",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 2,
             user_id: 7,

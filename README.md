@@ -32,8 +32,6 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 * [Features](#features)
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
-  * [Installation](#installation)
-  * [Deployment](#deployment)
 * [API Documentation](#api-documentation)
 * [Tests](#tests)
 * [Built With](#built-with)
@@ -60,8 +58,6 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
  
 ## Getting Started
 
-### Installation
-
 To clone and run the bot, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```bash
@@ -77,8 +73,6 @@ $ npm install
 # Create PostgreSQL database and run migrations
 $ npm run db:init
 ```
-
-### Deployment
 
 Before you run the bot, you'll need to create a `.env` file in the root directory.
 

@@ -1,39 +1,8 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const logger = require('../../lib/logger');
-const spawn = require('../../lib/util/spawn');
-const Promise = require('bluebird');
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire').noCallThru();
-const path = require('path');
-const EventEmitter = require('events').EventEmitter;
-const db = require('../../models');
+require('../common');
 const Ihl = require('../../lib/ihl');
 const Db = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
 
 describe('Database', () => {
-
-    before(async () => {
-        db.init();
-        await spawn('npm', ['run', 'db:init']);
-    });
-
-    afterEach(async () => {
-        await Promise.all(
-            Object.values(db.sequelize.models)
-                .map((model) => model.truncate({
-                    cascade: true,
-                    restartIdentity: true,
-                }))
-        );
-    });
-
-    after(async () => {
-        await db.close();
-    });
-
     describe('Bot Functions', () => {
         let ticket1;
         let league1;

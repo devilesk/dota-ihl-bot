@@ -24,8 +24,8 @@ module.exports = [
     {
         model: "Reputation",
         data: {
-            recipient_user_id: 3,
-            giver_user_id: 5,
+            recipient_user_id: 5,
+            giver_user_id: 3,
             timestamp: new Date(),
             created_at: new Date(),
             updated_at: new Date(),

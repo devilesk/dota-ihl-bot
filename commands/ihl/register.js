@@ -1,6 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const Ihl = require('../../lib/ihl');
+const getSteamProfile = require('../../lib/util/getSteamProfile');
 
 /**
  * @class RegisterCommand
@@ -39,14 +40,20 @@ module.exports = class RegisterCommand extends IHLCommand {
             try {
                 steamid_64 = await Ihl.parseSteamID64(text);
                 if (steamid_64 != null) {
-                    user = await Ihl.registerUser(guild.id, steamid_64, discord_id);
+                    const steamProfile = await getSteamProfile(steamid_64);
+                    if (steamProfile != null) {
+                        user = await Ihl.registerUser(guild.id, steamProfile.steamid, discord_id);
 
-                    if (user) {
-                        logger.debug(`RegisterCommand Registered ${user.steamid_64}`);
-                        await msg.say(`Registered ${user.steamid_64}`);
+                        if (user) {
+                            logger.debug(`RegisterCommand Registered ${user.steamid_64}`);
+                            await msg.say(`Registered ${user.steamid_64}`);
+                        }
+                        else {
+                            await msg.say(`Failed to create new user.`);
+                        }
                     }
                     else {
-                        await msg.say(`Failed to create new user.`);
+                        await msg.say(`Invalid steam id.`);
                     }
                 }
                 else {

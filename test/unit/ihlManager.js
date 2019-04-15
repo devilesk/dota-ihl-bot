@@ -1,12 +1,4 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const EventEmitter = require('events').EventEmitter;
-const db = require('../../models');
+require('../common');
 const {
     findUser,
     loadInhouseStates,
@@ -14,15 +6,11 @@ const {
     sendMatchStatsMessage,
     IHLManager,
     ihlManager,
-} = proxyquire('../../lib/ihlManager', {
-    './guild': require('../../lib/guildStub'),
-});
-const CONSTANTS = require('../../lib/constants');
+} = require('../../lib/ihlManager');
 
 describe('Database', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    beforeEach(done => {
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -32,9 +20,11 @@ describe('Database', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
+
     describe('findUser', () => {
         it('return user matching discord id', async () => {
             const guild = {

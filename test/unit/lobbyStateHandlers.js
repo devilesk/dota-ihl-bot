@@ -1,11 +1,4 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const db = require('../../models');
+require('../common');
 const MatchTracker = require('../../lib/matchTracker');
 const DotaBot = require('../../lib/dotaBot');
 const Lobby = require('../../lib/lobby');
@@ -14,18 +7,10 @@ const Db = require('../../lib/db');
 const LobbyQueueHandlers = require('../../lib/lobbyQueueHandlers')({ Db, Guild, Lobby });
 const LobbyStateHandlers = require('../../lib/lobbyStateHandlers');
 const Fp = require('../../lib/util/fp');
-const CONSTANTS = require('../../lib/constants');
-const Mocks = require('../mocks');
-const chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
-
-
 
 describe('Database - with lobby players', () => {
-       
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    beforeEach(done => {
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -33,9 +18,10 @@ describe('Database - with lobby players', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
         
     const lobby_name = 'funny-yak-74';
     const id = 1;
@@ -199,7 +185,7 @@ describe('Database - with lobby players', () => {
                     captain_rank_threshold: 1000,
                 }
                 const role = await Guild.findOrCreateRole(guild)('Tier 0 Captain');
-                Lobby.mapPlayers(Guild.addRoleToUser(guild)(role))(lobbyState);
+                await Lobby.mapPlayers(Guild.addRoleToUser(guild)(role))(lobbyState);
                 lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
                 lobbyState.captain_1_user_id = null;
                 lobbyState.captain_2_user_id = null;
@@ -382,7 +368,6 @@ describe('Database - with lobby players', () => {
         
         describe('STATE_WAITING_FOR_BOT', () => {
             it('return lobby state with STATE_BOT_ASSIGNED when assigned a bot', async () => {
-                const [bot1, created] = await Db.findOrCreateBot('1', 'bot1', 'bot1', 'pass');
                 lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
                 lobbyState.bot_id = null;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
@@ -390,14 +375,25 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.bot_id, 1);
             });
             
-            it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => { 
-                lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
-                lobbyState.bot_id = null;
-                const findUnassignedBot = sinon.stub(Db, 'findUnassignedBot');
-                findUnassignedBot.resolves(null);
-                const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
-                assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_BOT);
-                assert.notExists(result.bot_id);
+            describe('stub findUnassignedBot', () => {
+                let findUnassignedBot;
+                
+                beforeEach(async () => {
+                    findUnassignedBot = sinon.stub(Db, 'findUnassignedBot');
+                });
+                
+                afterEach(async () => {
+                    Db.findUnassignedBot.restore();
+                });
+                
+                it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => { 
+                    lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
+                    lobbyState.bot_id = null;
+                    findUnassignedBot.resolves(null);
+                    const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
+                    assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_BOT);
+                    assert.notExists(result.bot_id);
+                });
             });
             
             it('return lobby state with STATE_BOT_ASSIGNED when bot already assigned', async () => {

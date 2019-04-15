@@ -1,17 +1,7 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const logger = require('../../lib/logger');
-const spawn = require('../../lib/util/spawn');
-const chai = require('chai');
-const assert = chai.assert;
-const expect = chai.expect;
-const sinon = require('sinon');
-const db = require('../../models');
-const Mocks = require('../mocks');
-const TestHelper = require('../helper');
+require('../common');
 const MatchTracker = require('../../lib/matchTracker');
 const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
 
 const nockBack = require('nock').back;
 nockBack.fixtures = 'test/fixtures/';
@@ -23,8 +13,6 @@ describe('Database', () => {
     
     before(async () => {
         ({ nockDone} = await nockBack('int_matchTracker.json'));
-        db.init();
-        await spawn('npm', ['run', 'db:init']);
     });
     
     beforeEach(async () => {
@@ -104,20 +92,9 @@ describe('Database', () => {
         }
         matchTracker = new MatchTracker.MatchTracker(1000);
     });
-    
-    afterEach(async () => {
-        await Promise.all(
-            Object.values(db.sequelize.models)
-                .map((model) => model.truncate({
-                    cascade: true,
-                    restartIdentity: true,
-                }))
-        );
-    });
 
     after(async () => {
         await nockDone();
-        await db.close();
     });
     
     describe('getOpenDotaMatchDetails', () => {

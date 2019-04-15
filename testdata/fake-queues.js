@@ -4,7 +4,6 @@ module.exports = [
     {
         model: "Queue",
         data: {
-            id: 1,
             league_id: 1,
             enabled: true,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -17,7 +16,6 @@ module.exports = [
     {
         model: "Queue",
         data: {
-            id: 2,
             league_id: 1,
             enabled: true,
             queue_type: CONSTANTS.QUEUE_TYPE_AUTO,
@@ -30,7 +28,6 @@ module.exports = [
     {
         model: "Queue",
         data: {
-            id: 3,
             league_id: 1,
             enabled: false,
             queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE,

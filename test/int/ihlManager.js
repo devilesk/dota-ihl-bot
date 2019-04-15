@@ -1,20 +1,10 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const logger = require('../../lib/logger');
-const spawn = require('../../lib/util/spawn');
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const db = require('../../models');
-const Mocks = require('../mocks');
-const TestHelper = require('../helper');
+require('../common');
 const DotaBot = require('../../lib/dotaBot');
 const MatchTracker = require('../../lib/matchTracker');
 const IHLManager = require('../../lib/ihlManager');
 const Ihl = require('../../lib/ihl');
 const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
-const Promise = require('bluebird');
 
 const nockBack = require('nock').back;
 nockBack.fixtures = 'test/fixtures/';
@@ -28,8 +18,6 @@ describe('IHLManager', () => {
 
     before(async () => {
         ({ nockDone} = await nockBack('int_ihlManager.json'));
-        db.init();
-        await spawn('npm', ['run', 'db:init']);
         sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => {});
         sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
             return new Mocks.MockDotaBot(config);
@@ -45,23 +33,12 @@ describe('IHLManager', () => {
         ihlManager = new IHLManager.IHLManager(process.env);
         await ihlManager.init(client);
     });
-        
-    afterEach(async () => {
-        await Promise.all(
-            Object.values(db.sequelize.models)
-                .map((model) => model.truncate({
-                    cascade: true,
-                    restartIdentity: true,
-                }))
-        );
-    });
-
+    
     after(async () => {
         await nockDone();
         MatchTracker.createMatchEndMessageEmbed.restore();
         DotaBot.createDotaBot.restore();
         DotaBot.loadDotaBotTickets.restore();
-        await db.close();
     });
 
     describe('findUser', () => {

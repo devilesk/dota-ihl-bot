@@ -1,6 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const dota2 = require('dota2');
+const Dota2 = require('dota2');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -36,8 +36,8 @@ module.exports = class LobbyFirstPickCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }, { side }) {
-        const cm_pick = side === 'radiant' ? dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_GOOD_GUYS
-            : (side === 'dire' ? dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_BAD_GUYS : dota2.schema.lookupEnum('DOTA_CM_PICK').values.DOTA_CM_RANDOM);
+        const cm_pick = side === 'radiant' ? Dota2.schema.DOTA_CM_PICK.DOTA_CM_GOOD_GUYS
+            : (side === 'dire' ? Dota2.schema.DOTA_CM_PICK.DOTA_CM_BAD_GUYS : Dota2.schema.DOTA_CM_PICK.DOTA_CM_RANDOM);
 
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_FP](lobbyState, cm_pick);
         await msg.say(`First pick ${cm_pick}.`).catch(logger.error);

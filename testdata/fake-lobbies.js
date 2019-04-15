@@ -4,7 +4,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 1,
             league_id: 1,
             season_id: 1,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -21,7 +20,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 2,
             league_id: 1,
             season_id: 1,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -38,7 +36,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 3,
             league_id: 1,
             season_id: 1,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -54,7 +51,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 4,
             league_id: 2,
             season_id: 2,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -70,7 +66,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 5,
             league_id: 2,
             season_id: 2,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
@@ -86,7 +81,6 @@ module.exports = [
     {
         model: "Lobby",
         data: {
-            id: 6,
             league_id: 1,
             season_id: 1,
             queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,

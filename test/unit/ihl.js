@@ -1,12 +1,4 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-const assert = chai.assert;
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const path = require('path');
-const sequelizeMockingMocha = require('sequelize-mocking').sequelizeMockingMocha;
-const EventEmitter = require('events').EventEmitter;
-const db = require('../../models');
+require('../common');
 const {
     getUserRankTier,
     registerUser,
@@ -20,19 +12,22 @@ const {
     leaveLobbyQueue,
     getAllLobbyQueuesForUser,
     banInhouseQueue,
-} = proxyquire('../../lib/ihl', {
-    './guild': require('../../lib/guildStub'),
-    './lobby': {
-        lobbyToLobbyState: () => () => async () => sinon.stub(),
-    }
-});
+} = require('../../lib/ihl');
 const Db = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
+const Lobby = require('../../lib/lobby');
+
+const nockBack = require('nock').back;
+nockBack.fixtures = 'test/fixtures/';
+nockBack.setMode('record');
 
 describe('Database', () => {
-    sequelizeMockingMocha(
-        db.sequelize,
-        [
+    before(async () => {
+        ({ nockDone} = await nockBack('unit_ihl.json'));
+        sinon.stub(Lobby, 'lobbyToLobbyState').callsFake(() => () => async () => sinon.stub());
+    });
+    
+    beforeEach(done => {
+        sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-users.js')),
@@ -42,9 +37,15 @@ describe('Database', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ],
-        { logging: false },
-    );
+        ], db, { log: () => {} }).then(function(){
+            done();
+        });
+    });
+    
+    after(async () => {
+        await nockDone();
+        Lobby.lobbyToLobbyState.restore();
+    });
     
     const lobby_name = 'funny-yak-74';
     const id = 1;
@@ -86,7 +87,7 @@ describe('Database', () => {
                     matchmaking_system: 'elo',
                     leagueid: 1,
                 },
-                guild: {},
+                guild: new Mocks.MockGuild(),
             }
             const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
@@ -96,7 +97,7 @@ describe('Database', () => {
             const league = await Db.findLeague('422549177151782925');
             const args = {
                 league,
-                guild: {},
+                guild: new Mocks.MockGuild(),
             }
             const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
@@ -116,32 +117,22 @@ describe('Database', () => {
     });
 
     describe('hasActiveLobbies', () => {
+        before(() => {
+            sinon.stub(Db, 'findActiveLobbiesForUser');
+        });
+        
+        after(() => {
+            Db.findActiveLobbiesForUser.restore();
+        });
+        
         it('return true when user has active lobbies', async () => {
-            let hasActiveLobbies;
-            const findActiveLobbiesForUserStub = sinon.stub();
-            findActiveLobbiesForUserStub.resolves([{}]);
-            const { hasActiveLobbies: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findActiveLobbiesForUser: findActiveLobbiesForUserStub,
-                },
-            });
-            hasActiveLobbies = mock;
-
+            Db.findActiveLobbiesForUser.resolves([{}]);
             const result = await hasActiveLobbies({});
             assert.isTrue(result);
         });
         
         it('return false when user has no active lobbies', async () => {
-            let hasActiveLobbies;
-            const findActiveLobbiesForUserStub = sinon.stub();
-            findActiveLobbiesForUserStub.resolves([]);
-            const { hasActiveLobbies: mock } = proxyquire('../../lib/ihl', {
-                './db': {
-                    findActiveLobbiesForUser: findActiveLobbiesForUserStub,
-                },
-            });
-            hasActiveLobbies = mock;
-
+            Db.findActiveLobbiesForUser.resolves([]);
             const result = await hasActiveLobbies({});
             assert.isFalse(result);
         });
