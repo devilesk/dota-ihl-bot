@@ -1,0 +1,31 @@
+<% const argToString = arg => {
+    if (arg.default === null) {
+        return `\<${arg.label}\>`;
+    }
+    else {
+        return `[\<${arg.label}\>]`;
+    }
+} %>
+|Table of Contents|<%= ' |'.repeat(rowLen - 1); %>
+<%= '|--'.repeat(rowLen) + '|'; %>
+<% for (var i=0; i < toc.length; i++) {
+   var row = toc[i]; -%>
+<%= '|' + row.map(command => `[${command.name}](#${command.name})`).join('|') + '|' %>
+<% } %>
+
+<% for (var i=0; i < commands.length; i++) {
+   var command = commands[i]; %>
+## <%= command.name %>
+<% if (command.argsCollector) { %>
+<%- `**Format:** \`!${command.name} ${command.argsCollector.args.map(argToString).join(' ')}\`` %>
+<% } else { %>
+<%= `**Format:** \`!${command.name}\`` %>
+<% } %>
+<%- '> ' + command.description %>
+
+<% if (command.aliases.length) { %>**Aliases:** <%= command.aliases.map(alias => `\`${alias}\``).join(', '); %><% } %>
+<% if (command.examples) { %>
+**Usage Examples:**
+<%= command.examples.map(e => '* `!' + e + '`').join('\n'); %>
+ <% } %>
+ <% } %>

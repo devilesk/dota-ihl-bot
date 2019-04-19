@@ -32,6 +32,7 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 * [Features](#features)
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
+* [Bot Commands](#bot-commands)
 * [API Documentation](#api-documentation)
 * [Tests](#tests)
 * [Built With](#built-with)
@@ -53,12 +54,18 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 
 ## Requirements
 
+Installation
+* [Git](https://git-scm.com)
+* [npm](http://npmjs.com)
+* [svn](https://subversion.apache.org/) - Required to install [steam-resources](https://github.com/seishun/node-steam-resources), a dependency of [node-dota2](https://github.com/Arcana/node-dota2).
+
+Runtime
 * [Node.js](https://nodejs.org/en/download/) 10+ (Tested with 10.9.0)
 * [PostgreSQL](https://www.postgresql.org/download/) 9.5+ (Tested with 9.5.14)
- 
+
 ## Getting Started
 
-To clone and run the bot, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+Clone and install the `dota-ihl-bot` package.
 
 ```bash
 # Clone this repository
@@ -69,43 +76,89 @@ $ cd dota-ihl-bot
 
 # Install dependencies
 $ npm install
+```
 
+`dota-ihl-bot` uses the [dotenv](https://github.com/motdotla/dotenv) module to load environment variables from a `.env` file, so you'll create one now.
+
+```bash
+# Create an empty .env configuration file
+$ touch .env
+```
+
+Use the following template to fill in your `.env` file. Check the [wiki page](https://github.com/devilesk/dota-ihl-bot/wiki) for more details.
+
+```bash
+# Database name
+DB_NAME=ihl
+# Database user
+DB_USERNAME=postgres
+# Database password 
+DB_PASSWORD=password
+# Database connection string
+DB_HOST=127.0.0.1
+# Discord bot token
+TOKEN=
+# Discord bot command prefix
+COMMAND_PREFIX=!
+# Bot owner discord ID
+OWNER_DISCORD_ID=
+# How often to poll for completed match stats (in milliseconds)
+MATCH_POLL_INTERVAL=5000
+# Discord bot invite url
+INVITE_URL=
+# Discord bot client ID
+CLIENT_ID=
+# Discord bot client secret
+CLIENT_SECRET=
+# Discord bot OAuth2 callback url
+CALLBACK_URL=
+# Steam Web API key
+STEAM_API_KEY=
+# Log SQL statements
+LOGGER_LOG_SQL=false
+# Log output
+LOGGER_SILENT=false
+# Log level
+LOGGER_LEVEL=debug
+# Log exception file
+LOGGER_EXCEPTIONLOGFILE=exceptions.log
+# Log directory
+LOGGER_DIRNAME=logs
+# Log filename
+LOGGER_FILENAME=application-%DATE%.log
+# Log date pattern
+LOGGER_DATEPATTERN=YYYY-MM-DD-HH
+# Log zipped
+LOGGER_ZIPPEDARCHIVE=true
+# Max log file size
+LOGGER_MAXSIZE=20m
+# Log expiration
+LOGGER_MAXFILES=14d
+```
+
+Create the Postgres database.
+
+```bash
 # Create PostgreSQL database and run migrations
 $ npm run db:init
 ```
 
-Before you run the bot, you'll need to create a `.env` file in the root directory.
-
-```bash
-DB_NAME=ihl
-DB_USERNAME=postgres
-DB_PASSWORD=password
-DB_HOST=127.0.0.1
-TOKEN=
-COMMAND_PREFIX=!
-OWNER_DISCORD_ID=
-MATCH_POLL_INTERVAL=5000
-INVITE_URL=
-CLIENT_ID=
-CLIENT_SECRET=
-CALLBACK_URL=
-STEAM_API_KEY=
-LOGGER_LOG_SQL=false
-LOGGER_SILENT=false
-LOGGER_LEVEL=debug
-LOGGER_EXCEPTIONLOGFILE=exceptions.log
-LOGGER_DIRNAME=logs
-LOGGER_FILENAME=application-%DATE%.log
-LOGGER_DATEPATTERN=YYYY-MM-DD-HH
-LOGGER_ZIPPEDARCHIVE=true
-LOGGER_MAXSIZE=20m
-LOGGER_MAXFILES=14d
-```
+Now you're ready to start the bot.
 
 ```bash
 # Run the bot
 $ npm start
 ```
+
+## Bot Commands
+
+Links to README documentation in `commands/<group>` folders:
+ 
+* [Owner](commands/owner/README.md)
+* [Admin](commands/admin/README.md)
+* [Inhouse](commands/ihl/README.md)
+* [Queue](commands/queue/README.md)
+* [Challenge](commands/challenge/README.md)
 
 ## API Documentation
 
