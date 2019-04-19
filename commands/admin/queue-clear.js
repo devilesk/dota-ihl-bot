@@ -38,7 +38,7 @@ module.exports = class QueueClearCommand extends IHLCommand {
             const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
             lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
             if (lobbyState) {
-                logger.debug('QueueClearCommand channel found... clearing queue');
+                logger.silly('QueueClearCommand channel found... clearing queue');
                 await this.ihlManager.clearLobbyQueue(lobbyState);
                 await msg.say('Queue cleared.');
             }
@@ -47,12 +47,12 @@ module.exports = class QueueClearCommand extends IHLCommand {
             }
         }
         else if (lobbyState) {
-            logger.debug('QueueClearCommand lobby found... clearing queue');
+            logger.silly('QueueClearCommand lobby found... clearing queue');
             await this.ihlManager.clearLobbyQueue(lobbyState);
             await msg.say('Queue cleared.');
         }
         else {
-            logger.debug('QueueClearCommand clearing all queues');
+            logger.silly('QueueClearCommand clearing all queues');
             await this.ihlManager.clearAllLobbyQueues(inhouseState);
             await msg.say('All queues cleared.');
         }

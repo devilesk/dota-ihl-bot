@@ -45,7 +45,7 @@ module.exports = class RegisterCommand extends IHLCommand {
                         user = await Ihl.registerUser(guild.id, steamProfile.steamid, discord_id);
 
                         if (user) {
-                            logger.debug(`RegisterCommand Registered ${user.steamid_64}`);
+                            logger.silly(`RegisterCommand Registered ${user.steamid_64}`);
                             await msg.say(`Registered ${user.steamid_64}`);
                         }
                         else {
@@ -61,7 +61,7 @@ module.exports = class RegisterCommand extends IHLCommand {
                 }
             }
             catch (e) {
-                logger.debug(`RegisterCommand error: ${e.name}, ${e.message}`);
+                logger.silly(`RegisterCommand error: ${e.name}, ${e.message}`);
                 if (e instanceof Error && e.name === 'SequelizeUniqueConstraintError' && e.message === 'Validation error') {
                     await msg.say(`Failed to register. Steam id ${steamid_64} already registered.`);
                 }

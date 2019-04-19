@@ -20,11 +20,11 @@ const RANK_TO_MEDAL = {
 };
 
 const rankTierToMedalName = (rank_tier) => {
-    logger.debug(`rankTierToMedalName ${rank_tier}`);
+    logger.silly(`rankTierToMedalName ${rank_tier}`);
     rank_tier = rank_tier || 0;
     const rank = Math.floor(rank_tier / 10) * 10;
     const tier = rank_tier % 10;
-    logger.debug(`rankTierToMedalName ${rank} ${tier}`);
+    logger.silly(`rankTierToMedalName ${rank} ${tier}`);
     let medal = 'Unknown';
     if (rank >= 0 && rank < 90) {
         medal = `${RANK_TO_MEDAL[rank]}`;
@@ -88,19 +88,19 @@ module.exports = class WhoisCommand extends IHLCommand {
         }
 
         if (user) {
-            logger.debug(user.nickname);
+            logger.silly(user.nickname);
 
             let roles = [];
             for (let i = 1; i <= 5; i++) {
-                logger.debug(user[`role_${i}`]);
+                logger.silly(user[`role_${i}`]);
                 roles.push([i, user[`role_${i}`]]);
             }
-            logger.debug(roles);
+            logger.silly(roles);
             roles = roles.filter(([role, pref]) => pref !== -1).sort(([r1, p1], [r2, p2]) => p1 - p2).map(([r, p]) => r);
             const account_id = convertor.to32(user.steamid_64);
 
             const [leaderboard] = await user.getLeaderboards({ where: { season_id: league.current_season_id } });
-            logger.debug(leaderboard);
+            logger.silly(leaderboard);
             if (leaderboard) {
                 wins = leaderboard.wins;
                 losses = leaderboard.losses;
@@ -110,7 +110,7 @@ module.exports = class WhoisCommand extends IHLCommand {
 
             const rank = await Db.queryUserLeaderboardRank(league.id)(league.current_season_id)(user.id);
 
-            logger.debug(`rank ${rank}`);
+            logger.silly(`rank ${rank}`);
 
             await msg.channel.send({
                 embed: {

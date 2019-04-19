@@ -23,10 +23,10 @@ module.exports = class SecondCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState, inhouseUser }) {
-        logger.debug('SecondCommand');
+        logger.silly('SecondCommand');
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain)) {
-            logger.debug(`SecondCommand isCaptain ${captain.id}`);
+            logger.silly(`SecondCommand isCaptain ${captain.id}`);
             await this.ihlManager[CONSTANTS.EVENT_SELECTION_PICK](lobbyState, captain, 2);
         }
     }

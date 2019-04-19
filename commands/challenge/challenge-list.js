@@ -23,18 +23,18 @@ module.exports = class ChallengeListCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseUser }) {
-        logger.debug(`ChallengeListCommand`);
+        logger.silly(`ChallengeListCommand`);
         const receivers = await Fp.mapPromise(async (challenge) => {
             const receiver = await challenge.getRecipient();
             return Guild.resolveUser(guild)(receiver);
         })(inhouseUser.getChallengesGiven());
-        logger.debug(`ChallengeListCommand receivers ${receivers}`);
+        logger.silly(`ChallengeListCommand receivers ${receivers}`);
         
         const givers = await Fp.mapPromise(async (challenge) => {
             const giver = await challenge.getGiver();
             return Guild.resolveUser(guild)(giver);
         })(inhouseUser.getChallengesReceived());
-        logger.debug(`ChallengeListCommand givers ${givers}`);
+        logger.silly(`ChallengeListCommand givers ${givers}`);
         
         let text = '';
         

@@ -49,14 +49,14 @@ module.exports = class QueueJoinCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
-        logger.debug(`QueueJoinCommand lobbyState ${lobbyState}`);
+        logger.silly(`QueueJoinCommand lobbyState ${lobbyState}`);
         if (inhouseUser.rank_tier) {
             if (channel) {
                 // use lobbyState for given channel
                 lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
                 lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
                 if (lobbyState) {
-                    logger.debug('QueueJoinCommand channel found... joining queue');
+                    logger.silly('QueueJoinCommand channel found... joining queue');
                     const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
                     await this.processResult(guild, lobbyState, inhouseUser, result, msg);
                 }
@@ -65,12 +65,12 @@ module.exports = class QueueJoinCommand extends IHLCommand {
                 }
             }
             else if (lobbyState) {
-                logger.debug('QueueJoinCommand lobby found... joining queue');
+                logger.silly('QueueJoinCommand lobby found... joining queue');
                 const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
                 await this.processResult(guild, lobbyState, inhouseUser, result, msg);
             }
             else {
-                logger.debug('QueueJoinCommand joining all queues');
+                logger.silly('QueueJoinCommand joining all queues');
                 await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.member);
                 await msg.say(`${msg.member.displayName} joined all queues.`);
             }

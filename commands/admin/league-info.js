@@ -25,7 +25,7 @@ module.exports = class LeagueInfoCommand extends IHLCommand {
 
     async onMsg({ msg, league }) {
         const data = league.toJSON();
-        logger.debug(data);
+        logger.silly(data);
         const fields = Object.keys(data).map(key => ({
             name: key,
             value: data[key] || 'N/A',

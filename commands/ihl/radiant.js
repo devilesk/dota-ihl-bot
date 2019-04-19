@@ -22,10 +22,10 @@ module.exports = class RadiantCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState, inhouseUser }) {
-        logger.debug('RadiantCommand');
+        logger.silly('RadiantCommand');
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain)) {
-            logger.debug(`RadiantCommand isCaptain ${captain.id}`);
+            logger.silly(`RadiantCommand isCaptain ${captain.id}`);
             await this.ihlManager[CONSTANTS.EVENT_SELECTION_SIDE](lobbyState, captain, 1);
         }
     }

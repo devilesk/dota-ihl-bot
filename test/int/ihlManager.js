@@ -18,7 +18,7 @@ describe('IHLManager', () => {
 
     before(async () => {
         ({ nockDone} = await nockBack('int_ihlManager.json'));
-        sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => {});
+        sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => `Match ${match_id} end message embed`);
         sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
             return new Mocks.MockDotaBot(config);
         });

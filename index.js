@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('./lib/logger');
+const CommandDispatcher = require('discord.js-commando/src/dispatcher');
 if (process.env.NODE_ENV !== 'production') {
-    const CommandDispatcher = require('discord.js-commando/src/dispatcher');
     // monkey patch shouldHandleMessage to handle other bot messages for testing
     CommandDispatcher.prototype.shouldHandleMessage = function (message, oldMessage) {
         // Ignore partial messages
@@ -24,3 +24,8 @@ const IHLManager = require('./lib/ihlManager');
 const ihlManager = new IHLManager.IHLManager(process.env);
 const client = IHLManager.createClient(process.env);
 ihlManager.init(client);
+
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM signal received. Shutting down...');
+    process.exit(0);
+});

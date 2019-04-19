@@ -31,11 +31,11 @@ module.exports = class PickCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState, inhouseUser }, { member }) {
-        logger.debug('PickCommand');
+        logger.silly('PickCommand');
         const [user, discord_user, result_type] = await findUser(guild)(member);
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain) && user) {
-            logger.debug(`PickCommand isCaptain ${captain.id}`);
+            logger.silly(`PickCommand isCaptain ${captain.id}`);
             const result = await this.ihlManager[CONSTANTS.EVENT_PICK_PLAYER](lobbyState, captain, user);
             switch (result) {
             case CONSTANTS.INVALID_DRAFT_CAPTAIN:
