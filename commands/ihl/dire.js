@@ -22,10 +22,10 @@ module.exports = class DireCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState, inhouseUser }) {
-        logger.debug('DireCommand');
+        logger.silly('DireCommand');
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain)) {
-            logger.debug(`DireCommand isCaptain ${captain.id}`);
+            logger.silly(`DireCommand isCaptain ${captain.id}`);
             await this.ihlManager[CONSTANTS.EVENT_SELECTION_SIDE](lobbyState, captain, 2);
         }
     }

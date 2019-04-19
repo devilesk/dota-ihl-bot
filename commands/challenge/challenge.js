@@ -30,35 +30,35 @@ module.exports = class ChallengeCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseState, inhouseUser }, { member }) {
-        logger.debug(`ChallengeCommand`);
+        logger.silly(`ChallengeCommand`);
         const giver = inhouseUser;
         // check if giver already in a lobby
         let inLobby = await Ihl.hasActiveLobbies(giver);
-        logger.debug(`ChallengeCommand inLobby ${inLobby}`);
+        logger.silly(`ChallengeCommand inLobby ${inLobby}`);
         if (!inLobby) {
             const receiver = await Db.findUserByDiscordId(guild.id)(member.id);
-            logger.debug(`ChallengeCommand receiver ${receiver}`);
+            logger.silly(`ChallengeCommand receiver ${receiver}`);
             if (receiver) {
                 if (receiver.id !== giver.id) {
                     // check if receiver already in a lobby
                     inLobby = await Ihl.hasActiveLobbies(receiver);
-                    logger.debug(`ChallengeCommand receiver inLobby ${inLobby}`);
+                    logger.silly(`ChallengeCommand receiver inLobby ${inLobby}`);
                     if (!inLobby) {
                         // check if giver has issued a challenge to this receiver already
                         const challengeFromGiver = await Db.getChallengeBetweenUsers(giver)(receiver);
-                        logger.debug(`ChallengeCommand challengeFromGiver ${challengeFromGiver}`);
+                        logger.silly(`ChallengeCommand challengeFromGiver ${challengeFromGiver}`);
                         if (challengeFromGiver) {
-                            logger.debug(`ChallengeCommand ${member} already challenged.`);
+                            logger.silly(`ChallengeCommand ${member} already challenged.`);
                             await msg.say(`${member} already challenged.`);
                         }
                         else {
                             // check if receiver has issued a challenge to the giver already
                             const challengeFromReceiver = await Db.getChallengeBetweenUsers(receiver)(giver);
-                            logger.debug(`ChallengeCommand challengeFromReceiver ${challengeFromReceiver}`);
+                            logger.silly(`ChallengeCommand challengeFromReceiver ${challengeFromReceiver}`);
                             if (challengeFromReceiver) {
                                 // accept receiver's challenge if not yet accepted
                                 if (!challengeFromReceiver.accepted) {
-                                    logger.debug(`ChallengeCommand challenge accepted.`);
+                                    logger.silly(`ChallengeCommand challenge accepted.`);
                                     await this.ihlManager.createChallengeLobby(inhouseState, receiver, giver, challengeFromReceiver);
                                     //await Db.destroyChallengeBetweenUsers(receiver)(giver);
                                     await msg.say(`${msg.author} accepts challenge from ${member}.`);
@@ -69,8 +69,8 @@ module.exports = class ChallengeCommand extends IHLCommand {
                             }
                             else {
                                 // issue new challenge
-                                logger.debug(`ChallengeCommand createChallenge`);
-                                logger.debug(`${msg.author} challenges ${member}.`);
+                                logger.silly(`ChallengeCommand createChallenge`);
+                                logger.silly(`${msg.author} challenges ${member}.`);
                                 const challenge = await Db.createChallenge(giver)(receiver);
                                 await msg.say(`${msg.author} challenges ${member}.`);
                             }

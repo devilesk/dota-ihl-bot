@@ -60,7 +60,7 @@ module.exports = class BotAddCommand extends IHLCommand {
             await msg.say(`${tickets.length} tickets loaded.`);
             await DotaBot.disconnectDotaBot(dotaBot);
             await msg.say(`Bot ${steamid_64} disconnected.`);
-            this.ihlManager.emit(CONSTANTS.EVENT_BOT_AVAILABLE);
+            await this.ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
             await msg.say(`Bot ${steamid_64} added.`);
         }
         else {

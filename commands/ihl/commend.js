@@ -43,10 +43,10 @@ module.exports = class CommendCommand extends IHLCommand {
         const lobby = await Db.findLobbyByMatchId(match_id);
         const players = await Lobby.getPlayers()(lobby);
         if (lobby) {
-            logger.debug(`CommendCommand ${lobby.state}`);
+            logger.silly(`CommendCommand ${lobby.state}`);
             if (lobby.state === CONSTANTS.STATE_COMPLETED) {
                 if (user && fromUser) {
-                    logger.debug(`CommendCommand users exist`);
+                    logger.silly(`CommendCommand users exist`);
                     if (!players.find(player => player.id === user.id)) {
                         await msg.say(`${discord_user.displayName} not a player in the match.`);
                     }
@@ -54,9 +54,9 @@ module.exports = class CommendCommand extends IHLCommand {
                         await msg.say(`${msg.author.username} not a player in the match.`);
                     }
                     else {
-                        logger.debug(`CommendCommand users on team`);
+                        logger.silly(`CommendCommand users on team`);
                         if (user.id !== fromUser.id) {
-                            logger.debug(`CommendCommand ${user.id} ${fromUser.id}`);
+                            logger.silly(`CommendCommand ${user.id} ${fromUser.id}`);
                             const [rep, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
                             if (created) {
                                 await msg.say(`${msg.author.username} commends ${discord_user.displayName}`);

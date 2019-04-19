@@ -85,7 +85,7 @@ $ npm install
 $ touch .env
 ```
 
-Use the following template to fill in your `.env` file. Check the [wiki page](https://github.com/devilesk/dota-ihl-bot/wiki) for more details.
+Use the following template to fill in your `.env` file. Check the [wiki page](https://github.com/devilesk/dota-ihl-bot/wiki/.env-Configuration) for more details.
 
 ```bash
 # Database name

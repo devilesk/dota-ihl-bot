@@ -22,7 +22,7 @@ module.exports = class LeaderboardCommand extends IHLCommand {
 
     async onMsg({ msg, league, guild }) {
         const leaderboard = await Db.queryLeaderboardRank(league.id)(league.current_season_id)(10);
-        logger.debug(leaderboard.length);
+        logger.silly(leaderboard.length);
         const data = leaderboard.map((user) => {
             const member = guild.members.get(user.discord_id);
             const name = member ? member.displayName : user.nickname;

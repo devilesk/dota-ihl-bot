@@ -1,8 +1,8 @@
 
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
-|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[league-create](#league-create)|[restart](#restart)|[ticket-add](#ticket-add)|
-|[ticket-remove](#ticket-remove)|
+|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[league-create](#league-create)|[log-level](#log-level)|[restart](#restart)|
+|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
 
 
 
@@ -52,6 +52,23 @@
 
 **Aliases:** `leaguecreate`
 
+ 
+## log-level
+
+**Format:** `!log-level <level>`
+
+> Change the level of logging to one of error, warn, info, verbose, debug, silly.
+
+**Aliases:** `logger-level`, `loglevel`, `loggerlevel`
+
+**Usage Examples:**
+* `!log-level silly`
+* `!log-level debug`
+* `!log-level verbose`
+* `!log-level info`
+* `!log-level warn`
+* `!log-level error`
+ 
  
 ## restart
 

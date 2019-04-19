@@ -1,6 +1,5 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const convertor = require('steam-id-convertor');
 const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 
@@ -36,8 +35,7 @@ module.exports = class LobbyKickCommand extends IHLCommand {
         const user = await Db.findUserByDiscordId(guild.id)(member.id);
         if (user) {
             await member.removeRole(lobbyState.role);
-            const account_id = convertor.to32(user.steamid_64);
-            await this.ihlManager[CONSTANTS.EVENT_LOBBY_KICK](lobbyState, account_id);
+            await this.ihlManager[CONSTANTS.EVENT_LOBBY_KICK](lobbyState, user);
             await msg.say('User kicked from lobby.');
         }
         else {

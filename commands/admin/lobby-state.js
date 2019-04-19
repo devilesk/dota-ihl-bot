@@ -35,7 +35,7 @@ module.exports = class LobbyStateCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }, { state }) {
-        logger.debug(`LobbyStateCommand ${lobbyState}`);
+        logger.silly(`LobbyStateCommand ${lobbyState}`);
         const old_state = lobbyState.state;
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_STATE](lobbyState, state);
         await msg.say(`Lobby ${lobbyState.lobby_name} state from ${old_state} to ${state}.`);

@@ -36,7 +36,7 @@ module.exports = class RepCommand extends IHLCommand {
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
-                logger.debug(`RepCommand ${user.id} ${fromUser.id}`);
+                logger.silly(`RepCommand ${user.id} ${fromUser.id}`);
                 const [rep, created] = await Db.findOrCreateReputation(fromUser)(user);
                 if (created) {
                     await msg.say(`${msg.author.username} reps ${discord_user.displayName}`);

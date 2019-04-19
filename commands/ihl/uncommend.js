@@ -46,7 +46,7 @@ module.exports = class UncommendCommand extends IHLCommand {
                 if (players.find(player => player.id === user.id) && players.find(player => player.id === fromUser.id)) {
                     if (user.id !== fromUser.id) {
                         const count = await Db.destroyCommend(lobby)(fromUser)(user);
-                        logger.debug(count);
+                        logger.silly(count);
                         if (count) {
                             await msg.say(`${msg.author.username} uncommends ${discord_user.displayName}`);
                         }
