@@ -88,63 +88,35 @@ $ touch .env
 Use the following template to fill in your `.env` file. Check the [wiki page](https://github.com/devilesk/dota-ihl-bot/wiki/.env-Configuration) for more details.
 
 ```bash
-# Database name
 DB_NAME=ihl
-# Database user
 DB_USERNAME=postgres
-# Database password 
 DB_PASSWORD=password
-# Database host address
 DB_HOST=127.0.0.1
-# Database host port
 DB_PORT=5432
-# Log SQL statements
 DB_LOG_SQL=false
 
-# How often to poll for completed match stats (in milliseconds)
 MATCH_POLL_INTERVAL=5000
-# Steam Web API key
 STEAM_API_KEY=
 
-# Discord bot token
 TOKEN=
-# Discord bot command prefix
 COMMAND_PREFIX=!
-# Bot owner discord ID
 OWNER_DISCORD_ID=
-# Discord bot invite url
-INVITE_URL=
 
-# Log output
 LOGGER_SILENT=false
-# Log level
 LOGGER_LEVEL=debug
-# Log exception file
 LOGGER_EXCEPTIONLOGFILE=exceptions.log
-# Log directory
 LOGGER_DIRNAME=logs
-# Log filename
 LOGGER_FILENAME=application-%DATE%.log
-# Log date pattern
 LOGGER_DATEPATTERN=YYYY-MM-DD-HH
-# Log zipped
 LOGGER_ZIPPEDARCHIVE=true
-# Max log file size
 LOGGER_MAXSIZE=20m
-# Log expiration
 LOGGER_MAXFILES=14d
 
-# Discord bot client ID
 CLIENT_ID=
-# Discord bot client secret
 CLIENT_SECRET=
-# Discord bot OAuth2 callback url
 CALLBACK_URL=
-# Registration website server port
 PORT=
-# Steam sign in return url
 STEAM_RETURN_URL=
-# Registration website
 STEAM_REALM=
 ```
 

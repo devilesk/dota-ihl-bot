@@ -1,8 +1,8 @@
 
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
-|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[league-create](#league-create)|[log-level](#log-level)|[restart](#restart)|
-|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
+|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[invite-url](#invite-url)|[league-create](#league-create)|[log-level](#log-level)|
+|[restart](#restart)|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
 
 
 
@@ -43,6 +43,15 @@
 * `!bot-status 76561197960287930 BOT_ONLINE`
 * `!bot-status 76561197960287930 BOT_OFFLINE`
  
+ 
+## invite-url
+
+**Format:** `!invite-url`
+
+> Get the discord invite link to add the bot to your server.
+
+**Aliases:** `invite-link`, `bot-invite`, `invite-bot`, `inviteurl`, `invitelink`, `botinvite`, `invitebot`
+
  
 ## league-create
 
