@@ -94,28 +94,27 @@ DB_NAME=ihl
 DB_USERNAME=postgres
 # Database password 
 DB_PASSWORD=password
-# Database connection string
+# Database host address
 DB_HOST=127.0.0.1
+# Database host port
+DB_PORT=5432
+# Log SQL statements
+DB_LOG_SQL=false
+
+# How often to poll for completed match stats (in milliseconds)
+MATCH_POLL_INTERVAL=5000
+# Steam Web API key
+STEAM_API_KEY=
+
 # Discord bot token
 TOKEN=
 # Discord bot command prefix
 COMMAND_PREFIX=!
 # Bot owner discord ID
 OWNER_DISCORD_ID=
-# How often to poll for completed match stats (in milliseconds)
-MATCH_POLL_INTERVAL=5000
 # Discord bot invite url
 INVITE_URL=
-# Discord bot client ID
-CLIENT_ID=
-# Discord bot client secret
-CLIENT_SECRET=
-# Discord bot OAuth2 callback url
-CALLBACK_URL=
-# Steam Web API key
-STEAM_API_KEY=
-# Log SQL statements
-LOGGER_LOG_SQL=false
+
 # Log output
 LOGGER_SILENT=false
 # Log level
@@ -134,6 +133,19 @@ LOGGER_ZIPPEDARCHIVE=true
 LOGGER_MAXSIZE=20m
 # Log expiration
 LOGGER_MAXFILES=14d
+
+# Discord bot client ID
+CLIENT_ID=
+# Discord bot client secret
+CLIENT_SECRET=
+# Discord bot OAuth2 callback url
+CALLBACK_URL=
+# Registration website server port
+PORT=
+# Steam sign in return url
+STEAM_RETURN_URL=
+# Registration website
+STEAM_REALM=
 ```
 
 Create the Postgres database.

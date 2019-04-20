@@ -1,5 +1,6 @@
 const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('./lib/logger');
+const checkEnvironmentVariables = require('./lib/util/checkEnvironmentVariables');
 const CommandDispatcher = require('discord.js-commando/src/dispatcher');
 if (process.env.NODE_ENV !== 'production') {
     // monkey patch shouldHandleMessage to handle other bot messages for testing
@@ -18,6 +19,15 @@ if (process.env.NODE_ENV !== 'production') {
         return true;
     }
 }
+
+checkEnvironmentVariables([
+    'DB_NAME',
+    'DB_USERNAME',
+    'DB_PASSWORD',
+    'STEAM_API_KEY',
+    'TOKEN',
+    'OWNER_DISCORD_ID',
+]);
 
 const IHLManager = require('./lib/ihlManager');
 

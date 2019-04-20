@@ -13,11 +13,20 @@ global.Mocks = require('./mocks');
 global.TestHelper = require('./helper');
 global.chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
+const checkEnvironmentVariables = require('../lib/util/checkEnvironmentVariables');
 
-before(async () => {
+checkEnvironmentVariables([
+    'DB_NAME',
+    'DB_USERNAME',
+    'DB_PASSWORD',
+    'STEAM_API_KEY',
+]);
+
+async function init() {
     db.init();
-    await spawn('npm', ['run', 'db:init']);
-});
+    await spawn('npm', ['run', 'db:init'], { shell: true });
+    run();
+}
 
 afterEach(async () => {
     await Promise.all(
@@ -32,3 +41,5 @@ afterEach(async () => {
 after(async () => {
     await db.close();
 });
+
+init();
