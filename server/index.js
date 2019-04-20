@@ -18,6 +18,20 @@ const got = require('got');
 const Ihl = require('../lib/ihl');
 const Db = require('../lib/db');
 const getSteamProfile = require('../lib/util/getSteamProfile');
+const checkEnvironmentVariables = require('../lib/util/checkEnvironmentVariables');
+
+checkEnvironmentVariables([
+    'DB_NAME',
+    'DB_USERNAME',
+    'DB_PASSWORD',
+    'STEAM_API_KEY',
+    'CLIENT_ID',
+    'CLIENT_SECRET',
+    'CALLBACK_URL',
+    'PORT',
+    'STEAM_RETURN_URL',
+    'STEAM_REALM',
+]);
 
 const { PORT, STEAM_RETURN_URL, STEAM_REALM, STEAM_API_KEY, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env;
 
