@@ -3,9 +3,7 @@ const IHLCommand = require('../../lib/ihlCommand');
 const Db = require('../../lib/db');
 const convertor = require('steam-id-convertor');
 const CONSTANTS = require('../../lib/constants');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 
 const RANK_TO_MEDAL = {
     80: 'Immortal',
@@ -19,11 +17,11 @@ const RANK_TO_MEDAL = {
     0: 'Uncalibrated',
 };
 
-const rankTierToMedalName = (rank_tier) => {
-    logger.silly(`rankTierToMedalName ${rank_tier}`);
-    rank_tier = rank_tier || 0;
-    const rank = Math.floor(rank_tier / 10) * 10;
-    const tier = rank_tier % 10;
+const rankTierToMedalName = (_rankTier) => {
+    logger.silly(`rankTierToMedalName ${_rankTier}`);
+    const rankTier = _rankTier || 0;
+    const rank = Math.floor(rankTier / 10) * 10;
+    const tier = rankTier % 10;
     logger.silly(`rankTierToMedalName ${rank} ${tier}`);
     let medal = 'Unknown';
     if (rank >= 0 && rank < 90) {
@@ -66,18 +64,18 @@ module.exports = class WhoisCommand extends IHLCommand {
         let wins = 0;
         let losses = 0;
 
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        const [user, discordUser, result_type] = await findUser(guild)(member);
 
         let footerText;
         switch (result_type) {
         case CONSTANTS.MATCH_EXACT_DISCORD_MENTION:
-            footerText = `Exact match for ${discord_user.displayName} by discord mention`;
+            footerText = `Exact match for ${discordUser.displayName} by discord mention`;
             break;
         case CONSTANTS.MATCH_EXACT_DISCORD_NAME:
             footerText = `Exact match for ${member} by discord name`;
             break;
         case CONSTANTS.MATCH_STEAMID_64:
-            footerText = `Parsed steam id for ${discord_user.displayName}`;
+            footerText = `Parsed steam id for ${discordUser.displayName}`;
             break;
         case CONSTANTS.MATCH_EXACT_NICKNAME:
             footerText = `Exact match for ${member} by nickname`;
@@ -85,6 +83,8 @@ module.exports = class WhoisCommand extends IHLCommand {
         case CONSTANTS.MATCH_CLOSEST_NICKNAME:
             footerText = `Closest match for ${member} by nickname`;
             break;
+        default:
+            footerText = '';
         }
 
         if (user) {
@@ -96,7 +96,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                 roles.push([i, user[`role_${i}`]]);
             }
             logger.silly(roles);
-            roles = roles.filter(([role, pref]) => pref !== -1).sort(([r1, p1], [r2, p2]) => p1 - p2).map(([r, p]) => r);
+            roles = roles.filter(([, pref]) => pref !== -1).sort(([, p1], [, p2]) => p1 - p2).map(([r]) => r);
             const account_id = convertor.to32(user.steamid_64);
 
             const [leaderboard] = await user.getLeaderboards({ where: { season_id: league.current_season_id } });
@@ -118,7 +118,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                     fields: [
                         {
                             name: 'Discord',
-                            value: `${discord_user.user.username}#${discord_user.user.discriminator}`,
+                            value: `${discordUser.user.username}#${discordUser.user.discriminator}`,
                             inline: true,
                         },
                         {
@@ -177,9 +177,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                             inline: true,
                         },
                     ].filter(field => field.value !== null),
-                    footer: {
-                        text: footerText,
-                    },
+                    footer: { text: footerText },
                 },
             });
         }

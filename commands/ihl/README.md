@@ -13,6 +13,8 @@
 
 > Commend a player after a game.
 
+**Guild only**
+
 
 
 **Usage Examples:**
@@ -26,6 +28,8 @@
 
 > Select dire side.
 
+**Guild only**
+
 
 
  
@@ -35,6 +39,8 @@
 
 > Select first pick.
 
+**Guild only**
+
 **Aliases:** `1st`, `first-pick`, `pick-first`, `firstpick`, `pickfirst`
 
  
@@ -43,6 +49,8 @@
 **Format:** `!gamemode <text>`
 
 > Set your game mode preference.
+
+**Guild only**
 
 
 
@@ -57,6 +65,8 @@
 
 > Request a lobby invite.
 
+**Guild only**
+
 
 
  
@@ -66,6 +76,8 @@
 
 > Show inhouse leaderboard.
 
+**Guild only**
+
 
 
  
@@ -74,6 +86,8 @@
 **Format:** `!nickname <text>`
 
 > Set your nickname.
+
+**Guild only**
 
 
 
@@ -86,6 +100,8 @@
 **Format:** `!pick <member>`
 
 > Player draft command.
+
+**Guild only**
 
 **Aliases:** `draft`
 
@@ -100,14 +116,18 @@
 
 > Select radiant side.
 
+**Guild only**
+
 
 
  
 ## register
 
-**Format:** `!register <text>`
+**Format:** `!register <text> [<member>]`
 
 > Registers your steam account to your discord account.
+
+**Guild only**
 
 
 
@@ -123,6 +143,8 @@
 
 > Rep a player.
 
+**Guild only**
+
 
 
 **Usage Examples:**
@@ -135,6 +157,8 @@
 **Format:** `!roles <text>`
 
 > Set your dota role (positions 1-5) preference.
+
+**Guild only**
 
 
 
@@ -150,6 +174,8 @@
 
 > Select second pick.
 
+**Guild only**
+
 **Aliases:** `2nd`, `second-pick`, `pick-second`, `secondpick`, `picksecond`
 
  
@@ -158,6 +184,8 @@
 **Format:** `!uncommend <member> <match_id>`
 
 > Uncommend a player.
+
+**Guild only**
 
 
 
@@ -172,6 +200,8 @@
 
 > Unrep a player.
 
+**Guild only**
+
 
 
 **Usage Examples:**
@@ -184,6 +214,8 @@
 **Format:** `!whois <member>`
 
 > Look up inhouse player information.
+
+**Guild only**
 
 **Aliases:** `who`, `info`, `stats`, `lookup`
 

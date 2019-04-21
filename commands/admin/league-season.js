@@ -31,6 +31,7 @@ module.exports = class LeagueSeasonCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }, { name }) {
+        logger.debug('LeagueSeasonCommand');
         await Db.createSeason(guild.id)(name);
         await msg.say(`New season ${name} started.`);
     }

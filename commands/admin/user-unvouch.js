@@ -1,9 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const Db = require('../../lib/db');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 
 /**
  * @class UserVouchCommand
@@ -35,7 +33,8 @@ module.exports = class UserVouchCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }, { member }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        logger.debug('UserVouchCommand');
+        const [user] = await findUser(guild)(member);
         if (user) {
             await Db.unvouchUser(user);
             await msg.say('User unvouched.');

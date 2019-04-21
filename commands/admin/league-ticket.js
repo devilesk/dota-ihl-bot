@@ -31,7 +31,8 @@ module.exports = class LeagueTicketCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, league }, { leagueid }) {
+    async onMsg({ msg, league }, { leagueid }) {
+        logger.debug('LeagueTicketCommand');
         await this.ihlManager[CONSTANTS.EVENT_LEAGUE_TICKET_SET](league, leagueid);
         await msg.say(`League set to use ticket ${leagueid}.`);
     }

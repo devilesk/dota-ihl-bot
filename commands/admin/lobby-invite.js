@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 const Guild = require('../../lib/guild');
 const CONSTANTS = require('../../lib/constants');
 
@@ -35,10 +33,11 @@ module.exports = class LobbyInviteCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState }, { member }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        logger.silly('LobbyInviteCommand');
+        const [user, discordUser] = await findUser(guild)(member);
         if (user) {
             await this.ihlManager[CONSTANTS.EVENT_LOBBY_INVITE](lobbyState, user);
-            await Guild.addRoleToUser(guild)(lobbyState.role)(discord_user);
+            await Guild.addRoleToUser(guild)(lobbyState.role)(discordUser);
             await msg.say('User invited to lobby.');
         }
         else {

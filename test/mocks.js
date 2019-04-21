@@ -8,17 +8,19 @@ const { EventEmitter } = require('events');
 const sinon = require('sinon');
 const steam = require('steam');
 const Long = require('long');
-const getRandomInt = require('../lib/util/getRandomInt');
 const CONSTANTS = require('../lib/constants');
 const TestHelper = require('./helper');
 const db = require('../models');
 const Db = require('../lib/db');
 const Argument = require('discord.js-commando/src/commands/argument');
+
 Argument.validateInfo = function () {};
 const Command = require('discord.js-commando/src/commands/base');
+
 Command.validateInfo = function () {};
 const chai = require('chai');
-const assert = chai.assert;
+
+const { assert } = chai;
 
 class MockDotaBot extends EventEmitter {
     constructor(config) {
@@ -30,15 +32,13 @@ class MockDotaBot extends EventEmitter {
         this.game_name = null;
         this.pass_key = null;
         this.teamCache = {};
-        this.steamClient = {
-            logOn: () => {},
-        };
+        this.steamClient = { logOn: () => {} };
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockDotaBot(), data);
     }
-    
+
     async toDatabase(data = {}) {
         this._model = await db.Bot.create(Object.assign({}, this.config, data));
         return this;
@@ -57,9 +57,7 @@ class MockDotaBot extends EventEmitter {
     async sendMessage() {}
 
     async launchPracticeLobby() {
-        return {
-            match_id: TestHelper.randomMatchId(),
-        };
+        return { match_id: TestHelper.randomMatchId() };
     }
 
     async practiceLobbyKickFromTeam() {}
@@ -99,14 +97,16 @@ class MockMember {
         this.name = hri.random();
         this.username = this.name;
         this.displayName = this.name;
-        this.tag = this.name + '#' + TestHelper.randomNumberString(9999);
+        this.tag = `${this.name}#${TestHelper.randomNumberString(9999)}`;
         this.roles = new Collection();
+        this.hasPermission = sinon.stub();
+        this.hasPermission.returns(true);
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockMember(), data);
     }
-    
+
     async toDatabase(data = {}) {
         this._model = await db.User.create(Object.assign({}, {
             league_id: this.guild._model.id,
@@ -126,7 +126,7 @@ class MockMember {
         }, data));
         return this;
     }
-    
+
     toGuild(guild) {
         this.guild = guild;
         guild.members.set(this.id, this);
@@ -137,9 +137,9 @@ class MockMember {
         this.roles.set(role.id, role);
         return this;
     }
-    
+
     toMention() {
-        return `<@${this.id}>`
+        return `<@${this.id}>`;
     }
 }
 
@@ -152,11 +152,11 @@ class MockChannel {
         this.parentID = null;
         this.send = async text => logger.silly(`MockChannel.send ${this.guild.id} ${this.id} ${text}`);
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockChannel(), data);
     }
-    
+
     toGuild(guild) {
         this.guild = guild;
         guild.channels.set(this.id, this);
@@ -197,18 +197,18 @@ class MockRole {
         this.guild = guild;
         this.name = roleName;
     }
-    
+
     toGuild(guild) {
         this.guild = guild;
         guild.roles.set(this.id, this);
         return this;
     }
-    
+
     toMember(member) {
         member.roles.set(this.id, this);
         return this;
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockRole(), data);
     }
@@ -239,7 +239,7 @@ class MockMessage {
         this.member = member;
         this.say = async text => logger.silly(`MockMessage.say ${this.guild.id} ${this.channel.id} ${text}`);
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockMessage(), data);
     }
@@ -251,12 +251,14 @@ class MockGuild {
         this.roles = new Collection();
         this.channels = new Collection();
         this.members = new Collection();
+        this.me = new MockMember(this);
+        this.members.set(this.me.id, this.me);
     }
-    
+
     static Factory(data = {}) {
         return Object.assign(new MockMessage(), data);
     }
-    
+
     async toDatabase(data = {}) {
         this._model = await Db.findOrCreateLeague(this.id)([
             { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
@@ -265,12 +267,17 @@ class MockGuild {
         this._model.update(data);
         return this;
     }
-    
+
     toClient(client) {
         client.guilds.set(this.id, this);
+        if (client.user) {
+            this.members.delete(this.me.id);
+            this.me = client.user;
+            this.members.set(this.me.id, this.me);
+        }
         return this;
     }
-    
+
     async initDefault() {
         const category = new MockChannel(this, 'inhouses', 'category');
         category.toGuild(this);
@@ -350,7 +357,7 @@ class MockClient extends EventEmitter {
             types: new Collection(),
         };
     }
-    
+
     async initDefault() {
         const guild = new MockGuild();
         await guild.toClient(this).initDefault();
@@ -392,7 +399,7 @@ class MockCommands {
             this[command.name.replace('Command', '')] = async ({ guild, channel, member }, args = {}) => {
                 const msg = new MockMessage(guild, channel, member);
                 return this.registry[command.name.replace('Command', '')].run(msg, args);
-            }
+            };
         }
     }
 }

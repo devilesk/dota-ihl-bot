@@ -23,6 +23,8 @@
 <% } %>
 <%- '> ' + command.description %>
 
+<% if (command.guildOnly) { %>**Guild only**<% } %>
+
 <% if (command.aliases.length) { %>**Aliases:** <%= command.aliases.map(alias => `\`${alias}\``).join(', '); %><% } %>
 <% if (command.examples) { %>
 **Usage Examples:**

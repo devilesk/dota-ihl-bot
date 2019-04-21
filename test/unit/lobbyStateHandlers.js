@@ -9,7 +9,7 @@ const LobbyStateHandlers = require('../../lib/lobbyStateHandlers');
 const Fp = require('../../lib/util/fp');
 
 describe('Database - with lobby players', () => {
-    beforeEach(done => {
+    beforeEach((done) => {
         sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
@@ -18,11 +18,11 @@ describe('Database - with lobby players', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-queues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbies.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ], db, { log: () => {} }).then(function(){
+        ], db, { log: () => {} }).then(() => {
             done();
         });
     });
-        
+
     const lobby_name = 'funny-yak-74';
     const id = 1;
     let guild;
@@ -64,7 +64,7 @@ describe('Database - with lobby players', () => {
                 lobby_name_template: 'Inhouse Lobby ${lobby_id}',
             })(lobby);
         });
-        
+
         describe('STATE_NEW', () => {
             it('return lobby state with STATE_WAITING_FOR_QUEUE', async () => {
                 lobbyState.state = CONSTANTS.STATE_NEW;
@@ -72,11 +72,11 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
             });
         });
-        
+
         describe('STATE_WAITING_FOR_QUEUE', () => {
             // TODO
         });
-        
+
         describe('STATE_BEGIN_READY', () => {
             it('return lobby state with STATE_CHECKING_READY', async () => {
                 lobbyState.state = CONSTANTS.STATE_BEGIN_READY;
@@ -84,7 +84,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_CHECKING_READY);
                 assert.exists(result.ready_check_time);
             });
-            
+
             it('destroy challenges from players', async () => {
                 const user1 = await Db.findUserById(4);
                 const user2 = await Db.findUserById(3);
@@ -98,7 +98,7 @@ describe('Database - with lobby players', () => {
                 assert.notExists(challenge);
             });
         });
-        
+
         describe('STATE_CHECKING_READY', () => {
             it('return lobby state with STATE_CHECKING_READY when < 10 players ready', async () => {
                 const users = await db.User.findAll({ limit: 10 });
@@ -107,19 +107,17 @@ describe('Database - with lobby players', () => {
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_CHECKING_READY);
             });
-            
+
             it('return lobby state with STATE_WAITING_FOR_QUEUE when timed out', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.state = CONSTANTS.STATE_CHECKING_READY;
                 lobbyState.ready_check_time = 0;
-                lobbyState.inhouseState = {
-                    ready_check_timeout: 0,
-                };
+                lobbyState.inhouseState = { ready_check_timeout: 0 };
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_QUEUE);
             });
-            
+
             describe('10 ready players', () => {
                 beforeEach(async () => {
                     const users = await db.User.findAll({ limit: 10 });
@@ -151,13 +149,13 @@ describe('Database - with lobby players', () => {
                 });
             });
         });
-        
+
         describe('STATE_ASSIGNING_CAPTAINS', () => {
             beforeEach(async () => {
                 guild.createRole({ roleName: 'Tier 0 Captain' });
                 guild.createRole({ roleName: 'Inhouse Player' });
             });
-            
+
             it('return lobby state STATE_SELECTION_PRIORITY when captains already assigned', async () => {
                 lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
@@ -183,7 +181,7 @@ describe('Database - with lobby players', () => {
                     guild,
                     captain_role_regexp: 'Tier ([0-9]+) Captain',
                     captain_rank_threshold: 1000,
-                }
+                };
                 const role = await Guild.findOrCreateRole(guild)('Tier 0 Captain');
                 await Lobby.mapPlayers(Guild.addRoleToUser(guild)(role))(lobbyState);
                 lobbyState.state = CONSTANTS.STATE_ASSIGNING_CAPTAINS;
@@ -195,7 +193,7 @@ describe('Database - with lobby players', () => {
                 assert.isNumber(result.captain_2_user_id);
             });
         });
-        
+
         describe('STATE_SELECTION_PRIORITY', () => {
             it('set captain factions, STATE_SELECTION_PRIORITY, and selection_priority', async () => {
                 lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
@@ -223,7 +221,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.first_pick, 0);
                 assert.equal(result.radiant_faction, 0);
             });
-            
+
             it('return lobby state with STATE_SELECTION_PRIORITY', async () => {
                 lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
                 const captain_1 = await db.User.findOne({ where: { id: 1 } });
@@ -252,7 +250,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.first_pick, 1);
                 assert.equal(result.radiant_faction, 0);
             });
-            
+
             it('return lobby state with STATE_DRAFTING_PLAYERS', async () => {
                 lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
                 const captain_1 = await db.User.findOne({ where: { id: 1 } });
@@ -285,14 +283,14 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.radiant_faction, 1);
             });
         });
-        
+
         describe('STATE_DRAFTING_PLAYERS', () => {
             it('return lobby state with STATE_TEAMS_SELECTED when no unassigned players', async () => {
                 lobbyState.state = CONSTANTS.STATE_DRAFTING_PLAYERS;
                 const result = await lobbyStateHandlers[lobbyState.state](lobbyState);
                 assert.equal(result.state, CONSTANTS.STATE_TEAMS_SELECTED);
             });
-            
+
             describe('return lobby state with STATE_DRAFTING_PLAYERS', () => {
                 it('8 unassigned players', async () => {
                     const users = await db.User.findAll({ limit: 10 });
@@ -322,7 +320,7 @@ describe('Database - with lobby players', () => {
                 });
             });
         });
-        
+
         describe('STATE_AUTOBALANCING', () => {
             it('return lobby state with STATE_TEAMS_SELECTED arranging teams by rank_tier', async () => {
                 const users = await db.User.findAll({ limit: 10 });
@@ -339,12 +337,12 @@ describe('Database - with lobby players', () => {
                 assert.lengthOf(players1, 5);
                 assert.lengthOf(players2, 5);
             });
-            
+
             it('return lobby state with STATE_TEAMS_SELECTED arranging teams by rating', async () => {
                 const users = await db.User.findAll({ limit: 10 });
                 await Lobby.addPlayers(lobbyState)(users);
                 lobbyState.state = CONSTANTS.STATE_AUTOBALANCING;
-                lobbyState.inhouseState.matchmaking_system = 'elo'
+                lobbyState.inhouseState.matchmaking_system = 'elo';
                 let players1 = await lobby.getFaction1Players();
                 let players2 = await lobby.getFaction2Players();
                 assert.isEmpty(players1);
@@ -357,7 +355,7 @@ describe('Database - with lobby players', () => {
                 assert.lengthOf(players2, 5);
             });
         });
-        
+
         describe('STATE_TEAMS_SELECTED', () => {
             it('return lobby state with STATE_WAITING_FOR_BOT', async () => {
                 lobbyState.state = CONSTANTS.STATE_TEAMS_SELECTED;
@@ -365,7 +363,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_WAITING_FOR_BOT);
             });
         });
-        
+
         describe('STATE_WAITING_FOR_BOT', () => {
             it('return lobby state with STATE_BOT_ASSIGNED when assigned a bot', async () => {
                 lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
@@ -374,19 +372,19 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_BOT_ASSIGNED);
                 assert.equal(result.bot_id, 1);
             });
-            
+
             describe('stub findUnassignedBot', () => {
                 let findUnassignedBot;
-                
+
                 beforeEach(async () => {
                     findUnassignedBot = sinon.stub(Db, 'findUnassignedBot');
                 });
-                
+
                 afterEach(async () => {
                     Db.findUnassignedBot.restore();
                 });
-                
-                it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => { 
+
+                it('return lobby state with STATE_WAITING_FOR_BOT when not assigned a bot', async () => {
                     lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
                     lobbyState.bot_id = null;
                     findUnassignedBot.resolves(null);
@@ -395,7 +393,7 @@ describe('Database - with lobby players', () => {
                     assert.notExists(result.bot_id);
                 });
             });
-            
+
             it('return lobby state with STATE_BOT_ASSIGNED when bot already assigned', async () => {
                 lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
                 lobbyState.bot_id = 1;
@@ -404,7 +402,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.bot_id, 1);
             });
         });
-        
+
         describe('STATE_BOT_FAILED', () => {
             it('return lobby state with STATE_BOT_FAILED', async () => {
                 lobbyState.state = CONSTANTS.STATE_BOT_FAILED;
@@ -412,7 +410,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_BOT_FAILED);
             });
         });
-        
+
         describe('STATE_MATCH_IN_PROGRESS', () => {
             it('return lobby state with STATE_MATCH_IN_PROGRESS', async () => {
                 lobbyState.state = CONSTANTS.STATE_MATCH_IN_PROGRESS;
@@ -420,7 +418,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_MATCH_IN_PROGRESS);
             });
         });
-        
+
         describe('STATE_MATCH_ENDED', () => {
             it('return lobby state with STATE_MATCH_ENDED', async () => {
                 lobbyState.state = CONSTANTS.STATE_MATCH_ENDED;
@@ -428,7 +426,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_MATCH_ENDED);
             });
         });
-        
+
         describe('STATE_MATCH_STATS', () => {
             it('return lobby state with STATE_COMPLETED', async () => {
                 lobbyState.state = CONSTANTS.STATE_MATCH_STATS;
@@ -436,7 +434,7 @@ describe('Database - with lobby players', () => {
                 assert.equal(result.state, CONSTANTS.STATE_COMPLETED);
             });
         });
-        
+
         describe('STATE_KILLED', () => {
             it('return lobby state with STATE_KILLED', async () => {
                 lobbyState.state = CONSTANTS.STATE_KILLED;
@@ -445,5 +443,4 @@ describe('Database - with lobby players', () => {
             });
         });
     });
-    
 });

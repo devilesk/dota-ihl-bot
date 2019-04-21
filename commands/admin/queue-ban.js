@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 
 /**
  * @class QueueBanCommand
@@ -40,10 +38,11 @@ module.exports = class QueueBanCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, inhouseState }, { member, timeout }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        logger.debug('QueueBanCommand');
+        const [user, discordUser] = await findUser(guild)(member);
         if (user) {
-            await this.ihlManager.banInhouseQueue(inhouseState, user, timeout, discord_user);
-            await msg.say(`${discord_user} kicked from queues and banned for ${timeout} minutes.`);
+            await this.ihlManager.banInhouseQueue(inhouseState, user, timeout, discordUser);
+            await msg.say(`${discordUser} kicked from queues and banned for ${timeout} minutes.`);
         }
         else {
             await msg.say('User not found. (Has user registered with `!register`?)');

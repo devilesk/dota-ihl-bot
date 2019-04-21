@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 const Lobby = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
@@ -32,7 +30,7 @@ module.exports = class PickCommand extends IHLCommand {
 
     async onMsg({ msg, guild, lobbyState, inhouseUser }, { member }) {
         logger.silly('PickCommand');
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        const [user, discordUser] = await findUser(guild)(member);
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain) && user) {
             logger.silly(`PickCommand isCaptain ${captain.id}`);
@@ -48,7 +46,7 @@ module.exports = class PickCommand extends IHLCommand {
                 await msg.say(`${guild.member(user.discord_id)} drafted by ${guild.member(captain.discord_id)}`);
                 break;
             case CONSTANTS.INVALID_PLAYER_NOT_FOUND:
-                await msg.say(`${discord_user.displayName} not found.`);
+                await msg.say(`${discordUser.displayName} not found.`);
                 break;
             default:
                 break;

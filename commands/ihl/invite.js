@@ -1,9 +1,5 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
-const Guild = require('../../lib/guild');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -21,7 +17,8 @@ module.exports = class InviteCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, lobbyState, inhouseUser }) {
+    async onMsg({ lobbyState, inhouseUser }) {
+        logger.debug('InviteCommand');
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_INVITE](lobbyState, inhouseUser);
     }
 };

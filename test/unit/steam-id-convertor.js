@@ -1,6 +1,7 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
-const assert = chai.assert;
+
+const { assert } = chai;
 const convertor = require('steam-id-convertor');
 
 describe('convertor', () => {

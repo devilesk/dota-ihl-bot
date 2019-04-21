@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 const Db = require('../../lib/db');
 const Lobby = require('../../lib/lobby');
 
@@ -36,8 +34,8 @@ module.exports = class UncommendCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, league, guild, inhouseUser }, { member, match_id }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+    async onMsg({ msg, guild, inhouseUser }, { member, match_id }) {
+        const [user, discordUser] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         const lobby = await Db.findLobbyByMatchId(match_id);
         const players = await Lobby.getPlayers()(lobby);
@@ -48,14 +46,14 @@ module.exports = class UncommendCommand extends IHLCommand {
                         const count = await Db.destroyCommend(lobby)(fromUser)(user);
                         logger.silly(count);
                         if (count) {
-                            await msg.say(`${msg.author.username} uncommends ${discord_user.displayName}`);
+                            await msg.say(`${msg.author.username} uncommends ${discordUser.displayName}`);
                         }
                         else {
-                            await msg.say(`${discord_user.displayName} not commended.`);
+                            await msg.say(`${discordUser.displayName} not commended.`);
                         }
                     }
                     else {
-                        await msg.say(`Cannot uncommend yourself.`);
+                        await msg.say('Cannot uncommend yourself.');
                     }
                 }
             }

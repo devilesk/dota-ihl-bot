@@ -11,6 +11,8 @@
 
 > Player challenge command.
 
+**Guild only**
+
 
 
 **Usage Examples:**
@@ -22,6 +24,8 @@
 **Format:** `!challenge-list`
 
 > View your current challenges.
+
+**Guild only**
 
 **Aliases:** `challenges`, `challengelist`
 
@@ -35,6 +39,8 @@
 **Format:** `!unchallenge <member>`
 
 > Player unchallenge command.
+
+**Guild only**
 
 **Aliases:** `challenge-remove`, `remove-challenge`, `delete-challenge`, `challenge-delete`, `challengeremove`, `removechallenge`, `deletechallenge`, `challengedelete`
 

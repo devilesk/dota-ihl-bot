@@ -1,14 +1,11 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('../lib/logger');
 const path = require('path');
 const fs = require('fs');
-const fsPromises = fs.promises;
 const serve = require('koa-static');
 const views = require('koa-views');
 const Koa = require('koa');
 const Router = require('koa-router');
-const app = new Koa();
-const router = new Router();
 const passport = require('koa-passport');
 const SteamStrategy = require('passport-steam').Strategy;
 const DiscordStrategy = require('passport-discord').Strategy;
@@ -19,6 +16,10 @@ const Ihl = require('../lib/ihl');
 const Db = require('../lib/db');
 const getSteamProfile = require('../lib/util/getSteamProfile');
 const checkEnvironmentVariables = require('../lib/util/checkEnvironmentVariables');
+
+const fsPromises = fs.promises;
+const app = new Koa();
+const router = new Router();
 
 checkEnvironmentVariables([
     'DB_NAME',
