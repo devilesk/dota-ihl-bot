@@ -45,24 +45,24 @@ describe('Setup', () => {
         });
 
         describe('updatePlayerState', () => {
-            it('return playerState with steamid_64 faction value 1', async () => {
-                const steamid_64 = '123';
-                const playerState = DotaBot.updatePlayerState(steamid_64, 0, {});
-                assert.deepEqual(playerState, { [steamid_64]: 1 });
+            it('return playerState with steamId64 faction value 1', async () => {
+                const steamId64 = '123';
+                const playerState = DotaBot.updatePlayerState(steamId64, 0, {});
+                assert.deepEqual(playerState, { [steamId64]: 1 });
             });
 
-            it('return playerState with steamid_64 faction value 2', async () => {
-                const steamid_64 = '123';
-                const playerState = DotaBot.updatePlayerState(steamid_64, 1, {});
-                assert.deepEqual(playerState, { [steamid_64]: 2 });
+            it('return playerState with steamId64 faction value 2', async () => {
+                const steamId64 = '123';
+                const playerState = DotaBot.updatePlayerState(steamId64, 1, {});
+                assert.deepEqual(playerState, { [steamId64]: 2 });
             });
 
             it('return updated playerState', async () => {
-                const steamid_64 = '123';
-                let playerState = DotaBot.updatePlayerState(steamid_64, 0, { [steamid_64]: 2 });
-                assert.deepEqual(playerState, { [steamid_64]: 1 });
-                playerState = DotaBot.updatePlayerState(steamid_64, 1, playerState);
-                assert.deepEqual(playerState, { [steamid_64]: 2 });
+                const steamId64 = '123';
+                let playerState = DotaBot.updatePlayerState(steamId64, 0, { [steamId64]: 2 });
+                assert.deepEqual(playerState, { [steamId64]: 1 });
+                playerState = DotaBot.updatePlayerState(steamId64, 1, playerState);
+                assert.deepEqual(playerState, { [steamId64]: 2 });
             });
 
             it('delete player', async () => {
@@ -102,10 +102,22 @@ describe('Setup', () => {
                 assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
 
+            it('return true when empty', async () => {
+                const fromCache = {};
+                const playerState = {};
+                assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
+            });
+
+            it('return true when undefined', async () => {
+                const fromCache = { 1: undefined };
+                const playerState = {};
+                assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
+            });
+
             it('return true when null', async () => {
                 const fromCache = { 1: null };
                 const playerState = {};
-                assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
+                assert.isFalse(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
 
             it('return false when 0', async () => {
@@ -308,7 +320,7 @@ describe('Setup', () => {
 
         describe('invitePlayer', () => {
             it('invite player', async () => {
-                const user = { steamid_64: 'test' };
+                const user = { steamId64: 'test' };
                 const dotaBot = { inviteToLobby: sinon.spy() };
                 const result = await DotaBot.invitePlayer(dotaBot)(user);
                 assert(dotaBot.inviteToLobby.calledOnce);
@@ -451,7 +463,7 @@ describe('Setup', () => {
             it('disconnect bot', async () => {
                 const dotaBot = {
                     disconnect: sinon.stub(),
-                    steamid_64: '123',
+                    steamId64: '123',
                 };
                 dotaBot.disconnect.resolves(true);
                 await DotaBot.disconnectDotaBot(dotaBot);
@@ -464,12 +476,12 @@ describe('Setup', () => {
                 const dotaBot = {
                     launchPracticeLobby: sinon.stub(),
                     leaveLobbyChat: sinon.stub(),
-                    steamid_64: '123',
+                    steamId64: '123',
                 };
                 dotaBot.launchPracticeLobby.resolves({ match_id: 'test' });
                 dotaBot.leaveLobbyChat.resolves(true);
-                const match_id = await DotaBot.startDotaLobby(dotaBot);
-                assert.equal(match_id, 'test');
+                const matchId = await DotaBot.startDotaLobby(dotaBot);
+                assert.equal(matchId, 'test');
                 assert.isTrue(dotaBot.launchPracticeLobby.calledOnce);
                 assert.isTrue(dotaBot.leaveLobbyChat.calledOnce);
             });

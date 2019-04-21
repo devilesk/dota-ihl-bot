@@ -27,6 +27,6 @@ module.exports = class LobbyRunCommand extends IHLCommand {
         logger.silly(`LobbyRunCommand ${lobbyState}`);
         await msg.say('Running lobby...');
         await this.ihlManager[CONSTANTS.EVENT_RUN_LOBBY](lobbyState);
-        return msg.say(`Lobby ${lobbyState.lobby_name} run.`);
+        return msg.say(`Lobby ${lobbyState.lobbyName} run.`);
     }
 };

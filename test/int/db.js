@@ -19,12 +19,12 @@ describe('Database', () => {
             ticket1 = await Db.upsertTicket({
                 leagueid: 10,
                 name: 'Ticket1',
-                start_timestamp: Date.now(),
+                startTimestamp: Date.now(),
             });
             ticket2 = await Db.upsertTicket({
                 leagueid: 11,
                 name: 'Ticket2',
-                start_timestamp: Date.now(),
+                startTimestamp: Date.now(),
             });
             league1 = await Ihl.initLeague({ id: '123' });
             league2 = await Ihl.initLeague({ id: '456' });
@@ -33,26 +33,26 @@ describe('Database', () => {
             ([bot2, created] = await Db.findOrCreateBot('2', 'bot2', 'bot2', 'pass'));
             ([bot3, created] = await Db.findOrCreateBot('3', 'bot3', 'bot3', 'pass'));
             ([bot4, created] = await Db.findOrCreateBot('4', 'bot4', 'bot4', 'pass'));
-            lobby1 = await Db.findOrCreateLobby(league1, 'queue_type', 'lobby_name1');
-            lobby2 = await Db.findOrCreateLobby(league1, 'queue_type', 'lobby_name2');
-            lobby3 = await Db.findOrCreateLobby(league2, 'queue_type', 'lobby_name3');
+            lobby1 = await Db.findOrCreateLobby(league1, 'queueType', 'lobby_name1');
+            lobby2 = await Db.findOrCreateLobby(league1, 'queueType', 'lobby_name2');
+            lobby3 = await Db.findOrCreateLobby(league2, 'queueType', 'lobby_name3');
         });
 
         it('findAllUnassignedBotForLeagueTicket', async () => {
             let bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.empty(bots);
             await Db.addTicketOf(bot1)(ticket1);
-            await Db.updateLeague(league1.guild_id)({ leagueid: ticket1.leagueid });
+            await Db.updateLeague(league1.guildId)({ leagueid: ticket1.leagueid });
             await league1.reload();
             bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.lengthOf(bots, 1);
             await Db.addTicketOf(bot2)(ticket1);
             bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.lengthOf(bots, 2);
-            await bot1.update({ lobby_count: 4 });
+            await bot1.update({ lobbyCount: 4 });
             bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.lengthOf(bots, 2);
-            await bot1.update({ lobby_count: 5 });
+            await bot1.update({ lobbyCount: 5 });
             bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.lengthOf(bots, 1);
             await bot2.update({ status: CONSTANTS.BOT_IDLE });
@@ -69,7 +69,7 @@ describe('Database', () => {
             await Db.addTicketOf(bot1)(ticket1);
             bots = await Db.findAllUnassignedBotWithNoTicket();
             assert.lengthOf(bots, 3);
-            await bot1.update({ lobby_count: 0 });
+            await bot1.update({ lobbyCount: 0 });
             bots = await Db.findAllUnassignedBotWithNoTicket();
             assert.lengthOf(bots, 3);
             await bot3.update({ status: CONSTANTS.BOT_IDLE });
@@ -84,7 +84,7 @@ describe('Database', () => {
             let bot = await Db.findUnassignedBot(league1);
             assert.exists(bot);
             assert.equal(bot.id, 1);
-            await Db.updateLeague(league1.guild_id)({ leagueid: ticket1.leagueid });
+            await Db.updateLeague(league1.guildId)({ leagueid: ticket1.leagueid });
             await league1.reload();
             bot = await Db.findUnassignedBot(league1);
             assert.notExists(bot);
@@ -105,10 +105,10 @@ describe('Database', () => {
             user2 = await Db.findOrCreateUser(league, '456', '456', 50);
             user3 = await Db.findOrCreateUser(league, '789', '789', 50);
             user4 = await Db.findOrCreateUser(league, '111', '111', 50);
-            await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user1.id, rating: 1000, wins: 1, losses: 0 });
-            await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user2.id, rating: 1100, wins: 2, losses: 0 });
-            await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user3.id, rating: 1200, wins: 3, losses: 0 });
-            await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user4.id, rating: 1200, wins: 3, losses: 0 });
+            await db.Leaderboard.create({ leagueId: league.id, seasonId: 1, userId: user1.id, rating: 1000, wins: 1, losses: 0 });
+            await db.Leaderboard.create({ leagueId: league.id, seasonId: 1, userId: user2.id, rating: 1100, wins: 2, losses: 0 });
+            await db.Leaderboard.create({ leagueId: league.id, seasonId: 1, userId: user3.id, rating: 1200, wins: 3, losses: 0 });
+            await db.Leaderboard.create({ leagueId: league.id, seasonId: 1, userId: user4.id, rating: 1200, wins: 3, losses: 0 });
         });
 
         it('queryUserLeaderboardRank', async () => {
@@ -143,15 +143,15 @@ describe('Database', () => {
             });
             assert.equal(ticket.id, 1);
             assert.equal(ticket.name, 'Ticket');
-            assert.notExists(ticket.start_timestamp);
+            assert.notExists(ticket.startTimestamp);
             ticket = await Db.upsertTicket({
                 leagueid: 1,
                 name: 'Name',
-                start_timestamp: Date.now(),
+                startTimestamp: Date.now(),
             });
             assert.equal(ticket.id, 1);
             assert.equal(ticket.name, 'Name');
-            assert.exists(ticket.start_timestamp);
+            assert.exists(ticket.startTimestamp);
         });
     });
 
@@ -162,7 +162,7 @@ describe('Database', () => {
             ticket = await Db.upsertTicket({
                 leagueid: 12,
                 name: 'Ticket',
-                start_timestamp: Date.now(),
+                startTimestamp: Date.now(),
             });
         });
 
@@ -174,14 +174,14 @@ describe('Database', () => {
             });
 
             it('getCurrentTicket', async () => {
-                let current_ticket = await league.getCurrentTicket();
-                assert.notExists(current_ticket);
-                await Db.updateLeague(league.guild_id)({ leagueid: ticket.leagueid });
+                let currentTicket = await league.getCurrentTicket();
+                assert.notExists(currentTicket);
+                await Db.updateLeague(league.guildId)({ leagueid: ticket.leagueid });
                 await league.reload();
-                current_ticket = await league.getCurrentTicket();
-                assert.exists(current_ticket);
-                assert.equal(current_ticket.id, 1);
-                assert.equal(current_ticket.leagueid, 12);
+                currentTicket = await league.getCurrentTicket();
+                assert.exists(currentTicket);
+                assert.equal(currentTicket.id, 1);
+                assert.equal(currentTicket.leagueid, 12);
             });
 
             it('addTicketOf', async () => {

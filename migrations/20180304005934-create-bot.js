@@ -8,16 +8,16 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        steamid_64: {
+        steamId64: {
             allowNull: false,
             type: Sequelize.STRING,
             unique: true,
         },
-        account_name: {
+        accountName: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        persona_name: {
+        personaName: {
             allowNull: false,
             type: Sequelize.STRING,
         },
@@ -30,19 +30,19 @@ module.exports = {
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.BOT_OFFLINE,
         },
-        lobby_count: {
+        lobbyCount: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     }),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Bots'),
+    down: queryInterface => queryInterface.dropTable('Bots'),
 };

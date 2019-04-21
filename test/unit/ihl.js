@@ -43,17 +43,17 @@ describe('Database', () => {
         Lobby.lobbyToLobbyState.restore();
     });
 
-    const lobby_name = 'funny-yak-74';
+    const lobbyName = 'funny-yak-74';
     const id = 1;
 
     describe('getUserRankTier', () => {
         it('return a null rank tier', async () => {
-            const rank_tier = await getUserRankTier('76561198015512690');
-            assert.isNull(rank_tier);
+            const rankTier = await getUserRankTier('76561198015512690');
+            assert.isNull(rankTier);
         });
         it('return a rank tier', async () => {
-            const rank_tier = await getUserRankTier('76561198065444496');
-            assert.exists(rank_tier);
+            const rankTier = await getUserRankTier('76561198065444496');
+            assert.exists(rankTier);
         });
     });
 
@@ -73,14 +73,14 @@ describe('Database', () => {
         it('return an inhouse state', async () => {
             const args = {
                 league: {
-                    ready_check_timeout: 200,
-                    captain_rank_threshold: 100,
-                    captain_role_regexp: 'test',
-                    category_name: 'category',
-                    channel_name: 'channel',
-                    admin_role_name: 'admin',
-                    default_game_mode: 'cm',
-                    matchmaking_system: 'elo',
+                    readyCheckTimeout: 200,
+                    captainRankThreshold: 100,
+                    captainRoleRegexp: 'test',
+                    categoryName: 'category',
+                    channelName: 'channel',
+                    adminRoleName: 'admin',
+                    defaultGameMode: 'cm',
+                    matchmakingSystem: 'elo',
                     leagueid: 1,
                 },
                 guild: new Mocks.MockGuild(),
@@ -137,28 +137,28 @@ describe('Database', () => {
     describe('joinLobbyQueue', () => {
         it('return QUEUE_BANNED when user timed out', async () => {
             const user = await Db.findUserById(1);
-            user.queue_timeout = Date.now() + 10000;
-            const value = await joinLobbyQueue(user)({ lobby_name: 'test' });
+            user.queueTimeout = Date.now() + 10000;
+            const value = await joinLobbyQueue(user)({ lobbyName: 'test' });
             assert.equal(CONSTANTS.QUEUE_BANNED, value);
         });
 
         it('return QUEUE_ALREADY_JOINED when user already in queue', async () => {
             const user = await Db.findUserById(1);
-            user.queue_timeout = 0;
+            user.queueTimeout = 0;
             const value = await joinLobbyQueue(user)({ id });
             assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
 
         it('return QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
             const user = await Db.findUserById(2);
-            user.queue_timeout = 0;
+            user.queueTimeout = 0;
             const value = await joinLobbyQueue(user)({ id: 2 });
             assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
 
         it('return QUEUE_JOINED', async () => {
             const user = await Db.findUserById(11);
-            user.queue_timeout = 0;
+            user.queueTimeout = 0;
             const value = await joinLobbyQueue(user)({ id: 2, state: CONSTANTS.STATE_WAITING_FOR_QUEUE });
             assert.equal(CONSTANTS.QUEUE_JOINED, value);
         });
@@ -204,9 +204,9 @@ describe('Database', () => {
     describe('banInhouseQueue', () => {
         it('set user timeout', async () => {
             let user = await Db.findUserById(1);
-            assert.notExists(user.queue_timeout);
+            assert.notExists(user.queueTimeout);
             user = await banInhouseQueue(user, 10);
-            const diff = user.queue_timeout - Date.now() - 600000;
+            const diff = user.queueTimeout - Date.now() - 600000;
             assert.isAtMost(diff, 1000);
             assert.isAtLeast(diff, -1000);
         });

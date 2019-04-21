@@ -71,17 +71,17 @@ describe('Database', () => {
                 });
             });
         });
-        it.only('return leagues', async () => {
+        it('return leagues', async () => {
             const league = await findOrCreateLeague('test')([
-                { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
-                { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue' },
+                { queueType: CONSTANTS.QUEUE_TYPE_DRAFT, queueName: 'player-draft-queue' },
+                { queueType: CONSTANTS.QUEUE_TYPE_AUTO, queueName: 'autobalanced-queue' },
             ]);
             const season = await league.getCurrentSeason();
             console.log(season.id);
             let ticket = await league.getCurrentTicket();
             console.log(ticket);
-            await db.Ticket.create({ league_id: 1, leagueid: 2, name: 'test', start_timestamp: Date.now(), end_timestamp: Date.now() });
-            await league.update({ current_ticket_id: 1 });
+            await db.Ticket.create({ leagueId: 1, leagueid: 2, name: 'test', startTimestamp: Date.now(), endTimestamp: Date.now() });
+            await league.update({ currentTicketId: 1 });
             ticket = await league.getCurrentTicket();
             console.log(ticket);
         });

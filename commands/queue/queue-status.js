@@ -32,9 +32,9 @@ module.exports = class QueueStatusCommand extends IHLCommand {
     static async getQueueNames(guild, lobbyState) {
         const queuers = await Lobby.getActiveQueuers()(lobbyState);
         return queuers.map((queuer) => {
-            const discord_user = guild.member(queuer.discord_id);
-            if (discord_user) {
-                return discord_user.displayName;
+            const discordUser = guild.member(queuer.discordId);
+            if (discordUser) {
+                return discordUser.displayName;
             }
             return queuer.nickname ? queuer.nickname : 'unknown';
         });
@@ -43,9 +43,9 @@ module.exports = class QueueStatusCommand extends IHLCommand {
     static async getQueueStatusMessage(guild, lobbyState) {
         const userNames = await QueueStatusCommand.getQueueNames(guild, lobbyState);
         if (userNames.length) {
-            return `${userNames.length} queueing for ${lobbyState.lobby_name}: ${userNames.join(', ')}.`;
+            return `${userNames.length} queueing for ${lobbyState.lobbyName}: ${userNames.join(', ')}.`;
         }
-        return `0 queueing for ${lobbyState.lobby_name}.`;
+        return `0 queueing for ${lobbyState.lobbyName}.`;
     }
 
     async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {

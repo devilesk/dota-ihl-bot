@@ -1,26 +1,26 @@
 const CONSTANTS = require('../../lib/constants');
 
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Queues', [
+    up: queryInterface => queryInterface.bulkInsert('Queues', [
         {
-            league_id: 1,
+            leagueId: 1,
             enabled: true,
-            queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
-            queue_name: 'player-draft-queue',
+            queueType: CONSTANTS.QUEUE_TYPE_DRAFT,
+            queueName: 'player-draft-queue',
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
         },
         {
-            league_id: 1,
+            leagueId: 1,
             enabled: true,
-            queue_type: CONSTANTS.QUEUE_TYPE_AUTO,
-            queue_name: 'autobalanced-queue',
+            queueType: CONSTANTS.QUEUE_TYPE_AUTO,
+            queueName: 'autobalanced-queue',
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
         },
     ], {}),
 
-    down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Queues', null, {}),
+    down: queryInterface => queryInterface.bulkDelete('Queues', null, {}),
 };

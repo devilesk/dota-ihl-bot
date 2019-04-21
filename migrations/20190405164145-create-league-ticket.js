@@ -1,6 +1,6 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('LeagueTickets', {
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -9,7 +9,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        ticket_id: {
+        ticketId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -18,20 +18,20 @@ module.exports = {
                 key: 'id',
             },
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('LeagueTickets', ['league_id']))
-    .then(() => queryInterface.addIndex('LeagueTickets', ['ticket_id']))
-    .then(() => queryInterface.addConstraint('LeagueTickets', ['league_id', 'ticket_id'], {
-        type: 'primary key',
-        name: 'pk_leaguetickets_league_id_ticket_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('LeagueTickets'),
+        .then(() => queryInterface.addIndex('LeagueTickets', ['leagueId']))
+        .then(() => queryInterface.addIndex('LeagueTickets', ['ticketId']))
+        .then(() => queryInterface.addConstraint('LeagueTickets', ['leagueId', 'ticketId'], {
+            type: 'primary key',
+            name: 'pk_leaguetickets_leagueId_ticketId',
+        })),
+    down: queryInterface => queryInterface.dropTable('LeagueTickets'),
 };

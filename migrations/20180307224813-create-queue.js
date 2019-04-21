@@ -1,5 +1,3 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Queues', {
         id: {
@@ -8,7 +6,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -27,27 +25,27 @@ module.exports = {
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
         },
-        queue_type: {
+        queueType: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        queue_name: {
+        queueName: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Queues', ['league_id']))
-    .then(() => queryInterface.addConstraint('Queues', ['league_id', 'queue_type'], {
-        type: 'unique',
-        name: 'uq_queues_league_id_queue_type',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Queues'),
+        .then(() => queryInterface.addIndex('Queues', ['leagueId']))
+        .then(() => queryInterface.addConstraint('Queues', ['leagueId', 'queueType'], {
+            type: 'unique',
+            name: 'uq_queues_leagueId_queueType',
+        })),
+    down: queryInterface => queryInterface.dropTable('Queues'),
 };

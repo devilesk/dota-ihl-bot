@@ -27,8 +27,8 @@ class MockDotaBot extends EventEmitter {
         super();
 
         this.config = config;
-        this.steamid_64 = config.steamid_64;
-        this.lobby_id = Long.ZERO;
+        this.steamId64 = config.steamId64;
+        this.dotaLobbyId = Long.ZERO;
         this.game_name = null;
         this.pass_key = null;
         this.teamCache = {};
@@ -57,7 +57,7 @@ class MockDotaBot extends EventEmitter {
     async sendMessage() {}
 
     async launchPracticeLobby() {
-        return { match_id: TestHelper.randomMatchId() };
+        return { matchId: TestHelper.randomMatchId() };
     }
 
     async practiceLobbyKickFromTeam() {}
@@ -74,14 +74,14 @@ class MockDotaBot extends EventEmitter {
 
     async leaveLobbyChat() {}
 
-    async joinPracticeLobby(lobby_id, { game_name, pass_key }) {
-        this.lobby_id = Long.fromString(lobby_id);
+    async joinPracticeLobby(dotaLobbyId, { game_name, pass_key }) {
+        this.dotaLobbyId = Long.fromString(dotaLobbyId);
         this.game_name = game_name;
         this.pass_key = pass_key;
     }
 
     async createPracticeLobby({ game_name, pass_key }) {
-        this.lobby_id = TestHelper.randomLong();
+        this.dotaLobbyId = TestHelper.randomLong();
         this.game_name = game_name;
         this.pass_key = pass_key;
         return steam.EResult.OK;
@@ -109,18 +109,18 @@ class MockMember {
 
     async toDatabase(data = {}) {
         this._model = await db.User.create(Object.assign({}, {
-            league_id: this.guild._model.id,
-            steamid_64: TestHelper.randomSteamID64(),
-            discord_id: this.id,
+            leagueId: this.guild._model.id,
+            steamId64: TestHelper.randomSteamID64(),
+            discordId: this.id,
             nickname: TestHelper.randomName(),
-            role_1: TestHelper.randomNumber(5) + 1,
-            role_2: TestHelper.randomNumber(5) + 1,
-            role_3: TestHelper.randomNumber(5) + 1,
-            role_4: TestHelper.randomNumber(5) + 1,
-            role_5: TestHelper.randomNumber(5) + 1,
+            role1: TestHelper.randomNumber(5) + 1,
+            role2: TestHelper.randomNumber(5) + 1,
+            role3: TestHelper.randomNumber(5) + 1,
+            role4: TestHelper.randomNumber(5) + 1,
+            role5: TestHelper.randomNumber(5) + 1,
             vouched: true,
             rating: TestHelper.randomNumber(1500) + 500,
-            rank_tier: TestHelper.randomNumber(80) + 1,
+            rankTier: TestHelper.randomNumber(80) + 1,
             commends: TestHelper.randomNumber(10),
             reputation: TestHelper.randomNumber(10),
         }, data));
@@ -261,8 +261,8 @@ class MockGuild {
 
     async toDatabase(data = {}) {
         this._model = await Db.findOrCreateLeague(this.id)([
-            { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
-            { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue' },
+            { queueType: CONSTANTS.QUEUE_TYPE_DRAFT, queueName: 'player-draft-queue' },
+            { queueType: CONSTANTS.QUEUE_TYPE_AUTO, queueName: 'autobalanced-queue' },
         ]);
         this._model.update(data);
         return this;

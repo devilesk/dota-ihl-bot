@@ -1,6 +1,6 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('BotTickets', {
-        bot_id: {
+        botId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -9,7 +9,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        ticket_id: {
+        ticketId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -18,20 +18,20 @@ module.exports = {
                 key: 'id',
             },
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('BotTickets', ['bot_id']))
-    .then(() => queryInterface.addIndex('BotTickets', ['ticket_id']))
-    .then(() => queryInterface.addConstraint('BotTickets', ['bot_id', 'ticket_id'], {
-        type: 'primary key',
-        name: 'pk_bottickets_bot_id_ticket_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('BotTickets'),
+        .then(() => queryInterface.addIndex('BotTickets', ['botId']))
+        .then(() => queryInterface.addIndex('BotTickets', ['ticketId']))
+        .then(() => queryInterface.addConstraint('BotTickets', ['botId', 'ticketId'], {
+            type: 'primary key',
+            name: 'pk_bottickets_botId_ticketId',
+        })),
+    down: queryInterface => queryInterface.dropTable('BotTickets'),
 };

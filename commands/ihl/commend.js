@@ -25,7 +25,7 @@ module.exports = class CommendCommand extends IHLCommand {
                     type: 'string',
                 },
                 {
-                    key: 'match_id',
+                    key: 'matchId',
                     prompt: 'Provide a match id.',
                     type: 'string',
                 },
@@ -33,10 +33,10 @@ module.exports = class CommendCommand extends IHLCommand {
         }, { lobbyState: false });
     }
 
-    async onMsg({ msg, guild, inhouseUser }, { member, match_id }) {
+    async onMsg({ msg, guild, inhouseUser }, { member, matchId }) {
         const [user, discordUser] = await findUser(guild)(member);
         const fromUser = inhouseUser;
-        const lobby = await Db.findLobbyByMatchId(match_id);
+        const lobby = await Db.findLobbyByMatchId(matchId);
         const players = await Lobby.getPlayers()(lobby);
         if (lobby) {
             logger.silly(`CommendCommand ${lobby.state}`);
@@ -62,8 +62,8 @@ module.exports = class CommendCommand extends IHLCommand {
                 }
                 return msg.say(IHLCommand.UserNotFoundMessage);
             }
-            return msg.say(`Match ${match_id} not finished yet.`);
+            return msg.say(`Match ${matchId} not finished yet.`);
         }
-        return msg.say(`Match ${match_id} not found.`);
+        return msg.say(`Match ${matchId} not found.`);
     }
 };

@@ -21,10 +21,10 @@ module.exports = class LeaderboardCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league, guild }) {
-        const leaderboard = await Db.queryLeaderboardRank(league.id)(league.current_season_id)(10);
+        const leaderboard = await Db.queryLeaderboardRank(league.id)(league.currentSeasonId)(10);
         logger.silly(leaderboard.length);
         const data = leaderboard.map((user) => {
-            const member = guild.members.get(user.discord_id);
+            const member = guild.members.get(user.discordId);
             const name = member ? member.displayName : user.nickname;
             const rank = `${user.rank}.`;
             const record = `${user.wins.toString().padStart(2)}-${user.losses.toString().padEnd(2)}`;

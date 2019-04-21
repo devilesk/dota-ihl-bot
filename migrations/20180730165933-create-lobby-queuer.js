@@ -1,6 +1,6 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('LobbyQueuers', {
-        lobby_id: {
+        lobbyId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -9,7 +9,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        user_id: {
+        userId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -28,20 +28,20 @@ module.exports = {
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('LobbyQueuers', ['lobby_id']))
-    .then(() => queryInterface.addIndex('LobbyQueuers', ['user_id']))
-    .then(() => queryInterface.addConstraint('LobbyQueuers', ['lobby_id', 'user_id'], {
-        type: 'primary key',
-        name: 'pk_lobbyqueuers_lobby_id_user_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('LobbyQueuers'),
+        .then(() => queryInterface.addIndex('LobbyQueuers', ['lobbyId']))
+        .then(() => queryInterface.addIndex('LobbyQueuers', ['userId']))
+        .then(() => queryInterface.addConstraint('LobbyQueuers', ['lobbyId', 'userId'], {
+            type: 'primary key',
+            name: 'pk_lobbyqueuers_lobbyId_userId',
+        })),
+    down: queryInterface => queryInterface.dropTable('LobbyQueuers'),
 };

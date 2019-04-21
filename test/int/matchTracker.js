@@ -16,52 +16,52 @@ describe('Database', () => {
         await guild.toDatabase();
         const playerData = [
             {
-                steamid_64: '76561198141833531',
+                steamId64: '76561198141833531',
                 nickname: 'Magnus',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198002069391',
+                steamId64: '76561198002069391',
                 nickname: 'Troll Warlord',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198007202563',
+                steamId64: '76561198007202563',
                 nickname: 'Arc Warden',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198056207790',
+                steamId64: '76561198056207790',
                 nickname: 'Lion',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198006744028',
+                steamId64: '76561198006744028',
                 nickname: 'Jakiro',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198053292860',
+                steamId64: '76561198053292860',
                 nickname: 'Witch Doctor',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198084283419',
+                steamId64: '76561198084283419',
                 nickname: 'Chaos Knight',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198132465299',
+                steamId64: '76561198132465299',
                 nickname: 'Juggernaut',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198015512690',
+                steamId64: '76561198015512690',
                 nickname: 'Winter Wyvern',
                 rating: 1000,
             },
             {
-                steamid_64: '76561198085487944',
+                steamId64: '76561198085487944',
                 nickname: 'Earthshaker',
                 rating: 1000,
             },
@@ -75,10 +75,10 @@ describe('Database', () => {
             if (guild.me.id !== member.id) await Lobby.addPlayer(lobby)(member._model);
         }
         await lobby.update({
-            match_id: '4578557761',
+            matchId: '4578557761',
             state: CONSTANTS.STATE_MATCH_IN_PROGRESS,
-            captain_1_user_id: guild.members.array()[1]._model.id,
-            captain_2_user_id: guild.members.array()[6]._model.id,
+            captain1UserId: guild.members.array()[1]._model.id,
+            captain2UserId: guild.members.array()[6]._model.id,
         });
         for (let i = 0; i < 5; i++) {
             await Lobby.setPlayerFaction(1)(lobby)(guild.members.array()[i + 1]._model.id);
@@ -121,7 +121,7 @@ describe('Database', () => {
         it('return lobby with opendota and valve match data', async () => {
             const lobby = await MatchTracker.setMatchDetails({ id: 1 });
             assert.exists(lobby);
-            assert.exists(lobby.odota_data);
+            assert.exists(lobby.odotaData);
         });
     });
 
@@ -131,7 +131,7 @@ describe('Database', () => {
             await MatchTracker.setMatchPlayerDetails(lobby);
             const players = await Lobby.getPlayers()(lobby);
             for (const player of players) {
-                expect(player.LobbyPlayer.hero_id).to.be.a('number');
+                expect(player.LobbyPlayer.heroId).to.be.a('number');
                 expect(player.LobbyPlayer.kills).to.be.a('number');
                 expect(player.LobbyPlayer.deaths).to.be.a('number');
                 expect(player.LobbyPlayer.assists).to.be.a('number');
@@ -161,7 +161,7 @@ describe('Database', () => {
     describe('createMatchEndMessageEmbed', () => {
         it('return message embed', async () => {
             const lobby = await MatchTracker.setMatchDetails({ id: 1 });
-            const embed = await MatchTracker.createMatchEndMessageEmbed(lobby.match_id);
+            const embed = await MatchTracker.createMatchEndMessageEmbed(lobby.matchId);
             assert.exists(embed);
             assert.equal(embed.embed.fields[1].name, 'JBay7');
             assert.equal(embed.embed.fields[2].name, 'Sabo');

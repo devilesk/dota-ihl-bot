@@ -71,7 +71,7 @@
  
 ## lobby-draft
 
-**Format:** `!lobby-draft <captain_1> <captain_2>`
+**Format:** `!lobby-draft <captain1> <captain2>`
 
 > Force a lobby to do a player draft with assigned captains.
 
@@ -238,7 +238,7 @@
  
 ## user-badge
 
-**Format:** `!user-badge <member> <rank_tier>`
+**Format:** `!user-badge <member> <rankTier>`
 
 > Set a user's badge rank.
 

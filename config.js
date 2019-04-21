@@ -9,4 +9,4 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: 'postgres',
     logging: process.env.DB_LOG_SQL === 'true',
-}
+};

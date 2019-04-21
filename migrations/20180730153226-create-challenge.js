@@ -11,7 +11,7 @@ module.exports = {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
         },
-        recipient_user_id: {
+        recipientUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -20,7 +20,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        giver_user_id: {
+        giverUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -29,16 +29,16 @@ module.exports = {
                 key: 'id',
             },
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Challenges', ['recipient_user_id']))
-    .then(() => queryInterface.addIndex('Challenges', ['giver_user_id'])),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Challenges'),
+        .then(() => queryInterface.addIndex('Challenges', ['recipientUserId']))
+        .then(() => queryInterface.addIndex('Challenges', ['giverUserId'])),
+    down: queryInterface => queryInterface.dropTable('Challenges'),
 };

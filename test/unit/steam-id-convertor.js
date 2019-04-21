@@ -6,11 +6,11 @@ const convertor = require('steam-id-convertor');
 
 describe('convertor', () => {
     it('return strings', () => {
-        const account_id = convertor.to32('76561198015512690');
-        const steamid_64 = convertor.to64('55246962');
-        assert.isString(account_id);
-        assert.isString(steamid_64);
-        assert.strictEqual(account_id, '55246962');
-        assert.strictEqual(steamid_64, '76561198015512690');
+        const accountId = convertor.to32('76561198015512690');
+        const steamId64 = convertor.to64('55246962');
+        assert.isString(accountId);
+        assert.isString(steamId64);
+        assert.strictEqual(accountId, '55246962');
+        assert.strictEqual(steamId64, '76561198015512690');
     });
 });

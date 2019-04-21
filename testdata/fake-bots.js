@@ -2,27 +2,27 @@ const CONSTANTS = require('../lib/constants');
 
 module.exports = [
     {
-        model: "Bot",
+        model: 'Bot',
         data: {
-            steamid_64: '999991',
-            account_name: 'bot1',
+            steamId64: '999991',
+            accountName: 'bot1',
             password: 'bot1',
-            persona_name: 'pass',
+            personaName: 'pass',
             status: CONSTANTS.BOT_OFFLINE,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Bot",
+        model: 'Bot',
         data: {
-            steamid_64: '999992',
-            account_name: 'bot2',
-            persona_name: 'bot2',
+            steamId64: '999992',
+            accountName: 'bot2',
+            personaName: 'bot2',
             password: 'pass',
             status: CONSTANTS.BOT_ONLINE,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

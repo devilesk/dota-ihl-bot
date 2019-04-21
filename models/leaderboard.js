@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = (sequelize, DataTypes) => {
     const Leaderboard = sequelize.define('Leaderboard', {
         rating: DataTypes.INTEGER,
@@ -11,13 +12,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-    }, {
-        underscored: true,
     });
     Leaderboard.associate = (models) => {
-        Leaderboard.belongsTo(models.League);
-        Leaderboard.belongsTo(models.Season);
-        Leaderboard.belongsTo(models.User);
+        Leaderboard.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
+        Leaderboard.belongsTo(models.Season, {
+            foreignKey: 'seasonId',
+        });
+        Leaderboard.belongsTo(models.User, {
+            foreignKey: 'userId',
+        });
     };
     return Leaderboard;
 };

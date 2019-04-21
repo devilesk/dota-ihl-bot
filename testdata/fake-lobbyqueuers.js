@@ -1,125 +1,123 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = [
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 1,
+            lobbyId: 1,
+            userId: 1,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 2,
-            user_id: 1,
+            lobbyId: 2,
+            userId: 1,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 2,
+            lobbyId: 1,
+            userId: 2,
             active: false,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 3,
+            lobbyId: 1,
+            userId: 3,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 4,
+            lobbyId: 1,
+            userId: 4,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 5,
+            lobbyId: 1,
+            userId: 5,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 6,
+            lobbyId: 1,
+            userId: 6,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 7,
+            lobbyId: 1,
+            userId: 7,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 8,
+            lobbyId: 1,
+            userId: 8,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 9,
+            lobbyId: 1,
+            userId: 9,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyQueuer",
+        model: 'LobbyQueuer',
         data: {
-            lobby_id: 1,
-            user_id: 10,
+            lobbyId: 1,
+            userId: 10,
             active: true,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

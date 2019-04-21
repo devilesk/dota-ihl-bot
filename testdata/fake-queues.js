@@ -2,39 +2,39 @@ const CONSTANTS = require('../lib/constants');
 
 module.exports = [
     {
-        model: "Queue",
+        model: 'Queue',
         data: {
-            league_id: 1,
+            leagueId: 1,
             enabled: true,
-            queue_type: CONSTANTS.QUEUE_TYPE_DRAFT,
-            queue_name: 'player-draft-queue',
+            queueType: CONSTANTS.QUEUE_TYPE_DRAFT,
+            queueName: 'player-draft-queue',
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Queue",
+        model: 'Queue',
         data: {
-            league_id: 1,
+            leagueId: 1,
             enabled: true,
-            queue_type: CONSTANTS.QUEUE_TYPE_AUTO,
-            queue_name: 'autobalanced-queue',
+            queueType: CONSTANTS.QUEUE_TYPE_AUTO,
+            queueName: 'autobalanced-queue',
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Queue",
+        model: 'Queue',
         data: {
-            league_id: 1,
+            leagueId: 1,
             enabled: false,
-            queue_type: CONSTANTS.QUEUE_TYPE_CHALLENGE,
-            queue_name: 'challenge',
+            queueType: CONSTANTS.QUEUE_TYPE_CHALLENGE,
+            queueName: 'challenge',
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

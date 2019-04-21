@@ -1,9 +1,9 @@
+const logger = require('../../lib/logger');
 const Router = require('koa-router');
-const Db = require('../../lib/db');
 const db = require('../../models');
 
 const router = new Router();
-const BASE_URL = `/api/v1/bots`;
+const BASE_URL = '/api/v1/bots';
 
 router.get(BASE_URL, async (ctx) => {
     try {
@@ -14,7 +14,7 @@ router.get(BASE_URL, async (ctx) => {
         };
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
     }
 });
 
@@ -36,7 +36,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         }
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
     }
 });
 

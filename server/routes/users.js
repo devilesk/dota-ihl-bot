@@ -1,15 +1,13 @@
+const logger = require('../../lib/logger');
 const Router = require('koa-router');
-const Db = require('../../lib/db');
 const db = require('../../models');
 
 const router = new Router();
-const BASE_URL = `/api/v1/users`;
+const BASE_URL = '/api/v1/users';
 
 router.get(BASE_URL, async (ctx) => {
     try {
-        const where = {
-            league_id: ctx.params.league_id,
-        }
+        const where = { leagueId: ctx.params.leagueId };
         const data = await db.User.findAll({ limit: ctx.request.query.limit || 10, offset: ctx.request.query.offset || 0 }, { where, order: [['id', 'ASC']] });
         ctx.body = {
             status: 'success',
@@ -17,7 +15,7 @@ router.get(BASE_URL, async (ctx) => {
         };
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
     }
 });
 
@@ -39,7 +37,7 @@ router.get(`${BASE_URL}/:id`, async (ctx) => {
         }
     }
     catch (e) {
-        console.log(e);
+        logger.error(e);
     }
 });
 

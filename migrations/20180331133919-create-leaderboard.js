@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Leaderboards', {
         id: {
@@ -6,7 +7,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -15,7 +16,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        season_id: {
+        seasonId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -24,7 +25,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        user_id: {
+        userId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -46,21 +47,21 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Leaderboards', ['league_id']))
-    .then(() => queryInterface.addIndex('Leaderboards', ['season_id']))
-    .then(() => queryInterface.addIndex('Leaderboards', ['user_id']))
-    .then(() => queryInterface.addConstraint('Leaderboards', ['league_id', 'season_id', 'user_id'], {
-        type: 'unique',
-        name: 'uq_leaderboards_league_id_season_id_user_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Leaderboards'),
+        .then(() => queryInterface.addIndex('Leaderboards', ['leagueId']))
+        .then(() => queryInterface.addIndex('Leaderboards', ['seasonId']))
+        .then(() => queryInterface.addIndex('Leaderboards', ['userId']))
+        .then(() => queryInterface.addConstraint('Leaderboards', ['leagueId', 'seasonId', 'userId'], {
+            type: 'unique',
+            name: 'uq_leaderboards_leagueId_seasonId_userId',
+        })),
+    down: queryInterface => queryInterface.dropTable('Leaderboards'),
 };

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -17,7 +18,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        season_id: {
+        seasonId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -26,7 +27,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        bot_id: {
+        botId: {
             type: Sequelize.INTEGER,
             onDelete: 'SET NULL',
             references: {
@@ -34,56 +35,56 @@ module.exports = {
                 key: 'id',
             },
         },
-        queue_type: {
+        queueType: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        lobby_name: {
+        lobbyName: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        channel_id: {
+        channelId: {
             type: Sequelize.STRING,
         },
-        role_id: {
+        roleId: {
             type: Sequelize.STRING,
         },
-        lobby_id: {
+        dotaLobbyId: {
             type: Sequelize.STRING,
         },
         password: {
             type: Sequelize.STRING,
         },
-        ready_check_time: Sequelize.DATE,
+        readyCheckTime: Sequelize.DATE,
         state: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.STATE_NEW,
         },
-        game_mode: {
+        gameMode: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
-        match_id: {
+        matchId: {
             type: Sequelize.STRING,
         },
-        selection_priority: {
+        selectionPriority: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        player_first_pick: {
+        playerFirstPick: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        first_pick: {
+        firstPick: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        radiant_faction: {
+        radiantFaction: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
@@ -93,10 +94,10 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        fail_reason: {
+        failReason: {
             type: Sequelize.STRING,
         },
-        captain_1_user_id: {
+        captain1UserId: {
             type: Sequelize.INTEGER,
             onDelete: 'SET NULL',
             references: {
@@ -104,7 +105,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        captain_2_user_id: {
+        captain2UserId: {
             type: Sequelize.INTEGER,
             onDelete: 'SET NULL',
             references: {
@@ -112,32 +113,32 @@ module.exports = {
                 key: 'id',
             },
         },
-        started_at: {
+        startedAt: {
             type: Sequelize.DATE,
         },
-        finished_at: {
+        finishedAt: {
             type: Sequelize.DATE,
         },
-        valve_data: {
+        valveData: {
             type: Sequelize.JSONB,
         },
-        odota_data: {
+        odotaData: {
             type: Sequelize.JSONB,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Lobbies', ['league_id']))
-    .then(() => queryInterface.addIndex('Lobbies', ['season_id']))
-    .then(() => queryInterface.addConstraint('Lobbies', ['season_id', 'lobby_name'], {
-        type: 'unique',
-        name: 'uq_lobbies_season_id_lobby_name',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Lobbies'),
+        .then(() => queryInterface.addIndex('Lobbies', ['leagueId']))
+        .then(() => queryInterface.addIndex('Lobbies', ['seasonId']))
+        .then(() => queryInterface.addConstraint('Lobbies', ['seasonId', 'lobbyName'], {
+            type: 'unique',
+            name: 'uq_lobbies_seasonId_lobbyName',
+        })),
+    down: queryInterface => queryInterface.dropTable('Lobbies'),
 };

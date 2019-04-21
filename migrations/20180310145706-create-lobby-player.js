@@ -1,6 +1,6 @@
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('LobbyPlayers', {
-        lobby_id: {
+        lobbyId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -9,7 +9,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        user_id: {
+        userId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -38,7 +38,7 @@ module.exports = {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
         },
-        hero_id: {
+        heroId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
@@ -68,25 +68,25 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        rating_diff: {
+        ratingDiff: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('LobbyPlayers', ['lobby_id']))
-    .then(() => queryInterface.addIndex('LobbyPlayers', ['user_id']))
-    .then(() => queryInterface.addConstraint('LobbyPlayers', ['lobby_id', 'user_id'], {
-        type: 'primary key',
-        name: 'pk_lobbyplayers_lobby_id_user_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('LobbyPlayers'),
+        .then(() => queryInterface.addIndex('LobbyPlayers', ['lobbyId']))
+        .then(() => queryInterface.addIndex('LobbyPlayers', ['userId']))
+        .then(() => queryInterface.addConstraint('LobbyPlayers', ['lobbyId', 'userId'], {
+            type: 'primary key',
+            name: 'pk_lobbyplayers_lobbyId_userId',
+        })),
+    down: queryInterface => queryInterface.dropTable('LobbyPlayers'),
 };

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Commends', {
         id: {
@@ -6,7 +7,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        lobby_id: {
+        lobbyId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -15,7 +16,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        recipient_user_id: {
+        recipientUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -24,7 +25,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        giver_user_id: {
+        giverUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -36,21 +37,21 @@ module.exports = {
         timestamp: {
             type: Sequelize.DATE,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Commends', ['lobby_id']))
-    .then(() => queryInterface.addIndex('Commends', ['recipient_user_id']))
-    .then(() => queryInterface.addIndex('Commends', ['giver_user_id']))
-    .then(() => queryInterface.addConstraint('Commends', ['lobby_id', 'recipient_user_id', 'giver_user_id'], {
-        type: 'unique',
-        name: 'uq_commends_lobby_id_recipient_user_id_giver_user_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Commends'),
+        .then(() => queryInterface.addIndex('Commends', ['lobbyId']))
+        .then(() => queryInterface.addIndex('Commends', ['recipientUserId']))
+        .then(() => queryInterface.addIndex('Commends', ['giverUserId']))
+        .then(() => queryInterface.addConstraint('Commends', ['lobbyId', 'recipientUserId', 'giverUserId'], {
+            type: 'unique',
+            name: 'uq_commends_lobbyId_recipientUserId_giverUserId',
+        })),
+    down: queryInterface => queryInterface.dropTable('Commends'),
 };

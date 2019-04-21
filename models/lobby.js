@@ -1,47 +1,48 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const Lobby = sequelize.define('Lobby', {
-        queue_type: {
+        queueType: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        lobby_name: {
+        lobbyName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        channel_id: DataTypes.STRING,
-        role_id: DataTypes.STRING,
-        lobby_id: DataTypes.STRING,
+        channelId: DataTypes.STRING,
+        roleId: DataTypes.STRING,
+        dotaLobbyId: DataTypes.STRING,
         password: DataTypes.STRING,
-        ready_check_time: DataTypes.DATE,
+        readyCheckTime: DataTypes.DATE,
         state: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.STATE_NEW,
         },
-        game_mode: {
+        gameMode: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
-        match_id: DataTypes.STRING,
-        selection_priority: {
+        matchId: DataTypes.STRING,
+        selectionPriority: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-        player_first_pick: {
+        playerFirstPick: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-        first_pick: {
+        firstPick: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-        radiant_faction: {
+        radiantFaction: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
@@ -51,37 +52,38 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-        fail_reason: DataTypes.STRING,
-        started_at: DataTypes.DATE,
-        finished_at: DataTypes.DATE,
-        valve_data: DataTypes.JSONB,
-        odota_data: DataTypes.JSONB,
-    },
-    {
-        underscored: true,
+        failReason: DataTypes.STRING,
+        startedAt: DataTypes.DATE,
+        finishedAt: DataTypes.DATE,
+        valveData: DataTypes.JSONB,
+        odotaData: DataTypes.JSONB,
     });
     Lobby.associate = (models) => {
-        Lobby.belongsTo(models.League);
-        Lobby.belongsTo(models.Season);
+        Lobby.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
+        Lobby.belongsTo(models.Season, {
+            foreignKey: 'seasonId',
+        });
         Lobby.belongsTo(models.Bot, {
-            foreignKey: 'bot_id',
+            foreignKey: 'botId',
             constraints: false,
         });
-        Lobby.belongsToMany(models.User, { as: 'Players', through: models.LobbyPlayer });
-        Lobby.belongsToMany(models.User, { as: 'Queuers', through: models.LobbyQueuer });
+        Lobby.belongsToMany(models.User, { as: 'Players', through: models.LobbyPlayer, foreignKey: 'lobbyId', otherKey: 'userId' });
+        Lobby.belongsToMany(models.User, { as: 'Queuers', through: models.LobbyQueuer, foreignKey: 'lobbyId', otherKey: 'userId' });
 
         Lobby.belongsTo(models.User, {
             as: 'Captain1',
-            foreignKey: 'captain_1_user_id',
+            foreignKey: 'captain1UserId',
             constraints: false,
         });
 
         Lobby.belongsTo(models.User, {
             as: 'Captain2',
-            foreignKey: 'captain_2_user_id',
+            foreignKey: 'captain2UserId',
             constraints: false,
         });
-        
+
         Lobby.belongsToMany(models.User, {
             through: {
                 model: models.LobbyPlayer,
@@ -90,6 +92,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'ReadyPlayers',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -100,6 +104,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'NotReadyPlayers',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -110,6 +116,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'NoFactionPlayers',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -120,6 +128,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'Faction1Players',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -130,8 +140,10 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'Faction2Players',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
-        
+
         Lobby.belongsToMany(models.User, {
             through: {
                 model: models.LobbyQueuer,
@@ -140,6 +152,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'ActiveQueuers',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
         Lobby.belongsToMany(models.User, {
@@ -150,11 +164,13 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'InactiveQueuers',
+            foreignKey: 'lobbyId',
+            otherKey: 'userId',
         });
 
-        Lobby.addScope('lobby_name', value => ({
+        Lobby.addScope('lobbyName', value => ({
             where: {
-                lobby_name: value,
+                lobbyName: value,
             },
         }));
 
@@ -164,9 +180,9 @@ module.exports = (sequelize, DataTypes) => {
             },
         }));
 
-        Lobby.addScope('match_id', value => ({
+        Lobby.addScope('matchId', value => ({
             where: {
-                match_id: value,
+                matchId: value,
             },
         }));
 
@@ -174,7 +190,7 @@ module.exports = (sequelize, DataTypes) => {
             include: [{
                 model: models.League,
                 where: {
-                    guild_id: value,
+                    guildId: value,
                 },
             }],
         }));

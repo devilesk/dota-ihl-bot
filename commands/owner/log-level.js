@@ -21,7 +21,7 @@ module.exports = class LogLevelCommand extends IHLCommand {
                     prompt: 'Provide a log level.',
                     type: 'string',
                     validate: (level) => {
-                        if (LogLevelCommand.logLevels.contains(level)) return true;
+                        if (LogLevelCommand.logLevels.indexOf(level) !== -1) return true;
                         return `Value must be a valid level: ${LogLevelCommand.logLevels.join(', ')}`;
                     },
                 },
@@ -42,6 +42,6 @@ module.exports = class LogLevelCommand extends IHLCommand {
     async onMsg({ msg }, { level }) {
         const oldLevel = logger.level;
         logger.level = level;
-        return msg.say(`Log level changed from ${oldLevel} to {level}.`);
+        return msg.say(`Log level changed from ${oldLevel} to ${level}.`);
     }
 };

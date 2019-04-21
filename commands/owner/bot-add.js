@@ -17,20 +17,20 @@ module.exports = class BotAddCommand extends IHLCommand {
             memberName: 'bot-add',
             guildOnly: true,
             description: 'Add a bot to the inhouse league.',
-            examples: ['bot-add steamid_64 account_name persona_name password'],
+            examples: ['bot-add steamId64 accountName personaName password'],
             args: [
                 {
-                    key: 'steamid_64',
+                    key: 'steamId64',
                     prompt: 'Provide a steam id.',
                     type: 'string',
                 },
                 {
-                    key: 'account_name',
+                    key: 'accountName',
                     prompt: 'Provide a steam account name.',
                     type: 'string',
                 },
                 {
-                    key: 'persona_name',
+                    key: 'personaName',
                     prompt: 'Provide a steam display name.',
                     type: 'string',
                 },
@@ -49,21 +49,21 @@ module.exports = class BotAddCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg }, { steamid_64, account_name, persona_name, password }) {
-        const [bot, created] = await Db.findOrCreateBot(steamid_64, account_name, persona_name, password);
+    async onMsg({ msg }, { steamId64, accountName, personaName, password }) {
+        const [bot, created] = await Db.findOrCreateBot(steamId64, accountName, personaName, password);
         if (created) {
             await Db.updateBotStatus(CONSTANTS.BOT_LOADING)(bot.id);
             const dotaBot = await DotaBot.createDotaBot(bot);
             await DotaBot.connectDotaBot(dotaBot);
-            await msg.say(`Bot ${steamid_64} connected.`);
+            await msg.say(`Bot ${steamId64} connected.`);
             const tickets = await DotaBot.loadDotaBotTickets(dotaBot);
             await msg.say(`${tickets.length} tickets loaded.`);
             await DotaBot.disconnectDotaBot(dotaBot);
-            await msg.say(`Bot ${steamid_64} disconnected.`);
+            await msg.say(`Bot ${steamId64} disconnected.`);
             await this.ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
-            return msg.say(`Bot ${steamid_64} added.`);
+            return msg.say(`Bot ${steamId64} added.`);
         }
-        await Db.updateBot(steamid_64)({ account_name, persona_name, password });
-        return msg.say(`Bot ${steamid_64} updated.`);
+        await Db.updateBot(steamId64)({ accountName, personaName, password });
+        return msg.say(`Bot ${steamId64} updated.`);
     }
 };

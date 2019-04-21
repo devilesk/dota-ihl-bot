@@ -6,8 +6,8 @@ module.exports = {
     "rules": {
         "indent": ["error", 4],
         "class-methods-use-this": ["warn"],
-        "camelcase": ["warn"],
-        "max-len": ["warn"],
+        "camelcase": ["error"],
+        "max-len": 0,
         "brace-style": ["error", "stroustrup"],
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],

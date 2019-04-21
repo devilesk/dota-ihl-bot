@@ -6,12 +6,12 @@ const Fp = require('../../lib/util/fp');
 const createBotDetails = async (bot) => {
     const tickets = await Db.getTicketsOf()(bot);
     const ticketNames = tickets.map(ticket => `${ticket.leagueid} - ${ticket.name}`).join(', ');
-    return `**${bot.steamid_64}**
-Account Name: ${bot.account_name}
-Display Name: ${bot.persona_name}
+    return `**${bot.steamId64}**
+Account Name: ${bot.accountName}
+Display Name: ${bot.personaName}
 Status: ${bot.status}
 Tickets: ${ticketNames}`;
-}
+};
 
 /**
  * @class BotListCommand

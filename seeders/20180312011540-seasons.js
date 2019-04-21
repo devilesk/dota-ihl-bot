@@ -1,11 +1,11 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Seasons', [{
-        league_id: 1,
+    up: queryInterface => queryInterface.bulkInsert('Seasons', [{
+        leagueId: 1,
         active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
     },
     ], {}),
 
-    down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Seasons', null, {}),
+    down: queryInterface => queryInterface.bulkDelete('Seasons', null, {}),
 };

@@ -1,34 +1,32 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = [
     {
-        model: "Challenge",
+        model: 'Challenge',
         data: {
-            recipient_user_id: 1,
-            giver_user_id: 2,
+            recipientUserId: 1,
+            giverUserId: 2,
             accepted: false,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Challenge",
+        model: 'Challenge',
         data: {
-            recipient_user_id: 2,
-            giver_user_id: 3,
+            recipientUserId: 2,
+            giverUserId: 3,
             accepted: false,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Challenge",
+        model: 'Challenge',
         data: {
-            recipient_user_id: 3,
-            giver_user_id: 4,
+            recipientUserId: 3,
+            giverUserId: 4,
             accepted: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

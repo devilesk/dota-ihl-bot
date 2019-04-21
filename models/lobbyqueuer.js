@@ -1,7 +1,4 @@
-const Sequelize = require('sequelize');
-
-const Op = Sequelize.Op;
-
+/* eslint-disable object-curly-newline */
 module.exports = (sequelize, DataTypes) => {
     const LobbyQueuer = sequelize.define('LobbyQueuer', {
         active: {
@@ -14,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
-    }, { underscored: true });
+    });
     LobbyQueuer.associate = (models) => {
-        LobbyQueuer.belongsTo(models.Lobby);
-        LobbyQueuer.belongsTo(models.User);
+        LobbyQueuer.belongsTo(models.Lobby, {
+            foreignKey: 'lobbyId',
+        });
+        LobbyQueuer.belongsTo(models.User, {
+            foreignKey: 'userId',
+        });
     };
     return LobbyQueuer;
 };
