@@ -8,4 +8,5 @@ logs/
 prod_seeders/
 .nyc_output/
 *.log
+logs*.json
 TODO

@@ -29,23 +29,20 @@ module.exports = class RepCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, league, guild, inhouseUser }, { member }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+    async onMsg({ msg, guild, inhouseUser }, { member }) {
+        const [user, discordUser] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         if (user && fromUser) {
             if (user.id !== fromUser.id) {
                 logger.silly(`RepCommand ${user.id} ${fromUser.id}`);
-                const [rep, created] = await Db.findOrCreateReputation(fromUser)(user);
+                const [, created] = await Db.findOrCreateReputation(fromUser)(user);
                 if (created) {
-                    await msg.say(`${msg.author.username} reps ${discord_user.displayName}`);
+                    return msg.say(`${msg.author.username} reps ${discordUser.displayName}.`);
                 }
-                else {
-                    await msg.say(`${discord_user.displayName} already repped.`);
-                }
+                return msg.say(`${discordUser.displayName} already repped.`);
             }
-            else {
-                await msg.say(`Cannot rep yourself.`);
-            }
+            return msg.say('Cannot rep yourself.');
         }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

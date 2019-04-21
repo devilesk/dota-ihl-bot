@@ -33,7 +33,7 @@
     "bluebird": "^3.5.3",
     "discord.js": "^11.4.2",
     "discord.js-commando": "0.10.0",
-    "dota2": "github:devilesk/node-dota2#26f691f",
+    "dota2": "github:devilesk/node-dota2#a71891d",
     "dotaconstants": "^6.16.0",
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",

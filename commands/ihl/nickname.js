@@ -31,6 +31,6 @@ module.exports = class NicknameCommand extends IHLCommand {
         const values = { nickname: text };
         await inhouseUser.update(values);
         logger.silly(`User ${inhouseUser.discord_id} nickname set to ${text}.`);
-        await msg.say(`Nickname set to ${text}`);
+        return msg.say(`${msg.member.displayName} nickname set to ${text}.`);
     }
 };

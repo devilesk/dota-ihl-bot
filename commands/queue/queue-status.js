@@ -26,9 +26,7 @@ module.exports = class QueueStatusCommand extends IHLCommand {
                     default: '',
                 },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
     static async getQueueNames(guild, lobbyState) {
@@ -45,36 +43,31 @@ module.exports = class QueueStatusCommand extends IHLCommand {
     static async getQueueStatusMessage(guild, lobbyState) {
         const userNames = await QueueStatusCommand.getQueueNames(guild, lobbyState);
         if (userNames.length) {
-            return `${userNames.length} queueing for ${lobbyState.lobby_name}: ${userNames.join(', ')}`;
+            return `${userNames.length} queueing for ${lobbyState.lobby_name}: ${userNames.join(', ')}.`;
         }
-        else {
-            return `0 queueing for ${lobbyState.lobby_name}.`;
-        }
+        return `0 queueing for ${lobbyState.lobby_name}.`;
     }
 
     async onMsg({ msg, guild, inhouseState, lobbyState }, { channel }) {
         if (channel) {
             // use lobbyState for given channel
-            lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
-            if (lobbyState) {
-                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
-                await msg.say(message);
+            const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+            const _lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
+            if (_lobbyState) {
+                const message = await QueueStatusCommand.getQueueStatusMessage(guild, _lobbyState);
+                return msg.say(message);
             }
-            else {
-                await msg.say('Invalid lobby channel.');
-            }
+            return msg.say('Invalid lobby channel.');
         }
-        else if (lobbyState) {
+        if (lobbyState) {
             const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
+            return msg.say(message);
+        }
+        const lobbyStates = await Ihl.getAllLobbyQueues(inhouseState);
+        for (const _lobbyState of lobbyStates) {
+            const message = await QueueStatusCommand.getQueueStatusMessage(guild, _lobbyState);
             await msg.say(message);
         }
-        else {
-            const lobbyStates = await Ihl.getAllLobbyQueues(inhouseState);
-            for (const lobbyState of lobbyStates) {
-                const message = await QueueStatusCommand.getQueueStatusMessage(guild, lobbyState);
-                await msg.say(message);
-            }
-        }
+        return null;
     }
 };

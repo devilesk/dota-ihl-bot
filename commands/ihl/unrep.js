@@ -37,15 +37,12 @@ module.exports = class UnrepCommand extends IHLCommand {
                 const count = await Db.destroyReputation(fromUser)(user);
                 logger.silly(count);
                 if (count) {
-                    await msg.say(`${msg.author.username} unreps ${discordUser.displayName}`);
+                    return msg.say(`${msg.author.username} unreps ${discordUser.displayName}.`);
                 }
-                else {
-                    await msg.say(`${discordUser.displayName} not repped.`);
-                }
+                return msg.say(`${discordUser.displayName} not repped.`);
             }
-            else {
-                await msg.say('Cannot unrep yourself.');
-            }
+            return msg.say('Cannot unrep yourself.');
         }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

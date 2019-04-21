@@ -37,5 +37,6 @@ module.exports = {
         "linebreak-style": 0,
         "object-curly-newline": ["error", { "multiline": true }],
         "class-methods-use-this": ["error", { "exceptMethods": ["onMsg"] }],
+        "no-unused-vars": ["error", { "varsIgnorePattern": "logger" }],
     }
 }

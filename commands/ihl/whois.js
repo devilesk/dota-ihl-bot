@@ -112,7 +112,7 @@ module.exports = class WhoisCommand extends IHLCommand {
 
             logger.silly(`rank ${rank}`);
 
-            await msg.channel.send({
+            return msg.channel.send({
                 embed: {
                     color: 100000,
                     fields: [
@@ -181,8 +181,6 @@ module.exports = class WhoisCommand extends IHLCommand {
                 },
             });
         }
-        else {
-            await msg.say(`${member} not found.`);
-        }
+        return msg.say(`${member} not found.`);
     }
 };

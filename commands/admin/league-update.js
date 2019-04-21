@@ -59,7 +59,7 @@ class LeagueUpdateCommand extends IHLCommand {
         logger.silly('LeagueUpdateCommand');
         const field = settingMap[setting.toLowerCase().replace(/_/g, '')];
         await Db.updateLeague(guild.id)({ [field]: value });
-        await msg.say(`League setting updated. ${setting} set to ${value}`);
+        return msg.say(`League setting updated. ${setting} set to ${value}.`);
     }
 }
 

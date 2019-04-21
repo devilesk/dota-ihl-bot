@@ -10,6 +10,7 @@ module.exports = class LobbyRunCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-run',
+            aliases: ['lobby-process', 'run-lobby', 'process-lobby'],
             group: 'admin',
             memberName: 'lobby-run',
             guildOnly: true,
@@ -22,8 +23,10 @@ module.exports = class LobbyRunCommand extends IHLCommand {
         });
     }
 
-    async run({ msg, lobbyState }) {
+    async onMsg({ msg, lobbyState }) {
+        logger.silly(`LobbyRunCommand ${lobbyState}`);
+        await msg.say('Running lobby...');
         await this.ihlManager[CONSTANTS.EVENT_RUN_LOBBY](lobbyState);
-        await msg.say(`Lobby ${lobbyState.lobby_name} run.`);
+        return msg.say(`Lobby ${lobbyState.lobby_name} run.`);
     }
 };

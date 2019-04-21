@@ -31,7 +31,7 @@ module.exports = class LeaderboardCommand extends IHLCommand {
             return `\`${rank.padEnd(3)} ${user.rating.toString().padEnd(4)} ${record} ${name}\``;
         });
 
-        await msg.channel.send({
+        return msg.channel.send({
             embed: {
                 color: 100000,
                 fields: [

@@ -37,8 +37,8 @@ module.exports = class TicketAddCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, league }, { leagueid, name }) {
+    async onMsg({ msg, league }, { leagueid, name }) {
         await this.ihlManager[CONSTANTS.EVENT_LEAGUE_TICKET_ADD](league, leagueid, name);
-        await msg.say(`Added ticket ${name} to league.`);
+        return msg.say(`Added ticket ${name} to league.`);
     }
 };

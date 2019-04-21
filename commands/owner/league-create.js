@@ -25,10 +25,8 @@ module.exports = class LeagueCreateCommand extends IHLCommand {
     async onMsg({ msg, inhouseState, guild }) {
         if (!inhouseState) {
             await this.ihlManager.createNewLeague(guild);
-            await msg.say('Inhouse league created.');
+            return msg.say('Inhouse league created.');
         }
-        else {
-            await msg.say('Inhouse league already exists.');
-        }
+        return msg.say('Inhouse league already exists.');
     }
 };

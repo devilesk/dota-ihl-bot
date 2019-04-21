@@ -40,8 +40,8 @@ module.exports = class BotStatusCommand extends IHLCommand {
         });
     }
 
-    async run({ msg }, { steamid_64, status }) {
+    async onMsg({ msg }, { steamid_64, status }) {
         await this.ihlManager[CONSTANTS.EVENT_BOT_SET_STATUS](steamid_64, status);
-        await msg.say(`Bot ${steamid_64} status set to ${status}`);
+        return msg.say(`Bot ${steamid_64} status set to ${status}`);
     }
 };

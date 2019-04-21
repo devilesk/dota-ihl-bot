@@ -29,6 +29,7 @@ module.exports = class RolesCommand extends IHLCommand {
 
     async onMsg({ msg, inhouseUser }, { text }) {
         const values = {};
+        // eslint-disable-next-line no-restricted-globals
         let roles = text.split(',').map(x => parseInt(x)).filter(x => !isNaN(x) && x >= 1 && x <= 5);
         roles = roles.filter((x, pos) => roles.indexOf(x) === pos);
         for (let i = 1; i <= 5; i++) {
@@ -36,10 +37,8 @@ module.exports = class RolesCommand extends IHLCommand {
         }
         if (roles.length) {
             await inhouseUser.update(values);
-            await msg.say(`Roles set to ${roles.join(',')}`);
+            return msg.say(`Roles set to ${roles.join(',')}`);
         }
-        else {
-            await msg.say('No valid roles specified.');
-        }
+        return msg.say('No valid roles specified.');
     }
 };

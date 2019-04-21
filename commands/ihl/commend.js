@@ -44,35 +44,26 @@ module.exports = class CommendCommand extends IHLCommand {
                 if (user && fromUser) {
                     logger.silly('CommendCommand users exist');
                     if (!players.find(player => player.id === user.id)) {
-                        await msg.say(`${discordUser.displayName} not a player in the match.`);
+                        return msg.say(`${discordUser.displayName} not a player in the match.`);
                     }
-                    else if (!players.find(player => player.id === fromUser.id)) {
-                        await msg.say(`${msg.author.username} not a player in the match.`);
+                    if (!players.find(player => player.id === fromUser.id)) {
+                        return msg.say(`${msg.author.username} not a player in the match.`);
                     }
-                    else {
-                        logger.silly('CommendCommand users on team');
-                        if (user.id !== fromUser.id) {
-                            logger.silly(`CommendCommand ${user.id} ${fromUser.id}`);
-                            const [, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
-                            if (created) {
-                                await msg.say(`${msg.author.username} commends ${discordUser.displayName}`);
-                            }
-                            else {
-                                await msg.say(`${discordUser.displayName} already commended.`);
-                            }
+                    logger.silly('CommendCommand users on team');
+                    if (user.id !== fromUser.id) {
+                        logger.silly(`CommendCommand ${user.id} ${fromUser.id}`);
+                        const [, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
+                        if (created) {
+                            return msg.say(`${msg.author.username} commends ${discordUser.displayName}`);
                         }
-                        else {
-                            await msg.say('Cannot commend yourself.');
-                        }
+                        return msg.say(`${discordUser.displayName} already commended.`);
                     }
+                    return msg.say('Cannot commend yourself.');
                 }
+                return msg.say(IHLCommand.UserNotFoundMessage);
             }
-            else {
-                await msg.say(`Match ${match_id} not finished yet.`);
-            }
+            return msg.say(`Match ${match_id} not finished yet.`);
         }
-        else {
-            await msg.say(`Match ${match_id} not found.`);
-        }
+        return msg.say(`Match ${match_id} not found.`);
     }
 };

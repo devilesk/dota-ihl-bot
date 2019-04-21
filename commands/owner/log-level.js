@@ -34,7 +34,7 @@ module.exports = class LogLevelCommand extends IHLCommand {
             inhouseUser: false,
         });
     }
-    
+
     static get logLevels() {
         return ['error', 'warn', 'info', 'verbose', 'debug', 'silly'];
     }
@@ -42,6 +42,6 @@ module.exports = class LogLevelCommand extends IHLCommand {
     async onMsg({ msg }, { level }) {
         const oldLevel = logger.level;
         logger.level = level;
-        await msg.say(`Log level changed from ${oldLevel} to {level}.`);
+        return msg.say(`Log level changed from ${oldLevel} to {level}.`);
     }
 };

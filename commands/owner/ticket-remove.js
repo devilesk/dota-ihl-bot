@@ -32,8 +32,8 @@ module.exports = class TicketRemoveCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, league }, { leagueid }) {
+    async onMsg({ msg, league }, { leagueid }) {
         await this.ihlManager[CONSTANTS.EVENT_LEAGUE_TICKET_REMOVE](league, leagueid);
-        await msg.say(`Removed ticket ${leagueid} from the league.`);
+        return msg.say(`Removed ticket ${leagueid} from the league.`);
     }
 };

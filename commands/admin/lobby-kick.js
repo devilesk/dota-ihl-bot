@@ -1,6 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const Db = require('../../lib/db');
+const { findUser } = require('../../lib/ihlManager');
 const CONSTANTS = require('../../lib/constants');
 
 /**
@@ -20,7 +20,7 @@ module.exports = class LobbyKickCommand extends IHLCommand {
                 {
                     key: 'member',
                     prompt: 'Provide a user to kick.',
-                    type: 'member',
+                    type: 'string',
                 },
             ],
         }, {
@@ -32,15 +32,12 @@ module.exports = class LobbyKickCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild, lobbyState }, { member }) {
-        const user = await Db.findUserByDiscordId(guild.id)(member.id);
+        const [user, discordUser] = await findUser(guild)(member);
         if (user) {
             await member.removeRole(lobbyState.role);
             await this.ihlManager[CONSTANTS.EVENT_LOBBY_KICK](lobbyState, user);
-            await msg.say('User kicked from lobby.');
+            return msg.say(`${discordUser.displayName} kicked from lobby.`);
         }
-        else {
-            await msg.say('User not found. (Has user registered with `!register`?)');
-        }
-
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

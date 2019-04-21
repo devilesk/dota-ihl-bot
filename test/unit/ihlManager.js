@@ -38,6 +38,18 @@ describe('Database', () => {
             assert.equal(discord_user, 'discord_user');
             assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
         });
+        it('return user matching discord id nickname', async () => {
+            const guild = {
+                id: '422549177151782925',
+                members: [],
+            };
+            guild.members.get = sinon.stub();
+            guild.members.get.withArgs('76864899866697728').returns('discord_user');
+            const [user, discord_user, result_type] = await findUser(guild)('<@!76864899866697728>');
+            assert.equal(user.id, 1);
+            assert.equal(discord_user, 'discord_user');
+            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
+        });
 
         it('return user matching discord name', async () => {
             const guild = {

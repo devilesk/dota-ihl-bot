@@ -10,6 +10,7 @@ module.exports = class LobbyStartCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'lobby-start',
+            aliases: ['start-lobby'],
             group: 'admin',
             memberName: 'lobby-start',
             guildOnly: true,
@@ -25,11 +26,10 @@ module.exports = class LobbyStartCommand extends IHLCommand {
     async onMsg({ msg, lobbyState }) {
         logger.silly('LobbyStartCommand');
         if (lobbyState.state === CONSTANTS.STATE_WAITING_FOR_PLAYERS) {
+            await msg.say('Starting lobby...');
             const started = await this.ihlManager[CONSTANTS.EVENT_LOBBY_START](lobbyState);
-            await msg.say(started ? 'Lobby started.' : 'Lobby not started.');
+            return msg.say(started ? 'Lobby started.' : 'Lobby not started.');
         }
-        else {
-            await msg.say('Lobby must be in waiting for players state before starting.');
-        }
+        return msg.say('Lobby must be in waiting for players state before starting.');
     }
 };
