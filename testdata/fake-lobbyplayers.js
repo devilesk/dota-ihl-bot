@@ -1,114 +1,112 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = [
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 1,
+            lobbyId: 1,
+            userId: 1,
             ready: true,
             faction: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 2,
+            lobbyId: 1,
+            userId: 2,
             ready: true,
             faction: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 3,
+            lobbyId: 1,
+            userId: 3,
             ready: true,
             faction: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 4,
+            lobbyId: 1,
+            userId: 4,
             ready: true,
             faction: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 5,
+            lobbyId: 1,
+            userId: 5,
             ready: true,
             faction: 1,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 6,
+            lobbyId: 1,
+            userId: 6,
             ready: true,
             faction: 2,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 7,
+            lobbyId: 1,
+            userId: 7,
             ready: true,
             faction: 2,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 8,
+            lobbyId: 1,
+            userId: 8,
             ready: true,
             faction: 2,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 9,
+            lobbyId: 1,
+            userId: 9,
             ready: true,
             faction: 2,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "LobbyPlayer",
+        model: 'LobbyPlayer',
         data: {
-            lobby_id: 1,
-            user_id: 10,
+            lobbyId: 1,
+            userId: 10,
             ready: true,
             faction: 2,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

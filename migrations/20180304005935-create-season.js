@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Seasons', {
         id: {
@@ -6,7 +7,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -23,15 +24,15 @@ module.exports = {
             type: Sequelize.BOOLEAN,
             defaultValue: true,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Seasons', ['league_id'])),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Seasons'),
+        .then(() => queryInterface.addIndex('Seasons', ['leagueId'])),
+    down: queryInterface => queryInterface.dropTable('Seasons'),
 };

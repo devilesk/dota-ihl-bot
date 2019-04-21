@@ -1,5 +1,4 @@
-const CONSTANTS = require('../lib/constants');
-
+/* eslint-disable object-curly-newline */
 module.exports = (sequelize, DataTypes) => {
     const Queue = sequelize.define('Queue', {
         enabled: {
@@ -12,23 +11,25 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
-        queue_type: {
+        queueType: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        queue_name: {
+        queueName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-    }, { underscored: true });
+    });
     Queue.associate = (models) => {
-        Queue.belongsTo(models.League);
+        Queue.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
 
         Queue.addScope('guild', value => ({
             include: [{
                 model: models.League,
                 where: {
-                    guild_id: value,
+                    guildId: value,
                 },
             }],
         }));

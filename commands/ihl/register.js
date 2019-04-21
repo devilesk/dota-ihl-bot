@@ -62,8 +62,8 @@ module.exports = class RegisterCommand extends IHLCommand {
                 if (steamProfile != null) {
                     userToRegister = await Ihl.registerUser(guild.id, steamProfile.steamid, memberToRegister.id);
                     if (userToRegister) {
-                        logger.silly(`RegisterCommand Registered ${userToRegister.steamid_64}`);
-                        return msg.say(`Registered ${memberToRegister.displayName} ${userToRegister.steamid_64}.`);
+                        logger.silly(`RegisterCommand Registered ${userToRegister.steamId64}`);
+                        return msg.say(`Registered ${memberToRegister.displayName} ${userToRegister.steamId64}.`);
                     }
                     logger.silly('RegisterCommand failed to create new user');
                     return msg.say('Failed to create new user.');

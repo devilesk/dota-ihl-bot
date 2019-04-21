@@ -41,7 +41,7 @@ module.exports = class PickCommand extends IHLCommand {
             case CONSTANTS.INVALID_DRAFT_PLAYER:
                 return msg.say('Player already drafted.');
             case CONSTANTS.PLAYER_DRAFTED:
-                return msg.say(`${guild.member(user.discord_id)} drafted by ${guild.member(captain.discord_id)}.`);
+                return msg.say(`${guild.member(user.discordId)} drafted by ${guild.member(captain.discordId)}.`);
             case CONSTANTS.INVALID_PLAYER_NOT_FOUND:
                 return msg.say(`${discordUser.displayName} not found.`);
             default:

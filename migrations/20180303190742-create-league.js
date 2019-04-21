@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = {
@@ -8,70 +9,71 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        guild_id: {
+        guildId: {
             allowNull: false,
             type: Sequelize.STRING,
             unique: true,
         },
-        current_season_id: {
+        currentSeasonId: {
             type: Sequelize.INTEGER,
         },
-        ready_check_timeout: {
+        readyCheckTimeout: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 60000,
         },
-        captain_rank_threshold: {
+        captainRankThreshold: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 3,
         },
-        captain_role_regexp: {
+        captainRoleRegexp: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'Tier ([0-9]+) Captain',
         },
-        category_name: {
+        categoryName: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'inhouses',
         },
-        channel_name: {
+        channelName: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'general',
         },
-        admin_role_name: {
+        adminRoleName: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'Inhouse Admin',
         },
-        initial_rating: {
+        initialRating: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 1000,
         },
-        elo_k_factor: {
+        eloKFactor: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: 20,
         },
-        matchmaking_system: {
+        matchmakingSystem: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'badge',
         },
-        default_game_mode: {
+        defaultGameMode: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
-        lobby_name_template: {
+        lobbyNameTemplate: {
             allowNull: false,
             type: Sequelize.STRING,
-            defaultValue: 'Inhouse Lobby ${lobby_id}',
+            // eslint-disable-next-line no-template-curly-in-string
+            defaultValue: 'Inhouse Lobby ${lobbyId}',
         },
-        draft_order: {
+        draftOrder: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: 'ABBABAAB',
@@ -79,15 +81,15 @@ module.exports = {
         leagueid: {
             type: Sequelize.INTEGER,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.sequelize.query('CREATE EXTENSION fuzzystrmatch;')),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Leagues'),
+        .then(() => queryInterface.sequelize.query('CREATE EXTENSION fuzzystrmatch;')),
+    down: queryInterface => queryInterface.dropTable('Leagues'),
 };

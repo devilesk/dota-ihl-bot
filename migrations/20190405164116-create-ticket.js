@@ -1,5 +1,4 @@
-const CONSTANTS = require('../lib/constants');
-
+/* eslint-disable object-curly-newline */
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Tickets', {
         id: {
@@ -17,24 +16,24 @@ module.exports = {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        most_recent_activity: {
+        mostRecentActivity: {
             type: Sequelize.DATE,
         },
-        start_timestamp: {
+        startTimestamp: {
             type: Sequelize.DATE,
         },
-        end_timestamp: {
+        endTimestamp: {
             type: Sequelize.DATE,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Tickets', ['leagueid'])),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Tickets'),
+        .then(() => queryInterface.addIndex('Tickets', ['leagueid'])),
+    down: queryInterface => queryInterface.dropTable('Tickets'),
 };

@@ -8,7 +8,7 @@
 
 ## bot-add
 
-**Format:** `!bot-add <steamid_64> <account_name> <persona_name> <password>`
+**Format:** `!bot-add <steamId64> <accountName> <personaName> <password>`
 
 > Add a bot to the inhouse league.
 
@@ -17,12 +17,12 @@
 **Aliases:** `bot-create`, `bot-update`, `add-bot`, `create-bot`, `update-bot`, `botadd`, `botcreate`, `botupdate`, `addbot`, `createbot`, `updatebot`
 
 **Usage Examples:**
-* `!bot-add steamid_64 account_name persona_name password`
+* `!bot-add steamId64 accountName personaName password`
  
  
 ## bot-remove
 
-**Format:** `!bot-remove <steamid_64>`
+**Format:** `!bot-remove <steamId64>`
 
 > Remove a bot from the inhouse league.
 
@@ -31,12 +31,12 @@
 **Aliases:** `bot-delete`, `bot-destroy`, `delete-bot`, `remove-bot`, `destroy-bot`, `botremove`, `botdelete`, `botdestroy`, `deletebot`, `removebot`, `destroybot`
 
 **Usage Examples:**
-* `!bot-remove steamid_64`
+* `!bot-remove steamId64`
  
  
 ## bot-status
 
-**Format:** `!bot-status <steamid_64> <status>`
+**Format:** `!bot-status <steamId64> <status>`
 
 > Manually set a bot status.
 

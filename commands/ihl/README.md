@@ -9,7 +9,7 @@
 
 ## commend
 
-**Format:** `!commend <member> <match_id>`
+**Format:** `!commend <member> <matchId>`
 
 > Commend a player after a game.
 
@@ -181,7 +181,7 @@
  
 ## uncommend
 
-**Format:** `!uncommend <member> <match_id>`
+**Format:** `!uncommend <member> <matchId>`
 
 > Uncommend a player.
 

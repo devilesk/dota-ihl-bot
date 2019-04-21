@@ -18,12 +18,12 @@ module.exports = class LobbyDraftCommand extends IHLCommand {
             examples: ['lobby-draft @devilesk @Ari-'],
             args: [
                 {
-                    key: 'captain_1',
+                    key: 'captain1',
                     prompt: 'Provide a captain.',
                     type: 'string',
                 },
                 {
-                    key: 'captain_2',
+                    key: 'captain2',
                     prompt: 'Provide a captain.',
                     type: 'string',
                 },
@@ -36,12 +36,12 @@ module.exports = class LobbyDraftCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, lobbyState }, { captain_1, captain_2 }) {
+    async onMsg({ msg, guild, lobbyState }, { captain1, captain2 }) {
         logger.debug('LobbyDraftCommand');
-        const [captain_1_user] = await findUser(guild)(captain_1);
-        const [captain_2_user] = await findUser(guild)(captain_2);
-        if (captain_1_user && captain_2_user) {
-            await this.ihlManager[CONSTANTS.EVENT_LOBBY_FORCE_DRAFT](lobbyState, captain_1, captain_2);
+        const [captain1User] = await findUser(guild)(captain1);
+        const [captain2User] = await findUser(guild)(captain2);
+        if (captain1User && captain2User) {
+            await this.ihlManager[CONSTANTS.EVENT_LOBBY_FORCE_DRAFT](lobbyState, captain1, captain2);
             return msg.say('Lobby set to player draft.');
         }
         return msg.say(IHLCommand.UserNotFoundMessage);

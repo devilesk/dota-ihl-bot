@@ -1,22 +1,20 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = [
     {
-        model: "Season",
+        model: 'Season',
         data: {
-            league_id: 1,
+            leagueId: 1,
             active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Season",
+        model: 'Season',
         data: {
-            league_id: 2,
+            leagueId: 2,
             active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

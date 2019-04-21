@@ -6,20 +6,20 @@ const logger = require('../lib/logger');
 const basename = path.basename(__filename);
 const config = require('../config.js');
 
-config.logging = config.logging ? function (str) {
+config.logging = config.logging ? (str) => {
     logger.debug(str);
 } : false;
 
 class Database {
-    constructor(config) {
-        this.config = config;
+    constructor(_config) {
+        this.config = _config;
         this.Sequelize = Sequelize;
         this.init();
     }
-    
+
     init() {
         if (this.sequelize) return;
-        
+
         this.sequelize = new Sequelize(this.config.database, this.config.username, this.config.password, this.config);
 
         fs
@@ -36,7 +36,7 @@ class Database {
             }
         });
     }
-    
+
     async close() {
         await this.sequelize.close();
         this.sequelize = null;

@@ -64,10 +64,10 @@ module.exports = class WhoisCommand extends IHLCommand {
         let wins = 0;
         let losses = 0;
 
-        const [user, discordUser, result_type] = await findUser(guild)(member);
+        const [user, discordUser, resultType] = await findUser(guild)(member);
 
         let footerText;
-        switch (result_type) {
+        switch (resultType) {
         case CONSTANTS.MATCH_EXACT_DISCORD_MENTION:
             footerText = `Exact match for ${discordUser.displayName} by discord mention`;
             break;
@@ -92,14 +92,14 @@ module.exports = class WhoisCommand extends IHLCommand {
 
             let roles = [];
             for (let i = 1; i <= 5; i++) {
-                logger.silly(user[`role_${i}`]);
-                roles.push([i, user[`role_${i}`]]);
+                logger.silly(user[`role${i}`]);
+                roles.push([i, user[`role${i}`]]);
             }
             logger.silly(roles);
             roles = roles.filter(([, pref]) => pref !== -1).sort(([, p1], [, p2]) => p1 - p2).map(([r]) => r);
-            const account_id = convertor.to32(user.steamid_64);
+            const accountId = convertor.to32(user.steamId64);
 
-            const [leaderboard] = await user.getLeaderboards({ where: { season_id: league.current_season_id } });
+            const [leaderboard] = await user.getLeaderboards({ where: { seasonId: league.currentSeasonId } });
             logger.silly(leaderboard);
             if (leaderboard) {
                 wins = leaderboard.wins;
@@ -108,7 +108,7 @@ module.exports = class WhoisCommand extends IHLCommand {
             const rep = (await user.getReputationsReceived()).length;
             const commends = (await user.getCommendsReceived()).length;
 
-            const rank = await Db.queryUserLeaderboardRank(league.id)(league.current_season_id)(user.id);
+            const rank = await Db.queryUserLeaderboardRank(league.id)(league.currentSeasonId)(user.id);
 
             logger.silly(`rank ${rank}`);
 
@@ -128,7 +128,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                         },
                         {
                             name: 'Medal',
-                            value: rankTierToMedalName(user.rank_tier),
+                            value: rankTierToMedalName(user.rankTier),
                             inline: true,
                         },
                         {
@@ -158,7 +158,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                         },
                         {
                             name: 'Preferred Mode',
-                            value: `${user.game_mode_preference.replace('DOTA_GAMEMODE_', '')}`,
+                            value: `${user.gameModePreference.replace('DOTA_GAMEMODE_', '')}`,
                             inline: true,
                         },
                         {
@@ -168,12 +168,12 @@ module.exports = class WhoisCommand extends IHLCommand {
                         },
                         {
                             name: 'Queue Timeout',
-                            value: Date.now() < user.queue_timeout ? user.queue_timeout : null,
+                            value: Date.now() < user.queueTimeout ? user.queueTimeout : null,
                             inline: true,
                         },
                         {
                             name: 'Links',
-                            value: `[DB](https://www.dotabuff.com/players/${account_id})/[OD](https://www.opendota.com/players/${account_id})/[SZ](https://stratz.com/en-us/player/${account_id})/[Steam](http://steamcommunity.com/profiles/${user.steamid_64})`,
+                            value: `[DB](https://www.dotabuff.com/players/${accountId})/[OD](https://www.opendota.com/players/${accountId})/[SZ](https://stratz.com/en-us/player/${accountId})/[Steam](http://steamcommunity.com/profiles/${user.steamId64})`,
                             inline: true,
                         },
                     ].filter(field => field.value !== null),

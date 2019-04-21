@@ -17,7 +17,7 @@ module.exports = class BotStatusCommand extends IHLCommand {
             examples: ['bot-status 76561197960287930 BOT_UNAVAILABLE', 'bot-status 76561197960287930 BOT_ONLINE', 'bot-status 76561197960287930 BOT_OFFLINE'],
             args: [
                 {
-                    key: 'steamid_64',
+                    key: 'steamId64',
                     prompt: 'Provide a bot steam id.',
                     type: 'string',
                 },
@@ -40,8 +40,8 @@ module.exports = class BotStatusCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg }, { steamid_64, status }) {
-        await this.ihlManager[CONSTANTS.EVENT_BOT_SET_STATUS](steamid_64, status);
-        return msg.say(`Bot ${steamid_64} status set to ${status}`);
+    async onMsg({ msg }, { steamId64, status }) {
+        await this.ihlManager[CONSTANTS.EVENT_BOT_SET_STATUS](steamId64, status);
+        return msg.say(`Bot ${steamId64} status set to ${status}`);
     }
 };

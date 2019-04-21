@@ -1,13 +1,13 @@
-const Sequelize = require('sequelize');
-
-const Op = Sequelize.Op;
-
-module.exports = (sequelize, DataTypes) => {
-    const BotTicket = sequelize.define('BotTicket', {
-    }, { underscored: true });
+/* eslint-disable object-curly-newline */
+module.exports = (sequelize) => {
+    const BotTicket = sequelize.define('BotTicket', {});
     BotTicket.associate = (models) => {
-        BotTicket.belongsTo(models.Bot);
-        BotTicket.belongsTo(models.Ticket);
+        BotTicket.belongsTo(models.Bot, {
+            foreignKey: 'botId',
+        });
+        BotTicket.belongsTo(models.Ticket, {
+            foreignKey: 'ticketId',
+        });
     };
     return BotTicket;
 };

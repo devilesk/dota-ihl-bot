@@ -1,13 +1,13 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Reputations', [
+    up: queryInterface => queryInterface.bulkInsert('Reputations', [
         {
-            recipient_user_id: 4,
-            giver_user_id: 1,
+            recipientUserId: 4,
+            giverUserId: 1,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
         },
     ], {}),
 
-    down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Reputations', null, {}),
+    down: queryInterface => queryInterface.bulkDelete('Reputations', null, {}),
 };

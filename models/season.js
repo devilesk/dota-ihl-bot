@@ -1,15 +1,19 @@
+/* eslint-disable object-curly-newline */
 module.exports = (sequelize, DataTypes) => {
     const Season = sequelize.define('Season', {
         name: DataTypes.STRING,
         active: DataTypes.BOOLEAN,
-    },
-    {
-        underscored: true,
     });
     Season.associate = (models) => {
-        Season.belongsTo(models.League);
-        Season.hasMany(models.Lobby);
-        Season.hasMany(models.Leaderboard);
+        Season.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
+        Season.hasMany(models.Lobby, {
+            foreignKey: 'seasonId',
+        });
+        Season.hasMany(models.Leaderboard, {
+            foreignKey: 'seasonId',
+        });
 
         Season.addScope('active', {
             where: {
@@ -27,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
             include: [{
                 model: models.League,
                 where: {
-                    guild_id: value,
+                    guildId: value,
                 },
             }],
         }));

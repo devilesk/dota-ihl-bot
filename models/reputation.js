@@ -1,15 +1,16 @@
+/* eslint-disable object-curly-newline */
 module.exports = (sequelize, DataTypes) => {
     const Reputation = sequelize.define('Reputation', {
         timestamp: DataTypes.DATE,
-    }, { underscored: true });
+    });
     Reputation.associate = (models) => {
         Reputation.belongsTo(models.User, {
             as: 'Recipient',
-            foreignKey: 'recipient_user_id',
+            foreignKey: 'recipientUserId',
         });
         Reputation.belongsTo(models.User, {
             as: 'Giver',
-            foreignKey: 'giver_user_id',
+            foreignKey: 'giverUserId',
         });
     };
     return Reputation;

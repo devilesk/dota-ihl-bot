@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 module.exports = {
     up: (queryInterface, Sequelize) => queryInterface.createTable('Reputations', {
         id: {
@@ -6,7 +7,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        recipient_user_id: {
+        recipientUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -15,7 +16,7 @@ module.exports = {
                 key: 'id',
             },
         },
-        giver_user_id: {
+        giverUserId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -27,20 +28,20 @@ module.exports = {
         timestamp: {
             type: Sequelize.DATE,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Reputations', ['recipient_user_id']))
-    .then(() => queryInterface.addIndex('Reputations', ['giver_user_id']))
-    .then(() => queryInterface.addConstraint('Reputations', ['recipient_user_id', 'giver_user_id'], {
-        type: 'unique',
-        name: 'uq_reputations_recipient_user_id_giver_user_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Reputations'),
+        .then(() => queryInterface.addIndex('Reputations', ['recipientUserId']))
+        .then(() => queryInterface.addIndex('Reputations', ['giverUserId']))
+        .then(() => queryInterface.addConstraint('Reputations', ['recipientUserId', 'giverUserId'], {
+            type: 'unique',
+            name: 'uq_reputations_recipientUserId_giverUserId',
+        })),
+    down: queryInterface => queryInterface.dropTable('Reputations'),
 };

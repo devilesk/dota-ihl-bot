@@ -1,13 +1,13 @@
 module.exports = {
-    up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Challenges', [
+    up: queryInterface => queryInterface.bulkInsert('Challenges', [
         {
-            recipient_user_id: 4,
-            giver_user_id: 1,
+            recipientUserId: 4,
+            giverUserId: 1,
             accepted: true,
-            created_at: new Date(),
-            updated_at: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
         },
     ], {}),
 
-    down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Challenges', null, {}),
+    down: queryInterface => queryInterface.bulkDelete('Challenges', null, {}),
 };

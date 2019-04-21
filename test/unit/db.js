@@ -101,8 +101,8 @@ describe('Database', () => {
     describe('findOrCreateLeague', () => {
         it('return existing league', async () => {
             const league = await findOrCreateLeague('422549177151782925')([
-                { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
-                { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue2' },
+                { queueType: CONSTANTS.QUEUE_TYPE_DRAFT, queueName: 'player-draft-queue' },
+                { queueType: CONSTANTS.QUEUE_TYPE_AUTO, queueName: 'autobalanced-queue2' },
             ]);
             assert.exists(league);
             const queues = await league.getQueues();
@@ -110,8 +110,8 @@ describe('Database', () => {
         });
         it('return new league', async () => {
             const league = await findOrCreateLeague('123')([
-                { queue_type: CONSTANTS.QUEUE_TYPE_DRAFT, queue_name: 'player-draft-queue' },
-                { queue_type: CONSTANTS.QUEUE_TYPE_AUTO, queue_name: 'autobalanced-queue2' },
+                { queueType: CONSTANTS.QUEUE_TYPE_DRAFT, queueName: 'player-draft-queue' },
+                { queueType: CONSTANTS.QUEUE_TYPE_AUTO, queueName: 'autobalanced-queue2' },
             ]);
             assert.exists(league);
             const queues = await league.getQueues();
@@ -125,7 +125,7 @@ describe('Database', () => {
             assert.exists(season);
             assert.equal(season.name, '2');
             const league = await season.getLeague();
-            assert.equal(league.current_season_id, season.id);
+            assert.equal(league.currentSeasonId, season.id);
         });
     });
 
@@ -133,7 +133,7 @@ describe('Database', () => {
         it('create new bot', async () => {
             const [bot, created] = await findOrCreateBot('123', 'bot3', 'bot3', 'pass');
             assert.exists(bot);
-            assert.equal(bot.steamid_64, '123');
+            assert.equal(bot.steamId64, '123');
         });
     });
 
@@ -142,9 +142,9 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findOrCreateLobby(league, CONSTANTS.QUEUE_TYPE_DRAFT, 'draft-lobby');
             assert.exists(lobby);
-            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            assert.equal(lobby.league_id, league.id);
-            assert.equal(lobby.season_id, league.current_season_id);
+            assert.equal(lobby.queueType, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.leagueId, league.id);
+            assert.equal(lobby.seasonId, league.currentSeasonId);
         });
     });
 
@@ -153,9 +153,9 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findOrCreateLobbyForGuild('422549177151782925', CONSTANTS.QUEUE_TYPE_DRAFT, 'draft-lobby');
             assert.exists(lobby);
-            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            assert.equal(lobby.league_id, league.id);
-            assert.equal(lobby.season_id, league.current_season_id);
+            assert.equal(lobby.queueType, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.leagueId, league.id);
+            assert.equal(lobby.seasonId, league.currentSeasonId);
         });
     });
 
@@ -164,9 +164,9 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findLobbyByName('funny-yak-74');
             assert.exists(lobby);
-            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            assert.equal(lobby.league_id, league.id);
-            assert.equal(lobby.season_id, league.current_season_id);
+            assert.equal(lobby.queueType, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.leagueId, league.id);
+            assert.equal(lobby.seasonId, league.currentSeasonId);
         });
     });
 
@@ -175,9 +175,9 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const lobby = await findLobbyById(1);
             assert.exists(lobby);
-            assert.equal(lobby.queue_type, CONSTANTS.QUEUE_TYPE_DRAFT);
-            assert.equal(lobby.league_id, league.id);
-            assert.equal(lobby.season_id, league.current_season_id);
+            assert.equal(lobby.queueType, CONSTANTS.QUEUE_TYPE_DRAFT);
+            assert.equal(lobby.leagueId, league.id);
+            assert.equal(lobby.seasonId, league.currentSeasonId);
         });
     });
 
@@ -194,7 +194,7 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserById(1);
             assert.exists(user);
-            assert.equal(user.league_id, league.id);
+            assert.equal(user.leagueId, league.id);
         });
     });
 
@@ -203,8 +203,8 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserByDiscordId('422549177151782925')('76864899866697728');
             assert.exists(user);
-            assert.equal(user.discord_id, '76864899866697728');
-            assert.equal(user.league_id, league.id);
+            assert.equal(user.discordId, '76864899866697728');
+            assert.equal(user.leagueId, league.id);
         });
     });
 
@@ -213,8 +213,8 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const user = await findUserBySteamId64('422549177151782925')('76561198015512690');
             assert.exists(user);
-            assert.equal(user.steamid_64, '76561198015512690');
-            assert.equal(user.league_id, league.id);
+            assert.equal(user.steamId64, '76561198015512690');
+            assert.equal(user.leagueId, league.id);
         });
     });
 
@@ -226,10 +226,10 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             const user = await findOrCreateUser(league, '123', '456', 70);
             assert.exists(user);
-            assert.equal(user.steamid_64, '123');
-            assert.equal(user.discord_id, '456');
-            assert.equal(user.rank_tier, 70);
-            assert.equal(user.league_id, league.id);
+            assert.equal(user.steamId64, '123');
+            assert.equal(user.discordId, '456');
+            assert.equal(user.rankTier, 70);
+            assert.equal(user.leagueId, league.id);
         });
     });
 
@@ -239,18 +239,18 @@ describe('Database', () => {
             const queue = await findOrCreateQueue(league, true, CONSTANTS.QUEUE_TYPE_AUTO, 'auto-queue');
             assert.exists(queue);
             assert.isTrue(queue.enabled);
-            assert.equal(queue.queue_type, CONSTANTS.QUEUE_TYPE_AUTO);
-            assert.equal(queue.queue_name, 'autobalanced-queue');
-            assert.equal(queue.league_id, league.id);
+            assert.equal(queue.queueType, CONSTANTS.QUEUE_TYPE_AUTO);
+            assert.equal(queue.queueName, 'autobalanced-queue');
+            assert.equal(queue.leagueId, league.id);
         });
         it('create existing queue', async () => {
             const league = await findLeague('422549177151782925');
             const queue = await findOrCreateQueue(league, false, 'test', 'auto-queue');
             assert.exists(queue);
             assert.isFalse(queue.enabled);
-            assert.equal(queue.queue_type, 'test');
-            assert.equal(queue.queue_name, 'auto-queue');
-            assert.equal(queue.league_id, league.id);
+            assert.equal(queue.queueType, 'test');
+            assert.equal(queue.queueName, 'auto-queue');
+            assert.equal(queue.leagueId, league.id);
         });
     });
 
@@ -270,10 +270,10 @@ describe('Database', () => {
 
     describe('updateLeague', () => {
         it('update league values', async () => {
-            const result = await updateLeague('422549177151782925')({ channel_name: 'test' });
+            const result = await updateLeague('422549177151782925')({ channelName: 'test' });
             assert.lengthOf(result, 1);
             const league = await findLeague('422549177151782925');
-            assert.equal(league.channel_name, 'test');
+            assert.equal(league.channelName, 'test');
         });
     });
 
@@ -333,7 +333,7 @@ describe('Database', () => {
             const league = await findLeague('422549177151782925');
             let queue = await db.Queue.findOne({ where: { id: 3 } });
             assert.exists(queue);
-            await destroyQueueByName(league)(queue.queue_name);
+            await destroyQueueByName(league)(queue.queueName);
             queue = await db.Queue.findOne({ where: { id: 3 } });
             assert.notExists(queue);
         });
@@ -346,8 +346,8 @@ describe('Database', () => {
             const receiver = await findUserById(2);
             const [rep, created] = await findOrCreateReputation(giver)(receiver);
             assert.exists(rep);
-            assert.equal(rep.giver_user_id, giver.id);
-            assert.equal(rep.recipient_user_id, receiver.id);
+            assert.equal(rep.giverUserId, giver.id);
+            assert.equal(rep.recipientUserId, receiver.id);
         });
     });
 
@@ -393,8 +393,8 @@ describe('Database', () => {
             const challenge = await createChallenge(user1)(user2);
             assert.exists(challenge);
             assert.isFalse(challenge.accepted);
-            assert.equal(challenge.giver_user_id, user1.id);
-            assert.equal(challenge.recipient_user_id, user2.id);
+            assert.equal(challenge.giverUserId, user1.id);
+            assert.equal(challenge.recipientUserId, user2.id);
         });
     });
 

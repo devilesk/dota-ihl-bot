@@ -78,34 +78,34 @@ describe('Commands', () => {
         });
 
         it('add bot', async () => {
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
-            await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+            await cmd.onMsg({ msg, guild, league }, { steamId64, accountName, personaName, password });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} added.`));
         });
 
         it('add bot then update bot', async () => {
             let bot;
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
-            await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+            await cmd.onMsg({ msg, guild, league }, { steamId64, accountName, personaName, password });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} added.`));
             bot = await findBot(1);
-            assert.equal(bot.steamid_64, '76561198015512690');
-            assert.equal(bot.account_name, 'account_name');
-            assert.equal(bot.persona_name, 'persona_name');
+            assert.equal(bot.steamId64, '76561198015512690');
+            assert.equal(bot.accountName, 'accountName');
+            assert.equal(bot.personaName, 'personaName');
             assert.equal(bot.password, 'password');
             msg.say.reset();
-            await cmd.onMsg({ msg, guild, league }, { steamid_64, account_name: 'account_name2', persona_name: 'persona_name2', password: 'password2' });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} updated.`));
+            await cmd.onMsg({ msg, guild, league }, { steamId64, accountName: 'account_name2', personaName: 'persona_name2', password: 'password2' });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} updated.`));
             bot = await findBot(1);
-            assert.equal(bot.steamid_64, '76561198015512690');
-            assert.equal(bot.account_name, 'account_name2');
-            assert.equal(bot.persona_name, 'persona_name2');
+            assert.equal(bot.steamId64, '76561198015512690');
+            assert.equal(bot.accountName, 'account_name2');
+            assert.equal(bot.personaName, 'persona_name2');
             assert.equal(bot.password, 'password2');
         });
     });
@@ -134,11 +134,11 @@ describe('Commands', () => {
         });
 
         it('remove bot that does not exist', async () => {
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
-            await cmd.onMsg({ msg, guild, league }, { steamid_64 });
+            await cmd.onMsg({ msg, guild, league }, { steamId64 });
             assert.isTrue(msg.say.calledWith('No bot removed.'));
             const bots = await findAllBotsForLeague(league);
             assert.empty(bots);
@@ -147,22 +147,22 @@ describe('Commands', () => {
         it('add bot then remove bot', async () => {
             let bot;
             let bots;
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
-            await addCmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+            await addCmd.onMsg({ msg, guild, league }, { steamId64, accountName, personaName, password });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} added.`));
             bot = await findBot(1);
-            assert.equal(bot.steamid_64, '76561198015512690');
-            assert.equal(bot.account_name, 'account_name');
-            assert.equal(bot.persona_name, 'persona_name');
+            assert.equal(bot.steamId64, '76561198015512690');
+            assert.equal(bot.accountName, 'accountName');
+            assert.equal(bot.personaName, 'personaName');
             assert.equal(bot.password, 'password');
             bots = await findAllBotsForLeague(league);
             assert.lengthOf(bots, 1);
             msg.say.reset();
-            await cmd.onMsg({ msg, guild, league }, { steamid_64 });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
+            await cmd.onMsg({ msg, guild, league }, { steamId64 });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} removed.`));
             bots = await findAllBotsForLeague(league);
             assert.empty(bots);
         });
@@ -192,9 +192,9 @@ describe('Commands', () => {
         });
 
         it('list no bots', async () => {
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
             await cmd.onMsg({ msg, guild, league });
             sinon.assert.calledWith(msg.say, {
@@ -213,16 +213,16 @@ describe('Commands', () => {
 
         it('add bot then list bots', async () => {
             let bot;
-            const steamid_64 = '76561198015512690';
-            const account_name = 'account_name';
-            const persona_name = 'persona_name';
+            const steamId64 = '76561198015512690';
+            const accountName = 'accountName';
+            const personaName = 'personaName';
             const password = 'password';
-            await addCmd.onMsg({ msg, guild, league }, { steamid_64, account_name, persona_name, password });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} added.`));
+            await addCmd.onMsg({ msg, guild, league }, { steamId64, accountName, personaName, password });
+            assert.isTrue(msg.say.calledWith(`Bot ${steamId64} added.`));
             bot = await findBot(1);
-            assert.equal(bot.steamid_64, '76561198015512690');
-            assert.equal(bot.account_name, 'account_name');
-            assert.equal(bot.persona_name, 'persona_name');
+            assert.equal(bot.steamId64, '76561198015512690');
+            assert.equal(bot.accountName, 'accountName');
+            assert.equal(bot.personaName, 'personaName');
             assert.equal(bot.password, 'password');
             msg.say.reset();
             await cmd.onMsg({ msg, guild, league });
@@ -233,8 +233,8 @@ describe('Commands', () => {
                         {
                             name: 'Bots',
                             value: `**76561198015512690**
-Account Name: account_name
-Display Name: persona_name
+Account Name: accountName
+Display Name: personaName
 Status: BOT_OFFLINE
 Tickets: `,
                             inline: false,
@@ -292,12 +292,12 @@ Tickets: `,
             await addCmd.onMsg({ msg, guild });
             assert.isTrue(msg.say.calledWith('Inhouse league created.'));
             league = await findLeague(guild.id);
-            assert.equal(league.current_season_id, 1);
+            assert.equal(league.currentSeasonId, 1);
             msg.say.reset();
             await cmd.onMsg({ msg, guild }, { name });
             assert.isTrue(msg.say.calledWith(`New season ${name} started.`));
             league = await findLeague(guild.id);
-            assert.equal(league.current_season_id, 2);
+            assert.equal(league.currentSeasonId, 2);
         });
     });
 
@@ -322,19 +322,19 @@ Tickets: `,
             await Ihl.createNewLeague(guild);
         });
 
-        it('register with steamid_64', async () => {
+        it('register with steamId64', async () => {
             const text = '76561198015512690';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
-        it('register with account_id', async () => {
+        it('register with accountId', async () => {
             const text = '55246962';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
-        it('fail with a bad steamid_64', async () => {
+        it('fail with a bad steamId64', async () => {
             const text = 'asdf';
             await cmd.onMsg({ msg, guild }, { text });
             assert.isTrue(msg.say.calledWith('Invalid steam id.'));

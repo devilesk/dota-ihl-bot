@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const Mocks = require('../test/mocks');
+
 const client = new Mocks.MockClient();
 const commands = new Mocks.MockCommands(client);
 

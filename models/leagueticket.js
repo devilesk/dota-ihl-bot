@@ -1,13 +1,13 @@
-const Sequelize = require('sequelize');
-
-const Op = Sequelize.Op;
-
-module.exports = (sequelize, DataTypes) => {
-    const LeagueTicket = sequelize.define('LeagueTicket', {
-    }, { underscored: true });
+/* eslint-disable object-curly-newline */
+module.exports = (sequelize) => {
+    const LeagueTicket = sequelize.define('LeagueTicket', {});
     LeagueTicket.associate = (models) => {
-        LeagueTicket.belongsTo(models.League);
-        LeagueTicket.belongsTo(models.Ticket);
+        LeagueTicket.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
+        LeagueTicket.belongsTo(models.Ticket, {
+            foreignKey: 'ticketId',
+        });
     };
     return LeagueTicket;
 };

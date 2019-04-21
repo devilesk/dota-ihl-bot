@@ -33,8 +33,8 @@ module.exports = class GameModeCommand extends IHLCommand {
     }
 
     async onMsg({ msg, inhouseUser }, { text }) {
-        const game_mode = text === 'cm' ? CONSTANTS.DOTA_GAMEMODE_CM : CONSTANTS.DOTA_GAMEMODE_CD;
-        await inhouseUser.update({ game_mode_preference: game_mode });
+        const gameMode = text === 'cm' ? CONSTANTS.DOTA_GAMEMODE_CM : CONSTANTS.DOTA_GAMEMODE_CD;
+        await inhouseUser.update({ gameModePreference: gameMode });
         return msg.say(`Preferred game mode set to ${text === 'cm' ? "Captain's Mode" : "Captain's Draft"}.`);
     }
 };

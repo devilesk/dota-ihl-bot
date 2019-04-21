@@ -23,7 +23,7 @@ module.exports = class UserBadgeCommand extends IHLCommand {
                     type: 'string',
                 },
                 {
-                    key: 'rank_tier',
+                    key: 'rankTier',
                     prompt: 'Provide a badge rank.',
                     type: 'integer',
                 },
@@ -36,12 +36,12 @@ module.exports = class UserBadgeCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }, { member, rank_tier }) {
+    async onMsg({ msg, guild }, { member, rankTier }) {
         logger.debug('UserBadgeCommand');
         const [user, discordUser] = await findUser(guild)(member);
         if (user) {
-            await user.update({ rank_tier });
-            return msg.say(`${discordUser.displayName} badge set to ${rank_tier}.`);
+            await user.update({ rankTier });
+            return msg.say(`${discordUser.displayName} badge set to ${rankTier}.`);
         }
         return msg.say(IHLCommand.UserNotFoundMessage);
     }

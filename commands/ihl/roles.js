@@ -33,7 +33,7 @@ module.exports = class RolesCommand extends IHLCommand {
         let roles = text.split(',').map(x => parseInt(x)).filter(x => !isNaN(x) && x >= 1 && x <= 5);
         roles = roles.filter((x, pos) => roles.indexOf(x) === pos);
         for (let i = 1; i <= 5; i++) {
-            values[`role_${i}`] = roles.indexOf(i);
+            values[`role${i}`] = roles.indexOf(i);
         }
         if (roles.length) {
             await inhouseUser.update(values);

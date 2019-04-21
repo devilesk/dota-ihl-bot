@@ -32,11 +32,11 @@ describe('Database', () => {
                 members: [],
             };
             guild.members.get = sinon.stub();
-            guild.members.get.withArgs('76864899866697728').returns('discord_user');
-            const [user, discord_user, result_type] = await findUser(guild)('<@76864899866697728>');
+            guild.members.get.withArgs('76864899866697728').returns('discordUser');
+            const [user, discordUser, resultType] = await findUser(guild)('<@76864899866697728>');
             assert.equal(user.id, 1);
-            assert.equal(discord_user, 'discord_user');
-            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
+            assert.equal(discordUser, 'discordUser');
+            assert.equal(resultType, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
         });
         it('return user matching discord id nickname', async () => {
             const guild = {
@@ -44,11 +44,11 @@ describe('Database', () => {
                 members: [],
             };
             guild.members.get = sinon.stub();
-            guild.members.get.withArgs('76864899866697728').returns('discord_user');
-            const [user, discord_user, result_type] = await findUser(guild)('<@!76864899866697728>');
+            guild.members.get.withArgs('76864899866697728').returns('discordUser');
+            const [user, discordUser, resultType] = await findUser(guild)('<@!76864899866697728>');
             assert.equal(user.id, 1);
-            assert.equal(discord_user, 'discord_user');
-            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
+            assert.equal(discordUser, 'discordUser');
+            assert.equal(resultType, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
         });
 
         it('return user matching discord name', async () => {
@@ -61,10 +61,10 @@ describe('Database', () => {
                     },
                 ],
             };
-            const [user, discord_user, result_type] = await findUser(guild)('test');
+            const [user, discordUser, resultType] = await findUser(guild)('test');
             assert.equal(user.id, 2);
-            assert.equal(discord_user.id, '112718237040398336');
-            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
+            assert.equal(discordUser.id, '112718237040398336');
+            assert.equal(resultType, CONSTANTS.MATCH_EXACT_DISCORD_NAME);
         });
     });
 });

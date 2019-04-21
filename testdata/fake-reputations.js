@@ -1,34 +1,32 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = [
     {
-        model: "Reputation",
+        model: 'Reputation',
         data: {
-            recipient_user_id: 1,
-            giver_user_id: 3,
+            recipientUserId: 1,
+            giverUserId: 3,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Reputation",
+        model: 'Reputation',
         data: {
-            recipient_user_id: 3,
-            giver_user_id: 5,
+            recipientUserId: 3,
+            giverUserId: 5,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
     {
-        model: "Reputation",
+        model: 'Reputation',
         data: {
-            recipient_user_id: 5,
-            giver_user_id: 3,
+            recipientUserId: 5,
+            giverUserId: 3,
             timestamp: new Date(),
-            created_at: new Date(),
-            updated_at: new Date(),
-        }
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
     },
-]
+];

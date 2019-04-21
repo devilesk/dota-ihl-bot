@@ -1,42 +1,43 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
-        steamid_64: {
+        steamId64: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        discord_id: {
+        discordId: {
             allowNull: false,
             type: DataTypes.STRING,
         },
         nickname: DataTypes.STRING,
-        role_1: {
+        role1: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
-        role_2: {
+        role2: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
-        role_3: {
+        role3: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
-        role_4: {
+        role4: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
-        role_5: {
+        role5: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
-        queue_timeout: {
+        queueTimeout: {
             type: DataTypes.DATE,
         },
         vouched: {
@@ -49,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 1000,
         },
-        rank_tier: DataTypes.INTEGER,
-        game_mode_preference: {
+        rankTier: DataTypes.INTEGER,
+        gameModePreference: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
@@ -65,45 +66,49 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-    }, { underscored: true });
+    });
     User.associate = (models) => {
-        User.belongsTo(models.League);
-        User.hasMany(models.Leaderboard);
+        User.belongsTo(models.League, {
+            foreignKey: 'leagueId',
+        });
+        User.hasMany(models.Leaderboard, {
+            foreignKey: 'userId',
+        });
 
         User.hasMany(models.Challenge, {
             as: 'ChallengesReceived',
-            foreignKey: 'recipient_user_id',
+            foreignKey: 'recipientUserId',
         });
 
         User.hasMany(models.Challenge, {
             as: 'ChallengesGiven',
-            foreignKey: 'giver_user_id',
+            foreignKey: 'giverUserId',
         });
 
         User.hasMany(models.Commend, {
             as: 'CommendsReceived',
-            foreignKey: 'recipient_user_id',
+            foreignKey: 'recipientUserId',
         });
 
         User.hasMany(models.Commend, {
             as: 'CommendsGiven',
-            foreignKey: 'giver_user_id',
+            foreignKey: 'giverUserId',
         });
 
         User.hasMany(models.Reputation, {
             as: 'ReputationsReceived',
-            foreignKey: 'recipient_user_id',
+            foreignKey: 'recipientUserId',
         });
 
         User.hasMany(models.Reputation, {
             as: 'ReputationsGiven',
-            foreignKey: 'giver_user_id',
+            foreignKey: 'giverUserId',
         });
 
-        User.belongsToMany(models.Lobby, { as: 'Lobbies', through: models.LobbyPlayer });
-        
-        User.belongsToMany(models.Lobby, { as: 'Queues', through: models.LobbyQueuer });
-        
+        User.belongsToMany(models.Lobby, { as: 'Lobbies', through: models.LobbyPlayer, foreignKey: 'userId', otherKey: 'lobbyId' });
+
+        User.belongsToMany(models.Lobby, { as: 'Queues', through: models.LobbyQueuer, foreignKey: 'userId', otherKey: 'lobbyId' });
+
         User.belongsToMany(models.Lobby, {
             through: {
                 model: models.LobbyQueuer,
@@ -112,6 +117,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'ActiveQueues',
+            foreignKey: 'userId',
+            otherKey: 'lobbyId',
         });
 
         User.belongsToMany(models.Lobby, {
@@ -122,17 +129,19 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             as: 'InactiveQueues',
+            foreignKey: 'userId',
+            otherKey: 'lobbyId',
         });
 
-        User.addScope('steamid_64', value => ({
+        User.addScope('steamId64', value => ({
             where: {
-                steamid_64: value,
+                steamId64: value,
             },
         }));
 
-        User.addScope('discord_id', value => ({
+        User.addScope('discordId', value => ({
             where: {
-                discord_id: value,
+                discordId: value,
             },
         }));
 
@@ -152,7 +161,7 @@ module.exports = (sequelize, DataTypes) => {
             include: [{
                 model: models.League,
                 where: {
-                    guild_id: value,
+                    guildId: value,
                 },
             }],
         }));

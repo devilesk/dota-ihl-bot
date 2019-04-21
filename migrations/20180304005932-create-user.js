@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER,
         },
-        league_id: {
+        leagueId: {
             allowNull: false,
             type: Sequelize.INTEGER,
             onDelete: 'CASCADE',
@@ -17,43 +18,43 @@ module.exports = {
                 key: 'id',
             },
         },
-        steamid_64: {
+        steamId64: {
             allowNull: false,
             type: Sequelize.STRING,
         },
-        discord_id: {
+        discordId: {
             allowNull: false,
             type: Sequelize.STRING,
         },
         nickname: {
             type: Sequelize.STRING,
         },
-        role_1: {
+        role1: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
         },
-        role_2: {
+        role2: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
         },
-        role_3: {
+        role3: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
         },
-        role_4: {
+        role4: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
         },
-        role_5: {
+        role5: {
             allowNull: false,
             type: Sequelize.INTEGER,
             defaultValue: -1,
         },
-        queue_timeout: {
+        queueTimeout: {
             type: Sequelize.DATE,
         },
         vouched: {
@@ -66,10 +67,10 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 1000,
         },
-        rank_tier: {
+        rankTier: {
             type: Sequelize.INTEGER,
         },
-        game_mode_preference: {
+        gameModePreference: {
             allowNull: false,
             type: Sequelize.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
@@ -84,23 +85,23 @@ module.exports = {
             type: Sequelize.INTEGER,
             defaultValue: 0,
         },
-        created_at: {
+        createdAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
-        updated_at: {
+        updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
         },
     })
-    .then(() => queryInterface.addIndex('Users', ['league_id']))
-    .then(() => queryInterface.addConstraint('Users', ['league_id', 'steamid_64'], {
-        type: 'unique',
-        name: 'uq_users_league_id_steamid_64',
-    }))
-    .then(() => queryInterface.addConstraint('Users', ['league_id', 'discord_id'], {
-        type: 'unique',
-        name: 'uq_users_league_id_discord_id',
-    })),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('Users'),
+        .then(() => queryInterface.addIndex('Users', ['leagueId']))
+        .then(() => queryInterface.addConstraint('Users', ['leagueId', 'steamId64'], {
+            type: 'unique',
+            name: 'uq_users_leagueId_steamId64',
+        }))
+        .then(() => queryInterface.addConstraint('Users', ['leagueId', 'discordId'], {
+            type: 'unique',
+            name: 'uq_users_leagueId_discordId',
+        })),
+    down: queryInterface => queryInterface.dropTable('Users'),
 };

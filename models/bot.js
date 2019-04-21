@@ -1,16 +1,17 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
 module.exports = (sequelize, DataTypes) => {
     const Bot = sequelize.define('Bot', {
-        steamid_64: {
+        steamId64: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        account_name: {
+        accountName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        persona_name: {
+        personaName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
@@ -23,15 +24,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.BOT_OFFLINE,
         },
-        lobby_count: {
+        lobbyCount: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
-    }, { underscored: true });
+    });
     Bot.associate = (models) => {
-        Bot.hasMany(models.Lobby);
-        Bot.belongsToMany(models.Ticket, { through: models.BotTicket });
+        Bot.hasMany(models.Lobby, {
+            foreignKey: 'botId',
+        });
+        Bot.belongsToMany(models.Ticket, { through: models.BotTicket, foreignKey: 'botId', otherKey: 'ticketId' });
     };
     return Bot;
 };

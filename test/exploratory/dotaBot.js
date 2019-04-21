@@ -33,12 +33,12 @@ function traceMethodCalls(obj) {
 }
 
 const config = {
-    steamid_64: '76561198810968998',
-    account_name: 'rd2l1',
-    persona_name: 'Inhouse Bot',
+    steamId64: '76561198810968998',
+    accountName: 'rd2l1',
+    personaName: 'Inhouse Bot',
     password: 'redditdota2league',
     status: CONSTANTS.BOT_OFFLINE,
-    lobby_count: 0,
+    lobbyCount: 0,
 };
 
 const createDotaBot = (config) => {
@@ -128,7 +128,7 @@ async function run(dotaBot) {
     await DotaBot.connectDotaBot(dotaBot);
     // console.log('run connected');
 
-    await DotaBot.createDotaBotLobby({ lobby_name: 'lobby_name', password: 'password', leagueid: 10163, game_mode: 'DOTA_GAMEMODE_CM', first_pick: 1, radiant_faction: 1 })(dotaBot);
+    await DotaBot.createDotaBotLobby({ lobbyName: 'lobbyName', password: 'password', leagueid: 10163, gameMode: 'DOTA_GAMEMODE_CM', firstPick: 1, radiantFaction: 1 })(dotaBot);
     await dotaBot.leaveLobbyChat();
     await dotaBot.leavePracticeLobby();
     await DotaBot.disconnectDotaBot(dotaBot);

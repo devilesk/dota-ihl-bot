@@ -1,68 +1,68 @@
+/* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 module.exports = (sequelize, DataTypes) => {
     const League = sequelize.define('League', {
-        guild_id: {
+        guildId: {
             allowNull: false,
             type: DataTypes.STRING,
             unique: true,
         },
-        current_season_id: {
+        currentSeasonId: {
             type: DataTypes.INTEGER,
         },
-        ready_check_timeout: {
+        readyCheckTimeout: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 60000,
         },
-        captain_rank_threshold: {
+        captainRankThreshold: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 3,
         },
-        captain_role_regexp: {
+        captainRoleRegexp: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: 'Tier ([0-9]+) Captain',
         },
-        category_name: {
+        categoryName: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: 'inhouses',
         },
-        channel_name: {
+        channelName: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: 'general',
         },
-        admin_role_name: {
+        adminRoleName: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: 'Inhouse Admin',
         },
-        initial_rating: {
+        initialRating: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 1000,
         },
-        elo_k_factor: {
+        eloKFactor: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 20,
         },
-        default_game_mode: {
+        defaultGameMode: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
-        lobby_name_template: {
+        lobbyNameTemplate: {
             allowNull: false,
             type: DataTypes.STRING,
-            defaultValue: 'Inhouse Lobby ${lobby_id}',
+            // eslint-disable-next-line no-template-curly-in-string
+            defaultValue: 'Inhouse Lobby ${lobbyId}',
         },
-        draft_order: {
+        draftOrder: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: 'ABBABAAB',
@@ -72,25 +72,34 @@ module.exports = (sequelize, DataTypes) => {
         },
     },
     {
-        underscored: true,
         scopes: {
             guild: value => ({
                 where: {
-                    guild_id: value,
+                    guildId: value,
                 },
             }),
         },
     });
     League.associate = (models) => {
-        League.hasMany(models.Season);
-        League.hasMany(models.Queue);
-        League.hasMany(models.User);
-        League.hasMany(models.Lobby);
-        League.hasMany(models.Leaderboard);
-        League.belongsToMany(models.Ticket, { through: models.LeagueTicket });
+        League.hasMany(models.Season, {
+            foreignKey: 'leagueId',
+        });
+        League.hasMany(models.Queue, {
+            foreignKey: 'leagueId',
+        });
+        League.hasMany(models.User, {
+            foreignKey: 'leagueId',
+        });
+        League.hasMany(models.Lobby, {
+            foreignKey: 'leagueId',
+        });
+        League.hasMany(models.Leaderboard, {
+            foreignKey: 'leagueId',
+        });
+        League.belongsToMany(models.Ticket, { through: models.LeagueTicket, foreignKey: 'leagueId', otherKey: 'ticketId' });
         League.belongsTo(models.Season, {
             as: 'CurrentSeason',
-            foreignKey: 'current_season_id',
+            foreignKey: 'currentSeasonId',
             constraints: false,
         });
         League.belongsTo(models.Ticket, {

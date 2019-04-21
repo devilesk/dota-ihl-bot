@@ -37,7 +37,7 @@ module.exports = class QueueJoinCommand extends IHLCommand {
         case CONSTANTS.QUEUE_ALREADY_JOINED:
             return msg.say(`${msg.member.displayName} already in queue or game.`);
         case CONSTANTS.QUEUE_BANNED:
-            return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queue_timeout - Date.now()) / 1000)}.`);
+            return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queueTimeout - Date.now()) / 1000)}.`);
         default:
             return null;
         }
@@ -45,7 +45,7 @@ module.exports = class QueueJoinCommand extends IHLCommand {
 
     async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
         logger.silly(`QueueJoinCommand lobbyState ${lobbyState}`);
-        if (inhouseUser.rank_tier) {
+        if (inhouseUser.rankTier) {
             if (channel) {
                 // use lobbyState for given channel
                 const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;

@@ -1,5 +1,3 @@
-const CONSTANTS = require('../lib/constants');
-
 module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define('Ticket', {
         leagueid: {
@@ -11,13 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING,
         },
-        most_recent_activity: DataTypes.DATE,
-        start_timestamp: DataTypes.DATE,
-        end_timestamp: DataTypes.DATE,
-    }, { underscored: true });
+        mostRecentActivity: DataTypes.DATE,
+        startTimestamp: DataTypes.DATE,
+        endTimestamp: DataTypes.DATE,
+    });
     Ticket.associate = (models) => {
-        Ticket.belongsToMany(models.League, { through: models.LeagueTicket });
-        Ticket.belongsToMany(models.Bot, { through: models.BotTicket });
+        Ticket.belongsToMany(models.League, { through: models.LeagueTicket, foreignKey: 'ticketId', otherKey: 'leagueId' });
+        Ticket.belongsToMany(models.Bot, { through: models.BotTicket, foreignKey: 'ticketId', otherKey: 'botId' });
     };
     return Ticket;
 };
