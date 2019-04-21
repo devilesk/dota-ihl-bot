@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 const Db = require('../../lib/db');
 const Lobby = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
@@ -32,13 +30,11 @@ module.exports = class CommendCommand extends IHLCommand {
                     type: 'string',
                 },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
-    async onMsg({ msg, league, guild, inhouseUser }, { member, match_id }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+    async onMsg({ msg, guild, inhouseUser }, { member, match_id }) {
+        const [user, discordUser] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         const lobby = await Db.findLobbyByMatchId(match_id);
         const players = await Lobby.getPlayers()(lobby);
@@ -46,27 +42,27 @@ module.exports = class CommendCommand extends IHLCommand {
             logger.silly(`CommendCommand ${lobby.state}`);
             if (lobby.state === CONSTANTS.STATE_COMPLETED) {
                 if (user && fromUser) {
-                    logger.silly(`CommendCommand users exist`);
+                    logger.silly('CommendCommand users exist');
                     if (!players.find(player => player.id === user.id)) {
-                        await msg.say(`${discord_user.displayName} not a player in the match.`);
+                        await msg.say(`${discordUser.displayName} not a player in the match.`);
                     }
                     else if (!players.find(player => player.id === fromUser.id)) {
                         await msg.say(`${msg.author.username} not a player in the match.`);
                     }
                     else {
-                        logger.silly(`CommendCommand users on team`);
+                        logger.silly('CommendCommand users on team');
                         if (user.id !== fromUser.id) {
                             logger.silly(`CommendCommand ${user.id} ${fromUser.id}`);
-                            const [rep, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
+                            const [, created] = await Db.findOrCreateCommend(lobby)(fromUser)(user);
                             if (created) {
-                                await msg.say(`${msg.author.username} commends ${discord_user.displayName}`);
+                                await msg.say(`${msg.author.username} commends ${discordUser.displayName}`);
                             }
                             else {
-                                await msg.say(`${discord_user.displayName} already commended.`);
+                                await msg.say(`${discordUser.displayName} already commended.`);
                             }
                         }
                         else {
-                            await msg.say(`Cannot commend yourself.`);
+                            await msg.say('Cannot commend yourself.');
                         }
                     }
                 }

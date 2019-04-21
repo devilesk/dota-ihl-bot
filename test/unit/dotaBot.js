@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const steam = require('steam');
 const Dota2 = require('dota2');
 const { EventEmitter } = require('events');
-const Long = require("long");
+const Long = require('long');
 const fs = require('fs');
 const Db = require('../../lib/db');
 const DotaBot = require('../../lib/dotaBot');
@@ -15,13 +15,13 @@ describe('Setup', () => {
         sinon.stub(fs, 'readFileSync').callsFake(() => true);
         sinon.stub(Db, 'updateBotStatusBySteamId').callsFake(() => sinon.stub());
     });
-    
+
     after(() => {
         fs.writeFileSync.restore();
         fs.readFileSync.restore();
         Db.updateBotStatusBySteamId.restore();
     });
-    
+
     describe('Functions', () => {
         describe('slotToTeam', () => {
             it('return 1 for radiant', async () => {
@@ -30,124 +30,124 @@ describe('Setup', () => {
                 assert.equal(Dota2.schema.DOTA_GC_TEAM.DOTA_GC_TEAM_GOOD_GUYS, slot);
                 assert.equal(faction, 1);
             });
-            
+
             it('return 2 for dire', async () => {
                 const slot = 1;
                 const faction = DotaBot.slotToTeam(slot);
                 assert.equal(Dota2.schema.DOTA_GC_TEAM.DOTA_GC_TEAM_BAD_GUYS, slot);
                 assert.equal(faction, 2);
             });
-            
+
             it('return null when not 0 or 1', async () => {
                 assert.isNull(DotaBot.slotToTeam(-1));
                 assert.isNull(DotaBot.slotToTeam(2));
             });
         });
-        
+
         describe('updatePlayerState', () => {
             it('return playerState with steamid_64 faction value 1', async () => {
                 const steamid_64 = '123';
                 const playerState = DotaBot.updatePlayerState(steamid_64, 0, {});
                 assert.deepEqual(playerState, { [steamid_64]: 1 });
             });
-            
+
             it('return playerState with steamid_64 faction value 2', async () => {
                 const steamid_64 = '123';
                 const playerState = DotaBot.updatePlayerState(steamid_64, 1, {});
                 assert.deepEqual(playerState, { [steamid_64]: 2 });
             });
-            
+
             it('return updated playerState', async () => {
                 const steamid_64 = '123';
-                let playerState = DotaBot.updatePlayerState(steamid_64, 0,  { [steamid_64]: 2 });
+                let playerState = DotaBot.updatePlayerState(steamid_64, 0, { [steamid_64]: 2 });
                 assert.deepEqual(playerState, { [steamid_64]: 1 });
-                playerState = DotaBot.updatePlayerState(steamid_64, 1,  playerState);
+                playerState = DotaBot.updatePlayerState(steamid_64, 1, playerState);
                 assert.deepEqual(playerState, { [steamid_64]: 2 });
             });
-            
+
             it('delete player', async () => {
-                const playerState = DotaBot.updatePlayerState('1', null,  { '1': 1 });
+                const playerState = DotaBot.updatePlayerState('1', null, { 1: 1 });
                 assert.deepEqual(playerState, {});
             });
-            
+
             it('delete player when slot not 0 or 1', async () => {
-                let playerState = DotaBot.updatePlayerState('1', -1,  { '1': 1 });
+                let playerState = DotaBot.updatePlayerState('1', -1, { 1: 1 });
                 assert.deepEqual(playerState, {});
-                playerState = DotaBot.updatePlayerState('1', 2,  { '1': 1 });
+                playerState = DotaBot.updatePlayerState('1', 2, { 1: 1 });
                 assert.deepEqual(playerState, {});
             });
-            
+
             it('multiple players', async () => {
-                let playerState = DotaBot.updatePlayerState('1', 0,  {});
-                playerState = DotaBot.updatePlayerState('2', 1,  playerState);
-                playerState = DotaBot.updatePlayerState('3', 0,  playerState);
-                assert.deepEqual(playerState, { '1': 1, '2': 2, '3': 1 });
+                let playerState = DotaBot.updatePlayerState('1', 0, {});
+                playerState = DotaBot.updatePlayerState('2', 1, playerState);
+                playerState = DotaBot.updatePlayerState('3', 0, playerState);
+                assert.deepEqual(playerState, { 1: 1, 2: 2, 3: 1 });
             });
-            
+
             it('multiple players with a delete', async () => {
-                let playerState = DotaBot.updatePlayerState('1', 0,  {});
-                playerState = DotaBot.updatePlayerState('2', 1,  playerState);
-                playerState = DotaBot.updatePlayerState('3', 0,  playerState);
-                playerState = DotaBot.updatePlayerState('2', 2,  playerState);
-                assert.deepEqual(playerState, { '1': 1, '3': 1 });
-                playerState = DotaBot.updatePlayerState('1', null,  playerState);
-                assert.deepEqual(playerState, { '3': 1 });
+                let playerState = DotaBot.updatePlayerState('1', 0, {});
+                playerState = DotaBot.updatePlayerState('2', 1, playerState);
+                playerState = DotaBot.updatePlayerState('3', 0, playerState);
+                playerState = DotaBot.updatePlayerState('2', 2, playerState);
+                assert.deepEqual(playerState, { 1: 1, 3: 1 });
+                playerState = DotaBot.updatePlayerState('1', null, playerState);
+                assert.deepEqual(playerState, { 3: 1 });
             });
         });
-        
+
         describe('isDotaLobbyReady', () => {
             it('return true when fromCache is subset of playerState', async () => {
-                const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3};
-                const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
+                const fromCache = { 1: 1, 2: 2, 3: 0, 4: 3 };
+                const playerState = { 1: 1, 2: 2, 3: 0, 4: 3, 5: 0, 6: 0, 7: 1 };
                 assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
-            
+
             it('return true when null', async () => {
-                const fromCache = {'1': null};
+                const fromCache = { 1: null };
                 const playerState = {};
                 assert.isTrue(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
-            
+
             it('return false when 0', async () => {
-                const fromCache = {'1': 0};
+                const fromCache = { 1: 0 };
                 const playerState = {};
                 assert.isFalse(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
-            
+
             it('return false when fromCache is not subset of playerState', async () => {
-                const fromCache = {'1': 1, '2': 2, '3': 0, '4': 3, 'a': 0};
-                const playerState = {'1': 1, '2': 2, '3': 0, '4': 3, '5': 0, '6': 0, '7': 1}
+                const fromCache = { 1: 1, 2: 2, 3: 0, 4: 3, a: 0 };
+                const playerState = { 1: 1, 2: 2, 3: 0, 4: 3, 5: 0, 6: 0, 7: 1 };
                 assert.isFalse(DotaBot.isDotaLobbyReady(fromCache, playerState));
             });
         });
-        
+
         describe('connectToSteam', () => {
             it('call connect and resolve on connected event with client', async () => {
                 const steamClient = new EventEmitter();
                 steamClient.connect = () => steamClient.emit('connected');
-                sinon.spy(steamClient, "connect");
+                sinon.spy(steamClient, 'connect');
                 const result = await DotaBot.connectToSteam(steamClient);
                 assert.isTrue(steamClient.connect.calledOnce);
                 assert.equal(steamClient, result);
             });
         });
-        
+
         describe('logOnToSteam', () => {
             it('call logOn and resolve on logOnResponse event with client', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 const result = await DotaBot.logOnToSteam({})(steamClient)(steamUser);
                 assert.isTrue(steamUser.logOn.calledOnce);
                 assert.equal(steamClient, result);
             });
-        
+
             it('call logOn and reject on logOnResponse event with steam.EResult.Fail', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.Fail });
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
             });
 
@@ -155,7 +155,7 @@ describe('Setup', () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('error');
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
             });
 
@@ -163,10 +163,10 @@ describe('Setup', () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('loggedOff');
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
             });
-            
+
             it('call logOn and resolve on logOnResponse event with client, ignore subsequent events', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
@@ -175,35 +175,34 @@ describe('Setup', () => {
                     steamClient.emit('error');
                     steamClient.emit('loggedOff');
                     steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
-                }
-                sinon.spy(steamUser, "logOn");
+                };
+                sinon.spy(steamUser, 'logOn');
                 const result = await DotaBot.logOnToSteam({})(steamClient)(steamUser);
                 assert.isTrue(steamUser.logOn.calledOnce);
                 assert.equal(steamClient, result);
             });
         });
-        
+
         describe('connectToDota', () => {
             it('call launch and resolve on ready event with client', async () => {
                 const dotaClient = new EventEmitter();
                 dotaClient.launch = () => dotaClient.emit('ready');
-                sinon.spy(dotaClient, "launch");
+                sinon.spy(dotaClient, 'launch');
                 const result = await DotaBot.connectToDota(dotaClient);
                 assert.isTrue(dotaClient.launch.calledOnce);
                 assert.equal(dotaClient, result);
             });
         });
-        
+
         describe('updateServers', () => {
             it('assign servers to steam object', async () => {
                 const steam = {};
-                const servers = { '1': 1, '2': 2 };
-                DotaBot.updateServers(steam)(servers);
-                assert.property(steam, 'servers');
-                assert.equal(steam.servers, servers);
+                const servers = { 1: 1, 2: 2 };
+                const result = DotaBot.updateServers(servers);
+                assert.exists(result);
             });
         });
-        
+
         describe('updateMachineAuth', () => {
             it('calls callback with sha_file object', async () => {
                 const sha_file = crypto.createHash('sha1').update('data').digest();
@@ -212,7 +211,7 @@ describe('Setup', () => {
                 assert.isTrue(callback.withArgs({ sha_file }).calledOnce);
             });
         });
-        
+
         describe('diffMembers', () => {
             it('return array with 1 member', async () => {
                 const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
@@ -222,12 +221,12 @@ describe('Setup', () => {
                 assert.lengthOf(result, 1);
                 assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFF1)), 0);
             });
-            
+
             it('return empty', async () => {
                 const result = DotaBot.diffMembers([], []);
                 assert.isEmpty(result);
             });
-            
+
             it('return empty when no differences', async () => {
                 const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
                 const membersA = [{ id }];
@@ -235,7 +234,7 @@ describe('Setup', () => {
                 const result = DotaBot.diffMembers(membersA, membersB);
                 assert.isEmpty(result);
             });
-            
+
             it('return empty when first array is subset', async () => {
                 const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
                 const membersA = [{ id }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
@@ -244,7 +243,7 @@ describe('Setup', () => {
                 assert.isEmpty(result);
             });
         });
-        
+
         describe('intersectMembers', () => {
             it('return array with 1 member', async () => {
                 const id = new Long(0xFFFFFFFF, 0x7FFFFFFF);
@@ -254,19 +253,19 @@ describe('Setup', () => {
                 assert.lengthOf(result, 1);
                 assert.equal(result[0].id.compare(new Long(0xFFFFFFFF, 0x7FFFFFFF)), 0);
             });
-            
+
             it('return empty', async () => {
                 const result = DotaBot.intersectMembers([], []);
                 assert.isEmpty(result);
             });
-            
+
             it('return empty when none in common', async () => {
                 const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFFF) }];
                 const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
                 const result = DotaBot.intersectMembers(membersA, membersB);
                 assert.isEmpty(result);
             });
-            
+
             it('return empty when none in common multiple', async () => {
                 const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF1) }];
                 const membersB = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2) }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3) }];
@@ -276,7 +275,7 @@ describe('Setup', () => {
                 assert.isEmpty(result);
             });
         });
-        
+
         describe('membersToPlayerState', () => {
             it('return an object mapping steamids to slots', async () => {
                 const members = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2 }];
@@ -288,7 +287,7 @@ describe('Setup', () => {
                 });
             });
         });
-        
+
         describe('processMembers', () => {
             it('return object with members who left, joined, or changed slot', async () => {
                 const membersA = [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }];
@@ -306,15 +305,11 @@ describe('Setup', () => {
                 });
             });
         });
-        
+
         describe('invitePlayer', () => {
             it('invite player', async () => {
-                const user = {
-                    steamid_64: 'test',
-                }
-                const dotaBot = {
-                    inviteToLobby: sinon.spy(),
-                }
+                const user = { steamid_64: 'test' };
+                const dotaBot = { inviteToLobby: sinon.spy() };
                 const result = await DotaBot.invitePlayer(dotaBot)(user);
                 assert(dotaBot.inviteToLobby.calledOnce);
             });
@@ -322,7 +317,8 @@ describe('Setup', () => {
     });
 
     describe('DotaBot', () => {
-        let steamClient, steamUser, steamFriends, dotaClient;
+        let steamClient; let steamUser; let steamFriends; let
+            dotaClient;
 
         beforeEach(() => {
             steamClient = new EventEmitter();
@@ -337,37 +333,37 @@ describe('Setup', () => {
                 assert.equal(dotaBot.state, Queue.State.BLOCKED);
             });
         });
-        
+
         describe('logOnToSteam', () => {
             it('log in to steam and set name and online state', async () => {
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 const steamFriends = { setPersonaState: () => true, setPersonaName: () => true };
                 const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
                 await dotaBot.logOnToSteam();
                 assert.isTrue(steamUser.logOn.calledOnce);
             });
         });
-        
+
         describe('connectToDota', () => {
             it('connect to dota and release queue', async () => {
                 dotaClient.launch = () => dotaClient.emit('ready');
-                sinon.spy(dotaClient, "launch");
+                sinon.spy(dotaClient, 'launch');
                 const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
                 await dotaBot.connectToDota();
                 assert.isTrue(dotaClient.launch.calledOnce);
                 assert.equal(dotaBot.state, Queue.State.IDLE);
             });
         });
-        
+
         describe('connect', () => {
             it('connect to steam and dota', async () => {
                 steamClient.connect = () => steamClient.emit('connected');
-                sinon.spy(steamClient, "connect");
+                sinon.spy(steamClient, 'connect');
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
-                sinon.spy(steamUser, "logOn");
+                sinon.spy(steamUser, 'logOn');
                 dotaClient.launch = () => dotaClient.emit('ready');
-                sinon.spy(dotaClient, "launch");
+                sinon.spy(dotaClient, 'launch');
                 const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
                 await dotaBot.connect();
                 assert.isTrue(steamClient.connect.calledOnce);
@@ -375,13 +371,13 @@ describe('Setup', () => {
                 assert.isTrue(dotaClient.launch.calledOnce);
             });
         });
-        
+
         describe('disconnect', () => {
             it('disconnect from steam and dota and clear queue', async () => {
                 steamClient.disconnect = () => true;
-                sinon.spy(steamClient, "disconnect");
+                sinon.spy(steamClient, 'disconnect');
                 dotaClient.exit = () => true;
-                sinon.spy(dotaClient, "exit");
+                sinon.spy(dotaClient, 'exit');
                 const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
                 await dotaBot.disconnect();
                 assert.isTrue(steamClient.disconnect.calledOnce);
@@ -389,10 +385,11 @@ describe('Setup', () => {
                 assert.equal(dotaBot.state, Queue.State.IDLE);
             });
         });
-        
+
         describe('processLobbyUpdate', () => {
-            let dotaBot, memberLeftSpy, memberJoinedSpy, memberChangedSlotSpy, readySpy;
-            
+            let dotaBot; let memberLeftSpy; let memberJoinedSpy; let memberChangedSlotSpy; let
+                readySpy;
+
             beforeEach(() => {
                 dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
                 memberLeftSpy = sinon.spy();
@@ -404,56 +401,44 @@ describe('Setup', () => {
                 dotaBot.on(CONSTANTS.MSG_LOBBY_PLAYER_CHANGED_SLOT, memberChangedSlotSpy);
                 dotaBot.on(CONSTANTS.EVENT_LOBBY_READY, readySpy);
             });
-        
+
             it('emit left, joined, changed slot, and lobby ready', async () => {
-                const oldLobby = {
-                    members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }],
-                }
-                const newLobby = {
-                    members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }],
-                }
+                const oldLobby = { members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }] };
+                const newLobby = { members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }] };
                 dotaBot.teamCache = {
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 1,
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: null,
-                }
+                };
                 dotaBot.processLobbyUpdate(oldLobby, newLobby);
                 assert.isTrue(memberLeftSpy.calledOnce);
                 assert.isTrue(memberJoinedSpy.calledOnce);
                 assert.isTrue(memberChangedSlotSpy.calledOnce);
                 assert.isTrue(readySpy.calledOnce);
             });
-        
+
             it('emit left, joined, and changed slot', async () => {
-                const oldLobby = {
-                    members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }],
-                }
-                const newLobby = {
-                    members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }],
-                }
+                const oldLobby = { members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF4), team: 2, slot: 0 }] };
+                const newLobby = { members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 0, slot: 1 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF5), team: 2, slot: 0 }] };
                 dotaBot.teamCache = {
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 1,
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF5)).toString()]: 1,
-                }
+                };
                 dotaBot.processLobbyUpdate(oldLobby, newLobby);
                 assert.isTrue(memberLeftSpy.calledOnce);
                 assert.isTrue(memberJoinedSpy.calledOnce);
                 assert.isTrue(memberChangedSlotSpy.calledOnce);
                 assert.isFalse(readySpy.called);
             });
-        
+
             it('emit joined, and lobby ready', async () => {
-                const oldLobby = {
-                    members: [],
-                }
-                const newLobby = {
-                    members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }],
-                }
+                const oldLobby = { members: [] };
+                const newLobby = { members: [{ id: new Long(0xFFFFFFFF, 0x7FFFFFF2), team: 0, slot: 0 }, { id: new Long(0xFFFFFFFF, 0x7FFFFFF3), team: 1, slot: 1 }] };
                 dotaBot.teamCache = {
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF2)).toString()]: 1,
                     [(new Long(0xFFFFFFFF, 0x7FFFFFF3)).toString()]: 2,
-                }
+                };
                 dotaBot.processLobbyUpdate(oldLobby, newLobby);
                 assert.isFalse(memberLeftSpy.called);
                 assert.isTrue(memberJoinedSpy.calledTwice);
@@ -461,7 +446,7 @@ describe('Setup', () => {
                 assert.isTrue(readySpy.called);
             });
         });
-            
+
         describe('disconnectDotaBot', () => {
             it('disconnect bot', async () => {
                 const dotaBot = {
@@ -473,7 +458,7 @@ describe('Setup', () => {
                 assert.isTrue(dotaBot.disconnect.calledOnce);
             });
         });
-            
+
         describe('startDotaLobby', () => {
             it('return match id', async () => {
                 const dotaBot = {

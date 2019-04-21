@@ -1,8 +1,5 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
 const Lobby = require('../../lib/lobby');
 const CONSTANTS = require('../../lib/constants');
 
@@ -22,7 +19,7 @@ module.exports = class SecondCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild, lobbyState, inhouseUser }) {
+    async onMsg({ lobbyState, inhouseUser }) {
         logger.silly('SecondCommand');
         const captain = inhouseUser;
         if (Lobby.isCaptain(lobbyState)(captain)) {

@@ -14,17 +14,17 @@ describe('Database', () => {
         let lobby1;
         let lobby2;
         let lobby3;
-        
+
         beforeEach(async () => {
             ticket1 = await Db.upsertTicket({
                 leagueid: 10,
                 name: 'Ticket1',
-                start_timestamp: Date.now()
+                start_timestamp: Date.now(),
             });
             ticket2 = await Db.upsertTicket({
                 leagueid: 11,
                 name: 'Ticket2',
-                start_timestamp: Date.now()
+                start_timestamp: Date.now(),
             });
             league1 = await Ihl.initLeague({ id: '123' });
             league2 = await Ihl.initLeague({ id: '456' });
@@ -37,7 +37,7 @@ describe('Database', () => {
             lobby2 = await Db.findOrCreateLobby(league1, 'queue_type', 'lobby_name2');
             lobby3 = await Db.findOrCreateLobby(league2, 'queue_type', 'lobby_name3');
         });
-        
+
         it('findAllUnassignedBotForLeagueTicket', async () => {
             let bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.empty(bots);
@@ -62,7 +62,7 @@ describe('Database', () => {
             bots = await Db.findAllUnassignedBotForLeagueTicket(league1);
             assert.empty(bots);
         });
-        
+
         it('findAllUnassignedBotWithNoTicket', async () => {
             let bots = await Db.findAllUnassignedBotWithNoTicket();
             assert.lengthOf(bots, 4);
@@ -79,7 +79,7 @@ describe('Database', () => {
             bots = await Db.findAllUnassignedBotWithNoTicket();
             assert.lengthOf(bots, 2);
         });
-        
+
         it('findUnassignedBot', async () => {
             let bot = await Db.findUnassignedBot(league1);
             assert.exists(bot);
@@ -96,8 +96,9 @@ describe('Database', () => {
     });
 
     describe('Leaderboard', () => {
-        let league, user1, user2, user3, user4;
-        
+        let league; let user1; let user2; let user3; let
+            user4;
+
         beforeEach(async () => {
             league = await Ihl.initLeague({ id: '123' });
             user1 = await Db.findOrCreateUser(league, '123', '123', 50);
@@ -109,7 +110,7 @@ describe('Database', () => {
             await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user3.id, rating: 1200, wins: 3, losses: 0 });
             await db.Leaderboard.create({ league_id: league.id, season_id: 1, user_id: user4.id, rating: 1200, wins: 3, losses: 0 });
         });
-        
+
         it('queryUserLeaderboardRank', async () => {
             const rank1 = await Db.queryUserLeaderboardRank(league.id)(1)(user1.id);
             const rank2 = await Db.queryUserLeaderboardRank(league.id)(1)(user2.id);
@@ -146,7 +147,7 @@ describe('Database', () => {
             ticket = await Db.upsertTicket({
                 leagueid: 1,
                 name: 'Name',
-                start_timestamp: Date.now()
+                start_timestamp: Date.now(),
             });
             assert.equal(ticket.id, 1);
             assert.equal(ticket.name, 'Name');
@@ -156,18 +157,18 @@ describe('Database', () => {
 
     describe('Ticket associations', () => {
         let ticket;
-        
+
         beforeEach(async () => {
             ticket = await Db.upsertTicket({
                 leagueid: 12,
                 name: 'Ticket',
-                start_timestamp: Date.now()
+                start_timestamp: Date.now(),
             });
         });
-        
+
         describe('League', () => {
             let league;
-            
+
             beforeEach(async () => {
                 league = await Ihl.initLeague({ id: '123' });
             });
@@ -191,11 +192,11 @@ describe('Database', () => {
                 assert.lengthOf(tickets, 1);
             });
         });
-        
+
         describe('Bot', () => {
             let bot;
             let created;
-            
+
             beforeEach(async () => {
                 ([bot, created] = await Db.findOrCreateBot('123', 'bot3', 'bot3', 'pass'));
             });

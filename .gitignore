@@ -1,5 +1,6 @@
 .env
 .env.*
+.vscode/
 config.json
 config/
 node_modules/

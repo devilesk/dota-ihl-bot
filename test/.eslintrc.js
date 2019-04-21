@@ -1,6 +1,22 @@
 module.exports = {
     "env": {
         "node": true,
+        "mocha": true,
+    },
+    "globals": {
+        "spawn": true,
+        "Promise": true,
+        "chai": true,
+        "sinon": true,
+        "path": true,
+        "sequelize_fixtures": true,
+        "db": true,
+        "CONSTANTS": true,
+        "Mocks": true,
+        "TestHelper": true,
+        "chaiAsPromised": true,
+        "assert": true,
+        "expect": true,
     },
     "extends": "airbnb-base",
     "rules": {
@@ -22,4 +38,4 @@ module.exports = {
         "object-curly-newline": ["error", { "multiline": true }],
         "class-methods-use-this": ["error", { "exceptMethods": ["onMsg"] }],
     }
-};
+}

@@ -1,6 +1,7 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const chai = require('chai');
-const assert = chai.assert;
+
+const { assert } = chai;
 const Long = require('long');
 const Dota2 = require('dota2');
 
@@ -14,12 +15,12 @@ describe('Long', () => {
     });
     it('protobuf lobby_id is Long', () => {
         const d1 = new Dota2.schema.CMsgPracticeLobbyJoin({
-            "lobby_id": 1,
-            "pass_key": '2'
+            lobby_id: 1,
+            pass_key: '2',
         });
         const d2 = new Dota2.schema.CMsgPracticeLobbyJoin({
-            "lobby_id": new Long(1),
-            "pass_key": '2'
+            lobby_id: new Long(1),
+            pass_key: '2',
         });
         assert.isTrue(Long.isLong(d1.lobby_id));
         assert.isTrue(Long.isLong(d2.lobby_id));
@@ -54,7 +55,7 @@ describe('Long', () => {
         assert.isTrue(Long.ZERO.equals(value));
         value = Long.fromValue(undefined || '0');
         assert.isTrue(Long.ZERO.equals(value));
-        
+
         value = Long.fromString('123123a');
         assert.isTrue(value.equals(123123));
     });

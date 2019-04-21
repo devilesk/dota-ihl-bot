@@ -1,17 +1,20 @@
-const dotenv = require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
+require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('../../lib/logger');
 const spawn = require('../../lib/util/spawn');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
+
 Argument.validateInfo = function () {};
 const Command = require('discord.js-commando/src/commands/base');
+
 Command.validateInfo = function () {};
 const chai = require('chai');
-const assert = chai.assert;
+
+const { assert } = chai;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
-const SequelizeMocking = require('sequelize-mocking').SequelizeMocking;
+const { SequelizeMocking } = require('sequelize-mocking');
 const { EventEmitter } = require('events');
 const { hri } = require('human-readable-ids');
 const db = require('../../models');
@@ -23,10 +26,8 @@ const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 
-sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async match_id => {});
-sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
-    return new Mocks.MockDotaBot(config);
-});
+sinon.stub(MatchTracker, 'createMatchEndMessageEmbed').callsFake(async (match_id) => {});
+sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => new Mocks.MockDotaBot(config));
 sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
 
 const getRandomInt = require('../../lib/util/getRandomInt');
@@ -67,7 +68,7 @@ const joinLobby = async () => {
         c++;
     }
     setTimeout(readyUp, 1000);
-}
+};
 
 const readyUp = async () => {
     const guild = client.guilds.first();
@@ -78,7 +79,7 @@ const readyUp = async () => {
         queueReadyCommand.run(msg, {});
         c++;
     }
-}
+};
 
 const randomInput = () => {
     const guild = client.guilds.first();
@@ -88,7 +89,7 @@ const randomInput = () => {
     const msg = new Mocks.MockMessage(guild, channel, member);
     command.run(msg, {});
     setTimeout(randomInput, Math.random() * 1000);
-}
+};
 
 const testAutobalance = () => {
     lobby_channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
@@ -108,10 +109,10 @@ const testAutobalance = () => {
             queueReadyCommand.run(msg, {});
         }
     });
-    ihlManager.on(CONSTANTS.STATE_MATCH_IN_PROGRESS, lobbyState => {
+    ihlManager.on(CONSTANTS.STATE_MATCH_IN_PROGRESS, (lobbyState) => {
         ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobbyState.match_id);
     });
-}
+};
 
 const testDraft = () => {
     const guild = client.guilds.first();
@@ -132,9 +133,9 @@ const testDraft = () => {
     ihlManager.once(CONSTANTS.STATE_DRAFTING_PLAYERS, (lobbyState) => {
         randomDraft(lobbyState);
     });
-}
+};
 
-const randomDraft = async lobbyState => {
+const randomDraft = async (lobbyState) => {
     const lobby = await Lobby.getLobby(lobbyState);
     logger.debug(`randomDraft ${lobby.lobby_name} ${lobby.captain_1_user_id} ${lobby.captain_2_user_id}`);
     const guild = client.guilds.first();
@@ -155,38 +156,38 @@ const randomDraft = async lobbyState => {
     if (lobby.state === CONSTANTS.STATE_DRAFTING_PLAYERS) {
         setTimeout(async () => randomDraft(lobbyState), Math.random() * 1000);
     }
-}
+};
 
 const onReady = async () => {
     ihlManager.matchTracker.run = async () => {
         if (ihlManager.matchTracker.lobbies.length) {
             const lobbyOrState = ihlManager.matchTracker.lobbies.shift();
             const lobby = await Lobby.getLobby(lobbyOrState);
-            //ihlManager.matchTracker.emit(CONSTANTS.EVENT_MATCH_ENDED, lobby);
-            //ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobby.match_id);
+            // ihlManager.matchTracker.emit(CONSTANTS.EVENT_MATCH_ENDED, lobby);
+            // ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobby.match_id);
         }
-    }
-    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
-    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random())
+    };
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random());
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random());
+    await Db.findOrCreateBot(getRandomInt(100000000).toString(), hri.random(), hri.random(), hri.random());
     for (let i = 0; i < 20; i++) {
         await Mocks.MockMember.Factory().toGuild(guild).toDatabase();
     }
-    //await joinLobby();
-    //randomInput();
+    // await joinLobby();
+    // randomInput();
     testAutobalance();
-    //testDraft();
-}
+    // testDraft();
+};
 
 const run = async () => {
     await spawn('npm', ['run', 'db:init']);
     await client.initDefault();
     guild = client.guilds.first();
     await guild.toDatabase({ captain_rank_threshold: 100 });
-    //const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
+    // const mockedSequelize = await SequelizeMocking.createAndLoadFixtureFile(db.sequelize, [], { logging: false });
     ihlManager = new IHLManager.IHLManager(process.env);
-    //ihlManager.on('ready', onReady);
-    //ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
+    // ihlManager.on('ready', onReady);
+    // ihlManager.on(CONSTANTS.STATE_COMPLETED, joinLobby);
     await ihlManager.init(client);
     console.log('test');
     onReady();

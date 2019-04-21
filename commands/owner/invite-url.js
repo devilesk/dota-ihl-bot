@@ -1,5 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
+const IHLManager = require('../../lib/ihlManager');
 
 /**
  * @class InviteUrlCommand
@@ -12,8 +13,7 @@ module.exports = class InviteUrlCommand extends IHLCommand {
             aliases: ['invite-link', 'bot-invite', 'invite-bot'],
             group: 'owner',
             memberName: 'invite-url',
-            guildOnly: true,
-            description: `Get the discord invite link to add the bot to your server.`,
+            description: 'Get the discord invite link to add the bot to your server.',
         }, {
             clientOwner: true,
             inhouseAdmin: false,
@@ -24,6 +24,7 @@ module.exports = class InviteUrlCommand extends IHLCommand {
     }
 
     async onMsg({ msg }) {
-        await msg.say(this.ihlManager.inviteUrl);
+        logger.silly('InviteUrlCommand');
+        await msg.say(IHLManager.IHLManager.inviteUrl);
     }
 };

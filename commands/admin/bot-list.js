@@ -3,7 +3,7 @@ const IHLCommand = require('../../lib/ihlCommand');
 const Db = require('../../lib/db');
 const Fp = require('../../lib/util/fp');
 
-const createBotDetails = async bot => {
+const createBotDetails = async (bot) => {
     const tickets = await Db.getTicketsOf()(bot);
     const ticketNames = tickets.map(ticket => `${ticket.leagueid} - ${ticket.name}`).join(', ');
     return `**${bot.steamid_64}**
@@ -35,15 +35,16 @@ module.exports = class BotListCommand extends IHLCommand {
     }
 
     async onMsg({ msg, league }) {
+        logger.silly('BotListCommand');
         const bots = await Db.findAllBotsForLeague(league);
-        const bot_details = (await Fp.mapPromise(createBotDetails)(bots)).join('\t\n\n');
+        const details = (await Fp.mapPromise(createBotDetails)(bots)).join('\t\n\n');
         await msg.say({
             embed: {
                 color: 3447003,
                 fields: [
                     {
                         name: 'Bots',
-                        value: bot_details,
+                        value: details,
                         inline: false,
                     },
                 ],

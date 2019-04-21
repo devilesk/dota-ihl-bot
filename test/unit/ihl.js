@@ -16,17 +16,13 @@ const {
 const Db = require('../../lib/db');
 const Lobby = require('../../lib/lobby');
 
-const nockBack = require('nock').back;
-nockBack.fixtures = 'test/fixtures/';
-nockBack.setMode('record');
-
 describe('Database', () => {
     before(async () => {
-        ({ nockDone} = await nockBack('unit_ihl.json'));
+        ({ nockDone } = await nockBack('unit_ihl.json'));
         sinon.stub(Lobby, 'lobbyToLobbyState').callsFake(() => () => async () => sinon.stub());
     });
-    
-    beforeEach(done => {
+
+    beforeEach((done) => {
         sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
@@ -37,16 +33,16 @@ describe('Database', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyplayers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ], db, { log: () => {} }).then(function(){
+        ], db, { log: () => {} }).then(() => {
             done();
         });
     });
-    
+
     after(async () => {
         await nockDone();
         Lobby.lobbyToLobbyState.restore();
     });
-    
+
     const lobby_name = 'funny-yak-74';
     const id = 1;
 
@@ -66,7 +62,7 @@ describe('Database', () => {
             const user = await registerUser('422549177151782925', '76561198015512690', '76864899866697728');
             assert.exists(user);
         });
-        
+
         it('return a new user', async () => {
             const user = await registerUser('88641069939453952', '76561198015512690', '76864899866697728');
             assert.exists(user);
@@ -88,30 +84,30 @@ describe('Database', () => {
                     leagueid: 1,
                 },
                 guild: new Mocks.MockGuild(),
-            }
+            };
             const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
         });
-        
+
         it('return an inhouse state from a league', async () => {
             const league = await Db.findLeague('422549177151782925');
             const args = {
                 league,
                 guild: new Mocks.MockGuild(),
-            }
+            };
             const inhouseState = await createInhouseState(args);
             assert.exists(inhouseState);
         });
     });
-    
+
     describe('initLeague', () => {
         // TODO
     });
-    
+
     describe('createNewLeague', () => {
         // TODO
     });
-    
+
     describe('createLobbiesFromQueues', () => {
         // TODO
     });
@@ -120,17 +116,17 @@ describe('Database', () => {
         before(() => {
             sinon.stub(Db, 'findActiveLobbiesForUser');
         });
-        
+
         after(() => {
             Db.findActiveLobbiesForUser.restore();
         });
-        
+
         it('return true when user has active lobbies', async () => {
             Db.findActiveLobbiesForUser.resolves([{}]);
             const result = await hasActiveLobbies({});
             assert.isTrue(result);
         });
-        
+
         it('return false when user has no active lobbies', async () => {
             Db.findActiveLobbiesForUser.resolves([]);
             const result = await hasActiveLobbies({});
@@ -145,21 +141,21 @@ describe('Database', () => {
             const value = await joinLobbyQueue(user)({ lobby_name: 'test' });
             assert.equal(CONSTANTS.QUEUE_BANNED, value);
         });
-        
+
         it('return QUEUE_ALREADY_JOINED when user already in queue', async () => {
             const user = await Db.findUserById(1);
             user.queue_timeout = 0;
             const value = await joinLobbyQueue(user)({ id });
             assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
-        
+
         it('return QUEUE_ALREADY_JOINED when user has active lobbies', async () => {
             const user = await Db.findUserById(2);
             user.queue_timeout = 0;
             const value = await joinLobbyQueue(user)({ id: 2 });
             assert.equal(CONSTANTS.QUEUE_ALREADY_JOINED, value);
         });
-        
+
         it('return QUEUE_JOINED', async () => {
             const user = await Db.findUserById(11);
             user.queue_timeout = 0;
@@ -171,25 +167,21 @@ describe('Database', () => {
     describe('getAllLobbyQueues', () => {
         it('return queuing lobbies for inhouse', async () => {
             const inhouseState = {
-                guild: {
-                    id: '422549177151782925',
-                },
-                category: {
-                    name: 'test',
-                },
-            }
+                guild: { id: '422549177151782925' },
+                category: { name: 'test' },
+            };
             const lobbyStates = await getAllLobbyQueues(inhouseState);
             assert.lengthOf(lobbyStates, 1);
         });
     });
-    
+
     describe('leaveLobbyQueue', () => {
         it('return true when user already in queue', async () => {
             const user = await Db.findUserById(1);
             const value = await leaveLobbyQueue(user)({ id });
             assert.isTrue(value);
         });
-        
+
         it('return false when not in queue', async () => {
             const user = await Db.findUserById(11);
             const value = await leaveLobbyQueue(user)({ id: 2 });
@@ -200,13 +192,9 @@ describe('Database', () => {
     describe('getAllLobbyQueuesForUser', () => {
         it('do nothing when lobby not exist for queue', async () => {
             const inhouseState = {
-                guild: {
-                    id: '422549177151782925',
-                },
-                category: {
-                    name: 'test',
-                },
-            }
+                guild: { id: '422549177151782925' },
+                category: { name: 'test' },
+            };
             const user = await Db.findUserById(1);
             const lobbies = await getAllLobbyQueuesForUser(inhouseState, user);
             assert.lengthOf(lobbies, 2);

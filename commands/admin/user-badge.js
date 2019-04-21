@@ -1,8 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const {
-    findUser,
-} = require('../../lib/ihlManager');
+const { findUser } = require('../../lib/ihlManager');
 
 /**
  * @class UserBadgeCommand
@@ -39,7 +37,8 @@ module.exports = class UserBadgeCommand extends IHLCommand {
     }
 
     async onMsg({ msg, guild }, { member, rank_tier }) {
-        const [user, discord_user, result_type] = await findUser(guild)(member);
+        logger.debug('UserBadgeCommand');
+        const [user] = await findUser(guild)(member);
         if (user) {
             await user.update({ rank_tier });
             await msg.say(`${member} badge set to ${rank_tier}.`);

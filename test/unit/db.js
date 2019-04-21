@@ -38,7 +38,7 @@ const {
 } = require('../../lib/db');
 
 describe('Database', () => {
-    beforeEach(done => {
+    beforeEach((done) => {
         sequelize_fixtures.loadFiles([
             path.resolve(path.join(__dirname, '../../testdata/fake-leagues.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-seasons.js')),
@@ -50,7 +50,7 @@ describe('Database', () => {
             path.resolve(path.join(__dirname, '../../testdata/fake-lobbyqueuers.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-reputations.js')),
             path.resolve(path.join(__dirname, '../../testdata/fake-challenges.js')),
-        ], db, { log: () => {} }).then(function(){
+        ], db, { log: () => {} }).then(() => {
             done();
         });
     });
@@ -368,7 +368,7 @@ describe('Database', () => {
             const challenge = await getChallengeBetweenUsers(user1)(user2);
             assert.notExists(challenge);
         });
-        
+
         it('return accepted challenge', async () => {
             const user1 = await findUserById(4);
             const user2 = await findUserById(3);
@@ -376,7 +376,7 @@ describe('Database', () => {
             assert.exists(challenge);
             assert.isTrue(challenge.accepted);
         });
-        
+
         it('return challenge', async () => {
             const user1 = await findUserById(1);
             const user2 = await findUserById(2);
@@ -421,7 +421,7 @@ describe('Database', () => {
             challenge = await getChallengeBetweenUsers(user1)(user2);
             assert.notExists(challenge);
         });
-        
+
         it('destroy challenges for user 2', async () => {
             const user1 = await findUserById(4);
             const user2 = await findUserById(3);
@@ -432,7 +432,7 @@ describe('Database', () => {
             challenge = await getChallengeBetweenUsers(user1)(user2);
             assert.notExists(challenge);
         });
-        
+
         it('not destroy unaccepted challenge', async () => {
             const user1 = await findUserById(3);
             const user2 = await findUserById(2);

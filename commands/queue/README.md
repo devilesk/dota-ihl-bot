@@ -11,6 +11,8 @@
 
 > Join inhouse queue.
 
+**Guild only**
+
 **Aliases:** `qjoin`, `join`, `join-queue`, `queuejoin`, `joinqueue`
 
 **Usage Examples:**
@@ -25,6 +27,8 @@
 **Format:** `!queue-leave [<channel>]`
 
 > Leave inhouse queue.
+
+**Guild only**
 
 **Aliases:** `qleave`, `leave`, `leave-queue`, `queueleave`, `leavequeue`
 
@@ -41,6 +45,8 @@
 
 > Queue ready check acknowledgement.
 
+**Guild only**
+
 **Aliases:** `qready`, `ready`, `queueready`
 
  
@@ -49,6 +55,8 @@
 **Format:** `!queue-status [<channel>]`
 
 > Display players in queue.
+
+**Guild only**
 
 **Aliases:** `qstatus`, `status`, `queuestatus`
 

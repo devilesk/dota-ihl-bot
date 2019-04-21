@@ -3,18 +3,14 @@ const MatchTracker = require('../../lib/matchTracker');
 const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 
-const nockBack = require('nock').back;
-nockBack.fixtures = 'test/fixtures/';
-nockBack.setMode('record');
-
 describe('Database', () => {
     let guild;
     let matchTracker;
-    
+
     before(async () => {
-        ({ nockDone} = await nockBack('int_matchTracker.json'));
+        ({ nockDone } = await nockBack('int_matchTracker.json'));
     });
-    
+
     beforeEach(async () => {
         guild = new Mocks.MockGuild();
         await guild.toDatabase();
@@ -68,7 +64,7 @@ describe('Database', () => {
                 steamid_64: '76561198085487944',
                 nickname: 'Earthshaker',
                 rating: 1000,
-            }
+            },
         ];
         for (let i = 0; i < 10; i++) {
             const member = new Mocks.MockMember(guild);
@@ -76,19 +72,19 @@ describe('Database', () => {
         }
         const lobby = await Db.findOrCreateLobbyForGuild(guild.id, CONSTANTS.QUEUE_TYPE_AUTO, 'autobalanced-queue');
         for (const member of guild.members.array()) {
-            await Lobby.addPlayer(lobby)(member._model);
+            if (guild.me.id !== member.id) await Lobby.addPlayer(lobby)(member._model);
         }
         await lobby.update({
             match_id: '4578557761',
             state: CONSTANTS.STATE_MATCH_IN_PROGRESS,
-            captain_1_user_id: guild.members.array()[0]._model.id,
-            captain_2_user_id: guild.members.array()[5]._model.id,
+            captain_1_user_id: guild.members.array()[1]._model.id,
+            captain_2_user_id: guild.members.array()[6]._model.id,
         });
         for (let i = 0; i < 5; i++) {
-            await Lobby.setPlayerFaction(1)(lobby)(guild.members.array()[i]._model.id);
+            await Lobby.setPlayerFaction(1)(lobby)(guild.members.array()[i + 1]._model.id);
         }
         for (let i = 5; i < 10; i++) {
-            await Lobby.setPlayerFaction(2)(lobby)(guild.members.array()[i]._model.id);
+            await Lobby.setPlayerFaction(2)(lobby)(guild.members.array()[i + 1]._model.id);
         }
         matchTracker = new MatchTracker.MatchTracker(1000);
     });
@@ -96,31 +92,31 @@ describe('Database', () => {
     after(async () => {
         await nockDone();
     });
-    
+
     describe('getOpenDotaMatchDetails', () => {
         it('return opendota match data', async () => {
             const data = await MatchTracker.getOpenDotaMatchDetails('4578557761');
             assert.exists(data);
         });
-        
+
         it('return bad opendota match data', async () => {
             const data = await MatchTracker.getOpenDotaMatchDetails('aaaa4578aa557761aa');
             assert.isNull(data);
         });
     });
-    
+
     describe('getValveMatchDetails', () => {
         it('return valve match data', async () => {
             const data = await MatchTracker.getValveMatchDetails('4578557761');
             assert.exists(data);
         });
-        
+
         it('return null valve match data', async () => {
             const data = await MatchTracker.getValveMatchDetails('aaaa4578aa557761aa');
             assert.isNull(data);
         });
     });
-    
+
     describe('setMatchDetails', () => {
         it('return lobby with opendota and valve match data', async () => {
             const lobby = await MatchTracker.setMatchDetails({ id: 1 });
@@ -128,7 +124,7 @@ describe('Database', () => {
             assert.exists(lobby.odota_data);
         });
     });
-    
+
     describe('setMatchPlayerDetails', () => {
         it('set lobby players match stats', async () => {
             let lobby = await MatchTracker.setMatchDetails({ id: 1 });
@@ -148,10 +144,10 @@ describe('Database', () => {
             assert.equal(lobby.winner, 2);
         });
     });
-    
+
     describe('updatePlayerRatings', () => {
         it('set lobby players match stats', async () => {
-            let lobby = await MatchTracker.setMatchDetails({ id: 1 });
+            const lobby = await MatchTracker.setMatchDetails({ id: 1 });
             await MatchTracker.setMatchPlayerDetails(lobby);
             await MatchTracker.updatePlayerRatings({ id: 1 });
             const players = await Lobby.getPlayers()(lobby);
@@ -161,7 +157,7 @@ describe('Database', () => {
             }
         });
     });
-    
+
     describe('createMatchEndMessageEmbed', () => {
         it('return message embed', async () => {
             const lobby = await MatchTracker.setMatchDetails({ id: 1 });
@@ -171,7 +167,7 @@ describe('Database', () => {
             assert.equal(embed.embed.fields[2].name, 'Sabo');
         });
     });
-    
+
     describe('MatchTracker', () => {
         it('emit message embed', async () => {
             const lobby = await Lobby.getLobby({ id: 1 });

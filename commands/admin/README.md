@@ -14,6 +14,8 @@
 
 > List bots in the inhouse league.
 
+**Guild only**
+
 **Aliases:** `list-bot`, `list-bots`, `bots-list`, `botlist`, `listbot`, `listbots`, `botslist`
 
  
@@ -23,6 +25,8 @@
 
 > Display inhouse league info.
 
+**Guild only**
+
 **Aliases:** `leagueinfo`
 
  
@@ -31,6 +35,8 @@
 **Format:** `!league-season <name>`
 
 > Start a new inhouse league season.
+
+**Guild only**
 
 **Aliases:** `leagueseason`
 
@@ -44,6 +50,8 @@
 
 > Set the current dota ticket for the league.
 
+**Guild only**
+
 **Aliases:** `set-ticket`, `ticket-set`, `leagueticket`, `setticket`, `ticketset`
 
 **Usage Examples:**
@@ -56,6 +64,8 @@
 
 > Update an inhouse league setting.
 
+**Guild only**
+
 **Aliases:** `leagueupdate`
 
  
@@ -64,6 +74,8 @@
 **Format:** `!lobby-draft <captain_1> <captain_2>`
 
 > Force a lobby to do a player draft with assigned captains.
+
+**Guild only**
 
 **Aliases:** `lobbydraft`
 
@@ -77,6 +89,8 @@
 
 > Set lobby first pick.
 
+**Guild only**
+
 **Aliases:** `lobbyfp`
 
 **Usage Examples:**
@@ -89,6 +103,8 @@
 **Format:** `!lobby-gamemode <mode>`
 
 > Set lobby game mode.
+
+**Guild only**
 
 **Aliases:** `lobbygamemode`
 
@@ -104,6 +120,8 @@
 
 > Invite a user to a lobby.
 
+**Guild only**
+
 **Aliases:** `lobbyinvite`
 
 **Usage Examples:**
@@ -115,6 +133,8 @@
 **Format:** `!lobby-kick <member>`
 
 > Kick a user from a lobby.
+
+**Guild only**
 
 **Aliases:** `lobbykick`
 
@@ -128,6 +148,8 @@
 
 > Kill a lobby.
 
+**Guild only**
+
 **Aliases:** `lobby-destroy`, `lobbykill`, `lobbydestroy`
 
  
@@ -136,6 +158,8 @@
 **Format:** `!lobby-run`
 
 > Manually run a lobby.
+
+**Guild only**
 
 **Aliases:** `lobbyrun`
 
@@ -146,6 +170,8 @@
 
 > Start a lobby.
 
+**Guild only**
+
 **Aliases:** `lobbystart`
 
  
@@ -154,6 +180,8 @@
 **Format:** `!lobby-state <state>`
 
 > Manually set a lobby state and run it.
+
+**Guild only**
 
 **Aliases:** `lobbystate`
 
@@ -169,6 +197,8 @@
 
 > Swap lobby teams.
 
+**Guild only**
+
 **Aliases:** `lobby-flip`, `flip`, `swap`, `lobbyswap`, `lobbyflip`
 
  
@@ -177,6 +207,8 @@
 **Format:** `!queue-ban <member> [<timeout>]`
 
 > Kick player from inhouse queue and tempban them.
+
+**Guild only**
 
 **Aliases:** `qban`, `ban`, `queueban`
 
@@ -193,6 +225,8 @@
 
 > Clear inhouse queue.
 
+**Guild only**
+
 **Aliases:** `qclear`, `clear`, `queueclear`
 
 **Usage Examples:**
@@ -208,6 +242,8 @@
 
 > Set a user's badge rank.
 
+**Guild only**
+
 **Aliases:** `badge`, `userbadge`
 
 **Usage Examples:**
@@ -219,6 +255,8 @@
 **Format:** `!user-vouch <member>`
 
 > Vouch a user.
+
+**Guild only**
 
 **Aliases:** `vouch`, `uservouch`
 

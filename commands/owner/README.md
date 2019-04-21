@@ -12,6 +12,8 @@
 
 > Add a bot to the inhouse league.
 
+**Guild only**
+
 **Aliases:** `bot-create`, `bot-update`, `add-bot`, `create-bot`, `update-bot`, `botadd`, `botcreate`, `botupdate`, `addbot`, `createbot`, `updatebot`
 
 **Usage Examples:**
@@ -24,6 +26,8 @@
 
 > Remove a bot from the inhouse league.
 
+**Guild only**
+
 **Aliases:** `bot-delete`, `bot-destroy`, `delete-bot`, `remove-bot`, `destroy-bot`, `botremove`, `botdelete`, `botdestroy`, `deletebot`, `removebot`, `destroybot`
 
 **Usage Examples:**
@@ -35,6 +39,8 @@
 **Format:** `!bot-status <steamid_64> <status>`
 
 > Manually set a bot status.
+
+**Guild only**
 
 **Aliases:** `botstatus`
 
@@ -50,6 +56,8 @@
 
 > Get the discord invite link to add the bot to your server.
 
+
+
 **Aliases:** `invite-link`, `bot-invite`, `invite-bot`, `inviteurl`, `invitelink`, `botinvite`, `invitebot`
 
  
@@ -59,6 +67,8 @@
 
 > Create an inhouse league for the server.
 
+**Guild only**
+
 **Aliases:** `leaguecreate`
 
  
@@ -67,6 +77,8 @@
 **Format:** `!log-level <level>`
 
 > Change the level of logging to one of error, warn, info, verbose, debug, silly.
+
+**Guild only**
 
 **Aliases:** `logger-level`, `loglevel`, `loggerlevel`
 
@@ -85,6 +97,8 @@
 
 > Restart the bot.
 
+**Guild only**
+
 
 
  
@@ -93,6 +107,8 @@
 **Format:** `!ticket-add <leagueid> <name>`
 
 > Add a dota ticket to the league.
+
+**Guild only**
 
 **Aliases:** `add-ticket`, `ticketadd`, `addticket`
 
@@ -105,6 +121,8 @@
 **Format:** `!ticket-remove <leagueid>`
 
 > Remove a dota ticket from the league.
+
+**Guild only**
 
 **Aliases:** `remove-ticket`, `ticketremove`, `removeticket`
 

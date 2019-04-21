@@ -1,8 +1,10 @@
 require('../common');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
+
 Argument.validateInfo = function () {};
 const Command = require('discord.js-commando/src/commands/base');
+
 Command.validateInfo = function () {};
 const {
     MockDotaBot,
@@ -13,9 +15,7 @@ const {
     MockGuild,
     MockClient,
 } = require('../mocks');
-const {
-    IHLManager,
-} = require('../../lib/ihlManager');
+const { IHLManager } = require('../../lib/ihlManager');
 const Ihl = require('../../lib/ihl');
 const DotaBot = require('../../lib/dotaBot');
 const {
@@ -30,19 +30,14 @@ const LeagueCreateCommand = require('../../commands/owner/league-create');
 const LeagueSeasonCommand = require('../../commands/admin/league-season');
 const RegisterCommand = require('../../commands/ihl/register');
 
-const nockBack = require('nock').back;
-nockBack.fixtures = 'test/fixtures/';
-nockBack.setMode('record');
-const afterRecord = scopes => {
-    scopes.forEach(scope => {
+const afterRecord = (scopes) => {
+    scopes.forEach((scope) => {
         scope.path = scope.path.replace(`key=${process.env.STEAM_API_KEY}&`, '');
     });
     return scopes;
 };
-const prepareScope = scope => {
-    scope.filteringPath = path => {
-        return path.replace(`key=${process.env.STEAM_API_KEY}&`, '');
-    }
+const prepareScope = (scope) => {
+    scope.filteringPath = path => path.replace(`key=${process.env.STEAM_API_KEY}&`, '');
 };
 
 
@@ -50,10 +45,8 @@ describe('Commands', () => {
     let ihlManager;
 
     before(async () => {
-        ({ nockDone} = await nockBack('int_commands.json', { before: prepareScope, afterRecord }));
-        sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => {
-            return new MockDotaBot(config);
-        });
+        ({ nockDone } = await nockBack('int_commands.json', { before: prepareScope, afterRecord }));
+        sinon.stub(DotaBot, 'createDotaBot').callsFake(async config => new MockDotaBot(config));
         sinon.stub(DotaBot, 'loadDotaBotTickets').resolves([]);
     });
 
@@ -66,11 +59,9 @@ describe('Commands', () => {
     describe('BotAddCommand', () => {
         let guild;
         let league;
-        let inhouseState = {};
-        let msg = {
-            author: {
-                id: '76864899866697728',
-            },
+        const inhouseState = {};
+        const msg = {
+            author: { id: '76864899866697728' },
             say: sinon.stub(),
         };
         let cmd;
@@ -122,11 +113,9 @@ describe('Commands', () => {
     describe('BotRemoveCommand', () => {
         let guild;
         let league;
-        let inhouseState = {};
-        let msg = {
-            author: {
-                id: '76864899866697728',
-            },
+        const inhouseState = {};
+        const msg = {
+            author: { id: '76864899866697728' },
             say: sinon.stub(),
         };
         let cmd;
@@ -182,11 +171,9 @@ describe('Commands', () => {
     describe('BotListCommand', () => {
         let guild;
         let league;
-        let inhouseState = {};
-        let msg = {
-            author: {
-                id: '76864899866697728',
-            },
+        const inhouseState = {};
+        const msg = {
+            author: { id: '76864899866697728' },
             say: sinon.stub(),
         };
         let cmd;
@@ -218,9 +205,9 @@ describe('Commands', () => {
                             name: 'Bots',
                             value: '',
                             inline: false,
-                        }
+                        },
                     ],
-                }
+                },
             });
         });
 
@@ -251,19 +238,17 @@ Display Name: persona_name
 Status: BOT_OFFLINE
 Tickets: `,
                             inline: false,
-                        }
+                        },
                     ],
-                }
+                },
             });
         });
     });
 
     describe('LeagueCreateCommand', () => {
         let guild;
-        let inhouseState = {};
-        let msg = {
-            say: sinon.stub(),
-        };
+        const inhouseState = {};
+        const msg = { say: sinon.stub() };
         let cmd;
         beforeEach(async () => {
             ihlManager = new IHLManager(process.env);
@@ -287,10 +272,8 @@ Tickets: `,
 
     describe('LeagueSeasonCommand', () => {
         let guild;
-        let inhouseState = {};
-        let msg = {
-            say: sinon.stub(),
-        };
+        const inhouseState = {};
+        const msg = { say: sinon.stub() };
         let cmd;
         let addCmd;
         beforeEach(async () => {
@@ -321,11 +304,10 @@ Tickets: `,
     describe('RegisterCommand', () => {
         let nockDone;
         let guild;
-        let inhouseState = {};
-        let msg = {
-            author: {
-                id: '76864899866697728',
-            },
+        const inhouseState = {};
+        const msg = {
+            member: { id: '76864899866697728' },
+            author: { id: '76864899866697728' },
             say: sinon.stub(),
         };
         let cmd;
