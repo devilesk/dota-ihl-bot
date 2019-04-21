@@ -17,8 +17,9 @@ module.exports = class InviteCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ lobbyState, inhouseUser }) {
+    async onMsg({ msg, lobbyState, inhouseUser }) {
         logger.debug('InviteCommand');
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_INVITE](lobbyState, inhouseUser);
+        return msg.say(`Lobby invite sent to ${msg.member.displayName}.`);
     }
 };

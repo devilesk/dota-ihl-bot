@@ -37,20 +37,17 @@ module.exports = class PickCommand extends IHLCommand {
             const result = await this.ihlManager[CONSTANTS.EVENT_PICK_PLAYER](lobbyState, captain, user);
             switch (result) {
             case CONSTANTS.INVALID_DRAFT_CAPTAIN:
-                await msg.say('Cannot draft a captain.');
-                break;
+                return msg.say('Cannot draft a captain.');
             case CONSTANTS.INVALID_DRAFT_PLAYER:
-                await msg.say('Player already drafted.');
-                break;
+                return msg.say('Player already drafted.');
             case CONSTANTS.PLAYER_DRAFTED:
-                await msg.say(`${guild.member(user.discord_id)} drafted by ${guild.member(captain.discord_id)}`);
-                break;
+                return msg.say(`${guild.member(user.discord_id)} drafted by ${guild.member(captain.discord_id)}.`);
             case CONSTANTS.INVALID_PLAYER_NOT_FOUND:
-                await msg.say(`${discordUser.displayName} not found.`);
-                break;
+                return msg.say(`${discordUser.displayName} not found.`);
             default:
                 break;
             }
         }
+        return null;
     }
 };

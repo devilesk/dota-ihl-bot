@@ -36,10 +36,17 @@ module.exports = class LobbyFirstPickCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }, { side }) {
-        const cm_pick = side === 'radiant' ? Dota2.schema.DOTA_CM_PICK.DOTA_CM_GOOD_GUYS
-            : (side === 'dire' ? Dota2.schema.DOTA_CM_PICK.DOTA_CM_BAD_GUYS : Dota2.schema.DOTA_CM_PICK.DOTA_CM_RANDOM);
-
+        let cm_pick = Dota2.schema.DOTA_CM_PICK.DOTA_CM_RANDOM;
+        let name = 'random';
+        if (side === 'radiant') {
+            cm_pick = Dota2.schema.DOTA_CM_PICK.DOTA_CM_GOOD_GUYS;
+            name = 'Radiant';
+        }
+        else if (side === 'dire') {
+            cm_pick = Dota2.schema.DOTA_CM_PICK.DOTA_CM_BAD_GUYS;
+            name = 'Dire';
+        }
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_FP](lobbyState, cm_pick);
-        await msg.say(`First pick ${cm_pick}.`).catch(logger.error);
+        return msg.say(`First pick set to ${name}.`);
     }
 };

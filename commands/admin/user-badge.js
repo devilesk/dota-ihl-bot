@@ -38,13 +38,11 @@ module.exports = class UserBadgeCommand extends IHLCommand {
 
     async onMsg({ msg, guild }, { member, rank_tier }) {
         logger.debug('UserBadgeCommand');
-        const [user] = await findUser(guild)(member);
+        const [user, discordUser] = await findUser(guild)(member);
         if (user) {
             await user.update({ rank_tier });
-            await msg.say(`${member} badge set to ${rank_tier}.`);
+            return msg.say(`${discordUser.displayName} badge set to ${rank_tier}.`);
         }
-        else {
-            await msg.say('User not found. (Has user registered with `!register`?)');
-        }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

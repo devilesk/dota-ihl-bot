@@ -29,9 +29,7 @@ module.exports = class UncommendCommand extends IHLCommand {
                     type: 'string',
                 },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
     async onMsg({ msg, guild, inhouseUser }, { member, match_id }) {
@@ -46,20 +44,15 @@ module.exports = class UncommendCommand extends IHLCommand {
                         const count = await Db.destroyCommend(lobby)(fromUser)(user);
                         logger.silly(count);
                         if (count) {
-                            await msg.say(`${msg.author.username} uncommends ${discordUser.displayName}`);
+                            return msg.say(`${msg.author.username} uncommends ${discordUser.displayName}.`);
                         }
-                        else {
-                            await msg.say(`${discordUser.displayName} not commended.`);
-                        }
+                        return msg.say(`${discordUser.displayName} not commended.`);
                     }
-                    else {
-                        await msg.say('Cannot uncommend yourself.');
-                    }
+                    return msg.say('Cannot uncommend yourself.');
                 }
             }
+            return msg.say(IHLCommand.UserNotFoundMessage);
         }
-        else {
-            await msg.say(`Match ${match_id} not found.`);
-        }
+        return msg.say(`Match ${match_id} not found.`);
     }
 };

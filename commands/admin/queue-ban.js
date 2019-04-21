@@ -42,10 +42,8 @@ module.exports = class QueueBanCommand extends IHLCommand {
         const [user, discordUser] = await findUser(guild)(member);
         if (user) {
             await this.ihlManager.banInhouseQueue(inhouseState, user, timeout, discordUser);
-            await msg.say(`${discordUser} kicked from queues and banned for ${timeout} minutes.`);
+            return msg.say(`${discordUser} kicked from queues and banned for ${timeout} minutes.`);
         }
-        else {
-            await msg.say('User not found. (Has user registered with `!register`?)');
-        }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

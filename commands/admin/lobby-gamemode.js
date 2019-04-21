@@ -36,10 +36,17 @@ module.exports = class LobbyGameModeCommand extends IHLCommand {
     }
 
     async onMsg({ msg, lobbyState }, { mode }) {
-        const game_mode = mode === 'cm' ? Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_CM
-            : (mode === 'cd' ? Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_CD : Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AP);
-
+        let game_mode = Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_CM;
+        let name = "Captain's Mode";
+        if (mode === 'cd') {
+            game_mode = Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_CD;
+            name = "Captain's Draft";
+        }
+        else if (mode === 'ap') {
+            game_mode = Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AP;
+            name = 'All Pick';
+        }
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_GAMEMODE](lobbyState, game_mode);
-        await msg.say(`Game mode ${game_mode}.`).catch(logger.error);
+        return msg.say(`Game mode set to ${name}.`);
     }
 };

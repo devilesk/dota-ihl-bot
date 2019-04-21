@@ -23,8 +23,9 @@ module.exports = class LobbySwapCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg }) {
+    async onMsg({ msg, lobbyState }) {
+        await msg.say('Swapping teams...');
         await this.ihlManager[CONSTANTS.EVENT_LOBBY_SWAP_TEAMS](lobbyState);
-        await msg.say('Teams swapped.');
+        return msg.say('Teams swapped.');
     }
 };

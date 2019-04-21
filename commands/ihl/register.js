@@ -40,51 +40,44 @@ module.exports = class RegisterCommand extends IHLCommand {
         logger.silly(`RegisterCommand ${inhouseUser} ${text} ${member}`);
         let memberToRegister = msg.member;
         let userToRegister = inhouseUser;
-        if (member && inhouseUser && memberToRegister.roles.has(inhouseState.adminRole.id)) {
-            logger.silly('RegisterCommand admin registering user');
-            userToRegister = await Db.findUserByDiscordId(guild.id)(member.id);
-            memberToRegister = member;
+        if (member) {
+            if (inhouseUser && memberToRegister.roles.has(inhouseState.adminRole.id)) {
+                logger.silly('RegisterCommand admin registering user');
+                userToRegister = await Db.findUserByDiscordId(guild.id)(member.id);
+                memberToRegister = member;
+            }
+            else {
+                return msg.say('Only inhouse admins can register other members.');
+            }
         }
         if (userToRegister) {
             logger.silly('RegisterCommand already registered');
-            await msg.say(`${memberToRegister.displayName} already registered.`);
+            return msg.say(`${memberToRegister.displayName} already registered.`);
         }
-        else {
-            let steamId64;
-            try {
-                steamId64 = await Ihl.parseSteamID64(text);
-                if (steamId64 != null) {
-                    const steamProfile = await getSteamProfile(steamId64);
-                    if (steamProfile != null) {
-                        userToRegister = await Ihl.registerUser(guild.id, steamProfile.steamid, memberToRegister.id);
-                        if (userToRegister) {
-                            logger.silly(`RegisterCommand Registered ${userToRegister.steamid_64}`);
-                            await msg.say(`Registered ${userToRegister.steamid_64}`);
-                        }
-                        else {
-                            logger.silly('RegisterCommand failed to create new user');
-                            await msg.say('Failed to create new user.');
-                        }
+        let steamId64;
+        try {
+            steamId64 = await Ihl.parseSteamID64(text);
+            if (steamId64 != null) {
+                const steamProfile = await getSteamProfile(steamId64);
+                if (steamProfile != null) {
+                    userToRegister = await Ihl.registerUser(guild.id, steamProfile.steamid, memberToRegister.id);
+                    if (userToRegister) {
+                        logger.silly(`RegisterCommand Registered ${userToRegister.steamid_64}`);
+                        return msg.say(`Registered ${memberToRegister.displayName} ${userToRegister.steamid_64}.`);
                     }
-                    else {
-                        logger.silly('RegisterCommand invalid steam id');
-                        await msg.say('Invalid steam id.');
-                    }
-                }
-                else {
-                    logger.silly('RegisterCommand invalid steam id');
-                    await msg.say('Invalid steam id.');
+                    logger.silly('RegisterCommand failed to create new user');
+                    return msg.say('Failed to create new user.');
                 }
             }
-            catch (e) {
-                logger.silly(`RegisterCommand error: ${e.name}, ${e.message}`);
-                if (e instanceof Error && e.name === 'SequelizeUniqueConstraintError' && e.message === 'Validation error') {
-                    await msg.say(`Failed to register. Steam id ${steamId64} already registered.`);
-                }
-                else {
-                    await msg.say('Failed to register.');
-                }
+            logger.silly('RegisterCommand invalid steam id');
+            return msg.say('Invalid steam id.');
+        }
+        catch (e) {
+            logger.silly(`RegisterCommand error: ${e.name}, ${e.message}`);
+            if (e instanceof Error && e.name === 'SequelizeUniqueConstraintError' && e.message === 'Validation error') {
+                return msg.say(`Failed to register. Steam id ${steamId64} already registered.`);
             }
+            return msg.say('Failed to register.');
         }
     }
 };

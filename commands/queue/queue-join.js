@@ -27,24 +27,19 @@ module.exports = class QueueJoinCommand extends IHLCommand {
                     default: '',
                 },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
-    
-    async processResult(guild, lobbyState, inhouseUser, result, msg) {
+
+    static async processResult(lobbyState, inhouseUser, result, msg) {
         switch (result) {
         case CONSTANTS.QUEUE_JOINED:
-            await Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} joined queue. ${queuers.length} in queue.`))
-            break;
+            return Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} joined queue. ${queuers.length} in queue.`));
         case CONSTANTS.QUEUE_ALREADY_JOINED:
-            await msg.say(`${msg.member.displayName} already in queue or game.`);
-            break;
+            return msg.say(`${msg.member.displayName} already in queue or game.`);
         case CONSTANTS.QUEUE_BANNED:
-            await msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queue_timeout - Date.now()) / 1000)}.`);
-            break;
+            return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queue_timeout - Date.now()) / 1000)}.`);
         default:
-            break;
+            return null;
         }
     }
 
@@ -53,30 +48,24 @@ module.exports = class QueueJoinCommand extends IHLCommand {
         if (inhouseUser.rank_tier) {
             if (channel) {
                 // use lobbyState for given channel
-                lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
-                if (lobbyState) {
+                const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
+                const _lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
+                if (_lobbyState) {
                     logger.silly('QueueJoinCommand channel found... joining queue');
-                    const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
-                    await this.processResult(guild, lobbyState, inhouseUser, result, msg);
+                    const result = await this.ihlManager.joinLobbyQueue(_lobbyState, inhouseUser, msg.member);
+                    return QueueJoinCommand.processResult(_lobbyState, inhouseUser, result, msg);
                 }
-                else {
-                    await msg.say('Invalid lobby channel.');
-                }
+                return msg.say('Invalid lobby channel.');
             }
-            else if (lobbyState) {
+            if (lobbyState) {
                 logger.silly('QueueJoinCommand lobby found... joining queue');
                 const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
-                await this.processResult(guild, lobbyState, inhouseUser, result, msg);
+                return QueueJoinCommand.processResult(lobbyState, inhouseUser, result, msg);
             }
-            else {
-                logger.silly('QueueJoinCommand joining all queues');
-                await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.member);
-                await msg.say(`${msg.member.displayName} joined all queues.`);
-            }
+            logger.silly('QueueJoinCommand joining all queues');
+            await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.member);
+            return msg.say(`${msg.member.displayName} joined all queues.`);
         }
-        else {
-            await msg.say('Badge rank not set. Ping an admin to have them set it for you.');
-        }
+        return msg.say('Badge rank not set. Ping an admin to have them set it for you.');
     }
 };

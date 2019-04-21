@@ -50,6 +50,13 @@ describe('IHLManager', () => {
             assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
         });
 
+        it('return user matching discord id nickname', async () => {
+            const [user, discord_user, result_type] = await IHLManager.findUser(guild)(`<@!${member.id}>`);
+            assert.equal(user.id, 1);
+            assert.equal(discord_user, member);
+            assert.equal(result_type, CONSTANTS.MATCH_EXACT_DISCORD_MENTION);
+        });
+
         it('return user matching discord name', async () => {
             const [user, discord_user, result_type] = await IHLManager.findUser(guild)(member.name);
             assert.equal(user.id, 1);

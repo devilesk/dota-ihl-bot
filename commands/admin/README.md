@@ -161,7 +161,7 @@
 
 **Guild only**
 
-**Aliases:** `lobbyrun`
+**Aliases:** `lobby-process`, `run-lobby`, `process-lobby`, `lobbyrun`, `lobbyprocess`, `runlobby`, `processlobby`
 
  
 ## lobby-start
@@ -172,7 +172,7 @@
 
 **Guild only**
 
-**Aliases:** `lobbystart`
+**Aliases:** `start-lobby`, `lobbystart`, `startlobby`
 
  
 ## lobby-state

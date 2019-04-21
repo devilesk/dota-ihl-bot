@@ -25,41 +25,31 @@ module.exports = class QueueLeaveCommand extends IHLCommand {
                     default: '',
                 },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
     async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
         if (channel) {
             // use lobbyState for given channel
             const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-            lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
-            if (lobbyState) {
-                const inQueue = await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.member);
+            const _lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
+            if (_lobbyState) {
+                const inQueue = await this.ihlManager.leaveLobbyQueue(_lobbyState, inhouseUser, msg.member);
                 if (inQueue) {
-                    await Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
+                    return Lobby.getQueuers()(_lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
                 }
-                else {
-                    await msg.say(`${msg.member.displayName} not in queue.`);
-                }
+                return msg.say(`${msg.member.displayName} not in queue.`);
             }
-            else {
-                await msg.say('Invalid lobby channel.');
-            }
+            return msg.say('Invalid lobby channel.');
         }
-        else if (lobbyState) {
+        if (lobbyState) {
             const inQueue = await this.ihlManager.leaveLobbyQueue(lobbyState, inhouseUser, msg.member);
             if (inQueue) {
-                await Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
+                return Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} left queue. ${queuers.length} in queue.`));
             }
-            else {
-                await msg.say(`${msg.member.displayName} not in queue.`);
-            }
+            return msg.say(`${msg.member.displayName} not in queue.`);
         }
-        else {
-            await this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser, msg.member);
-            await msg.say(`${msg.member.displayName} left all queues.`);
-        }
+        await this.ihlManager.leaveAllLobbyQueues(inhouseState, inhouseUser, msg.member);
+        return msg.say(`${msg.member.displayName} left all queues.`);
     }
 };

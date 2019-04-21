@@ -42,10 +42,8 @@ module.exports = class LobbyDraftCommand extends IHLCommand {
         const [captain_2_user] = await findUser(guild)(captain_2);
         if (captain_1_user && captain_2_user) {
             await this.ihlManager[CONSTANTS.EVENT_LOBBY_FORCE_DRAFT](lobbyState, captain_1, captain_2);
-            await msg.say('Lobby set to player draft.');
+            return msg.say('Lobby set to player draft.');
         }
-        else {
-            await msg.say('Captain not found. (Has user registered with `!register`?)');
-        }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

@@ -1,7 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const Db = require('../../lib/db');
-const Fp = require('../../lib/util/fp');
 
 /**
  * @class LeagueInfoCommand
@@ -40,7 +39,7 @@ module.exports = class LeagueInfoCommand extends IHLCommand {
                 inline: false,
             });
         }
-        await msg.channel.send({
+        return msg.channel.send({
             embed: {
                 color: 100000,
                 fields,

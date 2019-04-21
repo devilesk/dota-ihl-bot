@@ -25,6 +25,6 @@ module.exports = class InviteUrlCommand extends IHLCommand {
 
     async onMsg({ msg }) {
         logger.silly('InviteUrlCommand');
-        await msg.say(IHLManager.IHLManager.inviteUrl);
+        return msg.say(IHLManager.IHLManager.inviteUrl);
     }
 };

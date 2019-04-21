@@ -139,7 +139,7 @@ describe('Commands', () => {
             const persona_name = 'persona_name';
             const password = 'password';
             await cmd.onMsg({ msg, guild, league }, { steamid_64 });
-            assert.isTrue(msg.say.calledWith(`Bot ${steamid_64} removed.`));
+            assert.isTrue(msg.say.calledWith('No bot removed.'));
             const bots = await findAllBotsForLeague(league);
             assert.empty(bots);
         });
@@ -203,7 +203,7 @@ describe('Commands', () => {
                     fields: [
                         {
                             name: 'Bots',
-                            value: '',
+                            value: 'No bots.',
                             inline: false,
                         },
                     ],
@@ -306,8 +306,8 @@ Tickets: `,
         let guild;
         const inhouseState = {};
         const msg = {
-            member: { id: '76864899866697728' },
-            author: { id: '76864899866697728' },
+            member: { id: '76864899866697728', displayName: 'Test' },
+            author: { id: '76864899866697728', displayName: 'Test' },
             say: sinon.stub(),
         };
         let cmd;
@@ -325,13 +325,13 @@ Tickets: `,
         it('register with steamid_64', async () => {
             const text = '76561198015512690';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('register with account_id', async () => {
             const text = '55246962';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with a bad steamid_64', async () => {
@@ -343,7 +343,7 @@ Tickets: `,
         it('register with steam vanity link', async () => {
             const text = 'https://steamcommunity.com/id/devilesk';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with bad steam vanity link', async () => {
@@ -355,7 +355,7 @@ Tickets: `,
         it('register with steam profiles link', async () => {
             const text = 'https://steamcommunity.com/profiles/76561198015512690';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with a bad steam profiles link', async () => {
@@ -367,7 +367,7 @@ Tickets: `,
         it('register with dotabuff link', async () => {
             const text = 'https://www.dotabuff.com/players/55246962';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with a bad dotabuff link', async () => {
@@ -379,7 +379,7 @@ Tickets: `,
         it('register with opendota link', async () => {
             const text = 'https://www.opendota.com/players/55246962';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with a bad opendota link', async () => {
@@ -391,7 +391,7 @@ Tickets: `,
         it('register with stratz link', async () => {
             const text = 'https://stratz.com/en-us/player/55246962';
             await cmd.onMsg({ msg, guild }, { text });
-            assert.isTrue(msg.say.calledWith('Registered 76561198015512690'));
+            assert.isTrue(msg.say.calledWith('Registered Test 76561198015512690.'));
         });
 
         it('fail with a bad stratz link', async () => {

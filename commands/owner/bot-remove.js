@@ -33,7 +33,11 @@ module.exports = class BotRemoveCommand extends IHLCommand {
     }
 
     async onMsg({ msg }, { steamid_64 }) {
-        await Db.destroyBotBySteamID64(steamid_64);
-        await msg.say(`Bot ${steamid_64} removed.`);
+        const result = await Db.destroyBotBySteamID64(steamid_64);
+        logger.silly(`BotRemoveCommand ${result}`);
+        if (result) {
+            return msg.say(`Bot ${steamid_64} removed.`);
+        }
+        return msg.say('No bot removed.');
     }
 };

@@ -38,13 +38,13 @@ module.exports = class BotListCommand extends IHLCommand {
         logger.silly('BotListCommand');
         const bots = await Db.findAllBotsForLeague(league);
         const details = (await Fp.mapPromise(createBotDetails)(bots)).join('\t\n\n');
-        await msg.say({
+        return msg.say({
             embed: {
                 color: 3447003,
                 fields: [
                     {
                         name: 'Bots',
-                        value: details,
+                        value: details || 'No bots.',
                         inline: false,
                     },
                 ],

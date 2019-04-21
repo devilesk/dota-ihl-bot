@@ -1,7 +1,6 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const Ihl = require('../../lib/ihl');
-const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 
 /**
@@ -22,15 +21,13 @@ module.exports = class ChallengeCommand extends IHLCommand {
                     key: 'member',
                     prompt: 'Provide a player mention.',
                     type: 'member',
-                }
+                },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
     async onMsg({ msg, guild, inhouseState, inhouseUser }, { member }) {
-        logger.silly(`ChallengeCommand`);
+        logger.silly('ChallengeCommand');
         const giver = inhouseUser;
         // check if giver already in a lobby
         let inLobby = await Ihl.hasActiveLobbies(giver);
@@ -49,47 +46,32 @@ module.exports = class ChallengeCommand extends IHLCommand {
                         logger.silly(`ChallengeCommand challengeFromGiver ${challengeFromGiver}`);
                         if (challengeFromGiver) {
                             logger.silly(`ChallengeCommand ${member} already challenged.`);
-                            await msg.say(`${member} already challenged.`);
+                            return msg.say(`${member} already challenged.`);
                         }
-                        else {
-                            // check if receiver has issued a challenge to the giver already
-                            const challengeFromReceiver = await Db.getChallengeBetweenUsers(receiver)(giver);
-                            logger.silly(`ChallengeCommand challengeFromReceiver ${challengeFromReceiver}`);
-                            if (challengeFromReceiver) {
-                                // accept receiver's challenge if not yet accepted
-                                if (!challengeFromReceiver.accepted) {
-                                    logger.silly(`ChallengeCommand challenge accepted.`);
-                                    await this.ihlManager.createChallengeLobby(inhouseState, receiver, giver, challengeFromReceiver);
-                                    //await Db.destroyChallengeBetweenUsers(receiver)(giver);
-                                    await msg.say(`${msg.author} accepts challenge from ${member}.`);
-                                }
-                                else {
-                                    await msg.say(`Challenge from ${member} already accepted.`);
-                                }
+                        // check if receiver has issued a challenge to the giver already
+                        const challengeFromReceiver = await Db.getChallengeBetweenUsers(receiver)(giver);
+                        logger.silly(`ChallengeCommand challengeFromReceiver ${challengeFromReceiver}`);
+                        if (challengeFromReceiver) {
+                            // accept receiver's challenge if not yet accepted
+                            if (!challengeFromReceiver.accepted) {
+                                logger.silly('ChallengeCommand challenge accepted.');
+                                await this.ihlManager.createChallengeLobby(inhouseState, receiver, giver, challengeFromReceiver);
+                                return msg.say(`${msg.author} accepts challenge from ${member}.`);
                             }
-                            else {
-                                // issue new challenge
-                                logger.silly(`ChallengeCommand createChallenge`);
-                                logger.silly(`${msg.author} challenges ${member}.`);
-                                const challenge = await Db.createChallenge(giver)(receiver);
-                                await msg.say(`${msg.author} challenges ${member}.`);
-                            }
+                            return msg.say(`Challenge from ${member} already accepted.`);
                         }
+                        // issue new challenge
+                        logger.silly('ChallengeCommand createChallenge');
+                        logger.silly(`${msg.author} challenges ${member}.`);
+                        await Db.createChallenge(giver)(receiver);
+                        return msg.say(`${msg.author} challenges ${member}.`);
                     }
-                    else {
-                        await msg.say('The player you are challenging is already in a lobby.');
-                    }
+                    return msg.say('The player you are challenging is already in a lobby.');
                 }
-                else {
-                    await msg.say('Cannot challenge yourself.');
-                }
+                return msg.say('Cannot challenge yourself.');
             }
-            else {
-                await msg.say('Challenged user not found.');
-            }
+            return msg.say('Challenged user not found.');
         }
-        else {
-            await msg.say('Cannot challenge while you are in a lobby.');
-        }
+        return msg.say('Cannot challenge while you are in a lobby.');
     }
 };

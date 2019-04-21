@@ -33,13 +33,11 @@ module.exports = class UserVouchCommand extends IHLCommand {
 
     async onMsg({ msg, guild }, { member }) {
         logger.debug('UserVouchCommand');
-        const [user] = await findUser(guild)(member);
+        const [user, discordUser] = await findUser(guild)(member);
         if (user) {
             await user.update({ vouched: true });
-            await msg.say('User vouched.');
+            return msg.say(`${discordUser.displayName} vouched.`);
         }
-        else {
-            await msg.say('User not found. (Has user registered with `!register`?)');
-        }
+        return msg.say(IHLCommand.UserNotFoundMessage);
     }
 };

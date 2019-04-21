@@ -21,11 +21,9 @@ module.exports = class UnchallengeCommand extends IHLCommand {
                     key: 'member',
                     prompt: 'Provide a player mention.',
                     type: 'member',
-                }
+                },
             ],
-        }, {
-            lobbyState: false,
-        });
+        }, { lobbyState: false });
     }
 
     async onMsg({ msg, guild, inhouseUser }, { member }) {
@@ -35,19 +33,13 @@ module.exports = class UnchallengeCommand extends IHLCommand {
             const challengeFromGiver = await Db.getChallengeBetweenUsers(giver)(receiver);
             if (challengeFromGiver) {
                 if (challengeFromGiver.accepted) {
-                    await msg.say('Challenge already accepted.');
+                    return msg.say('Challenge already accepted.');
                 }
-                else {
-                    await Db.destroyChallengeBetweenUsers(giver)(receiver);
-                    await msg.say('Challenge revoked.');
-                }
+                await Db.destroyChallengeBetweenUsers(giver)(receiver);
+                return msg.say('Challenge revoked.');
             }
-            else {
-                await msg.say('No challenge found.');
-            }
+            return msg.say('No challenge found.');
         }
-        else {
-            await msg.say('Challenged user not found.');
-        }
+        return msg.say('Challenged user not found.');
     }
 };
