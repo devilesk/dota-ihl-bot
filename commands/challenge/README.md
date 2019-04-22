@@ -1,4 +1,3 @@
-
 |Table of Contents| | |
 |--|--|--|
 |[challenge](#challenge)|[challenge-list](#challenge-list)|[unchallenge](#unchallenge)|

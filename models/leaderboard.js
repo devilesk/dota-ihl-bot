@@ -1,4 +1,10 @@
 /* eslint-disable object-curly-newline */
+
+/**
+ * @class Leaderboard
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Leaderboard = sequelize.define('Leaderboard', {
         rating: DataTypes.INTEGER,

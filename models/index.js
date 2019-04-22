@@ -10,6 +10,10 @@ config.logging = config.logging ? (str) => {
     logger.debug(str);
 } : false;
 
+/**
+ * @class Database
+ * @memberof module:db
+ */
 class Database {
     constructor(_config) {
         this.config = _config;

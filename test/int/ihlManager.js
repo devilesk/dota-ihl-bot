@@ -8,6 +8,7 @@ describe('IHLManager', () => {
     let ihlManager;
     let guild;
     let commands;
+    let nockDone;
 
     before(async () => {
         ({ nockDone } = await nockBack('int_ihlManager.json'));
@@ -23,6 +24,7 @@ describe('IHLManager', () => {
         await guild.toDatabase({ captainRankThreshold: 100 });
         ihlManager = new IHLManager.IHLManager(process.env);
         await ihlManager.init(client);
+        await TestHelper.waitForEvent(ihlManager)('empty');
     });
 
     after(async () => {
@@ -63,7 +65,7 @@ describe('IHLManager', () => {
     });
 
     describe('Lobbies', () => {
-        let nockDone;
+        let channel;
 
         const selectionCommands = [
             ['First', 'First', 'Radiant'],
@@ -127,7 +129,7 @@ describe('IHLManager', () => {
                 const captain2 = guild.members.array()[2];
                 await captain2._model.update({ rankTier: 20 });
                 captainRole.toGuild(guild).toMember(captain1).toMember(captain2);
-                channel = guild.channels.find(channel => channel.name === 'player-draft-queue');
+                channel = guild.channels.find(_channel => _channel.name === 'player-draft-queue');
                 for (const [id, member] of guild.members) {
                     if (guild.me.id !== member.id) await commands.QueueJoin({ guild, channel, member });
                 }
@@ -164,11 +166,11 @@ describe('IHLManager', () => {
             let lobbyState;
             const captain1 = guild.members.array()[1];
             const captain2 = guild.members.array()[2];
-            channel = guild.channels.find(channel => channel.name === 'general');
+            channel = guild.channels.find(_channel => _channel.name === 'general');
             await commands.Challenge({ guild, channel, member: captain1 }, { member: captain2 });
             await commands.Challenge({ guild, channel, member: captain2 }, { member: captain1 });
             lobbyState = await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE);
-            channel = guild.channels.find(channel => channel.name === lobbyState.lobbyName);
+            channel = guild.channels.find(_channel => _channel.name === lobbyState.lobbyName);
             for (let i = 2; i < 10; i++) {
                 await commands.QueueJoin({ guild, channel, member: guild.members.array()[i + 1] });
             }

@@ -1,4 +1,10 @@
 /* eslint-disable object-curly-newline */
+
+/**
+ * @class Queue
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Queue = sequelize.define('Queue', {
         enabled: {

@@ -1,4 +1,10 @@
 /* eslint-disable object-curly-newline */
+
+/**
+ * @class BotTicket
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize) => {
     const BotTicket = sequelize.define('BotTicket', {});
     BotTicket.associate = (models) => {

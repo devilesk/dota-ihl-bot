@@ -6,6 +6,7 @@ const Db = require('../../lib/db');
 describe('Database', () => {
     let guild;
     let matchTracker;
+    let nockDone;
 
     before(async () => {
         ({ nockDone } = await nockBack('int_matchTracker.json'));

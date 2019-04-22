@@ -1,4 +1,3 @@
-
 |Table of Contents| | | |
 |--|--|--|--|
 |[queue-join](#queue-join)|[queue-leave](#queue-leave)|[queue-ready](#queue-ready)|[queue-status](#queue-status)|

@@ -1,4 +1,3 @@
-
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
 |[bot-list](#bot-list)|[league-info](#league-info)|[league-season](#league-season)|[league-ticket](#league-ticket)|[league-update](#league-update)|[lobby-draft](#lobby-draft)|

@@ -1,11 +1,3 @@
-<% const argToString = arg => {
-    if (arg.default === null) {
-        return `\<${arg.label}\>`;
-    }
-    else {
-        return `[\<${arg.label}\>]`;
-    }
-} %>
 |Table of Contents|<%= ' |'.repeat(rowLen - 1); %>
 <%= '|--'.repeat(rowLen) + '|'; %>
 <% for (var i=0; i < toc.length; i++) {
