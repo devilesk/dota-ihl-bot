@@ -4,7 +4,7 @@
         "dictionaries": ["jsdoc"]
     },
     "source": {
-        "include": ["models", "lib", "commands", "package.json", "README.md"],
+        "include": ["models", "lib", "commands", "README.md"],
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|docs)"
     },
@@ -39,6 +39,7 @@
         "encoding": "utf8",
         "private": true,
         "recurse": true,
-        "template": "node_modules/better-docs"
+        "template": "node_modules/better-docs",
+        "package": ""
     }
 }

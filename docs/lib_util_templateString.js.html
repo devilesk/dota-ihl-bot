@@ -1,0 +1,136 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: lib/util/templateString.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                     
+                        <div><a href="index.html"><img class="logo-image" src="img/logo.png" alt="logo"></a></div>
+                    
+                     
+                        <h1 class="navbar-item"><a href="index.html">dota-ihl-bot Documentation</a></h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                 
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                    
+                        <div class="navbar-item">
+                            <a href="https://github.com/devilesk/dota-ihl-bot" target="_blank">Github</a>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-fp.html">fp</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlCommand.html">ihlCommand</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li><li><a href="module-util.html">util</a></li></ul><h3>Classes</h3><ul><li><a href="module-db.Database.html">Database</a></li><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlCommand-IHLCommand.html">IHLCommand</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="module-util.Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:empty">empty</a></li><li><a href="module-ihlManager.html#~event:EVENT_GUILD_MESSAGE">EVENT_GUILD_MESSAGE</a></li><li><a href="module-ihlManager.html#~event:EVENT_GUILD_USER_LEFT">EVENT_GUILD_USER_LEFT</a></li><li><a href="module-ihlManager.html#~event:EVENT_LOBBY_FORCE_DRAFT">EVENT_LOBBY_FORCE_DRAFT</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_RUN_LOBBY">EVENT_RUN_LOBBY</a></li><li><a href="module-ihlManager.html#~event:ready">ready</a></li></ul><h3>Mixins</h3><ul><li><a href="module-ihlManager.EventListeners.html">EventListeners</a></li><li><a href="module-ihlManager.LobbyQueueHandlers.html">LobbyQueueHandlers</a></li><li><a href="module-ihlManager.LobbyStateHandlers.html">LobbyStateHandlers</a></li></ul></div><div class="category"><h2>Commands</h2><h3>Classes</h3><ul><li><a href="module-ihlCommand.BotAddCommand.html">BotAddCommand</a></li><li><a href="module-ihlCommand.BotListCommand.html">BotListCommand</a></li><li><a href="module-ihlCommand.BotRemoveCommand.html">BotRemoveCommand</a></li><li><a href="module-ihlCommand.BotStatusCommand.html">BotStatusCommand</a></li><li><a href="module-ihlCommand.ChallengeCommand.html">ChallengeCommand</a></li><li><a href="module-ihlCommand.ChallengeListCommand.html">ChallengeListCommand</a></li><li><a href="module-ihlCommand.CommendCommand.html">CommendCommand</a></li><li><a href="module-ihlCommand.DireCommand.html">DireCommand</a></li><li><a href="module-ihlCommand.FirstCommand.html">FirstCommand</a></li><li><a href="module-ihlCommand.GameModeCommand.html">GameModeCommand</a></li><li><a href="module-ihlCommand.InviteCommand.html">InviteCommand</a></li><li><a href="module-ihlCommand.InviteUrlCommand.html">InviteUrlCommand</a></li><li><a href="module-ihlCommand.LeaderboardCommand.html">LeaderboardCommand</a></li><li><a href="module-ihlCommand.LeagueCreateCommand.html">LeagueCreateCommand</a></li><li><a href="module-ihlCommand.LeagueInfoCommand.html">LeagueInfoCommand</a></li><li><a href="module-ihlCommand.LeagueSeasonCommand.html">LeagueSeasonCommand</a></li><li><a href="module-ihlCommand.LeagueTicketCommand.html">LeagueTicketCommand</a></li><li><a href="module-ihlCommand.LeagueUpdateCommand.html">LeagueUpdateCommand</a></li><li><a href="module-ihlCommand.LobbyDraftCommand.html">LobbyDraftCommand</a></li><li><a href="module-ihlCommand.LobbyFirstPickCommand.html">LobbyFirstPickCommand</a></li><li><a href="module-ihlCommand.LobbyGameModeCommand.html">LobbyGameModeCommand</a></li><li><a href="module-ihlCommand.LobbyInviteCommand.html">LobbyInviteCommand</a></li><li><a href="module-ihlCommand.LobbyKickCommand.html">LobbyKickCommand</a></li><li><a href="module-ihlCommand.LobbyKillCommand.html">LobbyKillCommand</a></li><li><a href="module-ihlCommand.LobbyRunCommand.html">LobbyRunCommand</a></li><li><a href="module-ihlCommand.LobbyStartCommand.html">LobbyStartCommand</a></li><li><a href="module-ihlCommand.LobbyStateCommand.html">LobbyStateCommand</a></li><li><a href="module-ihlCommand.LobbySwapCommand.html">LobbySwapCommand</a></li><li><a href="module-ihlCommand.LogLevelCommand.html">LogLevelCommand</a></li><li><a href="module-ihlCommand.NicknameCommand.html">NicknameCommand</a></li><li><a href="module-ihlCommand.PickCommand.html">PickCommand</a></li><li><a href="module-ihlCommand.QueueBanCommand.html">QueueBanCommand</a></li><li><a href="module-ihlCommand.QueueClearCommand.html">QueueClearCommand</a></li><li><a href="module-ihlCommand.QueueJoinCommand.html">QueueJoinCommand</a></li><li><a href="module-ihlCommand.QueueLeaveCommand.html">QueueLeaveCommand</a></li><li><a href="module-ihlCommand.QueueReadyCommand.html">QueueReadyCommand</a></li><li><a href="module-ihlCommand.QueueStatusCommand.html">QueueStatusCommand</a></li><li><a href="module-ihlCommand.RadiantCommand.html">RadiantCommand</a></li><li><a href="module-ihlCommand.RegisterCommand.html">RegisterCommand</a></li><li><a href="module-ihlCommand.RepCommand.html">RepCommand</a></li><li><a href="module-ihlCommand.RestartCommand.html">RestartCommand</a></li><li><a href="module-ihlCommand.RolesCommand.html">RolesCommand</a></li><li><a href="module-ihlCommand.SecondCommand.html">SecondCommand</a></li><li><a href="module-ihlCommand.TicketAddCommand.html">TicketAddCommand</a></li><li><a href="module-ihlCommand.TicketRemoveCommand.html">TicketRemoveCommand</a></li><li><a href="module-ihlCommand.UnchallengeCommand.html">UnchallengeCommand</a></li><li><a href="module-ihlCommand.UncommendCommand.html">UncommendCommand</a></li><li><a href="module-ihlCommand.UnrepCommand.html">UnrepCommand</a></li><li><a href="module-ihlCommand.UserBadgeCommand.html">UserBadgeCommand</a></li><li><a href="module-ihlCommand.UserVouchCommand.html">UserVouchCommand</a></li><li><a href="module-ihlCommand.WhoisCommand.html">WhoisCommand</a></li></ul></div><div class="category"><h2>Database</h2><h3>Classes</h3><ul><li><a href="module-db.Bot.html">Bot</a></li><li><a href="module-db.BotTicket.html">BotTicket</a></li><li><a href="module-db.Challenge.html">Challenge</a></li><li><a href="module-db.Commend.html">Commend</a></li><li><a href="module-db.Leaderboard.html">Leaderboard</a></li><li><a href="module-db.League.html">League</a></li><li><a href="module-db.LeagueTicket.html">LeagueTicket</a></li><li><a href="module-db.Lobby.html">Lobby</a></li><li><a href="module-db.LobbyPlayer.html">LobbyPlayer</a></li><li><a href="module-db.LobbyQueuer.html">LobbyQueuer</a></li><li><a href="module-db.Queue.html">Queue</a></li><li><a href="module-db.Reputation.html">Reputation</a></li><li><a href="module-db.Season.html">Season</a></li><li><a href="module-db.Ticket.html">Ticket</a></li><li><a href="module-db.User.html">User</a></li></ul></div><div class="category"><h2>Other</h2><h3>Externals</h3><ul><li><a href="external-commando.html">commando</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Long.html">Long</a></li></ul></div><div class="category"><h2>Sequelize</h2><h3>Externals</h3><ul><li><a href="external-sequelize.html">sequelize</a></li></ul><h3>Classes</h3><ul><li><a href="external-sequelize.Model.html">Model</a></li></ul></div><div class="category"><h2>discord.js</h2><h3>Externals</h3><ul><li><a href="external-discordjs.html">discordjs</a></li></ul><h3>Classes</h3><ul><li><a href="external-discordjs.CategoryChannel.html">CategoryChannel</a></li><li><a href="external-discordjs.Client.html">Client</a></li><li><a href="external-discordjs.Guild.html">Guild</a></li><li><a href="external-discordjs.GuildChannel.html">GuildChannel</a></li><li><a href="external-discordjs.GuildMember.html">GuildMember</a></li><li><a href="external-discordjs.Message.html">Message</a></li><li><a href="external-discordjs.Role.html">Role</a></li><li><a href="external-discordjs.User.html">User</a></li></ul></div><div class="category"><h2>node-dota2</h2><h3>Externals</h3><ul><li><a href="external-Dota2.html">Dota2</a></li></ul><h3>Classes</h3><ul><li><a href="external-Dota2.Dota2Client.html">Dota2Client</a></li></ul></div><div class="category"><h2>node-steam</h2><h3>Externals</h3><ul><li><a href="external-steam.html">steam</a></li></ul><h3>Classes</h3><ul><li><a href="external-steam.SteamClient.html">SteamClient</a></li><li><a href="external-steam.SteamFriends.html">SteamFriends</a></li><li><a href="external-steam.SteamUser.html">SteamUser</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>lib/util/templateString.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const cache = {};
+
+/**
+ * Produces a function which uses template strings to do simple interpolation from objects.
+ *
+ * Usage:
+ *    const makeMeKing = generateTemplateString('${name} is now the king of ${country}!');
+ *
+ *    console.log(makeMeKing({ name: 'Bryan', country: 'Scotland'}));
+ *    // Logs 'Bryan is now the king of Scotland!'
+ * @memberof module:util
+ */
+const templateString = (template) => {
+    let fn = cache[template];
+
+    if (!fn) {
+        // Replace ${expressions} (etc) with ${map.expressions}.
+
+        const sanitized = template
+            .replace(/\$\{([\s]*[^;\s{]+[\s]*)\}/g, (_, match) => `$\{map.${match.trim()}}`)
+            // Afterwards, replace anything that's not ${map.expressions}' (etc) with a blank string.
+            .replace(/(\$\{(?!map\.)[^}]+\})/g, '');
+
+        // eslint-disable-next-line no-new-func
+        fn = Function('map', `return \`${sanitized}\``);
+    }
+
+    return fn;
+};
+
+module.exports = templateString;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p><a href="https://github.com/devilesk/dota-ihl-bot/tree/master/docs">Documentation source on Github</a></p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 22 2019 15:49:08 GMT+0000 (Coordinated Universal Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
