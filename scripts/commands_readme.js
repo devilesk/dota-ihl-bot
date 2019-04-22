@@ -3,39 +3,31 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const Mocks = require('../test/mocks');
+const partition = require('../lib/util/partition');
+const logger = require('../lib/logger');
 
 const client = new Mocks.MockClient();
 const commands = new Mocks.MockCommands(client);
 
-var partition = function(arr, length) {
-    var result = [];
-    for(var i = 0; i < arr.length; i++) {
-        if (i % length === 0) {
-            result.push([]);
-        }
-        result[result.length - 1].push(arr[i]);
+// eslint-disable-next-line no-unused-vars
+const argToString = (arg) => {
+    if (arg.default === null) {
+        // eslint-disable-next-line no-useless-escape
+        return `\<${arg.label}\>`;
     }
-    return result;
+    // eslint-disable-next-line no-useless-escape
+    return `[\<${arg.label}\>]`;
 };
 
-const argToString = arg => {
-    if (arg.default === null) {
-        return `<${arg.label}>`;
-    }
-    else {
-        return `[<${arg.label}>]`;
-    }
-}
-
 const commandsArray = Object.values(commands.registry);
-const commandGroups = {}
+const commandGroups = {};
 for (const command of commandsArray) {
     commandGroups[command.groupID] = commandGroups[command.groupID] || [];
     commandGroups[command.groupID].push(command);
 }
 
-const generateReadme = (key, commands) => {
-    const sortedCommands = commands.sort((a, b) => {
+const generateReadme = (key, cmds) => {
+    const sortedCommands = cmds.sort((a, b) => {
         if (a.name > b.name) {
             return 1;
         }
@@ -45,13 +37,14 @@ const generateReadme = (key, commands) => {
     const rowLen = Math.min(sortedCommands.length, 6);
     const toc = partition(sortedCommands, rowLen);
 
-    ejs.renderFile(path.join(__dirname, 'commands_readme.ejs'), { commands: sortedCommands, toc, rowLen }, {}, (err, str) => {
-        if (err) console.log(err);
+    ejs.renderFile(path.join(__dirname, 'commands_readme.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
+        if (err) logger.error(err);
+        // eslint-disable-next-line no-shadow
         fs.writeFile(path.join(__dirname, `../commands/${key}/README.md`), str, 'utf8', (err) => {
-            if (err) console.log(`error ${command.name}`);
+            if (err) logger.error(`error ${key}`);
         });
     });
-}
+};
 
 for (const key of Object.keys(commandGroups)) {
     generateReadme(key, commandGroups[key]);

@@ -1,4 +1,10 @@
 /* eslint-disable object-curly-newline */
+
+/**
+ * @class LobbyPlayer
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const LobbyPlayer = sequelize.define('LobbyPlayer', {
         ready: {

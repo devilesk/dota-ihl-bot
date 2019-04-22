@@ -1,6 +1,11 @@
 /* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
+/**
+ * @class Bot
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Bot = sequelize.define('Bot', {
         steamId64: {

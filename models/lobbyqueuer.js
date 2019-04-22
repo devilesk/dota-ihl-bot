@@ -1,4 +1,10 @@
 /* eslint-disable object-curly-newline */
+
+/**
+ * @class LobbyQueuer
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const LobbyQueuer = sequelize.define('LobbyQueuer', {
         active: {

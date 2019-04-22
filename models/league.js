@@ -1,6 +1,11 @@
 /* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
+/**
+ * @class League
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const League = sequelize.define('League', {
         guildId: {

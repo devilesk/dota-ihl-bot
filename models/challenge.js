@@ -1,3 +1,8 @@
+/**
+ * @class Challenge
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Challenge = sequelize.define('Challenge', {
         accepted: {

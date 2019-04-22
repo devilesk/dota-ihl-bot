@@ -1,4 +1,3 @@
-
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
 |[commend](#commend)|[dire](#dire)|[first](#first)|[gamemode](#gamemode)|[invite](#invite)|[leaderboard](#leaderboard)|

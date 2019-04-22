@@ -1,4 +1,3 @@
-
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
 |[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[invite-url](#invite-url)|[league-create](#league-create)|[log-level](#log-level)|

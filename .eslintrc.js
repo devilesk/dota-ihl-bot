@@ -14,7 +14,7 @@ module.exports = {
         "prefer-const": ["error", {"destructuring": "all"}],
         "no-await-in-loop": ["warn"],
         "no-restricted-syntax": 0,
-        "prefer-destructuring": ["warn"],
+        "prefer-destructuring": ["warn", { "AssignmentExpression": { "array": false, "object": false } }],
         "radix": ["error", "as-needed"],
         "no-underscore-dangle": 0,
         "import/order": 0,

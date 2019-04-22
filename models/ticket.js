@@ -1,3 +1,8 @@
+/**
+ * @class Ticket
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define('Ticket', {
         leagueid: {

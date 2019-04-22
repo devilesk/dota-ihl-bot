@@ -43,6 +43,7 @@ const prepareScope = (scope) => {
 
 describe('Commands', () => {
     let ihlManager;
+    let nockDone;
 
     before(async () => {
         ({ nockDone } = await nockBack('int_commands.json', { before: prepareScope, afterRecord }));
@@ -262,6 +263,7 @@ Tickets: `,
         it('say Inhouse league created', async () => {
             await cmd.onMsg({ msg, guild });
             assert.isTrue(msg.say.calledWith('Inhouse league created.'));
+            await TestHelper.waitForEvent(ihlManager)('empty');
         });
 
         it('say Inhouse league already exists', async () => {
@@ -298,11 +300,11 @@ Tickets: `,
             assert.isTrue(msg.say.calledWith(`New season ${name} started.`));
             league = await findLeague(guild.id);
             assert.equal(league.currentSeasonId, 2);
+            await TestHelper.waitForEvent(ihlManager)('empty');
         });
     });
 
     describe('RegisterCommand', () => {
-        let nockDone;
         let guild;
         const inhouseState = {};
         const msg = {

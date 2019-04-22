@@ -1,6 +1,11 @@
 /* eslint-disable object-curly-newline */
 const CONSTANTS = require('../lib/constants');
 
+/**
+ * @class Lobby
+ * @memberof module:db
+ * @extends external:sequelize.Model
+ */
 module.exports = (sequelize, DataTypes) => {
     const Lobby = sequelize.define('Lobby', {
         queueType: {
