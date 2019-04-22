@@ -150,7 +150,10 @@ class MockChannel {
         this.name = channelName;
         this.type = channelType;
         this.parentID = null;
-        this.send = async text => logger.silly(`MockChannel.send ${this.guild.id} ${this.id} ${text}`);
+        this.send = async (text) => {
+            logger.silly(`MockChannel.send ${this.guild.id} ${this.id} ${text}`);
+            return text;
+        }
     }
 
     static Factory(data = {}) {
@@ -237,7 +240,10 @@ class MockMessage {
         this.channel = channel;
         this.author = member;
         this.member = member;
-        this.say = async text => logger.silly(`MockMessage.say ${this.guild.id} ${this.channel.id} ${text}`);
+        this.say = async (text) => {
+            logger.silly(`MockMessage.say ${this.guild.id} ${this.channel.id} ${text}`);
+            return text;
+        }
     }
 
     static Factory(data = {}) {

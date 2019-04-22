@@ -1,7 +1,12 @@
 require('../common');
+const logger = require('../../lib/logger');
 const DotaBot = require('../../lib/dotaBot');
 const MatchTracker = require('../../lib/matchTracker');
 const IHLManager = require('../../lib/ihlManager');
+const Db = require('../../lib/db');
+const util = require('util');
+const Promise = require('bluebird');
+const Long = require('long');
 
 describe('IHLManager', () => {
     let client;
@@ -202,23 +207,77 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)('empty');
         });
         
-        it('autobalanced-queue', async () => {
+        it('fail ready up, complete match, requeue wrong channel, bot unavailable, reset bot and complete match', async function () {
+            this.timeout(20000);
             channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
-            for (const [id, member] of guild.members) {
-                if (guild.me.id !== member.id) await commands.QueueJoin({ guild, channel, member });
+            const admin = guild.members.array()[0];
+            const adminRole = guild.roles.find(role => role.name === 'Inhouse Admin');
+            adminRole.toGuild(guild).toMember(admin);
+            // Set ready check timeout to immediately expire.
+            await commands.LeagueUpdate({ guild, channel, member: admin }, { setting: 'readyCheckTimeout', value: 0 });
+            for (let i = 1; i <= 10; i++) {
+                await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
             }
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
-            for (const [id, member] of guild.members) {
-                if (guild.me.id !== member.id) await commands.QueueReady({ guild, channel, member });
+            await Promise.all([
+                TestHelper.waitForEventOnLobby(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE)({ id: 1 }),
+                TestHelper.waitForEventOnLobby(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE)({ id: 3 }),
+            ]);
+            await TestHelper.waitForEvent(ihlManager)('empty');
+            logger.info('No ready up.');
+            // Set ready check timeout to never expire.
+            await commands.LeagueUpdate({ guild, channel, member: admin }, { setting: 'readyCheckTimeout', value: 99999 });
+            for (let i = 1; i <= 10; i++) {
+                await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
             }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (let i = 1; i <= 10; i++) {
+                await commands.QueueReady({ guild, channel, member: guild.members.array()[i] });
+            }
+            logger.info('10 ready up.');
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
             DotaBot.startDotaLobby.resolves(6450130);
+            const botSteamId64 = TestHelper.randomNumberString();
             await commands.BotAdd({ guild, channel, member: client.owner }, {
-                steamId64: TestHelper.randomNumberString(),
+                steamId64: botSteamId64,
                 accountName: TestHelper.randomName(),
                 personaName: TestHelper.randomName(),
                 password: TestHelper.randomName(),
             });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
+            await TestHelper.waitForEvent(ihlManager)('empty');
+            logger.info('First match done.');
+            for (let i = 1; i <= 10; i++) {
+                const text = await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
+                assert.match(text, /cannot queue for this lobby/);
+            }
+            channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+            for (let i = 1; i <= 10; i++) {
+                const text = await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
+                assert.match(text, /joined queue\. \d+ in queue/);
+            }
+            logger.info('10 joined queue.');
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (let i = 1; i <= 10; i++) {
+                await commands.QueueReady({ guild, channel, member: guild.members.array()[i] });
+            }
+            logger.info('10 ready up.');
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_ASSIGNED);
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            logger.info('Try bot available.');
+            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            logger.info('Set bot idle and try bot available.');
+            await Db.updateBotStatusBySteamId(CONSTANTS.BOT_IDLE)(botSteamId64);
+            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_ASSIGNED);
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            logger.info('Set bot idle and reset lobby id and try bot available.');
+            await Db.updateBotStatusBySteamId(CONSTANTS.BOT_IDLE)(botSteamId64);
+            ihlManager.getBot(1).dotaLobbyId = Long.ZERO;
+            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
         });

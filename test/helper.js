@@ -26,6 +26,18 @@ const waitForEvent = emitter => async event => new Promise((resolve, reject) => 
     emitter.once(event, resolve);
 });
 
+const waitForEventOnLobby = emitter => event => async lobbyState => new Promise((resolve, reject) => {
+    const resolveOnLobbyState = (_lobbyState) => {
+        if (lobbyState.id === _lobbyState.id) {
+            resolve(_lobbyState);
+        }
+        else {
+            emitter.once(event, resolveOnLobbyState);
+        }
+    }
+    emitter.once(event, resolveOnLobbyState);
+});
+
 module.exports = {
     randomNumber,
     randomMatchId,
@@ -35,4 +47,5 @@ module.exports = {
     randomSnowflake,
     randomName,
     waitForEvent,
+    waitForEventOnLobby,
 };

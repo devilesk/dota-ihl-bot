@@ -10,7 +10,7 @@
 
 > Player challenge command.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 
 
@@ -24,7 +24,7 @@
 
 > View your current challenges.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 **Aliases:** `challenges`, `challengelist`
 
@@ -39,7 +39,7 @@
 
 > Player unchallenge command.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 **Aliases:** `challenge-remove`, `remove-challenge`, `delete-challenge`, `challenge-delete`, `challengeremove`, `removechallenge`, `deletechallenge`, `challengedelete`
 

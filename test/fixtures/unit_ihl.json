@@ -6,11 +6,11 @@
         "body": "",
         "status": 200,
         "response": [
-            "1f8b0800000000000003c4924b8edb301044efd26b5a22a93faf31c9261ba14db66cc6fc0824656030f0dd038dec0441b29f5da1d0e87a8bf70125a1be9199b750ac0305a2eb8676125dcf81418e2ece3afa958a2df64e73c27003d54a3e32f84fcf8796c19ae2621d81fa00d43a6ea1ccd680ea3ad9f6532f19ac94720c18d013283074b78ef20d181c4dd89c63b0ba2dbfb2be126502c519e442e8f77730f45d2fc43472d17542f6d3ce8b772c9840c1b59435abbafe3cd7269cb0c21b7ab45753052acf3e7abf055bdeeb753b3bab6bebf142b93ebee45a37b56e865e901063338afe6c967169a91da76ea4c12ccb223997bd3688d5cff5f27bdf93b19bff028af958fe0b66d99cfb0a947df709f214624bff82bc062b1d7d6d4dfd92a106060e73995dbcd8000a2417d389b727c1bf09a91aa9645fc986ffd8efe261597ad7d1ec467d7f030636cf3a8692ec792b31815ad0657a30f03ecd948bf5583e15fd939b71e40f068ed0503a474ce6a9f521e19ee762291dc5e317000000ffff03006cd338a33b030000"
+            "1f8b0800000000000003c492cd6edb301084df65cfb244521225f135da5e7a11d6e4ca66cd1f81a40c0481df3d50e42428da7b6e8be160e62330af5012ea1b99790bc53a50c0fb7ee826de4b0615e4e8e2aca35fa9d862ef34270c37509d606305fb3d174b0954d89cabc0111a4ae788c93c8d87fe9f00367415789f66cac57a2c04ea15beee761cd9a38235c5c5baf737d43a6ea1ccd680ea7bd1c9498a0a564a39060ce8091418ba5b47f906151cca51bfba2d7fa25c8932816215e442e8f73818642f399f46c6fb9e0b39ed3fc73b164ca0e05aca9a55d3bcdbb50927acf1861eedd5d481ca538fde6fc1969766ddceceeac67abc506e8e94dce8b6d1ed2039713eb6239767b38c4b47dd38f5230d665916c19890da20d67fd6cb67bf276337ff0d14f3d1fc17ccb239f71d287bef13e439882dfd0bf25158ebe81b6b9a8f31345081c35c66172f368002c1f87462dd89b39f5ca85628216bd1b2dfbb2f1e2b4b2f3a9a7d51bf7e400536cf3a8692ec792b31815ad0657a3cde000000ffff0300fbe1e78c3b030000"
         ],
         "rawHeaders": [
             "Date",
-            "Sun, 21 Apr 2019 20:31:52 GMT",
+            "Mon, 22 Apr 2019 21:00:04 GMT",
             "Content-Type",
             "application/json; charset=utf-8",
             "Transfer-Encoding",
@@ -18,19 +18,19 @@
             "Connection",
             "close",
             "Set-Cookie",
-            "__cfduid=d3c48af0e5bbd3eca25fffaab908af7611555878712; expires=Mon, 20-Apr-20 20:31:52 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
+            "__cfduid=de4f8f186b5ae0deedcd469a164b1b62a1555966804; expires=Tue, 21-Apr-20 21:00:04 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
             "X-Powered-By",
             "Express",
             "X-Rate-Limit-Remaining-Minute",
             "59",
             "X-Rate-Limit-Remaining-Month",
-            "49905",
+            "48872",
             "Vary",
             "Origin, Accept-Encoding",
             "Access-Control-Allow-Credentials",
             "true",
             "ETag",
-            "W/\"33b-5vARnppPkJPj0o8pisRudbA/Blg\"",
+            "W/\"33b-y8YOZNSzeA+feX+qbBDJERE49eo\"",
             "Via",
             "1.1 google",
             "Expect-CT",
@@ -38,7 +38,7 @@
             "Server",
             "cloudflare",
             "CF-RAY",
-            "4cb21fc29fcf9272-EWR",
+            "4cba86725c1cc5f6-EWR",
             "Content-Encoding",
             "gzip"
         ]
@@ -50,11 +50,11 @@
         "body": "",
         "status": 200,
         "response": [
-            "1f8b0800000000000003c4924d8edb300c85af32e05a8de254966d2d67d96d0f60d0329da8d18f2151298241ee5e64e2b4287280d9110f8f7c0fe0f7019cd19e691e6b64e7c1c4eabd80927c1a6d0a2bb16377a131633c83e9747710f0aa3f96eef3c88e32987e2f60cd69719ec07c005a9b6ae4d1cd609a7ddb747da77b012be59222460c04067e9f90e942f96d4dc5b14bf16df578a50c0236c7fbcf1f2060f5b580e15c49803d111502b317509830dc03a0d3ad6e9aa1dfeb5629a5060d02f0828c190c9c98d762a4fcb4db397ec31d9e31a03bcdbb48bce929841a1d5fe55a27efac74018f54e4e34a91cb209741b77ae8e7460f0aad42fa7e50769874af86795a5a6dc95a22ddec7eadc7bff9816657c317b4181fc9ff9559aaf75f51e59ebb15d910a9f9b5c833706753909bafc897d74a10e0b1f0e8d3d1c527893e3d80cb579b667aaaae8c3645ce6eaa9c3298057da19b004f38539e12e679e3590d0242c823157601f993e17fb356fbc3edf6070000ffff0300ad559e9a3a030000"
+            "1f8b0800000000000003c4924d8edb300c46af32e05a8de2892ddb5a76d96d0f60d0129da8d18f2151298241ee5e64e2b4287280d911c407be07f0fb00ce68ce64a71ad979d0b17a2f60cd69719e407f001a936ae4c959d0cdbe6bfaa1578380957249112306020dbf4fc874a1fcb6a6e2d8a5f8b67abc5206015be2fbcf1f2060f5b580e65c498039111502bd17509830dc01d0ab4e35cd38ec55d7b66d3b2a10801764cca0e1c4bc162de567dcd8f80d7778c680ee64779178dba7106a747c956b9dbd33d2053c52918f2b452ea35c46d5a971b08d1a5b342dd2e1bd35e3ac8676b4f3d22943c610a966f76b3dfee507b2ae862fb0981ee4ff6496eafd57a8dcb99bc856919a5f459ec09d49416eb9225f5e2b4180c7c2934f47179fd5f3e951b87c35c9d273ebca6452e4ece6ca29835ed017ba0928c9a7c9a4b0123b76179a32c633e85ef5ef02eef3c48e32e8612fc0135aca73c26cb758db0b08214f54d805e4cfbeff9bd5e1a06e025eafdf956e7f000000ffff0300e41518cb3a030000"
         ],
         "rawHeaders": [
             "Date",
-            "Sun, 21 Apr 2019 20:31:54 GMT",
+            "Mon, 22 Apr 2019 21:00:05 GMT",
             "Content-Type",
             "application/json; charset=utf-8",
             "Transfer-Encoding",
@@ -62,19 +62,19 @@
             "Connection",
             "close",
             "Set-Cookie",
-            "__cfduid=d9271856c708eab2c04c23629f659f3e21555878713; expires=Mon, 20-Apr-20 20:31:53 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
+            "__cfduid=dd67c1dc0e67fc0f97aa4bd41948010de1555966805; expires=Tue, 21-Apr-20 21:00:05 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
             "X-Powered-By",
             "Express",
             "X-Rate-Limit-Remaining-Minute",
             "58",
             "X-Rate-Limit-Remaining-Month",
-            "49904",
+            "48871",
             "Vary",
             "Origin, Accept-Encoding",
             "Access-Control-Allow-Credentials",
             "true",
             "ETag",
-            "W/\"33a-jLrXlmpynJdiodueFXzS+ZyvuvE\"",
+            "W/\"33a-qIxtbKT06xYl8dXbQ2uqBmiedw0\"",
             "Via",
             "1.1 google",
             "Expect-CT",
@@ -82,7 +82,7 @@
             "Server",
             "cloudflare",
             "CF-RAY",
-            "4cb21fca2998cd00-EWR",
+            "4cba8675eeebcce4-EWR",
             "Content-Encoding",
             "gzip"
         ]
@@ -94,11 +94,11 @@
         "body": "",
         "status": 200,
         "response": [
-            "1f8b0800000000000003c492c98edb301044ffa5cfb244523b7f63924b2e429b6cd98cb9085c0c0c06fef740233b4190dce7d62814aaaa81f70139a2ba915e8acfc68204def76337f37e6050410a362c2ab88db2c9e64e4b447f03d9093655b0df4b361441fa626d059650533c078cfa693cf42d86d55802f901a854283e2f4683ec7bd10df3202ad828a6e0d1a32390a0e96e2ca51b547028cf145bd2eb5657a2442059052913ba3d0ec6a11f389f27c6fb9e8b61de1fc03b668c20e19af39664d37cda95f627acf1860ecd55d79ef2530fce156ff27bb395b335aa310e2f949a232535aa6d543b0e9c389fda890f67bd4e6b47dd34f7138d7a5d57c198189446ac7f6e97dffd8eb429ee0b562c47f35f63d662ed574cd97b9f439e4094f8ef905761ad826b8c6e5e30345081c594171b2ec68304c1f87c62dd89b36f5cc8564831d4a2653f765f38288bef2ae89da8ef6f5081498b0a3e47732e3944902bda448f0afe83371bbb0a9c8b0ba56c1ce64f74ffdced34b1c7e317000000ffff0300c0551ef93b030000"
+            "1f8b0800000000000003c492c98edb301044ffa5cfb244523b7f23c92517a14db66cc65c042e060603ff7ba0913d4190dce7d62874d7ab06ea1d72447523bd149f8d0509bcefc76ee6fdc0a082146c5854701b6593cd9d9688fe06b2136caac0b9b850cac6612690eff0676ea7893d2ab0849ae23960d4cf435facad609f976c28be84ff10d8d855b0c5b01afb618e4a85e2f36234c8be17dd300fa2828d620a1e3d3a02099aeec652ba41058772b86fb6a44fd2952811485641ca846eb78371e807cee789f1bee76298f7cff18e192348b8e6bc25d9341feb4afb13d6784387e6aa6b4ff9a907e78a37f9add9cad91ad51887174acde1921ad536aa1d074e9c4fedc487b35ea7b5a36e9afb8946bdaeab604c0c4a23d6bfb6cb27df9136c57d418ae520ff15662dd67e45949dfb0cf22c4489ff0679016b155c6374f32a430315584c79b1e1623c48108ccf27d69d38fbce856c8514432d5af673df0b47cbe29b0a7a6fd48f6f5081498b0a3e47732e3944902bda448fc76f000000ffff0300452edc613b030000"
         ],
         "rawHeaders": [
             "Date",
-            "Sun, 21 Apr 2019 20:31:55 GMT",
+            "Mon, 22 Apr 2019 21:00:06 GMT",
             "Content-Type",
             "application/json; charset=utf-8",
             "Transfer-Encoding",
@@ -106,19 +106,19 @@
             "Connection",
             "close",
             "Set-Cookie",
-            "__cfduid=dcff6fb8607a886fe9d6895430fba04181555878715; expires=Mon, 20-Apr-20 20:31:55 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
+            "__cfduid=d9530cfe6ab83aa30dcf6dad88dae66ab1555966806; expires=Tue, 21-Apr-20 21:00:06 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
             "X-Powered-By",
             "Express",
             "X-Rate-Limit-Remaining-Minute",
             "57",
             "X-Rate-Limit-Remaining-Month",
-            "49903",
+            "48870",
             "Vary",
             "Origin, Accept-Encoding",
             "Access-Control-Allow-Credentials",
             "true",
             "ETag",
-            "W/\"33b-SgXz9nrpxo7OhsP7AwogM3m1XpM\"",
+            "W/\"33b-UcC/MPpN2tK+iqu02niTOKEvdf8\"",
             "Via",
             "1.1 google",
             "Expect-CT",
@@ -126,7 +126,7 @@
             "Server",
             "cloudflare",
             "CF-RAY",
-            "4cb21fd1bd8eccdc-EWR",
+            "4cba86799d46c5fa-EWR",
             "Content-Encoding",
             "gzip"
         ]
@@ -138,11 +138,11 @@
         "body": "",
         "status": 200,
         "response": [
-            "1f8b0800000000000003c493c98edb301044ffa5cfb244523b7f63924b2e429b6cd98cb9085c0c0c06fef740233b4190dce7562814baeaf0fa0372447523bd149f8d0509bcefc76ee6fdc0a0822d86d55802f901a854283e2f4683ec7bd10df3202ad828a6e0d1a32390a0e96e2ca51b547038be585bc1664b7a6975254a0492559032a1dbcfc138f403e7f3c478df7331cc7b35de31630409d79cb7249be633aeb43f618d377468aebaf6949f7e70ae7893df9bad9cad518d7178a1d41c5752a3da46b5e3c089f3a99df870d6ebb476d44d733fd1a8d775158c894169c4fae776f9ddef489be2be60c57234ff35662dd67ec594bdf739e4094489ff0e7915d62ab8c6e8e605430315584c79b1e1623c48108ccf27d69d38fbc6856c8514432d5af663cf8583b2f8ae82de89fafe061598b4a8e07334e7924304b9a24df4a820051b1615dc46d96473a725a2bf81ec049b2af88fcfc6ae825d2fd9507c11690935c573c0a89fc1c3772e2e94b271983f1fe08f6ea7893d1ebf000000ffff030084716cfb3b030000"
+            "1f8b0800000000000003c492c98edb301044ffa5cfb244523b7f63924b2e429b6cd98cb9085c0c0c06fef74063394190dce75628345e5503f50139a2ba915e8acfc68204def76337f37e6050410a362c2ab88db2c9e64e4b447f03d9093655600935c573c0a80fdf176b2b702e2e94b2719809e407fcd1ed34b14705ff01b2b1ab60d74b36145fa42d86d5d84f082a158acf8bd120fb5e74c33c880a368a2978f4e8082468ba1b4be906153c9d83624b7a6975254a0492559032a1db71300efdc0f93c31def75c0cf3fe39de31630409d79cb7249be6f35c697fc21a6fe8d05c75ed291f7e70ae7893df9bad9cad518d7178a1d43c29a9516da3da71e0c4f9d44e7c38eb755a3beaa6b99f68d4ebba0ac6c4a03462fd73bbfcce77a44d715fd0627926ff55662dd67e45953df728720ca2c47f8bbc026b155c6374f31a430315584c79b1e1623c48108ccf27d69d38fbc6856c8514432d5af663bf0bcf95c57715f4bea8ef6f5081498b0a3e47732e3944902bda448fc72f000000ffff030063faa2e53b030000"
         ],
         "rawHeaders": [
             "Date",
-            "Sun, 21 Apr 2019 20:31:56 GMT",
+            "Mon, 22 Apr 2019 21:00:06 GMT",
             "Content-Type",
             "application/json; charset=utf-8",
             "Transfer-Encoding",
@@ -150,19 +150,19 @@
             "Connection",
             "close",
             "Set-Cookie",
-            "__cfduid=d8f5fda55d75f55c9ac735029010f4a5c1555878716; expires=Mon, 20-Apr-20 20:31:56 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
+            "__cfduid=daef2b9e6c584872d3ca2ded7c3ac788d1555966806; expires=Tue, 21-Apr-20 21:00:06 GMT; path=/; domain=.opendota.com; HttpOnly; Secure",
             "X-Powered-By",
             "Express",
             "X-Rate-Limit-Remaining-Minute",
             "56",
             "X-Rate-Limit-Remaining-Month",
-            "49902",
+            "48869",
             "Vary",
             "Origin, Accept-Encoding",
             "Access-Control-Allow-Credentials",
             "true",
             "ETag",
-            "W/\"33b-/rHR2kvPsEXhmu2IAFbzkJEWZfU\"",
+            "W/\"33b-nWKa/Tp5zYAbb1rCclZdYFQtvco\"",
             "Via",
             "1.1 google",
             "Expect-CT",
@@ -170,7 +170,7 @@
             "Server",
             "cloudflare",
             "CF-RAY",
-            "4cb21fd91bed9278-EWR",
+            "4cba867d0f8bc5f6-EWR",
             "Content-Encoding",
             "gzip"
         ]
