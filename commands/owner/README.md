@@ -11,7 +11,7 @@
 
 > Add a bot to the inhouse league.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 **Aliases:** `bot-create`, `bot-update`, `add-bot`, `create-bot`, `update-bot`, `botadd`, `botcreate`, `botupdate`, `addbot`, `createbot`, `updatebot`
 
@@ -25,7 +25,7 @@
 
 > Remove a bot from the inhouse league.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 **Aliases:** `bot-delete`, `bot-destroy`, `delete-bot`, `remove-bot`, `destroy-bot`, `botremove`, `botdelete`, `botdestroy`, `deletebot`, `removebot`, `destroybot`
 
@@ -39,7 +39,7 @@
 
 > Manually set a bot status.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 **Aliases:** `botstatus`
 
@@ -55,7 +55,7 @@
 
 > Get the discord invite link to add the bot to your server.
 
-
+**Requirements:** Owner, Vouched
 
 **Aliases:** `invite-link`, `bot-invite`, `invite-bot`, `inviteurl`, `invitelink`, `botinvite`, `invitebot`
 
@@ -66,7 +66,7 @@
 
 > Create an inhouse league for the server.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 **Aliases:** `leaguecreate`
 
@@ -77,7 +77,7 @@
 
 > Change the level of logging to one of error, warn, info, verbose, debug, silly.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 **Aliases:** `logger-level`, `loglevel`, `loggerlevel`
 
@@ -96,7 +96,7 @@
 
 > Restart the bot.
 
-**Guild only**
+**Requirements:** Owner, Vouched
 
 
 
@@ -107,7 +107,7 @@
 
 > Add a dota ticket to the league.
 
-**Guild only**
+**Requirements:** Owner, Inhouse, Vouched
 
 **Aliases:** `add-ticket`, `ticketadd`, `addticket`
 
@@ -121,7 +121,7 @@
 
 > Remove a dota ticket from the league.
 
-**Guild only**
+**Requirements:** Owner, Inhouse, Vouched
 
 **Aliases:** `remove-ticket`, `ticketremove`, `removeticket`
 

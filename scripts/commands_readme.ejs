@@ -15,7 +15,7 @@
 <% } %>
 <%- '> ' + command.description %>
 
-<% if (command.guildOnly) { %>**Guild only**<% } %>
+<% if (command.requirements) { %>**Requirements:** <%= command.requirements %><% } %>
 
 <% if (command.aliases.length) { %>**Aliases:** <%= command.aliases.map(alias => `\`${alias}\``).join(', '); %><% } %>
 <% if (command.examples) { %>

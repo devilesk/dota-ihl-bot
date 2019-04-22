@@ -4,7 +4,7 @@ const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 const toHHMMSS = require('../../lib/util/toHHMMSS');
-
+const util = require('util');
 /**
  * @class QueueJoinCommand
  * @category Commands
@@ -38,6 +38,8 @@ module.exports = class QueueJoinCommand extends IHLCommand {
             return Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} joined queue. ${queuers.length} in queue.`));
         case CONSTANTS.QUEUE_ALREADY_JOINED:
             return msg.say(`${msg.member.displayName} already in queue or game.`);
+        case CONSTANTS.QUEUE_LOBBY_INVALID_STATE:
+            return msg.say(`${msg.member.displayName} cannot queue for this lobby.`);
         case CONSTANTS.QUEUE_BANNED:
             return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queueTimeout - Date.now()) / 1000)}.`);
         default:

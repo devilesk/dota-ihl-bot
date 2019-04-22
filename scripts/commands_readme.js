@@ -19,9 +19,22 @@ const argToString = (arg) => {
     return `[\<${arg.label}\>]`;
 };
 
+const getRequirements = (command) => {
+    const reqs = [];
+    if (command.validation.guildOnly) reqs.push('Guild');
+    if (command.validation.clientOwner) reqs.push('Owner');
+    if (command.validation.inhouseAdmin) reqs.push('Inhouse Admin');
+    if (command.validation.inhouseState) reqs.push('Inhouse');
+    if (command.validation.lobbyState) reqs.push('Lobby');
+    if (command.validation.inhouseUser) reqs.push('Inhouse Player');
+    if (command.validation.inhouseUserVouched) reqs.push('Vouched');
+    return reqs.join(', ');
+}
+
 const commandsArray = Object.values(commands.registry);
 const commandGroups = {};
 for (const command of commandsArray) {
+    command.requirements = getRequirements(command);
     commandGroups[command.groupID] = commandGroups[command.groupID] || [];
     commandGroups[command.groupID].push(command);
 }

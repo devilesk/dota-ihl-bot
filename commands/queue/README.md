@@ -10,7 +10,7 @@
 
 > Join inhouse queue.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 **Aliases:** `qjoin`, `join`, `join-queue`, `queuejoin`, `joinqueue`
 
@@ -27,7 +27,7 @@
 
 > Leave inhouse queue.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 **Aliases:** `qleave`, `leave`, `leave-queue`, `queueleave`, `leavequeue`
 
@@ -44,7 +44,7 @@
 
 > Queue ready check acknowledgement.
 
-**Guild only**
+**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
 
 **Aliases:** `qready`, `ready`, `queueready`
 
@@ -55,7 +55,7 @@
 
 > Display players in queue.
 
-**Guild only**
+**Requirements:** Inhouse, Inhouse Player, Vouched
 
 **Aliases:** `qstatus`, `status`, `queuestatus`
 

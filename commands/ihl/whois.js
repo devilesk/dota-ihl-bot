@@ -43,7 +43,7 @@ module.exports = class WhoisCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'whois',
-            aliases: ['who', 'info', 'stats', 'lookup'],
+            aliases: ['who', 'info', 'stats', 'lookup', 'profile', 'whoami'],
             group: 'ihl',
             memberName: 'whois',
             guildOnly: true,
@@ -54,6 +54,7 @@ module.exports = class WhoisCommand extends IHLCommand {
                     key: 'member',
                     prompt: 'Provide a player name or mention.',
                     type: 'string',
+                    default: '',
                 },
             ],
         }, {
@@ -65,8 +66,9 @@ module.exports = class WhoisCommand extends IHLCommand {
     async onMsg({ msg, league, guild }, { member }) {
         let wins = 0;
         let losses = 0;
+        let memberToFind = member ? member : msg.author
 
-        const [user, discordUser, resultType] = await findUser(guild)(member);
+        const [user, discordUser, resultType] = await findUser(guild)(memberToFind);
 
         let footerText;
         switch (resultType) {
@@ -74,16 +76,16 @@ module.exports = class WhoisCommand extends IHLCommand {
             footerText = `Exact match for ${discordUser.displayName} by discord mention`;
             break;
         case CONSTANTS.MATCH_EXACT_DISCORD_NAME:
-            footerText = `Exact match for ${member} by discord name`;
+            footerText = `Exact match for ${memberToFind} by discord name`;
             break;
         case CONSTANTS.MATCH_STEAMID_64:
             footerText = `Parsed steam id for ${discordUser.displayName}`;
             break;
         case CONSTANTS.MATCH_EXACT_NICKNAME:
-            footerText = `Exact match for ${member} by nickname`;
+            footerText = `Exact match for ${memberToFind} by nickname`;
             break;
         case CONSTANTS.MATCH_CLOSEST_NICKNAME:
-            footerText = `Closest match for ${member} by nickname`;
+            footerText = `Closest match for ${memberToFind} by nickname`;
             break;
         default:
             footerText = '';
@@ -183,6 +185,6 @@ module.exports = class WhoisCommand extends IHLCommand {
                 },
             });
         }
-        return msg.say(`${member} not found.`);
+        return msg.say(`${memberToFind} not found.`);
     }
 };
