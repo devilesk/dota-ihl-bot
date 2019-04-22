@@ -2,11 +2,16 @@
 
 /**
  * @class Reputation
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Reputation = sequelize.define('Reputation', {
+        /**
+         * @memberof module:db.Reputation
+         * @instance
+         */
         timestamp: DataTypes.DATE,
     });
     Reputation.associate = (models) => {

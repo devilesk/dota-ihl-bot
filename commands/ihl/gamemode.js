@@ -4,7 +4,9 @@ const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class GameModeCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class GameModeCommand extends IHLCommand {
     constructor(client) {

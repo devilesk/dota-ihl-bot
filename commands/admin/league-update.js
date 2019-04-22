@@ -12,7 +12,9 @@ validLeagueAttributes.forEach((a) => {
 
 /**
  * @class LeagueUpdateCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 class LeagueUpdateCommand extends IHLCommand {
     constructor(client) {

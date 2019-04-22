@@ -5,7 +5,9 @@ const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class RadiantCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class RadiantCommand extends IHLCommand {
     constructor(client) {

@@ -6,7 +6,9 @@ const Lobby = require('../../lib/lobby');
 
 /**
  * @class UncommendCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class UncommendCommand extends IHLCommand {
     constructor(client) {

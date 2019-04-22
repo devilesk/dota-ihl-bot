@@ -3,32 +3,57 @@ const CONSTANTS = require('../lib/constants');
 
 /**
  * @class Bot
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Bot = sequelize.define('Bot', {
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         steamId64: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         accountName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         personaName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         password: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         status: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.BOT_OFFLINE,
         },
+        /**
+         * @memberof module:db.Bot
+         * @instance
+         */
         lobbyCount: {
             allowNull: false,
             type: DataTypes.INTEGER,

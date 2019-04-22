@@ -4,7 +4,9 @@ const { findUser } = require('../../lib/ihlManager');
 
 /**
  * @class QueueBanCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class QueueBanCommand extends IHLCommand {
     constructor(client) {

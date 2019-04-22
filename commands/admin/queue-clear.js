@@ -5,7 +5,9 @@ const Lobby = require('../../lib/lobby');
 
 /**
  * @class QueueClearCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class QueueClearCommand extends IHLCommand {
     constructor(client) {

@@ -5,7 +5,9 @@ const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class LobbyDraftCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class LobbyDraftCommand extends IHLCommand {
     constructor(client) {

@@ -3,7 +3,9 @@ const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LeagueCreateCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class LeagueCreateCommand extends IHLCommand {
     constructor(client) {

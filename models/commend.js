@@ -2,11 +2,16 @@
 
 /**
  * @class Commend
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Commend = sequelize.define('Commend', {
+        /**
+         * @memberof module:db.Commend
+         * @instance
+         */
         timestamp: DataTypes.DATE,
     });
     Commend.associate = (models) => {

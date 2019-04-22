@@ -8,14 +8,37 @@
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|docs)"
     },
+    "plugins": [
+        "plugins/markdown",
+        "node_modules/better-docs/category"
+    ],
     "templates": {
-        "footerText": "https://github.com/devilesk/dota-ihl-bot"
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "default": {
+            "staticFiles": {
+                "include": [
+                    "./assets"
+                ]
+            },
+            "layoutFile": "./tmpl/layout.tmpl"
+        },
+        "better-docs": {
+            "name": "dota-ihl-bot Documentation",
+            "logo": "img/logo.png",
+            "navigation": [
+                {
+                    "label": "Github",
+                    "href": "https://github.com/devilesk/dota-ihl-bot"
+                }
+            ]
+        }
     },
     "opts": {
-        "destination": "./docs/",
+        "destination": "./docs",
         "encoding": "utf8",
         "private": true,
         "recurse": true,
-        "template": "./node_modules/tui-jsdoc-template"
+        "template": "node_modules/better-docs"
     }
 }

@@ -4,7 +4,9 @@ const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class InviteCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class InviteCommand extends IHLCommand {
     constructor(client) {

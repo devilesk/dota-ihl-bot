@@ -4,7 +4,9 @@ const Db = require('../../lib/db');
 
 /**
  * @class BotRemoveCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class BotRemoveCommand extends IHLCommand {
     constructor(client) {

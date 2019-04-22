@@ -4,7 +4,9 @@ const IHLManager = require('../../lib/ihlManager');
 
 /**
  * @class InviteUrlCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class InviteUrlCommand extends IHLCommand {
     constructor(client) {
