@@ -3,69 +3,130 @@ const CONSTANTS = require('../lib/constants');
 
 /**
  * @class User
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         steamId64: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         discordId: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         nickname: DataTypes.STRING,
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         role1: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         role2: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         role3: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         role4: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         role5: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         queueTimeout: {
             type: DataTypes.DATE,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         vouched: {
             allowNull: false,
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         rating: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 1000,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         rankTier: DataTypes.INTEGER,
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         gameModePreference: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         commends: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.User
+         * @instance
+         */
         reputation: {
             allowNull: false,
             type: DataTypes.INTEGER,

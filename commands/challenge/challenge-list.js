@@ -5,7 +5,9 @@ const Fp = require('../../lib/util/fp');
 
 /**
  * @class ChallengeListCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class ChallengeListCommand extends IHLCommand {
     constructor(client) {

@@ -4,7 +4,9 @@ const CONSTANTS = require('../../lib/constants');
 
 /**
  * @class TicketAddCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class TicketAddCommand extends IHLCommand {
     constructor(client) {

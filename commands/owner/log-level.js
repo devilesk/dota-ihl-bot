@@ -3,7 +3,9 @@ const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class LogLevelCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class LogLevelCommand extends IHLCommand {
     constructor(client) {

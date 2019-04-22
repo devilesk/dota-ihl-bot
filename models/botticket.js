@@ -2,6 +2,7 @@
 
 /**
  * @class BotTicket
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */

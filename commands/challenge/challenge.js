@@ -5,7 +5,9 @@ const Db = require('../../lib/db');
 
 /**
  * @class ChallengeCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class ChallengeCommand extends IHLCommand {
     constructor(client) {

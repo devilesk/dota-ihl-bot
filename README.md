@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img width="100" src="assets/logo.png">
+    <img width="75" src="https://github.com/devilesk/dota-ihl-bot/blob/master/assets/img/logo.png?raw=true">
     <br>
     dota-ihl-bot
 </h1>
@@ -32,8 +32,7 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 * [Features](#features)
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
-* [Bot Commands](#bot-commands)
-* [API Documentation](#api-documentation)
+* [Documentation](#documentation)
 * [Tests](#tests)
 * [Built With](#built-with)
 * [Acknowledgements](#acknowledgements)
@@ -134,19 +133,19 @@ Now you're ready to start the bot.
 $ npm start
 ```
 
-## Bot Commands
+## Documentation
 
-Links to README documentation in `commands/<group>` folders:
+Check the [wiki](https://github.com/devilesk/dota-ihl-bot/wiki) for user documentation.
+
+Bot command README documentation in `commands/<group>` folders:
  
-* [Owner](commands/owner/README.md)
-* [Admin](commands/admin/README.md)
-* [Inhouse](commands/ihl/README.md)
-* [Queue](commands/queue/README.md)
-* [Challenge](commands/challenge/README.md)
+* [Owner](https://github.com/devilesk/dota-ihl-bot/tree/master/commands/owner/README.md)
+* [Admin](https://github.com/devilesk/dota-ihl-bot/tree/master/commands/admin/README.md)
+* [Inhouse](https://github.com/devilesk/dota-ihl-bot/tree/master/commands/ihl/README.md)
+* [Queue](https://github.com/devilesk/dota-ihl-bot/tree/master/commands/queue/README.md)
+* [Challenge](https://github.com/devilesk/dota-ihl-bot/tree/master/commands/challenge/README.md)
 
-## API Documentation
-
-[View the docs here.](https://devilesk.github.io/dota-ihl-bot/)
+[Code documentation](https://devilesk.github.io/dota-ihl-bot/) hosted on github pages and generated using [JSDoc](https://github.com/jsdoc3/jsdoc).
 
 ```bash
 # Generate docs

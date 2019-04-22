@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: lib/lobby.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                     
+                        <div><a href="index.html"><img class="logo-image" src="img/logo.png" alt="logo"></a></div>
+                    
+                     
+                        <h1 class="navbar-item"><a href="index.html">dota-ihl-bot Documentation</a></h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                 
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                    
+                        <div class="navbar-item">
+                            <a href="https://github.com/devilesk/dota-ihl-bot" target="_blank">Github</a>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-constants.html">constants</a></li><li><a href="module-db.html">db</a></li><li><a href="module-dotaBot.html">dotaBot</a></li><li><a href="module-fp.html">fp</a></li><li><a href="module-guild.html">guild</a></li><li><a href="module-ihl.html">ihl</a></li><li><a href="module-ihlCommand.html">ihlCommand</a></li><li><a href="module-ihlManager.html">ihlManager</a></li><li><a href="module-lobby.html">lobby</a></li><li><a href="module-matchTracker.html">matchTracker</a></li><li><a href="module-util.html">util</a></li></ul><h3>Classes</h3><ul><li><a href="module-db.Database.html">Database</a></li><li><a href="module-dotaBot-DotaBot.html">DotaBot</a></li><li><a href="module-ihlCommand-IHLCommand.html">IHLCommand</a></li><li><a href="module-ihlManager-IHLManager.html">IHLManager</a></li><li><a href="module-matchTracker-MatchTracker.html">MatchTracker</a></li><li><a href="module-util.Queue.html">Queue</a></li></ul><h3>Events</h3><ul><li><a href="module-ihlManager.html#~event:empty">empty</a></li><li><a href="module-ihlManager.html#~event:EVENT_GUILD_MESSAGE">EVENT_GUILD_MESSAGE</a></li><li><a href="module-ihlManager.html#~event:EVENT_GUILD_USER_LEFT">EVENT_GUILD_USER_LEFT</a></li><li><a href="module-ihlManager.html#~event:EVENT_LOBBY_FORCE_DRAFT">EVENT_LOBBY_FORCE_DRAFT</a></li><li><a href="module-ihlManager.html#~event:EVENT_PICK_PLAYER">EVENT_PICK_PLAYER</a></li><li><a href="module-ihlManager.html#~event:EVENT_PLAYER_READY">EVENT_PLAYER_READY</a></li><li><a href="module-ihlManager.html#~event:EVENT_RUN_LOBBY">EVENT_RUN_LOBBY</a></li><li><a href="module-ihlManager.html#~event:ready">ready</a></li></ul><h3>Mixins</h3><ul><li><a href="module-ihlManager.EventListeners.html">EventListeners</a></li><li><a href="module-ihlManager.LobbyQueueHandlers.html">LobbyQueueHandlers</a></li><li><a href="module-ihlManager.LobbyStateHandlers.html">LobbyStateHandlers</a></li></ul></div><div class="category"><h2>Commands</h2><h3>Classes</h3><ul><li><a href="module-ihlCommand.BotAddCommand.html">BotAddCommand</a></li><li><a href="module-ihlCommand.BotListCommand.html">BotListCommand</a></li><li><a href="module-ihlCommand.BotRemoveCommand.html">BotRemoveCommand</a></li><li><a href="module-ihlCommand.BotStatusCommand.html">BotStatusCommand</a></li><li><a href="module-ihlCommand.ChallengeCommand.html">ChallengeCommand</a></li><li><a href="module-ihlCommand.ChallengeListCommand.html">ChallengeListCommand</a></li><li><a href="module-ihlCommand.CommendCommand.html">CommendCommand</a></li><li><a href="module-ihlCommand.DireCommand.html">DireCommand</a></li><li><a href="module-ihlCommand.FirstCommand.html">FirstCommand</a></li><li><a href="module-ihlCommand.GameModeCommand.html">GameModeCommand</a></li><li><a href="module-ihlCommand.InviteCommand.html">InviteCommand</a></li><li><a href="module-ihlCommand.InviteUrlCommand.html">InviteUrlCommand</a></li><li><a href="module-ihlCommand.LeaderboardCommand.html">LeaderboardCommand</a></li><li><a href="module-ihlCommand.LeagueCreateCommand.html">LeagueCreateCommand</a></li><li><a href="module-ihlCommand.LeagueInfoCommand.html">LeagueInfoCommand</a></li><li><a href="module-ihlCommand.LeagueSeasonCommand.html">LeagueSeasonCommand</a></li><li><a href="module-ihlCommand.LeagueTicketCommand.html">LeagueTicketCommand</a></li><li><a href="module-ihlCommand.LeagueUpdateCommand.html">LeagueUpdateCommand</a></li><li><a href="module-ihlCommand.LobbyDraftCommand.html">LobbyDraftCommand</a></li><li><a href="module-ihlCommand.LobbyFirstPickCommand.html">LobbyFirstPickCommand</a></li><li><a href="module-ihlCommand.LobbyGameModeCommand.html">LobbyGameModeCommand</a></li><li><a href="module-ihlCommand.LobbyInviteCommand.html">LobbyInviteCommand</a></li><li><a href="module-ihlCommand.LobbyKickCommand.html">LobbyKickCommand</a></li><li><a href="module-ihlCommand.LobbyKillCommand.html">LobbyKillCommand</a></li><li><a href="module-ihlCommand.LobbyRunCommand.html">LobbyRunCommand</a></li><li><a href="module-ihlCommand.LobbyStartCommand.html">LobbyStartCommand</a></li><li><a href="module-ihlCommand.LobbyStateCommand.html">LobbyStateCommand</a></li><li><a href="module-ihlCommand.LobbySwapCommand.html">LobbySwapCommand</a></li><li><a href="module-ihlCommand.LogLevelCommand.html">LogLevelCommand</a></li><li><a href="module-ihlCommand.NicknameCommand.html">NicknameCommand</a></li><li><a href="module-ihlCommand.PickCommand.html">PickCommand</a></li><li><a href="module-ihlCommand.QueueBanCommand.html">QueueBanCommand</a></li><li><a href="module-ihlCommand.QueueClearCommand.html">QueueClearCommand</a></li><li><a href="module-ihlCommand.QueueJoinCommand.html">QueueJoinCommand</a></li><li><a href="module-ihlCommand.QueueLeaveCommand.html">QueueLeaveCommand</a></li><li><a href="module-ihlCommand.QueueReadyCommand.html">QueueReadyCommand</a></li><li><a href="module-ihlCommand.QueueStatusCommand.html">QueueStatusCommand</a></li><li><a href="module-ihlCommand.RadiantCommand.html">RadiantCommand</a></li><li><a href="module-ihlCommand.RegisterCommand.html">RegisterCommand</a></li><li><a href="module-ihlCommand.RepCommand.html">RepCommand</a></li><li><a href="module-ihlCommand.RestartCommand.html">RestartCommand</a></li><li><a href="module-ihlCommand.RolesCommand.html">RolesCommand</a></li><li><a href="module-ihlCommand.SecondCommand.html">SecondCommand</a></li><li><a href="module-ihlCommand.TicketAddCommand.html">TicketAddCommand</a></li><li><a href="module-ihlCommand.TicketRemoveCommand.html">TicketRemoveCommand</a></li><li><a href="module-ihlCommand.UnchallengeCommand.html">UnchallengeCommand</a></li><li><a href="module-ihlCommand.UncommendCommand.html">UncommendCommand</a></li><li><a href="module-ihlCommand.UnrepCommand.html">UnrepCommand</a></li><li><a href="module-ihlCommand.UserBadgeCommand.html">UserBadgeCommand</a></li><li><a href="module-ihlCommand.UserVouchCommand.html">UserVouchCommand</a></li><li><a href="module-ihlCommand.WhoisCommand.html">WhoisCommand</a></li></ul></div><div class="category"><h2>Database</h2><h3>Classes</h3><ul><li><a href="module-db.Bot.html">Bot</a></li><li><a href="module-db.BotTicket.html">BotTicket</a></li><li><a href="module-db.Challenge.html">Challenge</a></li><li><a href="module-db.Commend.html">Commend</a></li><li><a href="module-db.Leaderboard.html">Leaderboard</a></li><li><a href="module-db.League.html">League</a></li><li><a href="module-db.LeagueTicket.html">LeagueTicket</a></li><li><a href="module-db.Lobby.html">Lobby</a></li><li><a href="module-db.LobbyPlayer.html">LobbyPlayer</a></li><li><a href="module-db.LobbyQueuer.html">LobbyQueuer</a></li><li><a href="module-db.Queue.html">Queue</a></li><li><a href="module-db.Reputation.html">Reputation</a></li><li><a href="module-db.Season.html">Season</a></li><li><a href="module-db.Ticket.html">Ticket</a></li><li><a href="module-db.User.html">User</a></li></ul></div><div class="category"><h2>Other</h2><h3>Externals</h3><ul><li><a href="external-commando.html">commando</a></li><li><a href="external-EventEmitter.html">EventEmitter</a></li><li><a href="external-Long.html">Long</a></li></ul></div><div class="category"><h2>Sequelize</h2><h3>Externals</h3><ul><li><a href="external-sequelize.html">sequelize</a></li></ul><h3>Classes</h3><ul><li><a href="external-sequelize.Model.html">Model</a></li></ul></div><div class="category"><h2>discord.js</h2><h3>Externals</h3><ul><li><a href="external-discordjs.html">discordjs</a></li></ul><h3>Classes</h3><ul><li><a href="external-discordjs.CategoryChannel.html">CategoryChannel</a></li><li><a href="external-discordjs.Client.html">Client</a></li><li><a href="external-discordjs.Guild.html">Guild</a></li><li><a href="external-discordjs.GuildChannel.html">GuildChannel</a></li><li><a href="external-discordjs.GuildMember.html">GuildMember</a></li><li><a href="external-discordjs.Message.html">Message</a></li><li><a href="external-discordjs.Role.html">Role</a></li><li><a href="external-discordjs.User.html">User</a></li></ul></div><div class="category"><h2>node-dota2</h2><h3>Externals</h3><ul><li><a href="external-Dota2.html">Dota2</a></li></ul><h3>Classes</h3><ul><li><a href="external-Dota2.Dota2Client.html">Dota2Client</a></li></ul></div><div class="category"><h2>node-steam</h2><h3>Externals</h3><ul><li><a href="external-steam.html">steam</a></li></ul><h3>Classes</h3><ul><li><a href="external-steam.SteamClient.html">SteamClient</a></li><li><a href="external-steam.SteamFriends.html">SteamFriends</a></li><li><a href="external-steam.SteamUser.html">SteamUser</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>lib/lobby.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module lobby
+ */
+
+/**
+ * @typedef module:lobby.LobbyState
+ * @type {Object}
+ * @property {module:ihl.InhouseState} inhouseState - The inhouse state the lobby belongs to.
+ * @property {external:discordjs.GuildChannel} channel - The discord lobby channel.
+ * @property {external:discordjs.Role} role - The discord lobby role.
+ * @property {number} readyCheckTime - Start of lobby ready timer.
+ * @property {string} state - The lobby state.
+ * @property {number} botId - The record id of the bot hosting the lobby.
+ * @property {string} queueType - The lobby queue type.
+ * @property {string} lobbyName - The lobby name.
+ * @property {string} dotaLobbyId - The dota lobby id.
+ * @property {string} password - The lobby password.
+ * @property {string} captain1UserId - The first captain user record id.
+ * @property {string} captain2UserId - The second captain user record id.
+ * @property {string} matchId - The match id for the lobby.
+ */
+
+const util = require('util');
+const Promise = require('bluebird');
+const Sequelize = require('sequelize');
+
+const logger = require('./logger');
+const shuffle = require('./util/shuffle');
+const combinations = require('./util/combinations');
+const templateString = require('./util/templateString');
+const capitalize = require('./util/capitalize');
+const CONSTANTS = require('./constants');
+const Guild = require('./guild');
+const Db = require('./db');
+const Fp = require('./util/fp');
+const AsyncLock = require('async-lock');
+
+const lock = new AsyncLock();
+
+const getLobby = async lobbyOrState => (lobbyOrState instanceof Sequelize.Model ? lobbyOrState.reload() : Db.findLobbyById(lobbyOrState.id));
+
+const getPlayers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getPlayers(options) : []));
+
+const getPlayerByUserId = lobbyOrState => async id => getPlayers({ where: { id } })(lobbyOrState).then(players => (players ? players[0] : null));
+
+const getPlayerBySteamId = lobbyOrState => async steamId64 => getPlayers({ where: { steamId64 } })(lobbyOrState).then(players => (players ? players[0] : null));
+
+const getPlayerByDiscordId = lobbyOrState => async discordId => getPlayers({ where: { discordId } })(lobbyOrState).then(players => (players ? players[0] : null));
+
+const getNoFactionPlayers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getNoFactionPlayers(options) : []));
+
+const getFaction1Players = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getFaction1Players(options) : []));
+
+const getFaction2Players = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getFaction2Players(options) : []));
+
+const getRadiantPlayers = options => async lobbyOrState => getLobby(lobbyOrState).then((lobby) => {
+    if (lobby) {
+        if (lobby.radiantFaction === 1) {
+            return lobby.getFaction1Players(options);
+        }
+        return lobby.getFaction2Players(options);
+    }
+    return [];
+});
+
+const getDirePlayers = options => async lobbyOrState => getLobby(lobbyOrState).then((lobby) => {
+    if (lobby) {
+        if (lobby.radiantFaction === 2) {
+            return lobby.getFaction1Players(options);
+        }
+        return lobby.getFaction2Players(options);
+    }
+    return [];
+});
+
+const getNotReadyPlayers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getNotReadyPlayers(options) : []));
+
+const getReadyPlayers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getReadyPlayers(options) : []));
+
+const mapPlayers = fn => async lobbyOrState => Fp.pipeP(getPlayers(), Fp.mapPromise(fn))(lobbyOrState);
+
+const addPlayer = lobbyOrState => async user => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.addPlayer(user) : null));
+
+const removePlayer = lobbyOrState => async user => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.removePlayer(user) : null));
+
+const addPlayers = lobbyOrState => async users => Fp.mapPromise(addPlayer(lobbyOrState))(users);
+
+const addRoleToPlayers = async lobbyState => mapPlayers(Guild.addRoleToUser(lobbyState.inhouseState.guild)(lobbyState.role))(lobbyState);
+
+const updateLobbyPlayer = data => lobbyOrState => async id => getPlayerByUserId(lobbyOrState)(id).then(player => (player ? player.LobbyPlayer.update(data) : null));
+
+const updateLobbyPlayerBySteamId = data => lobbyOrState => async steamId64 => getPlayerBySteamId(lobbyOrState)(steamId64).then(player => (player ? player.LobbyPlayer.update(data) : null));
+
+const setPlayerReady = ready => updateLobbyPlayer({ ready });
+
+const setPlayerFaction = faction => updateLobbyPlayer({ faction });
+
+const sortQueuersAsc = async queuers => Promise.resolve(queuers).then(q => (q ? q.sort((a, b) => a.LobbyQueuer.createdAt - b.LobbyQueuer.createdAt) : []));
+
+const getQueuers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getQueuers(options) : []));
+
+const getActiveQueuers = options => async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.getActiveQueuers(options) : [])).then(sortQueuersAsc);
+
+const getQueuerByUserId = lobbyOrState => async id => getQueuers({ where: { id } })(lobbyOrState).then(queuers => (queuers ? queuers[0] : null));
+
+const getQueuerBySteamId = lobbyOrState => async steamId64 => getQueuers({ where: { steamId64 } })(lobbyOrState).then(queuers => (queuers ? queuers[0] : null));
+
+const getQueuerByDiscordId = lobbyOrState => async discordId => getQueuers({ where: { discordId } })(lobbyOrState).then(queuers => (queuers ? queuers[0] : null));
+
+const mapQueuers = fn => async lobbyOrState => Fp.pipeP(getQueuers(), Fp.mapPromise(fn))(lobbyOrState);
+
+const mapActiveQueuers = fn => async lobbyOrState => Fp.pipeP(getActiveQueuers(), Fp.mapPromise(fn))(lobbyOrState);
+
+const hasQueuer = lobbyOrState => async user => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.hasQueuer(user) : false));
+
+const addQueuer = lobbyOrState => async user => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.addQueuer(user) : null));
+
+const removeQueuer = lobbyOrState => async user => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.removeQueuer(user) : null));
+
+const addQueuers = lobbyOrState => async users => Fp.mapPromise(addQueuer(lobbyOrState))(users);
+
+const addRoleToQueuers = async lobbyState => mapQueuers(Guild.addRoleToUser(lobbyState.inhouseState.guild)(lobbyState.role))(lobbyState);
+
+const updateLobbyQueuer = data => lobbyOrState => async id => getQueuerByUserId(lobbyOrState)(id).then(queuer => (queuer ? queuer.LobbyQueuer.update(data) : null));
+
+const updateLobbyQueuerBySteamId = data => lobbyOrState => async steamId64 => getQueuerBySteamId(lobbyOrState)(steamId64).then(queuer => (queuer ? queuer.LobbyQueuer.update(data) : null));
+
+const setQueuerActive = active => updateLobbyQueuer({ active });
+
+const removeUserFromQueues = async user => user.setQueues([]);
+
+const removeQueuers = async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.setQueuers([]) : null));
+
+const removePlayers = async lobbyOrState => getLobby(lobbyOrState).then(lobby => (lobby ? lobby.setPlayers([]) : null));
+
+const lobbyQueuerToPlayer = lobbyOrState => async user => Fp.pipeP(Db.updateQueuesForUser(false), addPlayer(lobbyOrState))(user);
+
+const returnPlayerToQueue = lobbyOrState => async user => Fp.pipeP(Db.updateQueuesForUser(true), removePlayer(lobbyOrState))(user);
+
+const returnPlayersToQueue = async lobbyOrState => mapPlayers(returnPlayerToQueue(lobbyOrState))(lobbyOrState);
+
+const isUserInGuild = guild => async (user) => {
+    try {
+        await Guild.resolveUser(guild)(user);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+};
+
+const cleanMissingPlayers = async lobbyState => Fp.pipeP(
+    getPlayers(),
+    Fp.filterPromise(Fp.negateP(isUserInGuild(lobbyState.inhouseState.guild))),
+    Fp.mapPromise(Db.unvouchUser),
+    Fp.mapPromise(removePlayer(lobbyState)),
+)(lobbyState);
+
+const cleanMissingQueuers = async lobbyState => Fp.pipeP(
+    getQueuers(),
+    Fp.filterPromise(Fp.negateP(isUserInGuild(lobbyState.inhouseState.guild))),
+    Fp.mapPromise(Db.unvouchUser),
+    Fp.mapPromise(removeQueuer(lobbyState)),
+)(lobbyState);
+
+const checkPlayers = async (lobbyState) => {
+    try {
+        const players = await getPlayers()(lobbyState);
+        if (players.length !== 10) {
+            return { ...lobbyState, state: CONSTANTS.STATE_FAILED, failReason: 'checkPlayers: invalid player count {e.toString()}' };
+        }
+        try {
+            await Fp.mapPromise(Guild.resolveUser(lobbyState.inhouseState.guild))(players);
+        }
+        catch (e) {
+            return { ...lobbyState, state: CONSTANTS.STATE_FAILED, failReason: 'checkPlayers: missing player {e.toString()}' };
+        }
+    }
+    catch (e) {
+        return { ...lobbyState, state: CONSTANTS.STATE_FAILED, failReason: 'checkPlayers: {e.toString()}' };
+    }
+    return { ...lobbyState };
+};
+
+const validateLobbyPlayers = async (_lobbyState) => {
+    let lobbyState;
+    switch (_lobbyState.state) {
+    case CONSTANTS.STATE_WAITING_FOR_PLAYERS:
+    case CONSTANTS.STATE_BOT_STARTED:
+    case CONSTANTS.STATE_BOT_FAILED:
+    case CONSTANTS.STATE_BOT_ASSIGNED:
+    case CONSTANTS.STATE_WAITING_FOR_BOT:
+    case CONSTANTS.STATE_TEAMS_SELECTED:
+    case CONSTANTS.STATE_AUTOBALANCING:
+    case CONSTANTS.STATE_DRAFTING_PLAYERS:
+    case CONSTANTS.STATE_SELECTION_PRIORITY:
+    case CONSTANTS.STATE_ASSIGNING_CAPTAINS:
+        // remove lobby players and add them back as active queuers
+        lobbyState = await checkPlayers(_lobbyState);
+        if (lobbyState.state === CONSTANTS.STATE_FAILED) {
+            logger.silly(`validateLobbyPlayers ${lobbyState.id} failed, returning players to queue`);
+            await Fp.pipeP(
+                getPlayers(),
+                addQueuers(lobbyState),
+            )(lobbyState);
+            await returnPlayersToQueue(lobbyState);
+            lobbyState.state = CONSTANTS.STATE_WAITING_FOR_QUEUE;
+            await Db.updateLobby(lobbyState);
+        }
+        break;
+    case CONSTANTS.STATE_CHECKING_READY:
+    case CONSTANTS.STATE_BEGIN_READY:
+        // remove lobby players and set queuers active
+        lobbyState = await checkPlayers(_lobbyState);
+        if (lobbyState.state === CONSTANTS.STATE_FAILED) {
+            logger.silly(`validateLobbyPlayers ${lobbyState.id} failed, returning players to queue`);
+            await returnPlayersToQueue(lobbyState);
+            lobbyState.state = CONSTANTS.STATE_WAITING_FOR_QUEUE;
+            await Db.updateLobby(lobbyState);
+        }
+        break;
+    case CONSTANTS.STATE_WAITING_FOR_QUEUE:
+    case CONSTANTS.STATE_NEW:
+    default:
+        logger.silly(`validateLobbyPlayers ${_lobbyState.id} default ${_lobbyState.state}`);
+        return { ..._lobbyState };
+    }
+    logger.silly(`validateLobbyPlayers ${lobbyState.id} end ${_lobbyState.state} to ${lobbyState.state}`);
+    return lobbyState;
+};
+
+const calcBalanceTeams = getPlayerRating => (players) => {
+    logger.silly('calcBalanceTeams');
+    const combs = combinations(players, 5);
+    let bestWeightDiff = 999999;
+    let bestPairs = [];
+    combs.forEach((comb) => {
+        const team1 = comb;
+        const team2 = players.filter(i => comb.indexOf(i) &lt; 0);
+        const weight1 = team1.reduce((total, player) => total + getPlayerRating(player), 0);
+        const weight2 = team2.reduce((total, player) => total + getPlayerRating(player), 0);
+        const weightDiff = Math.abs(weight1 - weight2);
+        if (weightDiff &lt; bestWeightDiff) {
+            bestPairs = [[team1, team2]];
+            bestWeightDiff = weightDiff;
+        }
+        else if (weightDiff === bestWeightDiff) {
+            bestPairs.push([team1, team2]);
+        }
+    });
+    shuffle(bestPairs);
+    const bestPair = bestPairs.pop();
+    logger.silly(`calcBalanceTeams done. ${bestPair.length}`);
+    return bestPair;
+};
+
+const setTeams = lobbyOrState => async ([team1, team2]) => {
+    const lobby = await getLobby(lobbyOrState);
+    team1.forEach((player) => {
+        // eslint-disable-next-line no-param-reassign
+        player.LobbyPlayer = { faction: 1 };
+    });
+    team2.forEach((player) => {
+        // eslint-disable-next-line no-param-reassign
+        player.LobbyPlayer = { faction: 2 };
+    });
+    return lobby.setPlayers(team1.concat(team2), { through: { faction: 0 } });
+};
+
+const getPlayerRatingFunction = (matchmakingSystem) => {
+    logger.silly(`getPlayerRatingFunction ${matchmakingSystem}`);
+    switch (matchmakingSystem) {
+    case 'elo':
+        return player => player.rating;
+    default:
+        return player => player.rankTier;
+    }
+};
+
+const selectCaptainPairFromTiers = captainRankThreshold => getPlayerRating => (tiers) => {
+    const keys = Object.keys(tiers).sort();
+    logger.silly(`selectCaptainPairFromTiers captainRankThreshold: ${captainRankThreshold} keys: ${keys}`);
+    // loop through tiers. lower tier = higher priority
+    for (const key of keys) {
+        logger.silly(`selectCaptainPairFromTiers checking tier ${key}`);
+        const tier = tiers[key];
+        // only look at tiers with at least 2 players in them
+        if (tier.length >= 2) {
+            logger.silly(`selectCaptainPairFromTiers tier ${key} length >= 2`);
+            // get all possible pairs within the tier
+            let combs = combinations(tier, 2);
+
+            logger.silly(`selectCaptainPairFromTiers combs ${combs.length}`);
+            // filter out pairs that exceed skill difference threshold
+            combs = combs.filter(([player1, player2]) => Math.abs(getPlayerRating(player1) - getPlayerRating(player2)) &lt;= captainRankThreshold);
+            logger.silly(`selectCaptainPairFromTiers filtered combs ${combs.length}`);
+
+            if (combs.length) {
+                // select random pair
+                shuffle(combs);
+                logger.silly(`selectCaptainPairFromTiers shuffled combs ${combs.length}`);
+
+                return combs.pop();
+            }
+        }
+    }
+    return [];
+};
+
+const sortPlayersByCaptainPriority = (playersWithCaptainPriority) => {
+    const tiers = {};
+    for (const [player, captainPriority] of playersWithCaptainPriority) {
+        if (captainPriority &lt; Infinity) {
+            tiers[captainPriority] = tiers[captainPriority] || [];
+            tiers[captainPriority].push(player);
+        }
+    }
+    logger.silly(`sortPlayersByCaptainPriority ${Object.keys(tiers)}`);
+    return tiers;
+};
+
+const roleToCaptainPriority = regexp => (role) => {
+    const match = role.name.match(regexp);
+    return match ? parseInt(match[1]) : null;
+};
+
+const getCaptainPriorityFromRoles = (captainRoleRegexp, roles) => {
+    const regexp = new RegExp(captainRoleRegexp);
+    const priorities = roles.map(roleToCaptainPriority(regexp)).filter(Number.isFinite);
+    logger.silly(`getCaptainPriorityFromRoles ${captainRoleRegexp} ${roles} ${priorities}`);
+    return Math.min.apply(null, priorities);
+};
+
+const playerToCaptainPriority = guild => captainRoleRegexp => async player => [player, getCaptainPriorityFromRoles(captainRoleRegexp, await Guild.getUserRoles(guild)(player))];
+
+const getPlayersWithCaptainPriority = guild => captainRoleRegexp => async lobbyOrState => mapPlayers(playerToCaptainPriority(guild)(captainRoleRegexp))(lobbyOrState);
+
+const getActiveQueuersWithCaptainPriority = guild => captainRoleRegexp => async lobbyOrState => mapActiveQueuers(playerToCaptainPriority(guild)(captainRoleRegexp))(lobbyOrState);
+
+const checkQueueForCaptains = async lobbyState => Fp.pipeP(
+    getActiveQueuersWithCaptainPriority(lobbyState.inhouseState.guild)(lobbyState.inhouseState.captainRoleRegexp),
+    sortPlayersByCaptainPriority,
+    selectCaptainPairFromTiers(lobbyState.inhouseState.captainRankThreshold)(getPlayerRatingFunction(lobbyState.inhouseState.matchmakingSystem)),
+)(lobbyState);
+
+const assignCaptains = async lobbyState => Fp.pipeP(
+    getPlayersWithCaptainPriority(lobbyState.inhouseState.guild)(lobbyState.inhouseState.captainRoleRegexp),
+    sortPlayersByCaptainPriority,
+    selectCaptainPairFromTiers(lobbyState.inhouseState.captainRankThreshold)(getPlayerRatingFunction(lobbyState.inhouseState.matchmakingSystem)),
+)(lobbyState);
+
+const calcDefaultGameMode = defaultGameMode => (gameModePreferences) => {
+    const gameModeTotals = gameModePreferences.reduce((tally, gameModePreference) => ({
+        ...tally,
+        [gameModePreference]: (tally[gameModePreference] || 0) + 1,
+    }), {});
+
+    let bestGameMode = defaultGameMode;
+    let bestCount = gameModeTotals[defaultGameMode] || 0;
+    for (const [gameMode, count] of Object.entries(gameModeTotals)) {
+        if (count > bestCount) {
+            bestCount = count;
+            bestGameMode = gameMode;
+        }
+    }
+
+    logger.silly(`calcDefaultGameMode ${util.inspect(gameModeTotals)} ${bestCount} ${bestGameMode}`);
+    return bestGameMode;
+};
+
+const autoBalanceTeams = getPlayerRating => async lobbyOrState => Fp.pipeP(
+    getPlayers(),
+    calcBalanceTeams(getPlayerRating),
+    setTeams(lobbyOrState),
+)(lobbyOrState);
+
+const getDefaultGameMode = async lobbyState => Fp.pipeP(
+    mapPlayers(player => player.gameModePreference),
+    calcDefaultGameMode(lobbyState.inhouseState.defaultGameMode),
+)(lobbyState);
+
+const assignGameMode = async lobbyState => ({ ...lobbyState, gameMode: await getDefaultGameMode(lobbyState) });
+
+const getDraftingFaction = draftOrder => async (lobbyOrState) => {
+    const playersNoTeam = await getNoFactionPlayers()(lobbyOrState);
+    const unassignedCount = playersNoTeam.length;
+    if (unassignedCount === 0) {
+        return 0;
+    }
+    logger.silly(`getDraftingFaction ${draftOrder}`);
+    return draftOrder[draftOrder.length - unassignedCount] === 'A' ? lobbyOrState.playerFirstPick : 3 - lobbyOrState.playerFirstPick;
+};
+
+const getFactionCaptain = lobbyOrState => async faction => (faction > 0 &amp;&amp; faction &lt;= 2 ? getPlayerByUserId(lobbyOrState)([lobbyOrState.captain1UserId, lobbyOrState.captain2UserId][faction - 1]) : null);
+
+const isPlayerDraftable = lobbyOrState => async (player) => {
+    if (player.id === lobbyOrState.captain1UserId || player.id === lobbyOrState.captain2UserId) {
+        return CONSTANTS.INVALID_DRAFT_CAPTAIN;
+    }
+    if (player.LobbyPlayer.faction !== 0) {
+        return CONSTANTS.INVALID_DRAFT_PLAYER;
+    }
+    return CONSTANTS.PLAYER_DRAFTED;
+};
+
+const isCaptain = lobbyState => user => user.id === lobbyState.captain1UserId || user.id === lobbyState.captain2UserId;
+
+const isFactionCaptain = lobbyState => faction => user => user.id === lobbyState[`captain${faction}UserId`];
+
+const formatNameForLobby = input => input.replace(/[^0-9a-z]/gi, '').substring(0, 15);
+
+const getLobbyNameFromCaptains = async (captainName1, captainName2, counter) => {
+    const name1 = formatNameForLobby(captainName1);
+    const name2 = formatNameForLobby(captainName2);
+    const lobbyName = `${name1}-${name2}-${counter}`;
+    const lobby = await Db.findLobbyByName(lobbyName);
+    if (!lobby) {
+        return lobbyName;
+    }
+
+    return getLobbyNameFromCaptains(captainName1, captainName2, counter + 1);
+};
+
+const resetLobbyState = async (_lobbyState) => {
+    const lobbyState = { ..._lobbyState };
+    switch (lobbyState.state) {
+    case CONSTANTS.STATE_WAITING_FOR_PLAYERS:
+    case CONSTANTS.STATE_BOT_STARTED:
+        lobbyState.state = CONSTANTS.STATE_WAITING_FOR_BOT;
+        logger.silly(`resetLobbyState ${_lobbyState.id} ${_lobbyState.state} to ${lobbyState.state}`);
+        break;
+    case CONSTANTS.STATE_CHECKING_READY:
+        lobbyState.state = CONSTANTS.STATE_BEGIN_READY;
+        logger.silly(`resetLobbyState ${_lobbyState.id} ${_lobbyState.state} to ${lobbyState.state}`);
+        break;
+    default:
+        lobbyState.state = lobbyState.state || CONSTANTS.STATE_NEW;
+        break;
+    }
+    await Db.updateLobby(lobbyState);
+    return lobbyState;
+};
+
+const isReadyCheckTimedOut = lobbyState => Date.now() - lobbyState.readyCheckTime >= lobbyState.inhouseState.readyCheckTimeout;
+
+const createLobbyState = inhouseState => ({ channel, role }) => lobby => ({
+    inhouseState: { ...inhouseState },
+    ...(lobby instanceof Sequelize.Model ? lobby.get({ plain: true }) : lobby),
+    channel,
+    role,
+    channelId: channel.id,
+    roleId: role.id,
+});
+
+const lobbyToLobbyState = inhouseState => async (lobby) => {
+    let channel;
+    let role;
+    try {
+        await lock.acquire(`lobby-${lobby.id}`, async () => {
+            if (lobby.channelId) {
+                channel = Guild.findChannel(inhouseState.guild)(lobby.channelId);
+            }
+            if (channel) {
+                if (channel.name !== lobby.lobbyName) {
+                    channel = await Guild.setChannelName(lobby.lobbyName)(channel);
+                }
+            }
+            else {
+                channel = await Guild.findOrCreateChannelInCategory(inhouseState.guild, inhouseState.category, lobby.lobbyName);
+                await Db.updateLobbyChannel(lobby)(channel);
+            }
+        });
+        await lock.acquire(`lobby-${lobby.id}`, async () => {
+            if (lobby.roleId) {
+                role = Guild.findRole(inhouseState.guild)(lobby.roleId);
+            }
+            if (role) {
+                if (role.name !== lobby.lobbyName) {
+                    role = await Fp.pipeP(
+                        Guild.setRoleName(lobby.lobbyName),
+                        Guild.setRolePermissions([]),
+                        Guild.setRoleMentionable(true),
+                    )(role);
+                }
+            }
+            else {
+                role = await Guild.makeRole(inhouseState.guild)([])(true)(lobby.lobbyName);
+                await Db.updateLobbyRole(lobby)(role);
+            }
+        });
+        const lobbyState = await createLobbyState(inhouseState)({ channel, role })(lobby);
+        const badQueuers = await cleanMissingQueuers(lobbyState);
+        const queuers = await getQueuers()(lobbyState);
+        const badPlayers = await cleanMissingPlayers(lobbyState);
+        const players = await getPlayers()(lobbyState);
+        logger.silly(`lobbyToLobbyState ${lobby.id}, ${lobbyState.lobbyName}, ${queuers.length}, ${badQueuers.length}, ${players.length}, ${badPlayers.length}, ${lobbyState.captain1UserId}, ${lobbyState.captain2UserId}`);
+
+        if ([CONSTANTS.STATE_NEW, CONSTANTS.STATE_WAITING_FOR_QUEUE].indexOf(lobbyState.state) !== -1) {
+            await Guild.setChannelViewable(inhouseState.guild)(true)(channel);
+        }
+        else {
+            await Guild.setChannelViewable(inhouseState.guild)(false)(channel);
+            await Guild.setChannelViewableForRole(inhouseState.adminRole)(true)(channel);
+            await Guild.setChannelViewableForRole(role)(true)(channel);
+        }
+        await addRoleToPlayers(lobbyState);
+        return lobbyState;
+    }
+    catch (e) {
+        logger.error(e);
+        await Db.updateLobbyFailed(lobby)('lobbyToLobbyState: {e.toString()}');
+        if (channel) {
+            await channel.send('Lobby failed to load.');
+            await Guild.setChannelViewable(inhouseState.guild)(false)(channel);
+        }
+        throw e;
+    }
+};
+
+const forceLobbyDraft = async (_lobbyState, captain1, captain2) => {
+    const lobbyState = { ..._lobbyState };
+    const states = [
+        CONSTANTS.STATE_ASSIGNING_CAPTAINS,
+        CONSTANTS.STATE_SELECTION_PRIORITY,
+        CONSTANTS.STATE_DRAFTING_PLAYERS,
+        CONSTANTS.STATE_AUTOBALANCING,
+        CONSTANTS.STATE_TEAMS_SELECTED,
+        CONSTANTS.STATE_WAITING_FOR_BOT,
+        CONSTANTS.STATE_BOT_ASSIGNED,
+        CONSTANTS.STATE_BOT_STARTED,
+        CONSTANTS.STATE_BOT_FAILED,
+        CONSTANTS.STATE_WAITING_FOR_PLAYERS,
+    ];
+    if (states.indexOf(lobbyState.state) !== -1) {
+        lobbyState.state = CONSTANTS.STATE_SELECTION_PRIORITY;
+        lobbyState.selectionPriority = 0;
+        lobbyState.playerFirstPick = 0;
+        lobbyState.firstPick = 0;
+        lobbyState.radiantFaction = 0;
+        lobbyState.captain1UserId = captain1.id;
+        lobbyState.captain2UserId = captain2.id;
+    }
+    return lobbyState;
+};
+
+const createChallengeLobby = async ({ inhouseState, captain1, captain2, challenge }) => {
+    const captainMember1 = await Guild.resolveUser(inhouseState.guild)(captain1.discordId);
+    const captainMember2 = await Guild.resolveUser(inhouseState.guild)(captain2.discordId);
+    const lobbyName = await getLobbyNameFromCaptains(captainMember1.displayName, captainMember2.displayName, 1);
+    const lobby = await Db.findOrCreateLobbyForGuild(inhouseState.guild.id, CONSTANTS.QUEUE_TYPE_CHALLENGE, lobbyName);
+    await Db.setChallengeAccepted(challenge);
+    await addQueuers(lobby)([captain1, captain2]);
+    const lobbyState = await lobbyToLobbyState(inhouseState)(lobby);
+    await Guild.setChannelPosition(1)(lobbyState.channel);
+    lobbyState.captain1UserId = captain1.id;
+    lobbyState.captain2UserId = captain2.id;
+    await Db.updateLobby(lobbyState);
+    return lobbyState;
+};
+
+const removeLobbyPlayersFromQueues = async lobbyOrState => mapPlayers(removeUserFromQueues)(lobbyOrState);
+
+const assignLobbyName = async (lobbyState) => {
+    let lobbyName = templateString(lobbyState.inhouseState.lobbyNameTemplate)({ lobbyId: lobbyState.id });
+    lobbyName = lobbyName.toLowerCase().replace(/ /g, '-').replace(/[^0-9a-z-]/gi, '');
+    return { ...lobbyState, lobbyName };
+};
+
+const reducePlayerToTeamCache = radiantFaction => (_teamCache, player) => {
+    const teamCache = { ..._teamCache };
+    teamCache[player.steamId64] = player.LobbyPlayer.faction === radiantFaction ? 1 : 2;
+    return teamCache;
+};
+
+const createLobbyStateMessage = async (lobbyState) => {
+    let topic = `Status: ${lobbyState.state.replace('STATE_', '').split('_').map(capitalize).join(' ')}.`;
+    const queuers = await getActiveQueuers()(lobbyState);
+    if (queuers.length) {
+        topic += `\n${queuers.length} in queue: ${queuers.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+    }
+    const captains = [];
+    if (lobbyState.captain1UserId) {
+        captains.push(await Db.findUserById(lobbyState.captain1UserId));
+    }
+    if (lobbyState.captain2UserId) {
+        captains.push(await Db.findUserById(lobbyState.captain2UserId));
+    }
+    if (captains.length) {
+        topic += `\nCaptains: ${captains.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+    }
+    if (lobbyState.state === CONSTANTS.STATE_BEGIN_READY || lobbyState.state === CONSTANTS.STATE_CHECKING_READY) {
+        const readyPlayers = await getReadyPlayers()(lobbyState);
+        if (readyPlayers.length) {
+            topic += `\n${readyPlayers.length} ready players: ${readyPlayers.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+        }
+        const notReadyPlayers = await getNotReadyPlayers()(lobbyState);
+        if (notReadyPlayers.length) {
+            topic += `\n${notReadyPlayers.length} players not ready: ${notReadyPlayers.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+        }
+    }
+    if (lobbyState.state === CONSTANTS.STATE_DRAFTING_PLAYERS) {
+        const playersNoTeam = await getNoFactionPlayers()(lobbyState);
+        if (playersNoTeam.length) {
+            topic += `\n${playersNoTeam.length} unpicked players: ${playersNoTeam.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+        }
+    }
+    const radiant = await getRadiantPlayers()(lobbyState);
+    if (radiant.length) {
+        topic += `\nRadiant: ${radiant.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+    }
+    const dire = await getDirePlayers()(lobbyState);
+    if (dire.length) {
+        topic += `\nDire: ${dire.map(user => Guild.userToDisplayName(lobbyState.inhouseState.guild)(user)).join(', ')}.`;
+    }
+    if ([CONSTANTS.STATE_BOT_ASSIGNED,
+        CONSTANTS.STATE_WAITING_FOR_BOT,
+        CONSTANTS.STATE_BOT_STARTED,
+        CONSTANTS.STATE_WAITING_FOR_PLAYERS].indexOf(lobbyState.state) !== -1) {
+        topic += `\nLobby Name: ${lobbyState.lobbyName} Password: ${lobbyState.password}`;
+    }
+    return topic;
+};
+
+const setLobbyTopic = async (lobbyState) => {
+    if (lobbyState.state === CONSTANTS.STATE_KILLED) return;
+    if (!lobbyState.channel) return;
+    const topic = await createLobbyStateMessage(lobbyState);
+    await Guild.setChannelTopic(topic)(lobbyState.channel);
+};
+
+const assignBotToLobby = lobbyState => async (botId) => {
+    await Db.assignBotToLobby(lobbyState)(botId);
+    return { ...lobbyState, botId };
+};
+
+const unassignBotFromLobby = async (lobbyState) => {
+    if (lobbyState.botId) {
+        await Db.unassignBotFromLobby(lobbyState)(lobbyState.botId);
+    }
+    return { ...lobbyState, botId: null, dotaLobbyId: null };
+};
+
+module.exports = {
+    getLobby,
+    getPlayers,
+    getPlayerByUserId,
+    getPlayerBySteamId,
+    getPlayerByDiscordId,
+    getNoFactionPlayers,
+    getFaction1Players,
+    getFaction2Players,
+    getRadiantPlayers,
+    getDirePlayers,
+    getNotReadyPlayers,
+    getReadyPlayers,
+    mapPlayers,
+    addPlayer,
+    removePlayer,
+    addPlayers,
+    addRoleToPlayers,
+    updateLobbyPlayer,
+    updateLobbyPlayerBySteamId,
+    setPlayerReady,
+    setPlayerFaction,
+    sortQueuersAsc,
+    getQueuers,
+    getActiveQueuers,
+    getQueuerByUserId,
+    getQueuerBySteamId,
+    getQueuerByDiscordId,
+    mapQueuers,
+    mapActiveQueuers,
+    hasQueuer,
+    addQueuer,
+    removeQueuer,
+    addQueuers,
+    addRoleToQueuers,
+    updateLobbyQueuer,
+    updateLobbyQueuerBySteamId,
+    setQueuerActive,
+    removeUserFromQueues,
+    removeQueuers,
+    removePlayers,
+    lobbyQueuerToPlayer,
+    returnPlayerToQueue,
+    returnPlayersToQueue,
+    isUserInGuild,
+    cleanMissingPlayers,
+    cleanMissingQueuers,
+    checkPlayers,
+    validateLobbyPlayers,
+    calcBalanceTeams,
+    setTeams,
+    getPlayerRatingFunction,
+    selectCaptainPairFromTiers,
+    sortPlayersByCaptainPriority,
+    roleToCaptainPriority,
+    getCaptainPriorityFromRoles,
+    playerToCaptainPriority,
+    getPlayersWithCaptainPriority,
+    getActiveQueuersWithCaptainPriority,
+    checkQueueForCaptains,
+    assignCaptains,
+    calcDefaultGameMode,
+    autoBalanceTeams,
+    getDefaultGameMode,
+    assignGameMode,
+    getDraftingFaction,
+    getFactionCaptain,
+    isPlayerDraftable,
+    isCaptain,
+    isFactionCaptain,
+    formatNameForLobby,
+    getLobbyNameFromCaptains,
+    resetLobbyState,
+    isReadyCheckTimedOut,
+    createLobbyState,
+    lobbyToLobbyState,
+    createChallengeLobby,
+    forceLobbyDraft,
+    removeLobbyPlayersFromQueues,
+    assignLobbyName,
+    reducePlayerToTeamCache,
+    createLobbyStateMessage,
+    setLobbyTopic,
+    assignBotToLobby,
+    unassignBotFromLobby,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p><a href="https://github.com/devilesk/dota-ihl-bot/tree/master/docs">Documentation source on Github</a></p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 22 2019 15:23:24 GMT+0000 (Coordinated Universal Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

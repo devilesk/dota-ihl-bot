@@ -3,64 +3,145 @@ const CONSTANTS = require('../lib/constants');
 
 /**
  * @class Lobby
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Lobby = sequelize.define('Lobby', {
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         queueType: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         lobbyName: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         channelId: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         roleId: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         dotaLobbyId: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         password: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         readyCheckTime: DataTypes.DATE,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         state: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.STATE_NEW,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         gameMode: {
             allowNull: false,
             type: DataTypes.STRING,
             defaultValue: CONSTANTS.DOTA_GAMEMODE_CM,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         matchId: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         selectionPriority: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         playerFirstPick: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         firstPick: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         radiantFaction: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         winner: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         failReason: DataTypes.STRING,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         startedAt: DataTypes.DATE,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         finishedAt: DataTypes.DATE,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         valveData: DataTypes.JSONB,
+        /**
+         * @memberof module:db.Lobby
+         * @instance
+         */
         odotaData: DataTypes.JSONB,
     });
     Lobby.associate = (models) => {

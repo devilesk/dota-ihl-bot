@@ -1,10 +1,15 @@
 /**
  * @class Challenge
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Challenge = sequelize.define('Challenge', {
+        /**
+         * @memberof module:db.Challenge
+         * @instance
+         */
         accepted: {
             allowNull: false,
             type: DataTypes.BOOLEAN,

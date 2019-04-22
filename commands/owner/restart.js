@@ -3,7 +3,9 @@ const IHLCommand = require('../../lib/ihlCommand');
 
 /**
  * @class RestartCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class RestartCommand extends IHLCommand {
     constructor(client) {

@@ -6,7 +6,9 @@ const getSteamProfile = require('../../lib/util/getSteamProfile');
 
 /**
  * @class RegisterCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class RegisterCommand extends IHLCommand {
     constructor(client) {

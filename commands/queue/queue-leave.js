@@ -5,7 +5,9 @@ const Db = require('../../lib/db');
 
 /**
  * @class QueueLeaveCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class QueueLeaveCommand extends IHLCommand {
     constructor(client) {

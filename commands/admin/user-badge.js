@@ -4,7 +4,9 @@ const { findUser } = require('../../lib/ihlManager');
 
 /**
  * @class UserBadgeCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class UserBadgeCommand extends IHLCommand {
     constructor(client) {

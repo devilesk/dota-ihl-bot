@@ -7,7 +7,9 @@ const toHHMMSS = require('../../lib/util/toHHMMSS');
 
 /**
  * @class QueueJoinCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class QueueJoinCommand extends IHLCommand {
     constructor(client) {

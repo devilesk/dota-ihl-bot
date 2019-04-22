@@ -35,7 +35,9 @@ const rankTierToMedalName = (_rankTier) => {
 
 /**
  * @class WhoisCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class WhoisCommand extends IHLCommand {
     constructor(client) {

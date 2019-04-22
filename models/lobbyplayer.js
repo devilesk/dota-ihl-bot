@@ -2,61 +2,106 @@
 
 /**
  * @class LobbyPlayer
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const LobbyPlayer = sequelize.define('LobbyPlayer', {
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         ready: {
             allowNull: false,
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         faction: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         win: {
             allowNull: false,
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         lose: {
             allowNull: false,
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         heroId: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: -1,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         kills: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         deaths: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         assists: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         gpm: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         xpm: {
             allowNull: false,
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        /**
+         * @memberof module:db.LobbyPlayer
+         * @instance
+         */
         ratingDiff: {
             allowNull: false,
             type: DataTypes.INTEGER,

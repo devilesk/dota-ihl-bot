@@ -4,7 +4,9 @@ const Db = require('../../lib/db');
 
 /**
  * @class LeagueInfoCommand
+ * @category Commands
  * @extends IHLCommand
+ * @memberof module:ihlCommand
  */
 module.exports = class LeagueInfoCommand extends IHLCommand {
     constructor(client) {

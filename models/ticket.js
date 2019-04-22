@@ -1,21 +1,42 @@
 /**
  * @class Ticket
+ * @category Database
  * @memberof module:db
  * @extends external:sequelize.Model
  */
 module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define('Ticket', {
+        /**
+         * @memberof module:db.Ticket
+         * @instance
+         */
         leagueid: {
             allowNull: false,
             type: DataTypes.INTEGER,
             unique: true,
         },
+        /**
+         * @memberof module:db.Ticket
+         * @instance
+         */
         name: {
             allowNull: false,
             type: DataTypes.STRING,
         },
+        /**
+         * @memberof module:db.Ticket
+         * @instance
+         */
         mostRecentActivity: DataTypes.DATE,
+        /**
+         * @memberof module:db.Ticket
+         * @instance
+         */
         startTimestamp: DataTypes.DATE,
+        /**
+         * @memberof module:db.Ticket
+         * @instance
+         */
         endTimestamp: DataTypes.DATE,
     });
     Ticket.associate = (models) => {
