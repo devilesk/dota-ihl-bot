@@ -55,7 +55,7 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 
 Installation
 * [Git](https://git-scm.com)
-* [npm](http://npmjs.com)
+* [npm](http://npmjs.com) 6.4.1+ (Tested with 6.9.0)
 * [svn](https://subversion.apache.org/) - Required to install [steam-resources](https://github.com/seishun/node-steam-resources), a dependency of [node-dota2](https://github.com/Arcana/node-dota2).
 
 Runtime
