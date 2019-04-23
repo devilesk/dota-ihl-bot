@@ -10,3 +10,4 @@ prod_seeders/
 *.log
 logs*.json
 TODO
+package-lock.json
