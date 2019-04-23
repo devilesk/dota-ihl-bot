@@ -210,13 +210,13 @@
  
 ## whois
 
-**Format:** `!whois <member>`
+**Format:** `!whois [<member>]`
 
 > Look up inhouse player information.
 
 **Requirements:** Inhouse, Vouched
 
-**Aliases:** `who`, `info`, `stats`, `lookup`
+**Aliases:** `who`, `info`, `stats`, `lookup`, `profile`, `whoami`
 
 **Usage Examples:**
 * `!whois @Ari*`

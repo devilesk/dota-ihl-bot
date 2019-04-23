@@ -20,8 +20,7 @@
                 "include": [
                     "./assets"
                 ]
-            },
-            "layoutFile": "./tmpl/layout.tmpl"
+            }
         },
         "better-docs": {
             "name": "dota-ihl-bot Documentation",
@@ -31,7 +30,8 @@
                     "label": "Github",
                     "href": "https://github.com/devilesk/dota-ihl-bot"
                 }
-            ]
+            ],
+            "githubSourceLink": "https://github.com/devilesk/dota-ihl-bot/tree/master/docs"
         }
     },
     "opts": {

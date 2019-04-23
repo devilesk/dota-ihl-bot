@@ -62,7 +62,7 @@
     "zlib-sync": "^0.1.4"
   },
   "devDependencies": {
-    "better-docs": "^1.1.6",
+    "better-docs": "github:devilesk/better-docs#dota-ihl-bot",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
