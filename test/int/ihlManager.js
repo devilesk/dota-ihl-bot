@@ -219,10 +219,6 @@ describe('IHLManager', () => {
                 await commands.QueueJoin({ guild, channel, member: guild.members.array()[i] });
             }
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
-            await Promise.all([
-                TestHelper.waitForEventOnLobby(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE)({ id: 1 }),
-                TestHelper.waitForEventOnLobby(ihlManager)(CONSTANTS.STATE_WAITING_FOR_QUEUE)({ id: 3 }),
-            ]);
             await TestHelper.waitForEvent(ihlManager)('empty');
             logger.info('No ready up.');
             // Set ready check timeout to never expire.
