@@ -1311,7 +1311,7 @@ describe('Database - no lobby players', () => {
                 afterEach(async () => {
                     Lobby.checkQueueForCaptains.restore();
                 });
-            
+
                 it('nothing when less than 10 queuers', async () => {
                     const result = await lobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
