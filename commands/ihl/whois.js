@@ -4,34 +4,7 @@ const Db = require('../../lib/db');
 const convertor = require('steam-id-convertor');
 const CONSTANTS = require('../../lib/constants');
 const { findUser } = require('../../lib/ihlManager');
-
-const RANK_TO_MEDAL = {
-    80: 'Immortal',
-    70: 'Divine',
-    60: 'Ancient',
-    50: 'Legend',
-    40: 'Archon',
-    30: 'Crusader',
-    20: 'Guardian',
-    10: 'Herald',
-    0: 'Uncalibrated',
-};
-
-const rankTierToMedalName = (_rankTier) => {
-    logger.silly(`rankTierToMedalName ${_rankTier}`);
-    const rankTier = _rankTier || 0;
-    const rank = Math.floor(rankTier / 10) * 10;
-    const tier = rankTier % 10;
-    logger.silly(`rankTierToMedalName ${rank} ${tier}`);
-    let medal = 'Unknown';
-    if (rank >= 0 && rank < 90) {
-        medal = `${RANK_TO_MEDAL[rank]}`;
-        if (rank !== 80 && rank > 0 && tier > 0) {
-            medal += ` ${tier}`;
-        }
-    }
-    return medal;
-};
+const { rankTierToMedalName } = require('../../lib/util/rankTier');
 
 /**
  * @class WhoisCommand
