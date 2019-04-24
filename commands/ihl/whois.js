@@ -66,7 +66,7 @@ module.exports = class WhoisCommand extends IHLCommand {
     async onMsg({ msg, league, guild }, { member }) {
         let wins = 0;
         let losses = 0;
-        let memberToFind = member ? member : msg.author
+        const memberToFind = member || msg.author;
 
         const [user, discordUser, resultType] = await findUser(guild)(memberToFind);
 

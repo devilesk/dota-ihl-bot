@@ -21,6 +21,7 @@
     "test:unit": "mocha test/unit",
     "test:int": "mocha test/int",
     "test": "mocha test/unit test/int",
+    "lint": "eslint . --fix",
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "start": "node index.js"

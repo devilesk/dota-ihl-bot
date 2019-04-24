@@ -29,7 +29,7 @@ const getRequirements = (command) => {
     if (command.validation.inhouseUser) reqs.push('Inhouse Player');
     if (command.validation.inhouseUserVouched) reqs.push('Vouched');
     return reqs.join(', ');
-}
+};
 
 const commandsArray = Object.values(commands.registry);
 const commandGroups = {};
