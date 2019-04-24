@@ -13,7 +13,6 @@ module.exports = class RestartCommand extends IHLCommand {
             name: 'restart',
             group: 'owner',
             memberName: 'restart',
-            guildOnly: true,
             description: 'Restart the bot.',
         }, {
             clientOwner: true,

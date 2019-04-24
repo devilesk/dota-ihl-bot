@@ -66,7 +66,7 @@
 
 > Create an inhouse league for the server.
 
-**Requirements:** Owner, Vouched
+**Requirements:** Guild, Owner, Vouched
 
 **Aliases:** `leaguecreate`
 
@@ -107,7 +107,7 @@
 
 > Add a dota ticket to the league.
 
-**Requirements:** Owner, Inhouse, Vouched
+**Requirements:** Guild, Owner, Inhouse, Vouched
 
 **Aliases:** `add-ticket`, `ticketadd`, `addticket`
 
@@ -121,7 +121,7 @@
 
 > Remove a dota ticket from the league.
 
-**Requirements:** Owner, Inhouse, Vouched
+**Requirements:** Guild, Owner, Inhouse, Vouched
 
 **Aliases:** `remove-ticket`, `ticketremove`, `removeticket`
 

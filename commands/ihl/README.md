@@ -12,7 +12,7 @@
 
 > Commend a player after a game.
 
-**Requirements:** Inhouse, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Inhouse Player, Vouched
 
 
 
@@ -27,7 +27,7 @@
 
 > Select dire side.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 
 
@@ -38,7 +38,7 @@
 
 > Select first pick.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 **Aliases:** `1st`, `first-pick`, `pick-first`, `firstpick`, `pickfirst`
 
@@ -49,7 +49,7 @@
 
 > Set your game mode preference.
 
-**Requirements:** Inhouse, Inhouse Player
+**Requirements:** Guild, Inhouse, Inhouse Player
 
 
 
@@ -64,7 +64,7 @@
 
 > Request a lobby invite.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 
 
@@ -75,7 +75,7 @@
 
 > Show inhouse leaderboard.
 
-**Requirements:** Inhouse, Vouched
+**Requirements:** Guild, Inhouse, Vouched
 
 
 
@@ -86,7 +86,7 @@
 
 > Set your nickname.
 
-**Requirements:** Inhouse, Inhouse Player
+**Requirements:** Guild, Inhouse, Inhouse Player
 
 
 
@@ -100,7 +100,7 @@
 
 > Player draft command.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 **Aliases:** `draft`
 
@@ -115,7 +115,7 @@
 
 > Select radiant side.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 
 
@@ -126,7 +126,7 @@
 
 > Registers your steam account to your discord account.
 
-**Requirements:** Inhouse, Vouched
+**Requirements:** Guild, Inhouse, Vouched
 
 
 
@@ -142,7 +142,7 @@
 
 > Rep a player.
 
-**Requirements:** Inhouse, Inhouse Player
+**Requirements:** Guild, Inhouse, Inhouse Player
 
 
 
@@ -157,7 +157,7 @@
 
 > Set your dota role (positions 1-5) preference.
 
-**Requirements:** Inhouse, Inhouse Player
+**Requirements:** Guild, Inhouse, Inhouse Player
 
 
 
@@ -173,7 +173,7 @@
 
 > Select second pick.
 
-**Requirements:** Inhouse, Lobby, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Lobby, Inhouse Player, Vouched
 
 **Aliases:** `2nd`, `second-pick`, `pick-second`, `secondpick`, `picksecond`
 
@@ -184,7 +184,7 @@
 
 > Uncommend a player.
 
-**Requirements:** Inhouse, Inhouse Player, Vouched
+**Requirements:** Guild, Inhouse, Inhouse Player, Vouched
 
 
 
@@ -199,7 +199,7 @@
 
 > Unrep a player.
 
-**Requirements:** Inhouse, Inhouse Player
+**Requirements:** Guild, Inhouse, Inhouse Player
 
 
 
@@ -214,7 +214,7 @@
 
 > Look up inhouse player information.
 
-**Requirements:** Inhouse, Vouched
+**Requirements:** Guild, Inhouse, Vouched
 
 **Aliases:** `who`, `info`, `stats`, `lookup`, `profile`, `whoami`
 

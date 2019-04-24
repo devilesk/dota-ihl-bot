@@ -206,8 +206,8 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
         });
-        
-        it('fail ready up, complete match, requeue wrong channel, bot unavailable, reset bot and complete match', async function () {
+
+        it('fail ready up, complete match, requeue wrong channel, complete match', async function () {
             this.timeout(20000);
             channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
             const admin = guild.members.array()[0];
@@ -260,20 +260,6 @@ describe('IHLManager', () => {
             logger.info('10 ready up.');
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_ASSIGNED);
-            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
-            logger.info('Try bot available.');
-            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
-            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
-            logger.info('Set bot idle and try bot available.');
-            await Db.updateBotStatusBySteamId(CONSTANTS.BOT_IDLE)(botSteamId64);
-            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
-            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
-            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_ASSIGNED);
-            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
-            logger.info('Set bot idle and reset lobby id and try bot available.');
-            await Db.updateBotStatusBySteamId(CONSTANTS.BOT_IDLE)(botSteamId64);
-            ihlManager.getBot(1).dotaLobbyId = Long.ZERO;
-            await ihlManager[CONSTANTS.EVENT_BOT_AVAILABLE]();
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
         });

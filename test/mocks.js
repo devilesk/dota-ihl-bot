@@ -62,7 +62,10 @@ class MockDotaBot extends EventEmitter {
 
     async practiceLobbyKickFromTeam() {}
 
-    async leavePracticeLobby() {}
+    async leavePracticeLobby() {
+        this.dotaLobbyId = Long.ZERO;
+        this.emit(CONSTANTS.EVENT_BOT_LOBBY_LEFT);
+    }
 
     async abandonCurrentGame() {}
 
@@ -153,7 +156,7 @@ class MockChannel {
         this.send = async (text) => {
             logger.silly(`MockChannel.send ${this.guild.id} ${this.id} ${text}`);
             return text;
-        }
+        };
     }
 
     static Factory(data = {}) {
@@ -243,7 +246,7 @@ class MockMessage {
         this.say = async (text) => {
             logger.silly(`MockMessage.say ${this.guild.id} ${this.channel.id} ${text}`);
             return text;
-        }
+        };
     }
 
     static Factory(data = {}) {
@@ -401,6 +404,7 @@ class MockCommands {
         this.client = client;
         this.registry = {};
         for (const command of MockCommandsList) {
+            // eslint-disable-next-line new-cap
             this.registry[command.name.replace('Command', '')] = new command(this.client);
             this[command.name.replace('Command', '')] = async ({ guild, channel, member }, args = {}) => {
                 const msg = new MockMessage(guild, channel, member);

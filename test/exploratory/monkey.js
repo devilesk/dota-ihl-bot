@@ -110,7 +110,7 @@ const testAutobalance = () => {
         }
     });
     ihlManager.on(CONSTANTS.STATE_MATCH_IN_PROGRESS, (lobbyState) => {
-        ihlManager.emit(CONSTANTS.EVENT_MATCH_SIGNEDOUT, lobbyState.matchId);
+        ihlManager[CONSTANTS.EVENT_MATCH_SIGNEDOUT](lobbyState.matchId);
     });
 };
 

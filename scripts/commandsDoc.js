@@ -21,7 +21,7 @@ const argToString = (arg) => {
 
 const getRequirements = (command) => {
     const reqs = [];
-    if (command.validation.guildOnly) reqs.push('Guild');
+    if (command.guildOnly) reqs.push('Guild');
     if (command.validation.clientOwner) reqs.push('Owner');
     if (command.validation.inhouseAdmin) reqs.push('Inhouse Admin');
     if (command.validation.inhouseState) reqs.push('Inhouse');
@@ -29,7 +29,7 @@ const getRequirements = (command) => {
     if (command.validation.inhouseUser) reqs.push('Inhouse Player');
     if (command.validation.inhouseUserVouched) reqs.push('Vouched');
     return reqs.join(', ');
-}
+};
 
 const commandsArray = Object.values(commands.registry);
 const commandGroups = {};
@@ -50,7 +50,7 @@ const generateReadme = (key, cmds) => {
     const rowLen = Math.min(sortedCommands.length, 6);
     const toc = partition(sortedCommands, rowLen);
 
-    ejs.renderFile(path.join(__dirname, 'commands_readme.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
+    ejs.renderFile(path.join(__dirname, 'commandsDoc.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
         if (err) logger.error(err);
         // eslint-disable-next-line no-shadow
         fs.writeFile(path.join(__dirname, `../commands/${key}/README.md`), str, 'utf8', (err) => {

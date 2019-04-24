@@ -15,7 +15,6 @@ module.exports = class BotRemoveCommand extends IHLCommand {
             aliases: ['bot-delete', 'bot-destroy', 'delete-bot', 'remove-bot', 'destroy-bot'],
             group: 'owner',
             memberName: 'bot-remove',
-            guildOnly: true,
             description: 'Remove a bot from the inhouse league.',
             examples: ['bot-remove steamId64'],
             args: [

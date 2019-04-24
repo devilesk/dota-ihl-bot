@@ -34,7 +34,7 @@ const waitForEventOnLobby = emitter => event => async lobbyState => new Promise(
         else {
             emitter.once(event, resolveOnLobbyState);
         }
-    }
+    };
     emitter.once(event, resolveOnLobbyState);
 });
 

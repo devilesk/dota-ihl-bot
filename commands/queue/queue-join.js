@@ -4,7 +4,7 @@ const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
 const toHHMMSS = require('../../lib/util/toHHMMSS');
-const util = require('util');
+
 /**
  * @class QueueJoinCommand
  * @category Commands

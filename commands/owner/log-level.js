@@ -14,7 +14,6 @@ module.exports = class LogLevelCommand extends IHLCommand {
             aliases: ['logger-level'],
             group: 'owner',
             memberName: 'log-level',
-            guildOnly: true,
             description: `Change the level of logging to one of ${LogLevelCommand.logLevels.join(', ')}.`,
             examples: ['log-level silly', 'log-level debug', 'log-level verbose', 'log-level info', 'log-level warn', 'log-level error'],
             args: [
