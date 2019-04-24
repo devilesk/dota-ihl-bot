@@ -401,6 +401,7 @@ class MockCommands {
         this.client = client;
         this.registry = {};
         for (const command of MockCommandsList) {
+            // eslint-disable-next-line new-cap
             this.registry[command.name.replace('Command', '')] = new command(this.client);
             this[command.name.replace('Command', '')] = async ({ guild, channel, member }, args = {}) => {
                 const msg = new MockMessage(guild, channel, member);
