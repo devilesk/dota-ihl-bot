@@ -13,7 +13,7 @@
 
 > List bots in the inhouse league.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `list-bot`, `list-bots`, `bots-list`, `botlist`, `listbot`, `listbots`, `botslist`
 
@@ -24,7 +24,7 @@
 
 > Display inhouse league info.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `leagueinfo`
 
@@ -35,7 +35,7 @@
 
 > Start a new inhouse league season.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `leagueseason`
 
@@ -49,7 +49,7 @@
 
 > Set the current dota ticket for the league.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `set-ticket`, `ticket-set`, `leagueticket`, `setticket`, `ticketset`
 
@@ -63,7 +63,7 @@
 
 > Update an inhouse league setting.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `leagueupdate`
 
@@ -74,7 +74,7 @@
 
 > Force a lobby to do a player draft with assigned captains.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbydraft`
 
@@ -88,7 +88,7 @@
 
 > Set lobby first pick.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbyfp`
 
@@ -103,7 +103,7 @@
 
 > Set lobby game mode.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbygamemode`
 
@@ -119,7 +119,7 @@
 
 > Invite a user to a lobby.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbyinvite`
 
@@ -133,7 +133,7 @@
 
 > Kick a user from a lobby.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbykick`
 
@@ -147,7 +147,7 @@
 
 > Kill a lobby.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobby-destroy`, `lobbykill`, `lobbydestroy`
 
@@ -158,7 +158,7 @@
 
 > Manually run a lobby.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobby-process`, `run-lobby`, `process-lobby`, `lobbyrun`, `lobbyprocess`, `runlobby`, `processlobby`
 
@@ -169,7 +169,7 @@
 
 > Start a lobby.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `start-lobby`, `lobbystart`, `startlobby`
 
@@ -180,7 +180,7 @@
 
 > Manually set a lobby state and run it.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobbystate`
 
@@ -196,7 +196,7 @@
 
 > Swap lobby teams.
 
-**Requirements:** Inhouse Admin, Inhouse, Lobby, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobby-flip`, `flip`, `swap`, `lobbyswap`, `lobbyflip`
 
@@ -207,7 +207,7 @@
 
 > Kick player from inhouse queue and tempban them.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `qban`, `ban`, `queueban`
 
@@ -224,7 +224,7 @@
 
 > Clear inhouse queue.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `qclear`, `clear`, `queueclear`
 
@@ -237,11 +237,11 @@
  
 ## user-badge
 
-**Format:** `!user-badge <member> <rankTier>`
+**Format:** `!user-badge <member> <badge>`
 
 > Set a user's badge rank.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `badge`, `userbadge`
 
@@ -255,7 +255,7 @@
 
 > Vouch a user.
 
-**Requirements:** Inhouse Admin, Inhouse, Vouched
+**Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
 **Aliases:** `vouch`, `uservouch`
 

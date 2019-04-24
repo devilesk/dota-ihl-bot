@@ -1,6 +1,7 @@
 const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
 const { findUser } = require('../../lib/ihlManager');
+const { parseRankTier, rankTierToMedalName } = require('../../lib/util/rankTier');
 
 /**
  * @class UserBadgeCommand
@@ -25,9 +26,9 @@ module.exports = class UserBadgeCommand extends IHLCommand {
                     type: 'string',
                 },
                 {
-                    key: 'rankTier',
+                    key: 'badge',
                     prompt: 'Provide a badge rank.',
-                    type: 'integer',
+                    type: 'string',
                 },
             ],
         }, {
@@ -38,13 +39,17 @@ module.exports = class UserBadgeCommand extends IHLCommand {
         });
     }
 
-    async onMsg({ msg, guild }, { member, rankTier }) {
+    async onMsg({ msg, guild }, { member, badge }) {
         logger.debug('UserBadgeCommand');
-        const [user, discordUser] = await findUser(guild)(member);
-        if (user) {
-            await user.update({ rankTier });
-            return msg.say(`${discordUser.displayName} badge set to ${rankTier}.`);
+        const rankTier = parseRankTier(badge);
+        if (rankTier !== null) {
+            const [user, discordUser] = await findUser(guild)(member);
+            if (user) {
+                await user.update({ rankTier });
+                return msg.say(`${discordUser.displayName} badge set to ${rankTierToMedalName(rankTier)}.`);
+            }
+            return msg.say(IHLCommand.UserNotFoundMessage);
         }
-        return msg.say(IHLCommand.UserNotFoundMessage);
+        return msg.say(`Could not parse badge from ${badge}.`);
     }
 };

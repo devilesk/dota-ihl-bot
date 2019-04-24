@@ -3,6 +3,7 @@ const IHLCommand = require('../../lib/ihlCommand');
 const Ihl = require('../../lib/ihl');
 const Lobby = require('../../lib/lobby');
 const Db = require('../../lib/db');
+const Fp = require('../../lib/util/fp');
 
 /**
  * @class QueueStatusCommand
@@ -66,10 +67,6 @@ module.exports = class QueueStatusCommand extends IHLCommand {
             return msg.say(message);
         }
         const lobbyStates = await Ihl.getAllLobbyQueues(inhouseState);
-        for (const _lobbyState of lobbyStates) {
-            const message = await QueueStatusCommand.getQueueStatusMessage(guild, _lobbyState);
-            await msg.say(message);
-        }
-        return null;
+        return Fp.mapPromise(_lobbyState => QueueStatusCommand.getQueueStatusMessage(guild, _lobbyState).then(message => msg.say(message)))(lobbyStates);
     }
 };

@@ -5,20 +5,20 @@ const CommandDispatcher = require('discord.js-commando/src/dispatcher');
 
 if (process.env.NODE_ENV !== 'production') {
     // monkey patch shouldHandleMessage to handle other bot messages for testing
-    CommandDispatcher.prototype.shouldHandleMessage = function (message, oldMessage) {
+    CommandDispatcher.prototype.shouldHandleMessage = function shouldHandleMessage(message, oldMessage) {
         // Ignore partial messages
-        if(message.partial) return false;
+        if (message.partial) return false;
 
-        if(message.author.id === this.client.user.id) return false;
+        if (message.author.id === this.client.user.id) return false;
 
         // Ignore messages from users that the bot is already waiting for input from
-        if(this._awaiting.has(message.author.id + message.channel.id)) return false;
+        if (this._awaiting.has(message.author.id + message.channel.id)) return false;
 
         // Make sure the edit actually changed the message content
-        if(oldMessage && message.content === oldMessage.content) return false;
+        if (oldMessage && message.content === oldMessage.content) return false;
 
         return true;
-    }
+    };
 }
 
 checkEnvironmentVariables([

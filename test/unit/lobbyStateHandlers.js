@@ -1,11 +1,13 @@
 require('../common');
 const MatchTracker = require('../../lib/matchTracker');
 const DotaBot = require('../../lib/dotaBot');
+const Ihl = require('../../lib/ihl');
 const Lobby = require('../../lib/lobby');
 const Guild = require('../../lib/guild');
 const Db = require('../../lib/db');
-const LobbyQueueHandlers = require('../../lib/lobbyQueueHandlers')({ Db, Guild, Lobby });
+const LobbyQueueHandlers = require('../../lib/lobbyQueueHandlers');
 const LobbyStateHandlers = require('../../lib/lobbyStateHandlers');
+const MessageListeners = require('../../lib/messageListeners');
 const Fp = require('../../lib/util/fp');
 
 describe('Database - with lobby players', () => {
@@ -41,7 +43,10 @@ describe('Database - with lobby players', () => {
             once: () => {},
             bots: [],
             matchTracker: {},
-        }, LobbyStateHandlers.LobbyStateHandlers({ DotaBot, Db, Guild, Lobby, MatchTracker, LobbyQueueHandlers }));
+        },
+        LobbyStateHandlers.LobbyStateHandlers({ DotaBot, Db, Guild, Lobby, MatchTracker }),
+        LobbyQueueHandlers({ Db, Lobby }),
+        MessageListeners({ Db, Guild, Lobby, MatchTracker, Ihl }));
         guild.createRole({ roleName: lobby.lobbyName });
         const users = await db.User.findAll();
         for (const user of users) {
