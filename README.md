@@ -17,6 +17,9 @@
     <a href="https://david-dm.org/devilesk/dota-ihl-bot">
         <img alt="David" src="https://img.shields.io/david/devilesk/dota-ihl-bot.svg">
     </a>
+    <a href="https://greenkeeper.io/">
+        <img alt="Greenkeeper badge" src="https://badges.greenkeeper.io/devilesk/dota-ihl-bot.svg">
+    </a>
     <a href="LICENSE">
         <img alt="GitHub" src="https://img.shields.io/github/license/devilesk/dota-ihl-bot.svg">
     </a>
@@ -29,8 +32,6 @@
 or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue</a>.</p>
 
 ## Table of Contents
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/devilesk/dota-ihl-bot.svg)](https://greenkeeper.io/)
 
 * [Features](#features)
 * [Requirements](#requirements)
