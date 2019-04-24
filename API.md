@@ -862,8 +862,8 @@ Bans a user from an inhouse queue.
             * [.UserBadgeCommand](#module_ihlCommand.UserBadgeCommand) ⇐ <code>IHLCommand</code>
             * [.UserVouchCommand](#module_ihlCommand.UserVouchCommand) ⇐ <code>IHLCommand</code>
             * [.UserVouchCommand](#module_ihlCommand.UserVouchCommand) ⇐ <code>IHLCommand</code>
-            * [.ChallengeListCommand](#module_ihlCommand.ChallengeListCommand) ⇐ <code>IHLCommand</code>
             * [.ChallengeCommand](#module_ihlCommand.ChallengeCommand) ⇐ <code>IHLCommand</code>
+            * [.ChallengeListCommand](#module_ihlCommand.ChallengeListCommand) ⇐ <code>IHLCommand</code>
             * [.UnchallengeCommand](#module_ihlCommand.UnchallengeCommand) ⇐ <code>IHLCommand</code>
             * [.CommendCommand](#module_ihlCommand.CommendCommand) ⇐ <code>IHLCommand</code>
             * [.DireCommand](#module_ihlCommand.DireCommand) ⇐ <code>IHLCommand</code>
@@ -1019,15 +1019,15 @@ Bans a user from an inhouse queue.
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
-<a name="module_ihlCommand.ChallengeListCommand"></a>
-
-### ihlCommand.ChallengeListCommand ⇐ <code>IHLCommand</code>
-**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
-**Extends**: <code>IHLCommand</code>  
-**Category**: Commands  
 <a name="module_ihlCommand.ChallengeCommand"></a>
 
 ### ihlCommand.ChallengeCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
+<a name="module_ihlCommand.ChallengeListCommand"></a>
+
+### ihlCommand.ChallengeListCommand ⇐ <code>IHLCommand</code>
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
@@ -2101,8 +2101,7 @@ Node.js EventEmitter object
 <a name="module_matchTracker..MatchTracker"></a>
 
 ### matchTracker~MatchTracker
-Match tracker checks opendota and valve match apis to see if a match has finished
-and saves the match data to the database.
+Match tracker checks opendota and valve match apis to see if a match has finishedand saves the match data to the database.
 
 **Kind**: inner class of [<code>matchTracker</code>](#module_matchTracker)  
 
