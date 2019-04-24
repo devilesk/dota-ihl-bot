@@ -62,7 +62,10 @@ class MockDotaBot extends EventEmitter {
 
     async practiceLobbyKickFromTeam() {}
 
-    async leavePracticeLobby() {}
+    async leavePracticeLobby() {
+        this.dotaLobbyId = Long.ZERO;
+        this.emit(CONSTANTS.EVENT_BOT_LOBBY_LEFT);
+    }
 
     async abandonCurrentGame() {}
 
