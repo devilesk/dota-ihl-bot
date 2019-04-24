@@ -21,7 +21,7 @@ const argToString = (arg) => {
 
 const getRequirements = (command) => {
     const reqs = [];
-    if (command.validation.guildOnly) reqs.push('Guild');
+    if (command.guildOnly) reqs.push('Guild');
     if (command.validation.clientOwner) reqs.push('Owner');
     if (command.validation.inhouseAdmin) reqs.push('Inhouse Admin');
     if (command.validation.inhouseState) reqs.push('Inhouse');
