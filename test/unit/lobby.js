@@ -1299,7 +1299,7 @@ describe('Database - no lobby players', () => {
 
             describe('QUEUE_TYPE_DRAFT', () => {
                 it('nothing when less than 10 queuers', async () => {
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
                 });
 
@@ -1308,7 +1308,7 @@ describe('Database - no lobby players', () => {
                     await addQueuers(lobby)(users);
                     const checkQueueForCaptains = sinon.stub();
                     checkQueueForCaptains.resolves([]);
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
                     assert.isTrue(checkQueueForCaptains.calledOnce);
                 });
@@ -1322,7 +1322,7 @@ describe('Database - no lobby players', () => {
                     checkQueueForCaptains.resolves([users[0], users[1]]);
                     let players = await getPlayers()(lobby);
                     assert.isEmpty(players);
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](checkQueueForCaptains)(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_DRAFT](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BEGIN_READY);
                     assert.isTrue(checkQueueForCaptains.calledOnce);
                     assert.equal(result.captain1UserId, users[0].id);
@@ -1338,7 +1338,7 @@ describe('Database - no lobby players', () => {
 
             describe('QUEUE_TYPE_AUTO', () => {
                 it('nothing when less than 10 queuers', async () => {
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_AUTO]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_AUTO](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
                 });
 
@@ -1349,7 +1349,7 @@ describe('Database - no lobby players', () => {
                     assert.lengthOf(queuers, 11);
                     let players = await getPlayers()(lobby);
                     assert.isEmpty(players);
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_AUTO]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_AUTO](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BEGIN_READY);
                     players = await getPlayers()(lobby);
                     assert.lengthOf(players, 10);
@@ -1366,7 +1366,7 @@ describe('Database - no lobby players', () => {
                     await addQueuers(lobby)(users.slice(0, 9));
                     lobbyState.captain1UserId = users[0].id;
                     lobbyState.captain2UserId = users[10].id;
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_PENDING_KILL);
                     const queuers = await getQueuers()(lobbyState);
                     assert.isEmpty(queuers);
@@ -1382,7 +1382,7 @@ describe('Database - no lobby players', () => {
                         queue.LobbyQueuer.active = false;
                         await queue.LobbyQueuer.save();
                     }
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_NEW);
                 });
 
@@ -1391,7 +1391,7 @@ describe('Database - no lobby players', () => {
                     await addQueuers(lobby)(users);
                     lobbyState.captain1UserId = users[0].id;
                     lobbyState.captain2UserId = users[1].id;
-                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE]()(lobbyState);
+                    const result = await LobbyQueueHandlers[CONSTANTS.QUEUE_TYPE_CHALLENGE](lobbyState);
                     assert.equal(result.state, CONSTANTS.STATE_BEGIN_READY);
                     assert.equal(result.captain1UserId, users[0].id);
                     assert.equal(result.captain2UserId, users[1].id);
