@@ -206,7 +206,7 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
         });
-        
+
         it('fail ready up, complete match, requeue wrong channel, bot unavailable, reset bot and complete match', async function () {
             this.timeout(20000);
             channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');

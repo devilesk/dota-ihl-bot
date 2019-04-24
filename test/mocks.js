@@ -153,7 +153,7 @@ class MockChannel {
         this.send = async (text) => {
             logger.silly(`MockChannel.send ${this.guild.id} ${this.id} ${text}`);
             return text;
-        }
+        };
     }
 
     static Factory(data = {}) {
@@ -243,7 +243,7 @@ class MockMessage {
         this.say = async (text) => {
             logger.silly(`MockMessage.say ${this.guild.id} ${this.channel.id} ${text}`);
             return text;
-        }
+        };
     }
 
     static Factory(data = {}) {
