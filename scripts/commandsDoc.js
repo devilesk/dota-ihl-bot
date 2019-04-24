@@ -50,7 +50,7 @@ const generateReadme = (key, cmds) => {
     const rowLen = Math.min(sortedCommands.length, 6);
     const toc = partition(sortedCommands, rowLen);
 
-    ejs.renderFile(path.join(__dirname, 'commands_readme.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
+    ejs.renderFile(path.join(__dirname, 'commandsDoc.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
         if (err) logger.error(err);
         // eslint-disable-next-line no-shadow
         fs.writeFile(path.join(__dirname, `../commands/${key}/README.md`), str, 'utf8', (err) => {

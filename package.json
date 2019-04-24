@@ -6,7 +6,7 @@
   "scripts": {
     "docs:html": "jsdoc --configure .jsdoc.json",
     "docs:md": "jsdoc2md lib/*.js commands/**/*.js -r > API.md",
-    "docs:commands": "node scripts/commands_readme.js",
+    "docs:commands": "node scripts/commandsDoc.js",
     "docs": "npm run docs:html && npm run docs:md && npm run docs:commands",
     "db:drop": "sequelize --config config.js db:drop",
     "db:create": "sequelize --config config.js db:create",
