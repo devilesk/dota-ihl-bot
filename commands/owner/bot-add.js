@@ -17,7 +17,6 @@ module.exports = class BotAddCommand extends IHLCommand {
             aliases: ['bot-create', 'bot-update', 'add-bot', 'create-bot', 'update-bot'],
             group: 'owner',
             memberName: 'bot-add',
-            guildOnly: true,
             description: 'Add a bot to the inhouse league.',
             examples: ['bot-add steamId64 accountName personaName password'],
             args: [
