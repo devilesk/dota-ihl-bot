@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     
     <meta charset="utf-8">
-    <title>JSDoc: CommendCommand</title>
+    <title>JSDoc: lib/util/rankTier.js</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -67,159 +69,146 @@
             <div class="column is-9-desktop">
                 <div class="content" id="main-content-wrapper">
                     <header class="page-title">
-                        <p>Class</p>
-                        <h1>CommendCommand</h1>
+                        <p>Source</p>
+                        <h1>lib/util/rankTier.js</h1>
                     </header>
                     
                     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-ihlCommand.html">ihlCommand</a>.</span>CommendCommand<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-            <div class='vertical-section'>
-                <h3 class="title"><span>Constructor</span></h3>
-                <div class="members">
-                    <div class="member">
-
-    
-    <h4 class="name" id="CommendCommand">
-        
-        <span class="code-name">
-            new CommendCommand<span class="signature">()</span><span class="type-signature"></span>
-        </span>
-    </h4>
-    
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    
-
-    
-
-    
-
-    
-        <p class="tag-source">
-            <a href="commands_ihl_commend.js.html" class="button">View Source</a>
-            <span>
-                <a href="commands_ihl_commend.js.html">commands/ihl/commend.js</a>, <a href="commands_ihl_commend.js.html#line8">line 8</a>
-            </span>
-        </p>
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-                </div>
-            </div>
-        
-    
-    </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>IHLCommand</li>
-    </ul>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module rankTier
+ * @description Rank tier badge utility functions.
+ */
+
+/**
+ * @memberof module:rankTier
+ */
+const RANK_TO_MEDAL = {
+    80: 'Immortal',
+    70: 'Divine',
+    60: 'Ancient',
+    50: 'Legend',
+    40: 'Archon',
+    30: 'Crusader',
+    20: 'Guardian',
+    10: 'Herald',
+    0: 'Uncalibrated',
+};
+
+/**
+ * @memberof module:rankTier
+ */
+const rankTierToMedalName = (_rankTier) => {
+    logger.silly(`rankTierToMedalName ${_rankTier}`);
+    const rankTier = _rankTier || 0;
+    const rank = Math.floor(rankTier / 10) * 10;
+    const tier = rankTier % 10;
+    logger.silly(`rankTierToMedalName ${rank} ${tier}`);
+    let medal = 'Unknown';
+    if (rank >= 0 &amp;&amp; rank &lt; 90) {
+        medal = `${RANK_TO_MEDAL[rank]}`;
+        if (rank !== 80 &amp;&amp; rank > 0 &amp;&amp; tier > 0) {
+            medal += ` ${tier}`;
+        }
+    }
+    return medal;
+};
+
+/**
+ * @memberof module:rankTier
+ */
+const TEXT_TO_RANK = {
+    i: 80,
+    d: 70,
+    an: 60,
+    l: 50,
+    ar: 40,
+    c: 30,
+    g: 20,
+    h: 10,
+    u: 0,
+};
+
+/**
+ * @memberof module:rankTier
+ */
+const textToRank = text => TEXT_TO_RANK[Object.keys(TEXT_TO_RANK).filter(key => text.toLowerCase().startsWith(key))[0]];
+
+/**
+ * @memberof module:rankTier
+ */
+const parseRankTier = (text) => {
+    let rankTier;
+    let rank;
+    let tier;
+    let match;
+
+    // Format: &lt;rank string> &lt;tier number>
+    match = text.match(/^\s*([a-zA-Z]+)\s*(\d+)\s*$/);
+    if (match) {
+        rank = textToRank(match[1]);
+        if (rank == null) {
+            return null;
+        }
+        tier = parseInt(match[2]);
+    }
+    else {
+        // Format: &lt;tier number> &lt;rank string>
+        match = text.match(/^\s*(\d+)\s*([a-zA-Z]+)\s*$/);
+        if (match) {
+            rank = textToRank(match[2]);
+            if (rank == null) {
+                return null;
+            }
+            tier = parseInt(match[1]);
+        }
+        else {
+            // Format: &lt;rank string>
+            match = text.match(/^\s*([a-zA-Z]+)\s*$/);
+            if (match) {
+                rank = textToRank(match[1]);
+                if (rank == null) {
+                    return null;
+                }
+                tier = 0;
+            }
+            else {
+                // Format: &lt;rankTier number>
+                match = text.match(/^\s*(\d+)\s*$/);
+                rankTier = parseInt(match[1]);
+                if (rankTier >= 0 &amp;&amp; rankTier &lt; 90) {
+                    return rankTier;
+                }
+                return null;
+            }
+        }
+    }
+    // Immortal rank, no tier
+    if (rank === 80) {
+        return rank;
+    }
+    // Non-immortal
+    if (tier >= 0 &amp;&amp; tier &lt; 10) {
+        return rank + tier;
+    }
+    return null;
+};
+
+module.exports = {
+    RANK_TO_MEDAL,
+    rankTierToMedalName,
+    TEXT_TO_RANK,
+    textToRank,
+    parseRankTier,
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -232,7 +221,7 @@
 <footer class="footer">
     <div class="content has-text-centered">
         <p><a href="https://github.com/devilesk/dota-ihl-bot/tree/master/docs">Documentation source on Github</a></p>
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 05:45:32 GMT+0000 (Coordinated Universal Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 05:45:31 GMT+0000 (Coordinated Universal Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>

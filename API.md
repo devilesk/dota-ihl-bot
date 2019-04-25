@@ -862,8 +862,8 @@ Bans a user from an inhouse queue.
             * [.UserBadgeCommand](#module_ihlCommand.UserBadgeCommand) ⇐ <code>IHLCommand</code>
             * [.UserVouchCommand](#module_ihlCommand.UserVouchCommand) ⇐ <code>IHLCommand</code>
             * [.UserVouchCommand](#module_ihlCommand.UserVouchCommand) ⇐ <code>IHLCommand</code>
-            * [.ChallengeCommand](#module_ihlCommand.ChallengeCommand) ⇐ <code>IHLCommand</code>
             * [.ChallengeListCommand](#module_ihlCommand.ChallengeListCommand) ⇐ <code>IHLCommand</code>
+            * [.ChallengeCommand](#module_ihlCommand.ChallengeCommand) ⇐ <code>IHLCommand</code>
             * [.UnchallengeCommand](#module_ihlCommand.UnchallengeCommand) ⇐ <code>IHLCommand</code>
             * [.CommendCommand](#module_ihlCommand.CommendCommand) ⇐ <code>IHLCommand</code>
             * [.DireCommand](#module_ihlCommand.DireCommand) ⇐ <code>IHLCommand</code>
@@ -1019,15 +1019,15 @@ Bans a user from an inhouse queue.
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
-<a name="module_ihlCommand.ChallengeCommand"></a>
-
-### ihlCommand.ChallengeCommand ⇐ <code>IHLCommand</code>
-**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
-**Extends**: <code>IHLCommand</code>  
-**Category**: Commands  
 <a name="module_ihlCommand.ChallengeListCommand"></a>
 
 ### ihlCommand.ChallengeListCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
+<a name="module_ihlCommand.ChallengeCommand"></a>
+
+### ihlCommand.ChallengeCommand ⇐ <code>IHLCommand</code>
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
@@ -1250,6 +1250,8 @@ External namespace for discord.js Commando classes.
             * [.clearLobbyQueue(lobbyState)](#module_ihlManager..IHLManager+clearLobbyQueue)
             * [.clearAllLobbyQueues(inhouseState)](#module_ihlManager..IHLManager+clearAllLobbyQueues)
             * [.banInhouseQueue(inhouseState, user, timeout, discordUser)](#module_ihlManager..IHLManager+banInhouseQueue)
+            * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
+            * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
             * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
             * [.onCreateLobbyQueue(_lobbyState)](#module_ihlManager..IHLManager+onCreateLobbyQueue)
             * [.onSetLobbyState(_lobbyState, state)](#module_ihlManager..IHLManager+onSetLobbyState)
@@ -1258,14 +1260,14 @@ External namespace for discord.js Commando classes.
             * [.onLeagueTicketSet(league, leagueid)](#module_ihlManager..IHLManager+onLeagueTicketSet) ⇒ <code>module:db.Ticket</code>
             * [.onLeagueTicketRemove(league, leagueid)](#module_ihlManager..IHLManager+onLeagueTicketRemove)
             * [.onBotAvailable()](#module_ihlManager..IHLManager+onBotAvailable)
-            * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-            * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
+            * [.onBotLobbyLeft()](#module_ihlManager..IHLManager+onBotLobbyLeft)
             * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
             * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
             * [.onSelectionPick(_lobbyState, captain, pick)](#module_ihlManager..IHLManager+onSelectionPick)
             * [.onSelectionSide(_lobbyState, captain, side)](#module_ihlManager..IHLManager+onSelectionSide)
             * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-            * [.onforceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onforceLobbyDraft)
+            * [.onForceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onForceLobbyDraft)
+            * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
             * [.onLobbyKick(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyKick)
             * [.onLobbyInvite(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyInvite)
             * [.onLobbyReady(dotaLobbyId)](#module_ihlManager..IHLManager+onLobbyReady)
@@ -1280,19 +1282,13 @@ External namespace for discord.js Commando classes.
             * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
             * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
             * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby)
-            * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
             * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
         * [~findUser(guild, member)](#module_ihlManager..findUser) ⇒ <code>Array</code>
         * [~loadInhouseStates(guilds, leagues)](#module_ihlManager..loadInhouseStates) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
         * [~loadInhouseStatesFromLeagues(guilds)](#module_ihlManager..loadInhouseStatesFromLeagues) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
         * ["ready"](#module_ihlManager..event_ready)
         * ["empty"](#module_ihlManager..event_empty)
-        * ["EVENT_GUILD_MESSAGE" (msg)](#module_ihlManager..event_EVENT_GUILD_MESSAGE)
-        * ["EVENT_GUILD_USER_LEFT" (user)](#module_ihlManager..event_EVENT_GUILD_USER_LEFT)
-        * ["EVENT_RUN_LOBBY" (lobbyState, states)](#module_ihlManager..event_EVENT_RUN_LOBBY)
-        * ["EVENT_LOBBY_FORCE_DRAFT" (lobbyState, captain1, captain2)](#module_ihlManager..event_EVENT_LOBBY_FORCE_DRAFT)
-        * ["EVENT_PLAYER_READY" (lobbyState, user)](#module_ihlManager..event_EVENT_PLAYER_READY)
-        * ["EVENT_PICK_PLAYER" (lobbyState, user, faction)](#module_ihlManager..event_EVENT_PICK_PLAYER)
+        * ["EVENT_MATCH_STATS" (lobby)](#module_ihlManager..event_EVENT_MATCH_STATS)
         * [~eventCallback](#module_ihlManager..eventCallback) : <code>function</code>
         * _Other_
             * [~EventEmitter](#external_EventEmitter)
@@ -1338,6 +1334,8 @@ Class representing the inhouse league manager.
     * [.clearLobbyQueue(lobbyState)](#module_ihlManager..IHLManager+clearLobbyQueue)
     * [.clearAllLobbyQueues(inhouseState)](#module_ihlManager..IHLManager+clearAllLobbyQueues)
     * [.banInhouseQueue(inhouseState, user, timeout, discordUser)](#module_ihlManager..IHLManager+banInhouseQueue)
+    * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
+    * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
     * [.runLobby(_lobbyState, states)](#module_ihlManager..IHLManager+runLobby)
     * [.onCreateLobbyQueue(_lobbyState)](#module_ihlManager..IHLManager+onCreateLobbyQueue)
     * [.onSetLobbyState(_lobbyState, state)](#module_ihlManager..IHLManager+onSetLobbyState)
@@ -1346,14 +1344,14 @@ Class representing the inhouse league manager.
     * [.onLeagueTicketSet(league, leagueid)](#module_ihlManager..IHLManager+onLeagueTicketSet) ⇒ <code>module:db.Ticket</code>
     * [.onLeagueTicketRemove(league, leagueid)](#module_ihlManager..IHLManager+onLeagueTicketRemove)
     * [.onBotAvailable()](#module_ihlManager..IHLManager+onBotAvailable)
-    * [.registerLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+registerLobbyTimeout)
-    * [.unregisterLobbyTimeout(lobbyState)](#module_ihlManager..IHLManager+unregisterLobbyTimeout)
+    * [.onBotLobbyLeft()](#module_ihlManager..IHLManager+onBotLobbyLeft)
     * [.onLobbyTimedOut(lobbyState)](#module_ihlManager..IHLManager+onLobbyTimedOut)
     * [.onPlayerReady(lobbyState, user)](#module_ihlManager..IHLManager+onPlayerReady)
     * [.onSelectionPick(_lobbyState, captain, pick)](#module_ihlManager..IHLManager+onSelectionPick)
     * [.onSelectionSide(_lobbyState, captain, side)](#module_ihlManager..IHLManager+onSelectionSide)
     * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
-    * [.onforceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onforceLobbyDraft)
+    * [.onForceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onForceLobbyDraft)
+    * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
     * [.onLobbyKick(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyKick)
     * [.onLobbyInvite(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyInvite)
     * [.onLobbyReady(dotaLobbyId)](#module_ihlManager..IHLManager+onLobbyReady)
@@ -1368,7 +1366,6 @@ Class representing the inhouse league manager.
     * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
     * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
     * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby)
-    * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
     * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
 
 <a name="new_module_ihlManager..IHLManager_new"></a>
@@ -1400,7 +1397,6 @@ Discord client ready handler.
 Discord message handler.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_GUILD\_MESSAGE</code>](#module_ihlManager..event_EVENT_GUILD_MESSAGE)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1412,7 +1408,6 @@ Discord message handler.
 Discord user left guild handler.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_GUILD\_USER\_LEFT</code>](#module_ihlManager..event_EVENT_GUILD_USER_LEFT)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1435,7 +1430,6 @@ Creates a new inhouse in a discord guild.
 Creates and runs a challenge lobby.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1450,7 +1444,6 @@ Creates and runs a challenge lobby.
 Runs all lobbies for an inhouse.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1462,7 +1455,6 @@ Runs all lobbies for an inhouse.
 Adds a user to a lobby queue.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1489,7 +1481,6 @@ Adds a user to all lobby queues.
 Removes a user from a lobby queue.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1546,6 +1537,28 @@ Bans a user from the inhouse queue.
 | timeout | <code>number</code> | Duration of ban in minutes. |
 | discordUser | [<code>User</code>](#external_discordjs.User) | A discord.js user. |
 
+<a name="module_ihlManager..IHLManager+registerLobbyTimeout"></a>
+
+#### ihlManager.registerLobbyTimeout(lobbyState)
+Creates and registers a ready up timer for a lobby state.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
+
+<a name="module_ihlManager..IHLManager+unregisterLobbyTimeout"></a>
+
+#### ihlManager.unregisterLobbyTimeout(lobbyState)
+Clears and unregisters the ready up timer for a lobby state.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
+
 <a name="module_ihlManager..IHLManager+runLobby"></a>
 
 #### ihlManager.runLobby(_lobbyState, states)
@@ -1565,7 +1578,6 @@ If no states to match against are given, the lobby state is run by default.
 Creates a queue lobby.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1577,7 +1589,6 @@ Creates a queue lobby.
 Sets a lobby state.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1639,30 +1650,12 @@ Removes a ticket from a league.
 Runs lobbies waiting for bots.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
-<a name="module_ihlManager..IHLManager+registerLobbyTimeout"></a>
+<a name="module_ihlManager..IHLManager+onBotLobbyLeft"></a>
 
-#### ihlManager.registerLobbyTimeout(lobbyState)
-Creates and registers a ready up timer for a lobby state.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: <code>module:ihlManager~event:MSG\_READY\_CHECK\_START</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
-<a name="module_ihlManager..IHLManager+unregisterLobbyTimeout"></a>
-
-#### ihlManager.unregisterLobbyTimeout(lobbyState)
-Clears and unregisters the ready up timer for a lobby state.
+#### ihlManager.onBotLobbyLeft()
+Set bot idle then call onBotAvailable to run lobbies waiting for bots.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-
 <a name="module_ihlManager..IHLManager+onLobbyTimedOut"></a>
 
 #### ihlManager.onLobbyTimedOut(lobbyState)
@@ -1670,7 +1663,6 @@ Runs a lobby state when its ready up timer has expired.
 Checks for STATE_CHECKING_READY lobby state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1683,7 +1675,6 @@ Runs a lobby state when a player has readied up and update their player ready st
 Checks for STATE_CHECKING_READY lobby state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_PLAYER\_READY</code>](#module_ihlManager..event_EVENT_PLAYER_READY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1696,7 +1687,6 @@ Checks for STATE_CHECKING_READY lobby state
 Updates a lobby state with a captain pick selection
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1710,7 +1700,6 @@ Updates a lobby state with a captain pick selection
 Updates a lobby state with a captain side selection
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1725,7 +1714,6 @@ Checks if a player is draftable and fires an event representing the result.
 If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and runs the lobby state.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1733,19 +1721,30 @@ If the player is draftable, checks for STATE_DRAFTING_PLAYERS lobby state and ru
 | user | <code>module:db.User</code> | The picked user |
 | faction | <code>number</code> | The picking faction |
 
-<a name="module_ihlManager..IHLManager+onforceLobbyDraft"></a>
+<a name="module_ihlManager..IHLManager+onForceLobbyDraft"></a>
 
-#### ihlManager.onforceLobbyDraft(lobbyState, captain1, captain2)
+#### ihlManager.onForceLobbyDraft(lobbyState, captain1, captain2)
 Force lobby into player draft with assigned captains.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
 | captain1 | <code>module:db.User</code> | The captain 1 user |
 | captain2 | <code>module:db.User</code> | The captain 2 user |
+
+<a name="module_ihlManager..IHLManager+onStartDotaLobby"></a>
+
+#### ihlManager.onStartDotaLobby(_lobbyState, _dotaBot) ⇒ <code>module:lobby.lobbyState</code>
+Start a dota lobby if all players are in the lobby and on the correct teams.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| _lobbyState | <code>module:lobby.lobbyState</code> | The lobby state to check. |
+| _dotaBot | <code>module:lobby.lobbyState</code> | The bot to check. |
 
 <a name="module_ihlManager..IHLManager+onLobbyKick"></a>
 
@@ -1778,7 +1777,6 @@ Runs a lobby state when the lobby is ready (all players have joined and are in t
 Checks for STATE_WAITING_FOR_PLAYERS lobby state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1790,7 +1788,6 @@ Checks for STATE_WAITING_FOR_PLAYERS lobby state
 Puts a lobby state in STATE_PENDING_KILL and runs lobby.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1803,7 +1800,6 @@ Handles match signed out bot event.
 Updates STATE_MATCH_IN_PROGRESS lobby state to STATE_MATCH_ENDED
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1818,7 +1814,6 @@ Sends match stats message.
 Puts lobby into STATE_MATCH_STATS state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: <code>module:ihlManager~event:MSG\_MATCH\_STATS</code>, [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1834,7 +1829,6 @@ Sends match stats message.
 Puts lobby into STATE_MATCH_STATS state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: <code>module:ihlManager~event:MSG\_MATCH\_STATS</code>, [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1848,7 +1842,6 @@ Sends match no stats message.
 Puts lobby into STATE_MATCH_NO_STATS state
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: <code>module:ihlManager~event:MSG\_MATCH\_NO\_STATS</code>, [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1917,26 +1910,13 @@ Remove a dota bot.
 
 #### ihlManager.botLeaveLobby(lobbyState)
 Disconnect a dota bot from its lobby.
+The bot should eventually emit EVENT_BOT_LOBBY_LEFT.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: [<code>EVENT\_RUN\_LOBBY</code>](#module_ihlManager..event_EVENT_RUN_LOBBY)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | lobbyState | <code>module:lobby.lobbyState</code> | The lobby for the bot. |
-
-<a name="module_ihlManager..IHLManager+onStartDotaLobby"></a>
-
-#### ihlManager.onStartDotaLobby(_lobbyState, _dotaBot) ⇒ <code>module:lobby.lobbyState</code>
-Start a dota lobby if all players are in the lobby and on the correct teams.
-
-**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
-**Emits**: <code>module:ihlManager~event:MSG\_LOBBY\_STARTED</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| _lobbyState | <code>module:lobby.lobbyState</code> | The lobby state to check. |
-| _dotaBot | <code>module:lobby.lobbyState</code> | The bot to check. |
 
 <a name="module_ihlManager..IHLManager+attachListeners"></a>
 
@@ -1994,77 +1974,16 @@ IHLManager ready event.
 IHLManager event queue empty event.
 
 **Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-<a name="module_ihlManager..event_EVENT_GUILD_MESSAGE"></a>
+<a name="module_ihlManager..event_EVENT_MATCH_STATS"></a>
 
-### "EVENT_GUILD_MESSAGE" (msg)
-Event indicating a message was sent to the guild.
-
-**Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| msg | [<code>Message</code>](#external_discordjs.Message) | A discord.js guild message. |
-
-<a name="module_ihlManager..event_EVENT_GUILD_USER_LEFT"></a>
-
-### "EVENT_GUILD_USER_LEFT" (user)
-Event indicating an inhouse user has left the guild.
+### "EVENT_MATCH_STATS" (lobby)
+Event for returning stats from a lobby.
 
 **Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| user | <code>external:db.User</code> | An inhouse user. |
-
-<a name="module_ihlManager..event_EVENT_RUN_LOBBY"></a>
-
-### "EVENT_RUN_LOBBY" (lobbyState, states)
-Event for running a lobby.
-
-**Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | The lobby to run. |
-| states | <code>Array.&lt;string&gt;</code> | A list of valid lobby states. |
-
-<a name="module_ihlManager..event_EVENT_LOBBY_FORCE_DRAFT"></a>
-
-### "EVENT_LOBBY_FORCE_DRAFT" (lobbyState, captain1, captain2)
-Event setting lobby into a player draft state.
-
-**Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| captain1 | <code>module:db.User</code> | The captain 1 user |
-| captain2 | <code>module:db.User</code> | The captain 2 user |
-
-<a name="module_ihlManager..event_EVENT_PLAYER_READY"></a>
-
-### "EVENT_PLAYER_READY" (lobbyState, user)
-Event reporting that a player has readied up.
-
-**Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>module:db.User</code> | The picked user |
-
-<a name="module_ihlManager..event_EVENT_PICK_PLAYER"></a>
-
-### "EVENT_PICK_PLAYER" (lobbyState, user, faction)
-Event reporting that a player has been picked.
-
-**Kind**: event emitted by [<code>ihlManager</code>](#module_ihlManager)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
-| user | <code>module:db.User</code> | The picked user |
-| faction | <code>number</code> | The picking faction |
+| lobby | <code>module:db.Lobby</code> | The lobby with stats. |
 
 <a name="module_ihlManager..eventCallback"></a>
 
@@ -2101,7 +2020,8 @@ Node.js EventEmitter object
 <a name="module_matchTracker..MatchTracker"></a>
 
 ### matchTracker~MatchTracker
-Match tracker checks opendota and valve match apis to see if a match has finishedand saves the match data to the database.
+Match tracker checks opendota and valve match apis to see if a match has finished
+and saves the match data to the database.
 
 **Kind**: inner class of [<code>matchTracker</code>](#module_matchTracker)  
 
@@ -2122,7 +2042,7 @@ Creates an inhouse league match tracker.
 The match polling loop
 
 **Kind**: instance method of [<code>MatchTracker</code>](#module_matchTracker..MatchTracker)  
-**Emits**: <code>module:ihlManager~event:EVENT\_MATCH\_STATS</code>  
+**Emits**: [<code>EVENT\_MATCH\_STATS</code>](#module_ihlManager..event_EVENT_MATCH_STATS)  
 <a name="module_matchTracker..MatchTracker+enable"></a>
 
 #### matchTracker.enable()
