@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     
     <meta charset="utf-8">
-    <title>JSDoc: commands/queue/queue-join.js</title>
+    <title>JSDoc: LobbyLeaveCommand</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -69,95 +67,159 @@
             <div class="column is-9-desktop">
                 <div class="content" id="main-content-wrapper">
                     <header class="page-title">
-                        <p>Source</p>
-                        <h1>commands/queue/queue-join.js</h1>
+                        <p>Class</p>
+                        <h1>LobbyLeaveCommand</h1>
                     </header>
                     
                     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const logger = require('../../lib/logger');
-const IHLCommand = require('../../lib/ihlCommand');
-const Lobby = require('../../lib/lobby');
-const Db = require('../../lib/db');
-const CONSTANTS = require('../../lib/constants');
-const toHHMMSS = require('../../lib/util/toHHMMSS');
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-ihlCommand.html">ihlCommand</a>.</span>LobbyLeaveCommand<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
+</header>
 
-/**
- * @class QueueJoinCommand
- * @category Commands
- * @extends IHLCommand
- * @memberof module:ihlCommand
- */
-module.exports = class QueueJoinCommand extends IHLCommand {
-    constructor(client) {
-        super(client, {
-            name: 'queue-join',
-            aliases: ['qjoin', 'join', 'join-queue'],
-            group: 'queue',
-            memberName: 'queue-join',
-            guildOnly: true,
-            description: 'Join inhouse queue.',
-            examples: ['queue-join', 'queuejoin', 'qjoin', 'join'],
-            args: [
-                {
-                    key: 'channel',
-                    prompt: 'Provide a channel.',
-                    type: 'channel',
-                    default: '',
-                },
-            ],
-        }, { lobbyState: false });
-    }
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <h3 class="title"><span>Constructor</span></h3>
+                <div class="members">
+                    <div class="member">
 
-    static async processResult(lobbyState, inhouseUser, result, msg) {
-        switch (result) {
-        case CONSTANTS.QUEUE_JOINED:
-            return Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} joined queue. ${queuers.length} in queue.`));
-        case CONSTANTS.QUEUE_ALREADY_JOINED:
-            return msg.say(`${msg.member.displayName} already in queue or game.`);
-        case CONSTANTS.QUEUE_LOBBY_INVALID_STATE:
-            return msg.say(`${msg.member.displayName} cannot queue for this lobby.`);
-        case CONSTANTS.QUEUE_BANNED:
-            return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queueTimeout - Date.now()) / 1000)}.`);
-        default:
-            return null;
-        }
-    }
+    
+    <h4 class="name" id="LobbyLeaveCommand">
+        
+        <span class="code-name">
+            new LobbyLeaveCommand<span class="signature">()</span><span class="type-signature"></span>
+        </span>
+    </h4>
+    
 
-    async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
-        logger.silly(`QueueJoinCommand lobbyState ${lobbyState}`);
-        if (inhouseUser.rankTier) {
-            if (channel) {
-                // use lobbyState for given channel
-                const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                const _lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
-                if (_lobbyState) {
-                    logger.silly('QueueJoinCommand channel found... joining queue');
-                    const result = await this.ihlManager.joinLobbyQueue(_lobbyState, inhouseUser, msg.member);
-                    return QueueJoinCommand.processResult(_lobbyState, inhouseUser, result, msg);
-                }
-                return msg.say('Invalid lobby channel.');
-            }
-            if (lobbyState) {
-                logger.silly('QueueJoinCommand lobby found... joining queue');
-                const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
-                return QueueJoinCommand.processResult(lobbyState, inhouseUser, result, msg);
-            }
-            logger.silly('QueueJoinCommand joining all queues');
-            await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.member);
-            return msg.say(`${msg.member.displayName} joined all queues.`);
-        }
-        return msg.say('Badge rank not set. Ping an admin to have them set it for you.');
-    }
-};
-</code></pre>
-        </article>
-    </section>
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="commands_admin_lobby-leave.js.html" class="button">View Source</a>
+            <span>
+                <a href="commands_admin_lobby-leave.js.html">commands/admin/lobby-leave.js</a>, <a href="commands_admin_lobby-leave.js.html#line5">line 5</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+                </div>
+            </div>
+        
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>IHLCommand</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -170,7 +232,7 @@ module.exports = class QueueJoinCommand extends IHLCommand {
 <footer class="footer">
     <div class="content has-text-centered">
         <p><a href="https://github.com/devilesk/dota-ihl-bot/tree/master/docs">Documentation source on Github</a></p>
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 11:35:50 GMT+0000 (Coordinated Universal Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 25 2019 11:35:51 GMT+0000 (Coordinated Universal Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>

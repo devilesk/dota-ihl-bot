@@ -5,7 +5,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>JSDoc: commands/queue/queue-join.js</title>
+    <title>JSDoc: commands/admin/lobby-leave.js</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -70,7 +70,7 @@
                 <div class="content" id="main-content-wrapper">
                     <header class="page-title">
                         <p>Source</p>
-                        <h1>commands/queue/queue-join.js</h1>
+                        <h1>commands/admin/lobby-leave.js</h1>
                     </header>
                     
                     
@@ -82,77 +82,39 @@
         <article>
             <pre class="prettyprint source linenums"><code>const logger = require('../../lib/logger');
 const IHLCommand = require('../../lib/ihlCommand');
-const Lobby = require('../../lib/lobby');
-const Db = require('../../lib/db');
 const CONSTANTS = require('../../lib/constants');
-const toHHMMSS = require('../../lib/util/toHHMMSS');
 
 /**
- * @class QueueJoinCommand
+ * @class LobbyLeaveCommand
  * @category Commands
  * @extends IHLCommand
  * @memberof module:ihlCommand
  */
-module.exports = class QueueJoinCommand extends IHLCommand {
+module.exports = class LobbyLeaveCommand extends IHLCommand {
     constructor(client) {
         super(client, {
-            name: 'queue-join',
-            aliases: ['qjoin', 'join', 'join-queue'],
-            group: 'queue',
-            memberName: 'queue-join',
+            name: 'lobby-leave',
+            aliases: ['leave-lobby'],
+            group: 'admin',
+            memberName: 'lobby-leave',
             guildOnly: true,
-            description: 'Join inhouse queue.',
-            examples: ['queue-join', 'queuejoin', 'qjoin', 'join'],
-            args: [
-                {
-                    key: 'channel',
-                    prompt: 'Provide a channel.',
-                    type: 'channel',
-                    default: '',
-                },
-            ],
-        }, { lobbyState: false });
+            description: 'Leave a lobby.',
+        }, {
+            inhouseAdmin: true,
+            inhouseState: true,
+            lobbyState: true,
+            inhouseUser: false,
+        });
     }
 
-    static async processResult(lobbyState, inhouseUser, result, msg) {
-        switch (result) {
-        case CONSTANTS.QUEUE_JOINED:
-            return Lobby.getQueuers()(lobbyState).then(queuers => msg.say(`${msg.member.displayName} joined queue. ${queuers.length} in queue.`));
-        case CONSTANTS.QUEUE_ALREADY_JOINED:
-            return msg.say(`${msg.member.displayName} already in queue or game.`);
-        case CONSTANTS.QUEUE_LOBBY_INVALID_STATE:
-            return msg.say(`${msg.member.displayName} cannot queue for this lobby.`);
-        case CONSTANTS.QUEUE_BANNED:
-            return msg.say(`${msg.member.displayName} banned from queuing. Remaining time: ${toHHMMSS((inhouseUser.queueTimeout - Date.now()) / 1000)}.`);
-        default:
-            return null;
+    async onMsg({ msg, lobbyState }) {
+        logger.silly('LobbyLeaveCommand');
+        if (lobbyState.state === CONSTANTS.STATE_WAITING_FOR_PLAYERS) {
+            await msg.say('Leaving lobby...');
+            const err = await this.ihlManager[CONSTANTS.EVENT_LOBBY_LEAVE](lobbyState);
+            return msg.say(!err ? 'Bot left lobby.' : `Bot failed to leave lobby. Reason: ${err}`);
         }
-    }
-
-    async onMsg({ msg, guild, inhouseState, lobbyState, inhouseUser }, { channel }) {
-        logger.silly(`QueueJoinCommand lobbyState ${lobbyState}`);
-        if (inhouseUser.rankTier) {
-            if (channel) {
-                // use lobbyState for given channel
-                const lobby = inhouseState ? await Db.findLobbyByDiscordChannel(guild.id)(channel.id) : null;
-                const _lobbyState = lobby ? await Lobby.lobbyToLobbyState(inhouseState)(lobby) : null;
-                if (_lobbyState) {
-                    logger.silly('QueueJoinCommand channel found... joining queue');
-                    const result = await this.ihlManager.joinLobbyQueue(_lobbyState, inhouseUser, msg.member);
-                    return QueueJoinCommand.processResult(_lobbyState, inhouseUser, result, msg);
-                }
-                return msg.say('Invalid lobby channel.');
-            }
-            if (lobbyState) {
-                logger.silly('QueueJoinCommand lobby found... joining queue');
-                const result = await this.ihlManager.joinLobbyQueue(lobbyState, inhouseUser, msg.member);
-                return QueueJoinCommand.processResult(lobbyState, inhouseUser, result, msg);
-            }
-            logger.silly('QueueJoinCommand joining all queues');
-            await this.ihlManager.joinAllLobbyQueues(inhouseState, inhouseUser, msg.member);
-            return msg.say(`${msg.member.displayName} joined all queues.`);
-        }
-        return msg.say('Badge rank not set. Ping an admin to have them set it for you.');
+        return msg.say('Lobby must be in waiting for players state before bot can leave.');
     }
 };
 </code></pre>

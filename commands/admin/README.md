@@ -1,9 +1,9 @@
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
 |[bot-list](#bot-list)|[league-info](#league-info)|[league-season](#league-season)|[league-ticket](#league-ticket)|[league-update](#league-update)|[lobby-draft](#lobby-draft)|
-|[lobby-fp](#lobby-fp)|[lobby-gamemode](#lobby-gamemode)|[lobby-invite](#lobby-invite)|[lobby-kick](#lobby-kick)|[lobby-kill](#lobby-kill)|[lobby-run](#lobby-run)|
-|[lobby-start](#lobby-start)|[lobby-state](#lobby-state)|[lobby-swap](#lobby-swap)|[queue-ban](#queue-ban)|[queue-clear](#queue-clear)|[user-badge](#user-badge)|
-|[user-vouch](#user-vouch)|
+|[lobby-fp](#lobby-fp)|[lobby-gamemode](#lobby-gamemode)|[lobby-invite](#lobby-invite)|[lobby-kick](#lobby-kick)|[lobby-kill](#lobby-kill)|[lobby-leave](#lobby-leave)|
+|[lobby-run](#lobby-run)|[lobby-start](#lobby-start)|[lobby-state](#lobby-state)|[lobby-swap](#lobby-swap)|[queue-ban](#queue-ban)|[queue-clear](#queue-clear)|
+|[user-badge](#user-badge)|[user-vouch](#user-vouch)|
 
 
 
@@ -150,6 +150,17 @@
 **Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
 
 **Aliases:** `lobby-destroy`, `lobbykill`, `lobbydestroy`
+
+ 
+## lobby-leave
+
+**Format:** `!lobby-leave`
+
+> Leave a lobby.
+
+**Requirements:** Guild, Inhouse Admin, Inhouse, Lobby, Vouched
+
+**Aliases:** `leave-lobby`, `lobbyleave`, `leavelobby`
 
  
 ## lobby-run
