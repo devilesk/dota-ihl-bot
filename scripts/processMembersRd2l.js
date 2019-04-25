@@ -100,4 +100,9 @@ const run = async (inputFile, outputFile, format = 'json') => {
     });
 };
 
-run(process.argv[2], process.argv[3], process.argv[4]);
+if (process.argv.length === 4 || process.argv.length === 5) {
+    run(process.argv[2], process.argv[3], process.argv[4]);
+}
+else {
+    logger.error('Invalid number of arguments. Usage: <inputFile> <outputFile> (format)');
+}
