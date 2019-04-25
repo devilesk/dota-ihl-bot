@@ -885,6 +885,7 @@ Bans a user from an inhouse queue.
             * [.BotAddCommand](#module_ihlCommand.BotAddCommand) ⇐ <code>IHLCommand</code>
             * [.BotRemoveCommand](#module_ihlCommand.BotRemoveCommand) ⇐ <code>IHLCommand</code>
             * [.BotStatusCommand](#module_ihlCommand.BotStatusCommand) ⇐ <code>IHLCommand</code>
+            * [.DumpMembersCommand](#module_ihlCommand.DumpMembersCommand) ⇐ <code>IHLCommand</code>
             * [.InviteUrlCommand](#module_ihlCommand.InviteUrlCommand) ⇐ <code>IHLCommand</code>
             * [.LeagueCreateCommand](#module_ihlCommand.LeagueCreateCommand) ⇐ <code>IHLCommand</code>
             * [.LogLevelCommand](#module_ihlCommand.LogLevelCommand) ⇐ <code>IHLCommand</code>
@@ -1155,6 +1156,12 @@ Bans a user from an inhouse queue.
 <a name="module_ihlCommand.BotStatusCommand"></a>
 
 ### ihlCommand.BotStatusCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
+<a name="module_ihlCommand.DumpMembersCommand"></a>
+
+### ihlCommand.DumpMembersCommand ⇐ <code>IHLCommand</code>
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
