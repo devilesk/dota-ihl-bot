@@ -853,6 +853,7 @@ Bans a user from an inhouse queue.
             * [.LobbyInviteCommand](#module_ihlCommand.LobbyInviteCommand) ⇐ <code>IHLCommand</code>
             * [.LobbyKickCommand](#module_ihlCommand.LobbyKickCommand) ⇐ <code>IHLCommand</code>
             * [.LobbyKillCommand](#module_ihlCommand.LobbyKillCommand) ⇐ <code>IHLCommand</code>
+            * [.LobbyLeaveCommand](#module_ihlCommand.LobbyLeaveCommand) ⇐ <code>IHLCommand</code>
             * [.LobbyRunCommand](#module_ihlCommand.LobbyRunCommand) ⇐ <code>IHLCommand</code>
             * [.LobbyStartCommand](#module_ihlCommand.LobbyStartCommand) ⇐ <code>IHLCommand</code>
             * [.LobbyStateCommand](#module_ihlCommand.LobbyStateCommand) ⇐ <code>IHLCommand</code>
@@ -884,6 +885,7 @@ Bans a user from an inhouse queue.
             * [.BotAddCommand](#module_ihlCommand.BotAddCommand) ⇐ <code>IHLCommand</code>
             * [.BotRemoveCommand](#module_ihlCommand.BotRemoveCommand) ⇐ <code>IHLCommand</code>
             * [.BotStatusCommand](#module_ihlCommand.BotStatusCommand) ⇐ <code>IHLCommand</code>
+            * [.DumpMembersCommand](#module_ihlCommand.DumpMembersCommand) ⇐ <code>IHLCommand</code>
             * [.InviteUrlCommand](#module_ihlCommand.InviteUrlCommand) ⇐ <code>IHLCommand</code>
             * [.LeagueCreateCommand](#module_ihlCommand.LeagueCreateCommand) ⇐ <code>IHLCommand</code>
             * [.LogLevelCommand](#module_ihlCommand.LogLevelCommand) ⇐ <code>IHLCommand</code>
@@ -962,6 +964,12 @@ Bans a user from an inhouse queue.
 <a name="module_ihlCommand.LobbyKillCommand"></a>
 
 ### ihlCommand.LobbyKillCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
+<a name="module_ihlCommand.LobbyLeaveCommand"></a>
+
+### ihlCommand.LobbyLeaveCommand ⇐ <code>IHLCommand</code>
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
@@ -1151,6 +1159,12 @@ Bans a user from an inhouse queue.
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
+<a name="module_ihlCommand.DumpMembersCommand"></a>
+
+### ihlCommand.DumpMembersCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
 <a name="module_ihlCommand.InviteUrlCommand"></a>
 
 ### ihlCommand.InviteUrlCommand ⇐ <code>IHLCommand</code>
@@ -1281,7 +1295,7 @@ External namespace for discord.js Commando classes.
             * [.getBot(botId)](#module_ihlManager..IHLManager+getBot) ⇒ <code>module:dotaBot.DotaBot</code>
             * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
             * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
-            * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby)
+            * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby) ⇒ <code>null</code> \| <code>string</code>
             * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
         * [~findUser(guild, member)](#module_ihlManager..findUser) ⇒ <code>Array</code>
         * [~loadInhouseStates(guilds, leagues)](#module_ihlManager..loadInhouseStates) ⇒ [<code>Array.&lt;InhouseState&gt;</code>](#module_ihl.InhouseState)
@@ -1365,7 +1379,7 @@ Class representing the inhouse league manager.
     * [.getBot(botId)](#module_ihlManager..IHLManager+getBot) ⇒ <code>module:dotaBot.DotaBot</code>
     * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
     * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
-    * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby)
+    * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby) ⇒ <code>null</code> \| <code>string</code>
     * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
 
 <a name="new_module_ihlManager..IHLManager_new"></a>
@@ -1908,11 +1922,12 @@ Remove a dota bot.
 
 <a name="module_ihlManager..IHLManager+botLeaveLobby"></a>
 
-#### ihlManager.botLeaveLobby(lobbyState)
+#### ihlManager.botLeaveLobby(lobbyState) ⇒ <code>null</code> \| <code>string</code>
 Disconnect a dota bot from its lobby.
 The bot should eventually emit EVENT_BOT_LOBBY_LEFT.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+**Returns**: <code>null</code> \| <code>string</code> - Null if the bot left the lobby or a string containing the error reason.  
 
 | Param | Type | Description |
 | --- | --- | --- |

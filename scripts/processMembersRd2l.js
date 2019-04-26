@@ -5,7 +5,7 @@
  * Usage:
  * node scripts/processMembersRd2l.js <inputFile> <outputFile> (format)
  *
- * inputFile - path to a file containing a JSON array of objects 
+ * inputFile - path to a file containing a JSON array of objects
  *             of discord user info with format:
  *    {
  *       "discordId": "123456789876543210",
@@ -20,7 +20,6 @@
 const got = require('got');
 const convertor = require('steam-id-convertor');
 const fs = require('fs');
-const path = require('path');
 const logger = require('../lib/logger');
 
 const run = async (inputFile, outputFile, format = 'json') => {
@@ -35,9 +34,8 @@ const run = async (inputFile, outputFile, format = 'json') => {
     logger.info(`rd2l.gg/players/json ${rd2lMembersWithDiscord.length} entries with discord_name.`);
 
     const members = {};
-    const discriminators = {};
 
-    logger.info(`Matching members by discord name...`);
+    logger.info('Matching members by discord name...');
     for (const discordMember of discordMembers) {
         for (const rd2lMember of rd2lMembersWithDiscord) {
             let addMember = false;
@@ -52,7 +50,7 @@ const run = async (inputFile, outputFile, format = 'json') => {
                 const cleanedDiscordNickname = discordMember.nickname.replace(/\s+/g, '').toLowerCase();
                 if (rd2lDiscordDiscriminator === discordMember.discriminator
                     && (cleanedRd2lDiscordName === cleanedDiscordUsername
-                     || cleanedRd2lDiscordName === rd2lDiscordDiscriminator)) {
+                     || cleanedRd2lDiscordName === cleanedDiscordNickname)) {
                     addMember = true;
                 }
             }
@@ -77,14 +75,14 @@ const run = async (inputFile, outputFile, format = 'json') => {
 
     const data = [];
 
-    for (const [key, foundMembers] of Object.entries(members)) {
+    for (const [, foundMembers] of Object.entries(members)) {
         if (foundMembers.length === 1) {
             data.push(foundMembers[0]);
         }
     }
 
     logger.info(`${data.length} 1 to 1 matching members.`);
-    
+
     let output = '';
     if (format === 'json') {
         output = JSON.stringify(data);
@@ -100,6 +98,11 @@ const run = async (inputFile, outputFile, format = 'json') => {
         }
         logger.info(`Ouput to ${outputFile}.`);
     });
-}
+};
 
-run(process.argv[2], process.argv[3], process.argv[4]);
+if (process.argv.length === 4 || process.argv.length === 5) {
+    run(process.argv[2], process.argv[3], process.argv[4]);
+}
+else {
+    logger.error('Invalid number of arguments. Usage: <inputFile> <outputFile> (format)');
+}

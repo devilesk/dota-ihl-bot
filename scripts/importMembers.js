@@ -4,7 +4,7 @@
  * Usage:
  * node scripts/importMembers.js <inputFile> <guildId> (vouched)
  *
- * inputFile - path to a json file containing a JSON array of objects 
+ * inputFile - path to a json file containing a JSON array of objects
  *             of discord user info with format:
  *    {
  *       "steamId64": "12345678987654",
@@ -22,10 +22,9 @@
 
 require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const fs = require('fs');
-const path = require('path');
 const Promise = require('bluebird');
 const logger = require('../lib/logger');
-const { initLeague, registerUser } = require('../lib/ihl');
+const { registerUser } = require('../lib/ihl');
 const Db = require('../lib/db');
 
 const run = async (inputFile, guildId, vouched = true) => {
@@ -35,24 +34,20 @@ const run = async (inputFile, guildId, vouched = true) => {
         logger.error(`Invalid guildId: ${guildId}`);
         process.exit(1);
     }
-    
+
     let countAdded = 0;
     let countFailed = 0;
     const rawData = fs.readFileSync(inputFile, 'utf8');
-    let header;
     let data;
     try {
         data = JSON.parse(rawData);
     }
     catch (e) {
         if (e.name === 'SyntaxError') {
-            let [ headerRow, ...tsvData ] = rawData.split('\n').map(row => row.split('\t'));
+            const [headerRow, ...tsvData] = rawData.split('\n').map(row => row.split('\t'));
             if (headerRow.indexOf('steamId64') === -1) throw new Error('Missing steamId64 column.');
             if (headerRow.indexOf('discordId') === -1) throw new Error('Missing discordId column.');
-            data = tsvData.map(row => row.reduce((obj, col, index) => {
-                obj[headerRow[index]] = col;
-                return obj;
-            }, {}));
+            data = tsvData.map(row => row.reduce((obj, colValue, index) => ({ ...obj, [headerRow[index]]: colValue }), {}));
         }
         else {
             throw (e);
@@ -77,8 +72,13 @@ const run = async (inputFile, guildId, vouched = true) => {
     }
     logger.info(`Finished. Added: ${countAdded}. Failed: ${countFailed}. Total: ${data.length}.`);
     process.exit(0);
-}
+};
 
 process.on('unhandledRejection', () => process.exit(1));
 
-run(process.argv[2], process.argv[3], process.argv[4]);
+if (process.argv.length === 4 || process.argv.length === 5) {
+    run(process.argv[2], process.argv[3], process.argv[4]);
+}
+else {
+    logger.error('Invalid number of arguments. Usage: <inputFile> <guildId> (vouched)');
+}

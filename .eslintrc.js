@@ -22,5 +22,6 @@ module.exports = {
         "object-curly-newline": ["error", { "multiline": true }],
         "class-methods-use-this": ["error", { "exceptMethods": ["onMsg"] }],
         "no-unused-vars": ["error", { "varsIgnorePattern": "logger" }],
+        "no-fallthrough": ["error", { "commentPattern": "falls[\\s\\w]*through" }],
     }
 };

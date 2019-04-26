@@ -1,7 +1,7 @@
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
-|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[invite-url](#invite-url)|[league-create](#league-create)|[log-level](#log-level)|
-|[restart](#restart)|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
+|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[dump-members](#dump-members)|[invite-url](#invite-url)|[league-create](#league-create)|
+|[log-level](#log-level)|[restart](#restart)|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
 
 
 
@@ -48,6 +48,17 @@
 * `!bot-status 76561197960287930 BOT_ONLINE`
 * `!bot-status 76561197960287930 BOT_OFFLINE`
  
+ 
+## dump-members
+
+**Format:** `!dump-members [<format>]`
+
+> Dumps all guild member info.
+
+**Requirements:** Guild, Owner, Vouched
+
+**Aliases:** `members-dump`, `dumpmembers`, `membersdump`
+
  
 ## invite-url
 
