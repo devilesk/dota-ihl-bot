@@ -7,7 +7,7 @@ addons:
   postgresql: '9.5'
 before_install:
 - npm i -g npm@6.9.0
-install: case $TRAVIS_BRANCH in greenkeeper*) npm i;; *) npm ci;; esac;
+install: case $TRAVIS_BRANCH in greenkeeper*) rm package-lock.json && npm i;; *) npm ci;; esac;
 script: npm run cover
 before_script:
 - npm run db:create
