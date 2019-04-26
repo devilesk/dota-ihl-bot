@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const logger = require('../lib/logger');
+const cache = require('../lib/cache');
 
 const basename = path.basename(__filename);
 const config = require('../config.js');
@@ -39,9 +40,13 @@ class Database {
                 this[modelName].associate(this);
             }
         });
+
+        cache.connect();
     }
 
     async close() {
+        cache.clear();
+        await cache.disconnect();
         await this.sequelize.close();
         this.sequelize = null;
     }
