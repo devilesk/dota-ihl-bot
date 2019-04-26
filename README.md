@@ -78,8 +78,20 @@ $ git clone https://github.com/devilesk/dota-ihl-bot
 $ cd dota-ihl-bot
 
 # Install dependencies
+$ rm package-lock.json
 $ npm install
 ```
+
+* *Note: `package-lock.json` is deleted before running `npm install` to work around current bugs with npm failing to install git dependencies.*
+
+  ```bash
+  # Not deleting package-lock.json gives an error
+  $ npm install
+  npm ERR! code ENOLOCAL
+  npm ERR! Could not install from "node_modules/steam/steam-resources@github:seishun/node-steam-resources#v1.2.0" as it does not contain a package.json file.
+  ```
+
+  *Alternatively, just running `npm ci` will work.*
 
 `dota-ihl-bot` uses the [dotenv](https://github.com/motdotla/dotenv) module to load environment variables from a `.env` file, so you'll create one now.
 
