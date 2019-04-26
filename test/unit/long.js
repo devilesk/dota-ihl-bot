@@ -1,7 +1,4 @@
-require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
-const chai = require('chai');
-
-const { assert } = chai;
+require('../common');
 const Long = require('long');
 const Dota2 = require('dota2');
 

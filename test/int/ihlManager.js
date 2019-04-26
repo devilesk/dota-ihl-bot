@@ -1,3 +1,5 @@
+require('../common.db');
+require('../common.nock');
 require('../common');
 const logger = require('../../lib/logger');
 const DotaBot = require('../../lib/dotaBot');

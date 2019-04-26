@@ -1,3 +1,4 @@
+require('../common.db');
 require('../common');
 const Ihl = require('../../lib/ihl');
 const Db = require('../../lib/db');

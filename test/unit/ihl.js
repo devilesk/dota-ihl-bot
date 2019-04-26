@@ -1,3 +1,5 @@
+require('../common.db');
+require('../common.nock');
 require('../common');
 const {
     getUserRankTier,

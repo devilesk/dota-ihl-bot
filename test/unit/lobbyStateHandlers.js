@@ -1,3 +1,4 @@
+require('../common.db');
 require('../common');
 const MatchTracker = require('../../lib/matchTracker');
 const DotaBot = require('../../lib/dotaBot');

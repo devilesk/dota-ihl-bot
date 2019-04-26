@@ -1,3 +1,4 @@
+require('../common.db');
 require('../common');
 const {
     findUser,

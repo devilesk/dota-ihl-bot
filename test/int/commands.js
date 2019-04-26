@@ -1,3 +1,5 @@
+require('../common.db');
+require('../common.nock');
 require('../common');
 const Collection = require('discord.js/src/util/Collection');
 const Argument = require('discord.js-commando/src/commands/argument');
