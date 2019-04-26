@@ -3,7 +3,6 @@ global.spawn = require('../lib/util/spawn');
 global.Promise = require('bluebird');
 global.sequelize_fixtures = require('sequelize-fixtures');
 global.db = require('../models');
-global.cache = require('../lib/cache');
 
 const checkEnvironmentVariables = require('../lib/util/checkEnvironmentVariables');
 
@@ -20,14 +19,7 @@ before(async function () {
 });
 
 afterEach(async () => {
-    cache.clear();
-    await Promise.all(
-        Object.values(db.sequelize.models)
-            .map(model => model.truncate({
-                cascade: true,
-                restartIdentity: true,
-            })),
-    );
+    await db.truncate();
 });
 
 after(async () => {

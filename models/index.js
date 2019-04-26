@@ -43,6 +43,17 @@ class Database {
 
         cache.connect();
     }
+    
+    async truncate() {
+        cache.clear();
+        return Promise.all(
+            Object.values(this.sequelize.models)
+                .map(model => model.truncate({
+                    cascade: true,
+                    restartIdentity: true,
+                })),
+        );
+    }
 
     async close() {
         cache.clear();
