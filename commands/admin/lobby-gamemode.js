@@ -48,7 +48,7 @@ module.exports = class LobbyGameModeCommand extends IHLCommand {
             gameMode = Dota2.schema.DOTA_GameMode.DOTA_GAMEMODE_AP;
             name = 'All Pick';
         }
-        await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_GAMEMODE](lobbyState, gameMode);
-        return msg.say(`Game mode set to ${name}.`);
+        const result = await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_GAMEMODE](lobbyState, gameMode);
+        return msg.say(result ? `Game mode set to ${name}.` : 'Failed to set game mode.');
     }
 };

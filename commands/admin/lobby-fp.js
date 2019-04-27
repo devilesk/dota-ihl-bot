@@ -48,7 +48,7 @@ module.exports = class LobbyFirstPickCommand extends IHLCommand {
             cmPick = Dota2.schema.DOTA_CM_PICK.DOTA_CM_BAD_GUYS;
             name = 'Dire';
         }
-        await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_FP](lobbyState, cmPick);
-        return msg.say(`First pick set to ${name}.`);
+        const result = await this.ihlManager[CONSTANTS.EVENT_LOBBY_SET_FP](lobbyState, cmPick);
+        return msg.say(result ? `First pick set to ${name}.` : 'Failed to set first pick.');
     }
 };
