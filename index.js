@@ -1,5 +1,6 @@
 require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const logger = require('./lib/logger');
+const cache = require('./lib/cache');
 const checkEnvironmentVariables = require('./lib/util/checkEnvironmentVariables');
 const CommandDispatcher = require('discord.js-commando/src/dispatcher');
 
@@ -29,6 +30,8 @@ checkEnvironmentVariables([
     'TOKEN',
     'OWNER_DISCORD_ID',
 ]);
+
+cache.connect();
 
 const IHLManager = require('./lib/ihlManager');
 

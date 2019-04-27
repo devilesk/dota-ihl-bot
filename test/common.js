@@ -20,6 +20,11 @@ checkEnvironmentVariables([
     'STEAM_API_KEY',
 ]);
 
+before(async () => {
+    await cache.connect();
+});
+
+
 after(async () => {
     await cache.disconnect();
 });
