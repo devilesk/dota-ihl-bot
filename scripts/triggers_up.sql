@@ -51,3 +51,9 @@ FOR EACH ROW EXECUTE PROCEDURE notify_trigger(
   'id',
   'updatedAt'
 );
+
+CREATE TRIGGER user_notify AFTER INSERT OR UPDATE OR DELETE ON "Users"
+FOR EACH ROW EXECUTE PROCEDURE notify_trigger(
+  'id',
+  'updatedAt'
+);
