@@ -11,6 +11,7 @@
     "db:drop": "sequelize --config config.js db:drop",
     "db:create": "sequelize --config config.js db:create",
     "db:migrate": "sequelize --config config.js db:migrate",
+    "db:undo:all": "sequelize --config config.js db:migrate:undo:all",
     "db:seed:all": "sequelize --config config.js db:seed:all",
     "db:seed:test1": "sequelize --config config.js --seeders-path test_seeders/1 db:seed:all",
     "db:seed:test2": "sequelize --config config.js --seeders-path test_seeders/2 db:seed:all",

@@ -24,4 +24,5 @@ afterEach(async () => {
 
 after(async () => {
     await db.close();
+    await spawn('npm', ['run', 'db:undo:all'], { shell: true });
 });
