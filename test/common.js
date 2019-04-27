@@ -5,6 +5,7 @@ global.sinon = require('sinon');
 global.path = require('path');
 global.CONSTANTS = require('../lib/constants');
 global.logger = require('../lib/logger');
+global.cache = require('../lib/cache');
 global.Mocks = require('./mocks');
 global.TestHelper = require('./helper');
 global.chaiAsPromised = require('chai-as-promised');
@@ -18,3 +19,7 @@ const checkEnvironmentVariables = require('../lib/util/checkEnvironmentVariables
 checkEnvironmentVariables([
     'STEAM_API_KEY',
 ]);
+
+after(async () => {
+    await cache.disconnect();
+});

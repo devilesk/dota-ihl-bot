@@ -40,8 +40,6 @@ class Database {
                 this[modelName].associate(this);
             }
         });
-
-        cache.connect();
     }
 
     async truncate() {
@@ -57,7 +55,6 @@ class Database {
 
     async close() {
         cache.clear();
-        await cache.disconnect();
         await this.sequelize.close();
         this.sequelize = null;
     }
