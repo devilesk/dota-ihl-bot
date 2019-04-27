@@ -53,8 +53,10 @@ const generateReadme = (key, cmds) => {
     ejs.renderFile(path.join(__dirname, 'commandsDoc.ejs'), { commands: sortedCommands, toc, rowLen, argToString }, {}, (err, str) => {
         if (err) logger.error(err);
         // eslint-disable-next-line no-shadow
-        fs.writeFile(path.join(__dirname, `../commands/${key}/README.md`), str, 'utf8', (err) => {
+        const outfile = path.join(__dirname, `../commands/${key}/README.md`);
+        fs.writeFile(outfile, str, 'utf8', (err) => {
             if (err) logger.error(`error ${key}`);
+            logger.info(`${outfile} done.`);
         });
     });
 };
