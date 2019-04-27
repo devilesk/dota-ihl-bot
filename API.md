@@ -1,6 +1,9 @@
 ## Modules
 
 <dl>
+<dt><a href="#module_cache">cache</a></dt>
+<dd><p>Cache functions</p>
+</dd>
 <dt><a href="#module_constants">constants</a></dt>
 <dd></dd>
 <dt><a href="#module_db">db</a></dt>
@@ -22,6 +25,11 @@
 <dt><a href="#module_matchTracker">matchTracker</a></dt>
 <dd></dd>
 </dl>
+
+<a name="module_cache"></a>
+
+## cache
+Cache functions
 
 <a name="module_constants"></a>
 
@@ -883,6 +891,7 @@ Bans a user from an inhouse queue.
             * [.UnrepCommand](#module_ihlCommand.UnrepCommand) ⇐ <code>IHLCommand</code>
             * [.WhoisCommand](#module_ihlCommand.WhoisCommand) ⇐ <code>IHLCommand</code>
             * [.BotAddCommand](#module_ihlCommand.BotAddCommand) ⇐ <code>IHLCommand</code>
+            * [.BotLeaveCommand](#module_ihlCommand.BotLeaveCommand) ⇐ <code>IHLCommand</code>
             * [.BotRemoveCommand](#module_ihlCommand.BotRemoveCommand) ⇐ <code>IHLCommand</code>
             * [.BotStatusCommand](#module_ihlCommand.BotStatusCommand) ⇐ <code>IHLCommand</code>
             * [.DumpMembersCommand](#module_ihlCommand.DumpMembersCommand) ⇐ <code>IHLCommand</code>
@@ -1147,6 +1156,12 @@ Bans a user from an inhouse queue.
 **Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
 **Extends**: <code>IHLCommand</code>  
 **Category**: Commands  
+<a name="module_ihlCommand.BotLeaveCommand"></a>
+
+### ihlCommand.BotLeaveCommand ⇐ <code>IHLCommand</code>
+**Kind**: static class of [<code>ihlCommand</code>](#module_ihlCommand)  
+**Extends**: <code>IHLCommand</code>  
+**Category**: Commands  
 <a name="module_ihlCommand.BotRemoveCommand"></a>
 
 ### ihlCommand.BotRemoveCommand ⇐ <code>IHLCommand</code>
@@ -1282,6 +1297,7 @@ External namespace for discord.js Commando classes.
             * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
             * [.onForceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onForceLobbyDraft)
             * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
+            * [.onLobbySwapTeams(lobbyState)](#module_ihlManager..IHLManager+onLobbySwapTeams)
             * [.onLobbyKick(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyKick)
             * [.onLobbyInvite(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyInvite)
             * [.onLobbyReady(dotaLobbyId)](#module_ihlManager..IHLManager+onLobbyReady)
@@ -1293,7 +1309,10 @@ External namespace for discord.js Commando classes.
             * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
             * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
             * [.getBot(botId)](#module_ihlManager..IHLManager+getBot) ⇒ <code>module:dotaBot.DotaBot</code>
-            * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
+            * [.getBotBySteamId(steamId64)](#module_ihlManager..IHLManager+getBotBySteamId) ⇒ <code>module:dotaBot.DotaBot</code>
+            * [.loadBotById(botId)](#module_ihlManager..IHLManager+loadBotById) ⇒ <code>module:dotaBot.DotaBot</code>
+            * [.loadBotBySteamId(steamId64)](#module_ihlManager..IHLManager+loadBotBySteamId) ⇒ <code>module:dotaBot.DotaBot</code>
+            * [.loadBot(bot)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
             * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
             * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby) ⇒ <code>null</code> \| <code>string</code>
             * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
@@ -1366,6 +1385,7 @@ Class representing the inhouse league manager.
     * [.onDraftMember(lobbyState, user, faction)](#module_ihlManager..IHLManager+onDraftMember)
     * [.onForceLobbyDraft(lobbyState, captain1, captain2)](#module_ihlManager..IHLManager+onForceLobbyDraft)
     * [.onStartDotaLobby(_lobbyState, _dotaBot)](#module_ihlManager..IHLManager+onStartDotaLobby) ⇒ <code>module:lobby.lobbyState</code>
+    * [.onLobbySwapTeams(lobbyState)](#module_ihlManager..IHLManager+onLobbySwapTeams)
     * [.onLobbyKick(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyKick)
     * [.onLobbyInvite(lobbyState, user)](#module_ihlManager..IHLManager+onLobbyInvite)
     * [.onLobbyReady(dotaLobbyId)](#module_ihlManager..IHLManager+onLobbyReady)
@@ -1377,7 +1397,10 @@ Class representing the inhouse league manager.
     * [.processEventQueue()](#module_ihlManager..IHLManager+processEventQueue)
     * [.queueEvent(fn, ...args)](#module_ihlManager..IHLManager+queueEvent)
     * [.getBot(botId)](#module_ihlManager..IHLManager+getBot) ⇒ <code>module:dotaBot.DotaBot</code>
-    * [.loadBot(botId)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
+    * [.getBotBySteamId(steamId64)](#module_ihlManager..IHLManager+getBotBySteamId) ⇒ <code>module:dotaBot.DotaBot</code>
+    * [.loadBotById(botId)](#module_ihlManager..IHLManager+loadBotById) ⇒ <code>module:dotaBot.DotaBot</code>
+    * [.loadBotBySteamId(steamId64)](#module_ihlManager..IHLManager+loadBotBySteamId) ⇒ <code>module:dotaBot.DotaBot</code>
+    * [.loadBot(bot)](#module_ihlManager..IHLManager+loadBot) ⇒ <code>module:dotaBot.DotaBot</code>
     * [.removeBot(botId)](#module_ihlManager..IHLManager+removeBot)
     * [.botLeaveLobby(lobbyState)](#module_ihlManager..IHLManager+botLeaveLobby) ⇒ <code>null</code> \| <code>string</code>
     * [.attachListeners()](#module_ihlManager..IHLManager+attachListeners)
@@ -1760,6 +1783,17 @@ Start a dota lobby if all players are in the lobby and on the correct teams.
 | _lobbyState | <code>module:lobby.lobbyState</code> | The lobby state to check. |
 | _dotaBot | <code>module:lobby.lobbyState</code> | The bot to check. |
 
+<a name="module_ihlManager..IHLManager+onLobbySwapTeams"></a>
+
+#### ihlManager.onLobbySwapTeams(lobbyState)
+Swap teams in the dota lobby.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| lobbyState | [<code>LobbyState</code>](#module_lobby.LobbyState) | An inhouse lobby state. |
+
 <a name="module_ihlManager..IHLManager+onLobbyKick"></a>
 
 #### ihlManager.onLobbyKick(lobbyState, user)
@@ -1898,16 +1932,49 @@ Gets a bot.
 | --- | --- | --- |
 | botId | <code>number</code> | The bot id. |
 
-<a name="module_ihlManager..IHLManager+loadBot"></a>
+<a name="module_ihlManager..IHLManager+getBotBySteamId"></a>
 
-#### ihlManager.loadBot(botId) ⇒ <code>module:dotaBot.DotaBot</code>
-Start a dota bot.
+#### ihlManager.getBotBySteamId(steamId64) ⇒ <code>module:dotaBot.DotaBot</code>
+Gets a bot by steam id.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steamId64 | <code>number</code> | The bot steam id. |
+
+<a name="module_ihlManager..IHLManager+loadBotById"></a>
+
+#### ihlManager.loadBotById(botId) ⇒ <code>module:dotaBot.DotaBot</code>
+Start a dota bot by id.
 
 **Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | botId | <code>number</code> | The bot id. |
+
+<a name="module_ihlManager..IHLManager+loadBotBySteamId"></a>
+
+#### ihlManager.loadBotBySteamId(steamId64) ⇒ <code>module:dotaBot.DotaBot</code>
+Start a dota bot by steam id.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| steamId64 | <code>number</code> | The bot steam id. |
+
+<a name="module_ihlManager..IHLManager+loadBot"></a>
+
+#### ihlManager.loadBot(bot) ⇒ <code>module:dotaBot.DotaBot</code>
+Start a dota bot.
+
+**Kind**: instance method of [<code>IHLManager</code>](#module_ihlManager..IHLManager)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bot | <code>module:db.Bot</code> | The bot model. |
 
 <a name="module_ihlManager..IHLManager+removeBot"></a>
 

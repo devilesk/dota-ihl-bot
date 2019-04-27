@@ -1,7 +1,7 @@
 |Table of Contents| | | | | |
 |--|--|--|--|--|--|
-|[bot-add](#bot-add)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[dump-members](#dump-members)|[invite-url](#invite-url)|[league-create](#league-create)|
-|[log-level](#log-level)|[restart](#restart)|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
+|[bot-add](#bot-add)|[bot-leave](#bot-leave)|[bot-remove](#bot-remove)|[bot-status](#bot-status)|[dump-members](#dump-members)|[invite-url](#invite-url)|
+|[league-create](#league-create)|[log-level](#log-level)|[restart](#restart)|[ticket-add](#ticket-add)|[ticket-remove](#ticket-remove)|
 
 
 
@@ -17,6 +17,20 @@
 
 **Usage Examples:**
 * `!bot-add steamId64 accountName personaName password`
+ 
+ 
+## bot-leave
+
+**Format:** `!bot-leave <steamId64>`
+
+> Manually tell bot to leave lobby.
+
+**Requirements:** Owner, Vouched
+
+**Aliases:** `botleave`
+
+**Usage Examples:**
+* `!bot-leave 76561197960287930`
  
  
 ## bot-remove

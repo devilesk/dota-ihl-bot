@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     
     <meta charset="utf-8">
-    <title>JSDoc: commands/ihl/dire.js</title>
+    <title>JSDoc: cache</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -69,51 +67,135 @@
             <div class="column is-9-desktop">
                 <div class="content" id="main-content-wrapper">
                     <header class="page-title">
-                        <p>Source</p>
-                        <h1>commands/ihl/dire.js</h1>
+                        <p>Module</p>
+                        <h1>cache</h1>
                     </header>
                     
                     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const logger = require('../../lib/logger');
-const IHLCommand = require('../../lib/ihlCommand');
-const Lobby = require('../../lib/lobby');
-const CONSTANTS = require('../../lib/constants');
+        
+            
+        
+    
+</header>
 
-/**
- * @class DireCommand
- * @category Commands
- * @extends IHLCommand
- * @memberof module:ihlCommand
- */
-module.exports = class DireCommand extends IHLCommand {
-    constructor(client) {
-        super(client, {
-            name: 'dire',
-            group: 'ihl',
-            memberName: 'dire',
-            guildOnly: true,
-            description: 'Select dire side.',
-        });
-    }
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Cache functions</p></div>
+        
 
-    async onMsg({ lobbyState, inhouseUser }) {
-        logger.silly('DireCommand');
-        const captain = inhouseUser;
-        if (Lobby.isCaptain(lobbyState)(captain)) {
-            logger.silly(`DireCommand isCaptain ${captain.id}`);
-            await this.ihlManager[CONSTANTS.EVENT_SELECTION_SIDE](lobbyState, captain, 2);
-        }
-    }
-};
-</code></pre>
-        </article>
-    </section>
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="lib_cache.js.html" class="button">View Source</a>
+            <span>
+                <a href="lib_cache.js.html">lib/cache.js</a>, <a href="lib_cache.js.html#line1">line 1</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

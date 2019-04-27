@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     
     <meta charset="utf-8">
-    <title>JSDoc: commands/ihl/dire.js</title>
+    <title>JSDoc: BotLeaveCommand</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -69,51 +67,159 @@
             <div class="column is-9-desktop">
                 <div class="content" id="main-content-wrapper">
                     <header class="page-title">
-                        <p>Source</p>
-                        <h1>commands/ihl/dire.js</h1>
+                        <p>Class</p>
+                        <h1>BotLeaveCommand</h1>
                     </header>
                     
                     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>const logger = require('../../lib/logger');
-const IHLCommand = require('../../lib/ihlCommand');
-const Lobby = require('../../lib/lobby');
-const CONSTANTS = require('../../lib/constants');
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-ihlCommand.html">ihlCommand</a>.</span>BotLeaveCommand<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+    
+</header>
 
-/**
- * @class DireCommand
- * @category Commands
- * @extends IHLCommand
- * @memberof module:ihlCommand
- */
-module.exports = class DireCommand extends IHLCommand {
-    constructor(client) {
-        super(client, {
-            name: 'dire',
-            group: 'ihl',
-            memberName: 'dire',
-            guildOnly: true,
-            description: 'Select dire side.',
-        });
-    }
+<article>
+    <div class="container-overview">
+    
+        
+            <div class='vertical-section'>
+                <h3 class="title"><span>Constructor</span></h3>
+                <div class="members">
+                    <div class="member">
 
-    async onMsg({ lobbyState, inhouseUser }) {
-        logger.silly('DireCommand');
-        const captain = inhouseUser;
-        if (Lobby.isCaptain(lobbyState)(captain)) {
-            logger.silly(`DireCommand isCaptain ${captain.id}`);
-            await this.ihlManager[CONSTANTS.EVENT_SELECTION_SIDE](lobbyState, captain, 2);
-        }
-    }
-};
-</code></pre>
-        </article>
-    </section>
+    
+    <h4 class="name" id="BotLeaveCommand">
+        
+        <span class="code-name">
+            new BotLeaveCommand<span class="signature">()</span><span class="type-signature"></span>
+        </span>
+    </h4>
+    
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="commands_owner_bot-leave.js.html" class="button">View Source</a>
+            <span>
+                <a href="commands_owner_bot-leave.js.html">commands/owner/bot-leave.js</a>, <a href="commands_owner_bot-leave.js.html#line5">line 5</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+                </div>
+            </div>
+        
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>IHLCommand</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
