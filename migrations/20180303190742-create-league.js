@@ -91,5 +91,6 @@ module.exports = {
         },
     })
         .then(() => queryInterface.sequelize.query('CREATE EXTENSION fuzzystrmatch;')),
-    down: queryInterface => queryInterface.dropTable('Leagues'),
+    down: queryInterface => queryInterface.dropTable('Leagues')
+        .then(() => queryInterface.sequelize.query('DROP EXTENSION IF EXISTS fuzzystrmatch;')),
 };
