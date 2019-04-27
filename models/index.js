@@ -43,7 +43,7 @@ class Database {
 
         cache.connect();
     }
-    
+
     async truncate() {
         cache.clear();
         return Promise.all(
