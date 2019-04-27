@@ -27,7 +27,7 @@ module.exports = class LobbySwapCommand extends IHLCommand {
 
     async onMsg({ msg, lobbyState }) {
         await msg.say('Swapping teams...');
-        await this.ihlManager[CONSTANTS.EVENT_LOBBY_SWAP_TEAMS](lobbyState);
-        return msg.say('Teams swapped.');
+        const result = await this.ihlManager[CONSTANTS.EVENT_LOBBY_SWAP_TEAMS](lobbyState);
+        return msg.say(result ? 'Teams swapped.' : 'Team swap failed.');
     }
 };
