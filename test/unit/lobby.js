@@ -724,8 +724,7 @@ describe('Database - with lobby players', () => {
                     };
                     const captains = await checkQueueForCaptains(lobby);
                     assert.lengthOf(captains, 2);
-                    assert.equal(captains[0].id, 1);
-                    assert.equal(captains[1].id, 3);
+                    assert.isTrue((captains[0].id === 1 && captains[1].id === 3) || (captains[0].id === 3 && captains[1].id === 1));
                 });
             });
 
@@ -754,8 +753,7 @@ describe('Database - with lobby players', () => {
                     };
                     const captains = await assignCaptains(lobby);
                     assert.lengthOf(captains, 2);
-                    assert.equal(captains[0].id, 1);
-                    assert.equal(captains[1].id, 3);
+                    assert.isTrue((captains[0].id === 1 && captains[1].id === 3) || (captains[0].id === 3 && captains[1].id === 1));
                 });
             });
         });
@@ -957,7 +955,8 @@ describe('Database - with lobby players', () => {
 
             it('return INVALID_DRAFT_PLAYER when player is on a team', async () => {
                 const players = await lobby.getFaction1Players();
-                const result = await isPlayerDraftable(lobby)(players[1]);
+                const nonCaptainPlayers = players.filter(player => player.id !== lobby.captain1UserId && player.id !== lobby.captain2UserId);
+                const result = await isPlayerDraftable(lobby)(nonCaptainPlayers[0]);
                 assert.equal(result, CONSTANTS.INVALID_DRAFT_PLAYER);
             });
 
