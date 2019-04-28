@@ -31,13 +31,16 @@ checkEnvironmentVariables([
     'OWNER_DISCORD_ID',
 ]);
 
-cache.connect();
+const run = async () {
+    await cache.connect();
+    const IHLManager = require('./lib/ihlManager');
 
-const IHLManager = require('./lib/ihlManager');
+    const ihlManager = new IHLManager.IHLManager(process.env);
+    const client = IHLManager.createClient(process.env);
+    ihlManager.init(client);
+}
 
-const ihlManager = new IHLManager.IHLManager(process.env);
-const client = IHLManager.createClient(process.env);
-ihlManager.init(client);
+run();
 
 process.on('SIGTERM', () => {
     logger.info('SIGTERM signal received. Shutting down...');

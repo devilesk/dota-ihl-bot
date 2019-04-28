@@ -26,5 +26,6 @@ before(async () => {
 
 
 after(async () => {
-    await cache.disconnect();
+    logger.info(`cache hits: ${cache.hits}`);
+    await cache.destroy();
 });
