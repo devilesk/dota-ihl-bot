@@ -2,7 +2,7 @@
     {
         "scope": "http://api.steampowered.com:80",
         "method": "GET",
-        "path": "/ISteamUser/ResolveVanityURL/v0001/?key=***REMOVED***&vanityurl=",
+        "path": "/ISteamUser/ResolveVanityURL/v0001/?vanityurl=",
         "body": "",
         "status": 400,
         "response": {},
@@ -12,9 +12,9 @@
             "Content-Length",
             "2",
             "Expires",
-            "Fri, 26 Apr 2019 20:53:05 GMT",
+            "Sun, 28 Apr 2019 05:39:49 GMT",
             "Date",
-            "Fri, 26 Apr 2019 20:53:05 GMT",
+            "Sun, 28 Apr 2019 05:39:49 GMT",
             "Connection",
             "close"
         ]
@@ -22,7 +22,7 @@
     {
         "scope": "http://api.steampowered.com:80",
         "method": "GET",
-        "path": "/ISteamUser/GetPlayerSummaries/v0002/?key=***REMOVED***&steamids=undefined",
+        "path": "/ISteamUser/GetPlayerSummaries/v0002/?steamids=undefined",
         "body": "",
         "status": 200,
         "response": [
@@ -35,12 +35,12 @@
             "Accept-Encoding",
             "Content-Encoding",
             "gzip",
+            "Expires",
+            "Sun, 28 Apr 2019 05:39:51 GMT",
+            "Date",
+            "Sun, 28 Apr 2019 05:39:51 GMT",
             "Content-Length",
             "47",
-            "Expires",
-            "Fri, 26 Apr 2019 20:53:05 GMT",
-            "Date",
-            "Fri, 26 Apr 2019 20:53:05 GMT",
             "Connection",
             "close"
         ]

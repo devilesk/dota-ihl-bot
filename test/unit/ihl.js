@@ -21,7 +21,7 @@ const Lobby = require('../../lib/lobby');
 describe('Database', () => {
     let nockDone;
     before(async () => {
-        ({ nockDone } = await nockBack('unit_ihl.json'));
+        ({ nockDone } = await nockBack('unit_ihl.json', { before: prepareScope, afterRecord }));
         sinon.stub(Lobby, 'lobbyToLobbyState').callsFake(() => () => async () => sinon.stub());
     });
 

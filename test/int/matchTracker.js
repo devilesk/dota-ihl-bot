@@ -11,7 +11,7 @@ describe('Database', () => {
     let nockDone;
 
     before(async () => {
-        ({ nockDone } = await nockBack('int_matchTracker.json'));
+        ({ nockDone } = await nockBack('int_matchTracker.json', { before: prepareScope, afterRecord }));
     });
 
     beforeEach(async () => {

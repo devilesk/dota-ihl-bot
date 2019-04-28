@@ -5,7 +5,7 @@ const Fp = require('../../lib/util/fp');
 
 describe('util', () => {
     before(async () => {
-        ({ nockDone } = await nockBack('unit_util.json'));
+        ({ nockDone } = await nockBack('unit_util.json', { before: prepareScope, afterRecord }));
     });
 
     after(async () => {

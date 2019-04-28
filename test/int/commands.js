@@ -32,17 +32,6 @@ const LeagueCreateCommand = require('../../commands/owner/league-create');
 const LeagueSeasonCommand = require('../../commands/admin/league-season');
 const RegisterCommand = require('../../commands/ihl/register');
 
-const afterRecord = (scopes) => {
-    scopes.forEach((scope) => {
-        scope.path = scope.path.replace(`key=${process.env.STEAM_API_KEY}&`, '');
-    });
-    return scopes;
-};
-const prepareScope = (scope) => {
-    scope.filteringPath = path => path.replace(`key=${process.env.STEAM_API_KEY}&`, '');
-};
-
-
 describe('Commands', () => {
     let ihlManager;
     let nockDone;
