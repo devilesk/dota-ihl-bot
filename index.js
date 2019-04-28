@@ -31,7 +31,7 @@ checkEnvironmentVariables([
     'OWNER_DISCORD_ID',
 ]);
 
-const run = async () {
+const run = async () => {
     await cache.connect();
     const IHLManager = require('./lib/ihlManager');
 
