@@ -2,6 +2,7 @@ require('../common.nock');
 require('../common');
 const util = require('../../lib/util');
 const Fp = require('../../lib/util/fp');
+const Promise = require('bluebird');
 
 describe('util', () => {
     before(async () => {
@@ -182,8 +183,47 @@ describe('util', () => {
             const q = new util.queue();
             q.block();
             assert.equal('blocked', q._state);
+            const spy = sinon.spy(q, '_execute');
             q.release();
             assert.equal('idle', q._state);
+            assert.isTrue(spy.calledOnce);
+        });
+        
+        it('release when retries > 0', async () => {
+            const q = new util.queue();
+            q.block();
+            assert.equal('blocked', q._state);
+            q._retries += 1
+            const spy = sinon.spy(q, '_execute');
+            q.release();
+            assert.equal('idle', q._state);
+            assert.isFalse(spy.calledOnce);
+        });
+        
+        it('block then _execute with no job', async () => {
+            const q = new util.queue();
+            q.block();
+            assert.equal('blocked', q._state);
+            q._execute();
+            assert.equal('idle', q._state);
+            assert.equal(q._retries, 0);
+        });
+        
+        it('block then _execute', async () => {
+            const q = new util.queue();
+            q.backoff = 0;
+            q.block();
+            assert.equal('blocked', q._state);
+            const spy = sinon.spy();
+            q._queue.push(spy);
+            q._execute();
+            assert.equal('blocked', q._state);
+            assert.equal(q._retries, 1);
+            assert.isFalse(spy.calledOnce);
+            assert.lengthOf(q._queue, 1);
+            q.release();
+            await Promise.delay(50);
+            assert.isTrue(spy.calledOnce);
         });
     });
 
@@ -235,6 +275,7 @@ describe('util', () => {
             { args: 'notarank 1', expected: null },
             { args: '1 notarank', expected: null },
             { args: '1 a', expected: null },
+            { args: '1 an', expected: 61 },
             { args: 'u 10', expected: null },
             { args: 'u 0', expected: 0 },
             { args: 'u 9', expected: 0 },
