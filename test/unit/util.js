@@ -101,6 +101,92 @@ describe('util', () => {
         });
     });
 
+    describe('partition', () => {
+        it('return array with partitions of length 2', async () => {
+            const result = await util.partition([1, 2, 3, 4, 5, 6, 7, 8], 2);
+            result.forEach(group => assert.lengthOf(group, 2));
+        });
+    });
+
+    describe('spawn', () => {
+        it('reject', async () => {
+            await assert.isRejected(util.spawn('asdf1234'));
+        });
+    });
+
+    describe('templateString', () => {
+        it('return replaced string', async () => {
+            let makeMeKing = util.templateString('${name} is now the king of ${country}!');
+            let result = makeMeKing({ name: 'Bryan', country: 'Scotland'});
+            assert.equal(result, 'Bryan is now the king of Scotland!');
+            makeMeKing = util.templateString('${name} is now the king of ${country}!');
+            result = makeMeKing({ name: 'John', country: 'England'});
+            assert.equal(result, 'John is now the king of England!');
+        });
+    });
+
+    describe('enumerateErrorFormat', () => {
+        it('return info object from message error', async () => {
+            const e = new Error('test');
+            const info = util.enumerateErrorFormat().transform({
+                message: e
+            });
+            assert.equal(e.message, info.message.message);
+        });
+        it('return info object from error', async () => {
+            const e = new Error('test');
+            const info = util.enumerateErrorFormat().transform(e);
+            assert.equal(e.message, info.message);
+        });
+    });
+
+    describe('queue', () => {
+        it('get and set rateLimit', async () => {
+            const q = new util.queue();
+            assert.equal(q.rateLimit, 1);
+            q.rateLimit = 2;
+            assert.equal(q.rateLimit, 2);
+        });
+        
+        it('get and set backoff', async () => {
+            const q = new util.queue();
+            assert.equal(q.backoff, 10000);
+            q.backoff = 20000;
+            assert.equal(q.backoff, 20000);
+        });
+        
+        it('schedule job and execute', async () => {
+            const spy = sinon.spy();
+            const q = new util.queue();
+            q.schedule(spy);
+            assert.isTrue(spy.calledOnce);
+        });
+        
+        it('schedule job do not execute when STATE.BLOCKED', async () => {
+            const spy = sinon.spy();
+            const q = new util.queue();
+            q.block();
+            q.schedule(spy);
+            assert.isFalse(spy.calledOnce);
+        });
+        
+        it('schedule job do not execute when retries > 0', async () => {
+            const spy = sinon.spy();
+            const q = new util.queue();
+            q._retries += 1
+            q.schedule(spy);
+            assert.isFalse(spy.calledOnce);
+        });
+        
+        it('release', async () => {
+            const q = new util.queue();
+            q.block();
+            assert.equal('blocked', q._state);
+            q.release();
+            assert.equal('idle', q._state);
+        });
+    });
+
     describe('toHHMMSS', () => {
         it('return 01:59:11 when given 7151 seconds', async () => {
             assert.equal(util.toHHMMSS(7151), '01:59:11');
@@ -145,7 +231,10 @@ describe('util', () => {
             { args: '-', expected: null },
             { args: '', expected: null },
             { args: ' ', expected: null },
+            { args: '90', expected: null },
             { args: 'notarank 1', expected: null },
+            { args: '1 notarank', expected: null },
+            { args: '1 a', expected: null },
             { args: 'u 10', expected: null },
             { args: 'u 0', expected: 0 },
             { args: 'u 9', expected: 0 },
