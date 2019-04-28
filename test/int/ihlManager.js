@@ -127,6 +127,33 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)('empty');
         });
 
+        it('forward dota lobby chat message', async () => {
+            channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+            for (const [id, member] of guild.members) {
+                if (guild.me.id !== member.id) await commands.QueueJoin({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (const [id, member] of guild.members) {
+                if (guild.me.id !== member.id) await commands.QueueReady({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            DotaBot.startDotaLobby.resolves(6450130);
+            const botSteamId = TestHelper.randomNumberString();
+            await commands.BotAdd({ guild, channel, member: client.owner }, {
+                steamId64: botSteamId,
+                accountName: TestHelper.randomName(),
+                personaName: TestHelper.randomName(),
+                password: TestHelper.randomName(),
+            });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_STARTED);
+            const dotaBot = await ihlManager.getBotBySteamId(botSteamId);
+            dotaBot.emit(CONSTANTS.MSG_CHAT_MESSAGE, 'channel', 'Test', 'message', {});
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_PLAYERS);
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
+            await TestHelper.waitForEvent(ihlManager)('empty');
+            assert.isTrue(channel.send.calledWith(`**Test:** message`));
+        });
+
         selectionCommands.forEach((selectionCommand) => {
             it(`player-draft-queue selection priority: ${selectionCommand.join(',')}`, async () => {
                 let lobbyState;
