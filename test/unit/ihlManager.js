@@ -31,7 +31,7 @@ describe('Database', () => {
             assert.equal(IHLManager.inviteUrl, `https://discordapp.com/oauth2/authorize/?permissions=268454928&scope=bot&client_id=${process.env.CLIENT_ID}`);
         });
     });
-    
+
     describe('findUser', () => {
         it('return user matching discord id', async () => {
             const guild = {

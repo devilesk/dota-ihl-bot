@@ -151,7 +151,7 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_PLAYERS);
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
-            assert.isTrue(channel.send.calledWith(`**Test:** message`));
+            assert.isTrue(channel.send.calledWith('**Test:** message'));
         });
 
         selectionCommands.forEach((selectionCommand) => {

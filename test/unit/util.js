@@ -118,10 +118,10 @@ describe('util', () => {
     describe('templateString', () => {
         it('return replaced string', async () => {
             let makeMeKing = util.templateString('${name} is now the king of ${country}!');
-            let result = makeMeKing({ name: 'Bryan', country: 'Scotland'});
+            let result = makeMeKing({ name: 'Bryan', country: 'Scotland' });
             assert.equal(result, 'Bryan is now the king of Scotland!');
             makeMeKing = util.templateString('${name} is now the king of ${country}!');
-            result = makeMeKing({ name: 'John', country: 'England'});
+            result = makeMeKing({ name: 'John', country: 'England' });
             assert.equal(result, 'John is now the king of England!');
         });
     });
@@ -129,9 +129,7 @@ describe('util', () => {
     describe('enumerateErrorFormat', () => {
         it('return info object from message error', async () => {
             const e = new Error('test');
-            const info = util.enumerateErrorFormat().transform({
-                message: e
-            });
+            const info = util.enumerateErrorFormat().transform({ message: e });
             assert.equal(e.message, info.message.message);
         });
         it('return info object from error', async () => {
@@ -148,21 +146,21 @@ describe('util', () => {
             q.rateLimit = 2;
             assert.equal(q.rateLimit, 2);
         });
-        
+
         it('get and set backoff', async () => {
             const q = new util.queue();
             assert.equal(q.backoff, 10000);
             q.backoff = 20000;
             assert.equal(q.backoff, 20000);
         });
-        
+
         it('schedule job and execute', async () => {
             const spy = sinon.spy();
             const q = new util.queue();
             q.schedule(spy);
             assert.isTrue(spy.calledOnce);
         });
-        
+
         it('schedule job do not execute when STATE.BLOCKED', async () => {
             const spy = sinon.spy();
             const q = new util.queue();
@@ -170,15 +168,15 @@ describe('util', () => {
             q.schedule(spy);
             assert.isFalse(spy.calledOnce);
         });
-        
+
         it('schedule job do not execute when retries > 0', async () => {
             const spy = sinon.spy();
             const q = new util.queue();
-            q._retries += 1
+            q._retries += 1;
             q.schedule(spy);
             assert.isFalse(spy.calledOnce);
         });
-        
+
         it('release', async () => {
             const q = new util.queue();
             q.block();
@@ -188,18 +186,18 @@ describe('util', () => {
             assert.equal('idle', q._state);
             assert.isTrue(spy.calledOnce);
         });
-        
+
         it('release when retries > 0', async () => {
             const q = new util.queue();
             q.block();
             assert.equal('blocked', q._state);
-            q._retries += 1
+            q._retries += 1;
             const spy = sinon.spy(q, '_execute');
             q.release();
             assert.equal('idle', q._state);
             assert.isFalse(spy.calledOnce);
         });
-        
+
         it('block then _execute with no job', async () => {
             const q = new util.queue();
             q.block();
@@ -208,7 +206,7 @@ describe('util', () => {
             assert.equal('idle', q._state);
             assert.equal(q._retries, 0);
         });
-        
+
         it('block then _execute', async () => {
             const q = new util.queue();
             q.backoff = 0;

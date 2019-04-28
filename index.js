@@ -38,7 +38,7 @@ const run = async () => {
     const ihlManager = new IHLManager.IHLManager(process.env);
     const client = IHLManager.createClient(process.env);
     ihlManager.init(client);
-}
+};
 
 run();
 
