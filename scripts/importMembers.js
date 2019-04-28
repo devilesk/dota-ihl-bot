@@ -9,13 +9,12 @@
  *    {
  *       "steamId64": "12345678987654",
  *       "discordId": "123456789876543210",
- *       "nickname": "discord nickname",
- *       "username": "discord username",
- *       "discriminator": "1234"
+ *       "nickname": "discord nickname (optional)",
+ *       "username": "discord username (optional)"
  *    }
  * or a tsv file with first row containing the following column headers:
- * steamId64    discordId    nickname    username    discriminator
- *
+ * steamId64    discordId    nickname    username
+ * The nickname and username columns are optional.
  * guildId - The Discord server ID to import the users into.
  * vouched - boolean (optional) Set imported users as vouched. Default: true
  */
