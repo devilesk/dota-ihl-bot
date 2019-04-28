@@ -22,6 +22,8 @@
     "test:unit": "mocha test/unit",
     "test:int": "mocha test/int",
     "test": "mocha test/unit test/int",
+    "lint:lib": "eslint . --ignore-pattern test/ --fix",
+    "lint:test": "eslint test/ --fix",
     "lint": "eslint . --fix",
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
