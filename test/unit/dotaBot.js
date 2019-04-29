@@ -145,36 +145,30 @@ describe('Setup', () => {
         });
 
         describe('logOnToSteam', () => {
-            it('call logOn and resolve on logOnResponse event with client', async () => {
+            it('call logOn and resolve on logOnResponse event with steam.EResult.OK', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
                 sinon.spy(steamUser, 'logOn');
                 const result = await DotaBot.logOnToSteam({})(steamClient)(steamUser);
                 assert.isTrue(steamUser.logOn.calledOnce);
-                assert.equal(steamClient, result);
+                assert.equal(result, steam.EResult.OK);
             });
 
-            it('call logOn and reject on logOnResponse event with steam.EResult.Fail', async () => {
+            it('call logOn and resolve on logOnResponse event with steam.EResult.Fail', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.Fail });
                 sinon.spy(steamUser, 'logOn');
-                return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
+                const result = await DotaBot.logOnToSteam({})(steamClient)(steamUser);
+                assert.isTrue(steamUser.logOn.calledOnce);
+                assert.equal(result, steam.EResult.Fail);
             });
 
             it('call logOn and reject on error event', async () => {
                 const steamClient = new EventEmitter();
                 const steamUser = new EventEmitter();
                 steamUser.logOn = () => steamClient.emit('error');
-                sinon.spy(steamUser, 'logOn');
-                return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
-            });
-
-            it('call logOn and reject on loggedOff event', async () => {
-                const steamClient = new EventEmitter();
-                const steamUser = new EventEmitter();
-                steamUser.logOn = () => steamClient.emit('loggedOff');
                 sinon.spy(steamUser, 'logOn');
                 return assert.isRejected(DotaBot.logOnToSteam({})(steamClient)(steamUser));
             });
@@ -191,7 +185,7 @@ describe('Setup', () => {
                 sinon.spy(steamUser, 'logOn');
                 const result = await DotaBot.logOnToSteam({})(steamClient)(steamUser);
                 assert.isTrue(steamUser.logOn.calledOnce);
-                assert.equal(steamClient, result);
+                assert.equal(result, steam.EResult.OK);
             });
         });
 
@@ -346,28 +340,6 @@ describe('Setup', () => {
             });
         });
 
-        describe('logOnToSteam', () => {
-            it('log in to steam and set name and online state', async () => {
-                steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
-                sinon.spy(steamUser, 'logOn');
-                const steamFriends = { setPersonaState: () => true, setPersonaName: () => true };
-                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
-                await dotaBot.logOnToSteam();
-                assert.isTrue(steamUser.logOn.calledOnce);
-            });
-        });
-
-        describe('connectToDota', () => {
-            it('connect to dota and release queue', async () => {
-                dotaClient.launch = () => dotaClient.emit('ready');
-                sinon.spy(dotaClient, 'launch');
-                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
-                await dotaBot.connectToDota();
-                assert.isTrue(dotaClient.launch.calledOnce);
-                assert.equal(dotaBot.state, Queue.State.IDLE);
-            });
-        });
-
         describe('connect', () => {
             it('connect to steam and dota', async () => {
                 steamClient.connect = () => steamClient.emit('connected');
@@ -381,6 +353,65 @@ describe('Setup', () => {
                 assert.isTrue(steamClient.connect.calledOnce);
                 assert.isTrue(steamUser.logOn.calledOnce);
                 assert.isTrue(dotaClient.launch.calledOnce);
+            });
+            
+            it('throw Invalid Password', async () => {
+                steamClient.connect = () => steamClient.emit('connected');
+                sinon.spy(steamClient, 'connect');
+                steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.InvalidPassword });
+                sinon.spy(steamUser, 'logOn');
+                dotaClient.launch = () => dotaClient.emit('ready');
+                sinon.spy(dotaClient, 'launch');
+                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+                await assert.isRejected(dotaBot.connect(), 'Invalid Password.');
+                assert.isTrue(steamClient.connect.calledOnce);
+                assert.isTrue(steamUser.logOn.calledOnce);
+                assert.isFalse(dotaClient.launch.calledOnce);
+            });
+            
+            it('return false after 3 connection attempts from steamClient error', async () => {
+                steamClient.connect = () => { throw new Error('connect error'); };
+                sinon.spy(steamClient, 'connect');
+                steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.InvalidPassword });
+                sinon.spy(steamUser, 'logOn');
+                dotaClient.launch = () => dotaClient.emit('ready');
+                sinon.spy(dotaClient, 'launch');
+                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+                const result = await dotaBot.connect();
+                assert.isFalse(result);
+                assert.isTrue(steamClient.connect.calledThrice);
+                assert.isFalse(steamUser.logOn.calledOnce);
+                assert.isFalse(dotaClient.launch.calledOnce);
+            });
+            
+            it('return false after 3 connection attempts from steamUser logOn fail', async () => {
+                steamClient.connect = () => steamClient.emit('connected');
+                sinon.spy(steamClient, 'connect');
+                steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.Fail });
+                sinon.spy(steamUser, 'logOn');
+                dotaClient.launch = () => dotaClient.emit('ready');
+                sinon.spy(dotaClient, 'launch');
+                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+                const result = await dotaBot.connect();
+                assert.isFalse(result);
+                assert.isTrue(steamClient.connect.calledOnce);
+                assert.isTrue(steamUser.logOn.calledThrice);
+                assert.isFalse(dotaClient.launch.calledOnce);
+            });
+            
+            it('return false after 3 connection attempts from dota launch fail', async () => {
+                steamClient.connect = () => steamClient.emit('connected');
+                sinon.spy(steamClient, 'connect');
+                steamUser.logOn = () => steamClient.emit('logOnResponse', { eresult: steam.EResult.OK });
+                sinon.spy(steamUser, 'logOn');
+                dotaClient.launch = () => { throw new Error('connect error'); };
+                sinon.spy(dotaClient, 'launch');
+                const dotaBot = new DotaBot.DotaBot(steamClient, steamUser, steamFriends, dotaClient, {}, true, true);
+                const result = await dotaBot.connect();
+                assert.isFalse(result);
+                assert.isTrue(steamClient.connect.calledOnce);
+                assert.isTrue(steamUser.logOn.calledOnce);
+                assert.isTrue(dotaClient.launch.calledThrice);
             });
         });
 
