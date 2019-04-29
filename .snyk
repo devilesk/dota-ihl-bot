@@ -1,0 +1,21 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-SEQUELIZECLI-174320:
+    - sequelize-cli:
+        reason: >-
+          Sensitive data is passed through a config file which does not get
+          exposed by the CLI.
+        expires: '2020-05-29T13:41:48.512Z'
+  'npm:protobufjs:20180305':
+    - protobufjs:
+        reason: Not affected because only .proto files provided by SteamKit are used.
+        expires: '2020-05-29T13:41:48.512Z'
+    - steam-resources > protobufjs:
+        reason: Not affected because only .proto files provided by SteamKit are used.
+        expires: '2020-05-29T13:41:48.512Z'
+    - steam > steam-resources > protobufjs:
+        reason: Not affected because only .proto files provided by SteamKit are used.
+        expires: '2020-05-29T13:41:48.512Z'
+patch: {}
