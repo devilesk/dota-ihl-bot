@@ -240,3 +240,5 @@ Thanks to the [Reddit Dota 2 League](https://rd2l.gg/) for support and testing!
 ## License
 * [ISC License](https://opensource.org/licenses/ISC)
 * Copyright 2019 © [devilesk](https://github.com/devilesk/)
+
+[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
