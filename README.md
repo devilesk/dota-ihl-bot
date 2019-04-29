@@ -21,6 +21,9 @@
     <a href="https://greenkeeper.io/">
         <img alt="Greenkeeper badge" src="https://badges.greenkeeper.io/devilesk/dota-ihl-bot.svg">
     </a>
+    <a href="https://snyk.io/test/github/devilesk/dota-ihl-bot">
+        <img alt="Snyk badge" src="https://img.shields.io/snyk/vulnerabilities/github/devilesk/dota-ihl-bot.svg">
+    </a>
     <a href="LICENSE">
         <img alt="GitHub" src="https://img.shields.io/github/license/devilesk/dota-ihl-bot.svg">
     </a>
