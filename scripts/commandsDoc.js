@@ -1,3 +1,11 @@
+/*
+ * Generates a README of bot command info in each commands subfolder.
+ * Rendered with the commandsDoc.ejs template file.
+ *
+ * Usage:
+ * node scripts/commandsDoc.js
+ */
+
 require('dotenv').config({ path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env' });
 const path = require('path');
 const fs = require('fs');
