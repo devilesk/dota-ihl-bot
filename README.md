@@ -1,3 +1,4 @@
+
 <h1 align="center">
     <img width="75" src="https://github.com/devilesk/dota-ihl-bot/blob/master/assets/img/logo.png?raw=true">
     <br>
@@ -57,6 +58,8 @@ or <a href="https://github.com/devilesk/dota-ihl-bot/issues/new">create an issue
 
 ## Requirements
 
+### Local Setup
+
 Installation
 * [Git](https://git-scm.com)
 * [npm](http://npmjs.com) 6.4.1+ (Tested with 6.9.0)
@@ -66,34 +69,20 @@ Runtime
 * [Node.js](https://nodejs.org/en/download/) 10+ (Tested with 10.9.0)
 * [PostgreSQL](https://www.postgresql.org/download/) 9.5+ (Tested with 9.5.14)
 
+### Docker Setup
+
+* [Docker](https://www.docker.com/)
+
 ## Getting Started
 
-Clone and install the `dota-ihl-bot` package.
+Clone the `dota-ihl-bot` repository.
 
 ```bash
 # Clone this repository
 $ git clone https://github.com/devilesk/dota-ihl-bot
-
-# Go into the repository
-$ cd dota-ihl-bot
-
-# Install dependencies
-$ rm package-lock.json
-$ npm install
 ```
 
-* *Note: `package-lock.json` is deleted before running `npm install` to work around current bugs with npm failing to install git dependencies.*
-
-  ```bash
-  # Not deleting package-lock.json gives an error
-  $ npm install
-  npm ERR! code ENOLOCAL
-  npm ERR! Could not install from "node_modules/steam/steam-resources@github:seishun/node-steam-resources#v1.2.0" as it does not contain a package.json file.
-  ```
-
-  *Alternatively, just running `npm ci` will work.*
-
-`dota-ihl-bot` uses the [dotenv](https://github.com/motdotla/dotenv) module to load environment variables from a `.env` file, so you'll create one now.
+`dota-ihl-bot` uses the [dotenv](https://github.com/motdotla/dotenv) module to load environment variables from a `.env` file, so you'll need to create one now.
 
 ```bash
 # Create an empty .env configuration file
@@ -135,6 +124,36 @@ STEAM_RETURN_URL=
 STEAM_REALM=
 ```
 
+If you want to install and run everything locally yourself, then continue to [Local Setup](#local-setup).
+
+If you want to install and run with Docker, then skip to [Docker Setup](#docker-setup).
+
+### Local Setup
+
+Install the `dota-ihl-bot` package.
+
+```bash
+# Go into the repository
+$ cd dota-ihl-bot
+
+# Delete dependency lock file
+$ rm package-lock.json
+
+# Install dependencies
+$ npm install
+```
+
+* *Note: `package-lock.json` is deleted before running `npm install` to work around current bugs with npm failing to install git dependencies.*
+
+  ```bash
+  # Not deleting package-lock.json gives an error
+  $ npm install
+  npm ERR! code ENOLOCAL
+  npm ERR! Could not install from "node_modules/steam/steam-resources@github:seishun/node-steam-resources#v1.2.0" as it does not contain a package.json file.
+  ```
+
+  *Alternatively, just running `npm ci` to install will work.*
+
 Create the Postgres database.
 
 ```bash
@@ -147,6 +166,29 @@ Now you're ready to start the bot.
 ```bash
 # Run the bot
 $ npm start
+```
+
+### Docker Setup
+
+First, you'll need to build the docker container.
+
+```bash
+# Build the docker container
+$ make
+```
+
+Now you can run the container and start developing in it.
+
+```bash
+# Run the container for development
+$ make dev
+```
+
+To run in production, you'll need a .env file called `.env.production`.
+
+```bash
+# Run with production configuration
+$ make prod
 ```
 
 ## Documentation
