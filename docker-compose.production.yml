@@ -10,12 +10,8 @@ services:
   app:
     build: .
     container_name: "dota-ihl-bot"
-    command: "tail -f /dev/null"
-    env_file: .env
+    env_file: .env.production
     depends_on:
       - db
-    volumes:
-      - ./:/usr/app
-      - /usr/app/node_modules/
 volumes:
   dbdata:

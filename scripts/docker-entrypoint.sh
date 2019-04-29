@@ -9,7 +9,7 @@ done
 
 >&2 echo "Postgres is up"
 
-npm run db:init
+npm run db:create; npm run db:migrate
 
 node --version
 
