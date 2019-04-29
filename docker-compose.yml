@@ -1,0 +1,17 @@
+version: "3"
+services:
+  db:
+    image: "postgres:9.5"
+    container_name: "dota-ihl-db"
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+  app:
+    build: .
+    container_name: "dota-ihl-bot"
+    env_file: .env
+    depends_on:
+      - db
+volumes:
+  dbdata:
