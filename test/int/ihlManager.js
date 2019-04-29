@@ -127,6 +127,35 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)('empty');
         });
 
+        it('kill lobby', async () => {
+            channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+            const admin = guild.members.array()[0];
+            const adminRole = guild.roles.find(role => role.name === 'Inhouse Admin');
+            adminRole.toGuild(guild).toMember(admin);
+            for (const [id, member] of guild.members) {
+                if (guild.me.id !== member.id) await commands.QueueJoin({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_CHECKING_READY);
+            for (const [id, member] of guild.members) {
+                if (guild.me.id !== member.id) await commands.QueueReady({ guild, channel, member });
+            }
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_BOT);
+            DotaBot.startDotaLobby.resolves(6450130);
+            await commands.BotAdd({ guild, channel, member: client.owner }, {
+                steamId64: TestHelper.randomNumberString(),
+                accountName: TestHelper.randomName(),
+                personaName: TestHelper.randomName(),
+                password: TestHelper.randomName(),
+            });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_PLAYERS);
+            logger.info('killing lobby');
+            await commands.LobbyKill({ guild, channel, member: guild.me });
+            await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_KILLED);
+            logger.info('killed lobby');
+            await TestHelper.waitForEvent(ihlManager)('empty');
+            await TestHelper.waitForEvent(ihlManager)('lobby-queue-created');
+        });
+
         it('forward dota lobby chat message', async () => {
             channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
             for (const [id, member] of guild.members) {
