@@ -124,9 +124,9 @@ STEAM_RETURN_URL=
 STEAM_REALM=
 ```
 
-If you want to install and run everything locally yourself, then continue to [Local Setup](#local-setup).
+If you want to install and run everything locally yourself, then continue to [Local Setup](#local-setup-1).
 
-If you want to install and run with Docker, then skip to [Docker Setup](#docker-setup).
+If you want to install and run with Docker, then skip to [Docker Setup](#docker-setup-1).
 
 ### Local Setup
 
