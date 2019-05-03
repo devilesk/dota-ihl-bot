@@ -27,6 +27,7 @@ const {
     mapQueuers,
     mapActiveQueuers,
     hasQueuer,
+    hasActiveQueuer,
     addQueuer,
     removeQueuer,
     addQueuers,
@@ -351,6 +352,19 @@ describe('Database - with lobby players', () => {
                 const user = await getQueuerByUserId(lobby)(1);
                 const result = await hasQueuer(lobby)(user);
                 assert.isTrue(result);
+            });
+        });
+
+        describe('hasActiveQueuer', () => {
+            it('return active user in queue true', async () => {
+                const user = await getQueuerByUserId(lobby)(1);
+                const result = await hasActiveQueuer(lobby)(user);
+                assert.isTrue(result);
+            });
+            it('return active user in queue false', async () => {
+                const user = await getQueuerByUserId(lobby)(2);
+                const result = await hasActiveQueuer(lobby)(user);
+                assert.isFalse(result);
             });
         });
 
