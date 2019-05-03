@@ -65,7 +65,7 @@
 
 **Requirements:** Guild, Inhouse Admin, Inhouse, Vouched
 
-**Aliases:** `leagueupdate`
+**Aliases:** `league-setting`, `leagueupdate`, `leaguesetting`
 
  
 ## lobby-draft

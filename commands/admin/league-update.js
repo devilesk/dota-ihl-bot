@@ -20,6 +20,7 @@ class LeagueUpdateCommand extends IHLCommand {
     constructor(client) {
         super(client, {
             name: 'league-update',
+            aliases: ['league-setting'],
             group: 'admin',
             memberName: 'league-update',
             guildOnly: true,
