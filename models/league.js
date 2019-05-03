@@ -101,6 +101,15 @@ module.exports = (sequelize, DataTypes) => {
          * @memberof module:db.League
          * @instance
          */
+        matchmakingSystem: {
+            allowNull: false,
+            type: DataTypes.STRING,
+            defaultValue: 'badge',
+        },
+        /**
+         * @memberof module:db.League
+         * @instance
+         */
         defaultGameMode: {
             allowNull: false,
             type: DataTypes.STRING,
