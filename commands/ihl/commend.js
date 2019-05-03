@@ -39,12 +39,12 @@ module.exports = class CommendCommand extends IHLCommand {
         const [user, discordUser] = await findUser(guild)(member);
         const fromUser = inhouseUser;
         const lobby = await Db.findLobbyByMatchId(matchId);
-        const players = await Lobby.getPlayers()(lobby);
         if (lobby) {
             logger.silly(`CommendCommand ${lobby.state}`);
             if (lobby.state === CONSTANTS.STATE_COMPLETED) {
                 if (user && fromUser) {
                     logger.silly('CommendCommand users exist');
+                    const players = await Lobby.getPlayers()(lobby);
                     if (!players.find(player => player.id === user.id)) {
                         return msg.say(`${discordUser.displayName} not a player in the match.`);
                     }
