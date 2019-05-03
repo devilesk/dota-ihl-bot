@@ -9,6 +9,7 @@ const Db = require('../../lib/db');
 const util = require('util');
 const Promise = require('bluebird');
 const Long = require('long');
+const convertor = require('steam-id-convertor');
 
 describe('IHLManager', () => {
     let client;
@@ -176,11 +177,13 @@ describe('IHLManager', () => {
             });
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_STARTED);
             const dotaBot = await ihlManager.getBotBySteamId(botSteamId);
-            dotaBot.emit(CONSTANTS.MSG_CHAT_MESSAGE, 'channel', 'Test', 'message', {});
+            const member = guild.members.array()[1];
+            const user = await Db.findUserByDiscordId(guild.id)(member.id);
+            dotaBot.emit(CONSTANTS.MSG_CHAT_MESSAGE, 'channel', 'Test', 'message', { account_id: convertor.to32(user.steamId64) });
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_WAITING_FOR_PLAYERS);
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
-            assert.isTrue(channel.send.calledWith('**Test:** message'));
+            assert.isTrue(channel.send.calledWith(`**${member.displayName}:** message`));
         });
 
         selectionCommands.forEach((selectionCommand) => {
