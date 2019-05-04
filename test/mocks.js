@@ -32,6 +32,7 @@ class MockDotaBot extends EventEmitter {
         this.game_name = null;
         this.pass_key = null;
         this.teamCache = {};
+        this._playerState = null;
         this.steamClient = { logOn: () => {} };
     }
 
@@ -45,7 +46,11 @@ class MockDotaBot extends EventEmitter {
     }
 
     get playerState() {
-        return this.teamCache;
+        return this._playerState || this.teamCache;
+    }
+
+    set playerState(value) {
+        this._playerState = value;
     }
 
     async connect() {}
