@@ -6,6 +6,7 @@ const DotaBot = require('../../lib/dotaBot');
 const MatchTracker = require('../../lib/matchTracker');
 const IHLManager = require('../../lib/ihlManager');
 const Db = require('../../lib/db');
+const Guild = require('../../lib/guild');
 const util = require('util');
 const Promise = require('bluebird');
 const Long = require('long');
@@ -323,6 +324,36 @@ describe('IHLManager', () => {
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_BOT_ASSIGNED);
             await TestHelper.waitForEvent(ihlManager)(CONSTANTS.STATE_COMPLETED);
             await TestHelper.waitForEvent(ihlManager)('empty');
+        });
+        
+        it('rename first channel and return a new channel', async function () {
+            const channelName = 'autobalanced-queue'
+            channel = guild.channels.find(channel => channel.name === 'autobalanced-queue');
+            const category = { id: 'category' };
+            await channel.setParent(category);
+            const stub = sinon.stub(Guild, 'setChannelName');
+            stub.callsFake(name => async (_channel) => {
+                logger.info(`FakeGuild setChannelName ${_channel.id} ${_channel.name} to ${name}`);
+                const oldName = _channel.name;
+                const newName = name.toLowerCase();
+                if (oldName === newName) return _channel;
+                return Guild.lock.acquire([`channel-${_channel.guild.id}-${oldName}`, `channel-${_channel.guild.id}-${newName}`], async () => {
+                    await Promise.delay(1000); // simulate delayed response from discord api
+                    const channel = await _channel.setName(newName);
+                    logger.info(`renamed channel id ${_channel.id} ${oldName} to ${newName}`);
+                    return channel;
+                });
+            });
+            const p = Guild.setChannelName('test')(channel);
+            assert.equal(channel.name, channelName);
+            const channel2 = await Guild.findOrCreateChannelInCategory(guild, category, channelName)
+            assert.notEqual(channel.id, channel2.id);
+            assert.equal(channel.name, 'test');
+            assert.equal(channel2.name, channelName);
+            await p;
+            const channel3 = await Guild.findOrCreateChannelInCategory(guild, category, channelName)
+            assert.notEqual(channel.id, channel3.id);
+            assert.equal(channel3.name, channelName);
         });
     });
 });
