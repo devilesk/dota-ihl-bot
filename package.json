@@ -58,7 +58,7 @@
     "pg": "^7.10.0",
     "pg-listen": "^1.2.0",
     "sequelize": "^5.7.6",
-    "sequelize-cli": "^5.2.6",
+    "sequelize-cli": "5.4.0",
     "steam": "^1.4.1",
     "steam-id-convertor": "^1.0.1",
     "uws": "9.148.0",
