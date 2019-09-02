@@ -82,7 +82,7 @@
     "proxyquire": "^2.1.0",
     "require-all": "^3.0.0",
     "sequelize-fixtures": "^0.10.0",
-    "sinon": "^7.3.1"
+    "sinon": "^7.4.2"
   },
   "engines": {
     "node": ">=10.0.0"
