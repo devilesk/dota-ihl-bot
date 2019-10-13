@@ -81,7 +81,7 @@
     "nyc": "^14.0.0",
     "proxyquire": "^2.1.0",
     "require-all": "^3.0.0",
-    "sequelize-fixtures": "^0.10.0",
+    "sequelize-fixtures": "^1.1.0",
     "sinon": "^7.3.1"
   },
   "engines": {
