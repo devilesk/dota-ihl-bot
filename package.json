@@ -78,7 +78,7 @@
     "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^6.0.2",
     "nock": "^10.0.6",
-    "nyc": "^14.0.0",
+    "nyc": "^15.0.0",
     "proxyquire": "^2.1.0",
     "require-all": "^3.0.0",
     "sequelize-fixtures": "^0.10.0",
