@@ -45,7 +45,7 @@
     "got": "^9.6.0",
     "human-readable-ids": "^1.0.4",
     "koa": "^2.7.0",
-    "koa-bodyparser": "^4.2.1",
+    "koa-bodyparser": "4.2.1",
     "koa-passport": "^4.1.1",
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.1",
