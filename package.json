@@ -42,7 +42,7 @@
     "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
     "erlpack": "github:hammerandchisel/erlpack",
-    "got": "^9.6.0",
+    "got": "^11.0.0",
     "human-readable-ids": "^1.0.4",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
