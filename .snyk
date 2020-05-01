@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.14.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   SNYK-JS-SEQUELIZECLI-174320:
@@ -18,4 +18,14 @@ ignore:
     - steam > steam-resources > protobufjs:
         reason: Not affected because only .proto files provided by SteamKit are used.
         expires: '2020-05-29T13:41:48.512Z'
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - sequelize > lodash:
+        patched: '2020-05-01T04:42:19.328Z'
+    - sequelize-cli > lodash:
+        patched: '2020-05-01T04:42:19.328Z'
+    - winston > async > lodash:
+        patched: '2020-05-01T04:42:19.328Z'
+    - node-dota2 > winston > async > lodash:
+        patched: '2020-05-01T04:42:19.328Z'
