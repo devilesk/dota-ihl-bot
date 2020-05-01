@@ -27,7 +27,9 @@
     "lint": "eslint . --fix",
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "start": "node index.js"
+    "start": "node index.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "devilesk",
   "license": "ISC",
@@ -64,7 +66,8 @@
     "uws": "9.148.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.8.0",
-    "zlib-sync": "^0.1.4"
+    "zlib-sync": "^0.1.4",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "better-docs": "github:devilesk/better-docs#dota-ihl-bot",
@@ -99,5 +102,6 @@
   "bugs": {
     "url": "https://github.com/devilesk/dota-ihl-bot/issues"
   },
-  "homepage": "https://github.com/devilesk/dota-ihl-bot#readme"
+  "homepage": "https://github.com/devilesk/dota-ihl-bot#readme",
+  "snyk": true
 }
