@@ -50,7 +50,7 @@
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.1",
     "koa-static": "^5.0.0",
-    "koa-views": "^6.2.0",
+    "koa-views": "^6.2.3",
     "logform": "^2.1.2",
     "long": "^4.0.0",
     "passport-discord": "^0.1.3",
