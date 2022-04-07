@@ -62,7 +62,7 @@
     "steam": "^1.4.1",
     "steam-id-convertor": "^1.0.1",
     "uws": "9.148.0",
-    "winston": "^3.2.1",
+    "winston": "^3.3.0",
     "winston-daily-rotate-file": "^3.8.0",
     "zlib-sync": "^0.1.4"
   },
