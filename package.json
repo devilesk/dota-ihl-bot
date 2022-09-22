@@ -27,7 +27,9 @@
     "lint": "eslint . --fix",
     "cover": "nyc npm test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "start": "node index.js"
+    "start": "node index.js",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "author": "devilesk",
   "license": "ISC",
@@ -35,18 +37,18 @@
     "async-lock": "^1.2.0",
     "bignumber.js": "^8.1.1",
     "bluebird": "^3.5.3",
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.0",
     "discord.js-commando": "0.10.0",
     "dota2": "github:devilesk/node-dota2#a71891d",
     "dotaconstants": "^6.16.0",
     "dotenv": "^8.0.0",
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.7",
     "erlpack": "github:hammerandchisel/erlpack",
-    "got": "^9.6.0",
+    "got": "^11.8.5",
     "human-readable-ids": "^1.0.4",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
-    "koa-passport": "^4.1.1",
+    "koa-passport": "^5.0.0",
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.1",
     "koa-static": "^5.0.0",
@@ -57,14 +59,15 @@
     "passport-steam": "^1.0.10",
     "pg": "^7.10.0",
     "pg-listen": "^1.2.0",
-    "sequelize": "^5.7.6",
-    "sequelize-cli": "^5.2.6",
+    "sequelize": "^6.21.2",
+    "sequelize-cli": "^6.3.0",
     "steam": "^1.4.1",
     "steam-id-convertor": "^1.0.1",
     "uws": "9.148.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.8.0",
-    "zlib-sync": "^0.1.4"
+    "zlib-sync": "^0.1.4",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "better-docs": "github:devilesk/better-docs#dota-ihl-bot",
@@ -99,5 +102,6 @@
   "bugs": {
     "url": "https://github.com/devilesk/dota-ihl-bot/issues"
   },
-  "homepage": "https://github.com/devilesk/dota-ihl-bot#readme"
+  "homepage": "https://github.com/devilesk/dota-ihl-bot#readme",
+  "snyk": true
 }
